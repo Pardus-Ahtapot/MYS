@@ -5,7 +5,7 @@ Ahtapot
 
 MYS Ahtapot bunyesinde bulunan Merkezi Yonetim Aracidir. 
 Ahtapot hakkinda daha fazla bilgi ilgili linkten elde edilebilir.
-[ahtapot.bilg.io] (https://ahtapot.bilg.io)
+[ahtapot.org.tr] (http://ahtapot.org.tr:8000)
 
 Gereklilikler
 -------------
