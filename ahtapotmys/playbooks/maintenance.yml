@@ -1,0 +1,7 @@
+---
+# Bakim scripti
+- hosts: all
+  remote_user: ahtapotops 
+  sudo: yes
+  roles:
+  - { role: maintenance }

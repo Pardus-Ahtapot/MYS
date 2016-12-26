@@ -1,0 +1,12 @@
+---
+- name: Kullanicilar kontrol ediliyor.
+  user:
+        name: "{{ item.value.name }}"
+        uid: "{{ item.value.uid }}"
+        group: "{{ item.value.group }}"
+        state: "{{ item.value.state }}"
+        shell: "{{ item.value.shell }}"
+        password: "{{ item.value.password }}"
+  with_dict: "firewall_users" 
+  sudo: yes 
+  tags: user 

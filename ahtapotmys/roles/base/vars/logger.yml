@@ -1,0 +1,15 @@
+---
+# Heartbeat yapilandirmasini belirtmektedir.
+logger:
+    cron:
+        source: "logger.sh.j2"
+        destination: "/etc/cron.d/logger.sh"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    min: "00"
+    hour: "*"
+    facility: "local5"
+    severity: "info"
+    tag: "heartbeat"
+    message: "Heartbeat from $(hostname) at $(date) !"

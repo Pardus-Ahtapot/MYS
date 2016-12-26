@@ -1,0 +1,3 @@
+---
+# Guvenlik Duvarinin Test Makinasi isleyici dosyasidir.
+- include: sysctl.yml

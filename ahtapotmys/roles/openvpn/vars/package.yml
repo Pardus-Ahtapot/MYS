@@ -1,0 +1,16 @@
+---
+# Paket degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
+openvpn_packages:
+    package01:
+        name: "openvpn=2.3.4-5+deb8u1" 
+        state: "present" 
+    package02:
+        name: "openvpn-auth-ldap=2.0.3-6.1" 
+        state: "present" 
+#    packageXX:
+#        name: 
+#        state:  
+#    packageXX:
+#        name: 
+#        state:  

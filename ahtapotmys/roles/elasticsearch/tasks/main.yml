@@ -1,0 +1,5 @@
+---
+# Elasticsearch gorevlerini iceren dosyadir.
+- include: install.yml
+- include: elasticsearch.yml
+- include: searchguard.yml

@@ -1,0 +1,6 @@
+---
+- name: sshd servisini yeniden baslat
+  service:
+    name: "{{ ssh['service']['name'] }}"
+    state: restarted
+  sudo: yes

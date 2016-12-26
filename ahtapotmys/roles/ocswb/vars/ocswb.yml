@@ -1,0 +1,13 @@
+---
+# Ocswb'in degiskenlerini iceren dosyadir
+ocswb:
+    conf:
+        source: "ocswb.config.ini.j2" 
+        destination: "/var/opt/ahtapot-ocs-wb/config.ini"
+        owner: "ahtapotops"
+        group: "ahtapotops"
+        mode: "0644" 
+    host: "OSSIM_FQDN"
+    user: "ocs"
+    password: "tIOlsKbkhKc93XNV"
+    db_name: "ocsweb"

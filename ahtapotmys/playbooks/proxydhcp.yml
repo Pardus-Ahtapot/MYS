@@ -1,0 +1,36 @@
+---
+# Calistirildiginda Web Proxy ve DHCPD Kurulumu Yapilir
+- hosts: proxy-dhcp 
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/base/vars/group.yml
+  - /etc/ansible/roles/base/vars/user.yml
+  - /etc/ansible/roles/base/vars/repo.yml
+  - /etc/ansible/roles/base/vars/rsyslog.yml
+  - /etc/ansible/roles/base/vars/ntp.yml
+  - /etc/ansible/roles/base/vars/package.yml
+  - /etc/ansible/roles/base/vars/blacklist.yml
+  - /etc/ansible/roles/base/vars/host.yml
+  - /etc/ansible/roles/base/vars/audit.yml
+  - /etc/ansible/roles/base/vars/sudo.yml
+  - /etc/ansible/roles/base/vars/ssh.yml
+  - /etc/ansible/roles/base/vars/grub.yml
+  - /etc/ansible/roles/base/vars/logger.yml
+  - /etc/ansible/roles/base/vars/logrotate.yml
+  - /etc/ansible/roles/base/vars/directory.yml
+  - /etc/ansible/roles/base/vars/profile.yml
+  - /etc/ansible/roles/base/vars/fusioninventory.yml
+  - /etc/ansible/roles/squid/vars/package.yml
+  - /etc/ansible/roles/squid/vars/squid.yml
+  - /etc/ansible/roles/squid/vars/dansguardian.yml
+  - /etc/ansible/roles/squid/vars/updshalla.yml
+  - /etc/ansible/roles/squid/vars/zeustracker.yml
+  - /etc/ansible/roles/squid/vars/sarg.yml
+  - /etc/ansible/roles/squid/vars/nginx.yml
+  - /etc/ansible/roles/dhcpd/vars/package.yml
+  - /etc/ansible/roles/dhcpd/vars/dhcpd.yml
+  roles:
+  - { role: base }
+  - { role: squid }
+  - { role: dhcpd }

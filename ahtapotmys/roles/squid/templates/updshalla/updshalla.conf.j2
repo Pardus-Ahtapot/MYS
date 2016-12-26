@@ -1,0 +1,28 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+# BASE DIRECTORY FOR SHALLA LIST
+LISTBASE='/etc/dansguardian/lists/blacklists/shalla'
+
+# SHALLA LIST DOWNLOAD URL
+LISTURL='http://www.shallalist.de/Downloads/shallalist.tar.gz'
+
+# SHALLA LIST DOWNLOAD URL FOR MD5 FILE CHECKSUM
+LISTMD5='http://www.shallalist.de/Downloads/shallalist.tar.gz.md5'
+
+# MAIL PARAMETERS FOR SENDING ERROR AND REPORT
+# SMTP SERVER
+SMTPHOST='{{ updshalla['smtphost'] }}'
+
+# SMTP PORT
+SMTPPORT='{{ updshalla['smtpport'] }}'
+
+# SENDER DOMAIN
+#DOMAIN='{{ updshalla['domain'] }}'
+
+# SENDER MAIL
+#SENDER='{{ updshalla['sender'] }}'
+
+# RECIPIENT MAIL
+DESTMAIL='{{ updshalla['destmail'] }}'

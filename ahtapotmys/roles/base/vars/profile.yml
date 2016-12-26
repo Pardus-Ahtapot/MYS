@@ -1,0 +1,15 @@
+---
+# Profile scriptleri yerlestiriliyor.
+base_profile_scripts:
+    script01:
+        source: "debiannoninteractive.sh.j2"
+        destination: "/etc/profile.d/debiannoninteractive.sh"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+#    scriptXX:
+#        source: ""
+#        destination: ""
+#        owner: ""
+#        group: ""
+#        mode: ""

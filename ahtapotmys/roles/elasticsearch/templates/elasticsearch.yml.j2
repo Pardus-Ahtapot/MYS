@@ -1,0 +1,57 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+cluster.name: {{ elasticsearch['conf']['cluster_name'] }}
+bootstrap.mlockall: {{ elasticsearch['conf']['bootstrap_mlockall'] }}
+
+discovery.zen.ping.unicast.hosts: [{% for key,value in elasticsearch_servers.iteritems() %}"{{ value.fqdn }}:{{ value.transport_port }}"{% if not loop.last %},{% endif %}{% endfor %}]
+discovery.zen.ping.multicast.enabled: false
+
+{% for key,value in elasticsearch_servers.iteritems() %}
+{% if ansible_fqdn == value.fqdn %}
+{% if value.instance_name == item.value.instance_name %}
+node.name: {{ value.node_name }}
+network.host: {{ value.network_host }}
+http.port: {{ value.http_port }}
+node.data: {{ value.node_data }}
+node.master: {{ value.node_master }}
+node.rack: {{ value.node_rack }}
+
+# SearchGuard 
+searchguard.enabled: true
+security.manager.enabled: false
+searchguard.authcz.admin_dn:
+  - "CN=firstadmin, OU=client, O=client, L=Test, C=TR"
+
+# Transport Layer SSL
+searchguard.ssl.transport.enabled: true
+searchguard.ssl.transport.keystore_type: JKS
+searchguard.ssl.transport.keystore_filepath: {{ value.node_name }}-keystore.jks
+searchguard.ssl.transport.keystore_password: {{ value.transport_keystore_pass }}
+
+searchguard.ssl.transport.truststore_type: JKS
+searchguard.ssl.transport.truststore_filepath: truststore.jks
+searchguard.ssl.transport.truststore_password: TRUSTPASS
+
+searchguard.ssl.transport.enforce_hostname_verification: true
+searchguard.ssl.transport.resolve_hostname: true
+searchguard.ssl.transport.enable_openssl_if_available: true
+
+# HTTP/REST Layer SSL
+
+searchguard.ssl.http.enabled: true
+searchguard.ssl.http.keystore_type: JKS
+searchguard.ssl.http.keystore_filepath: {{ value.node_name }}-keystore.jks
+searchguard.ssl.http.keystore_password: {{ value.http_keystore_pass }}
+# searchguard.ssl.http.clientauth_mode: REQUIRE
+
+searchguard.ssl.http.truststore_type: JKS
+searchguard.ssl.http.truststore_filepath: truststore.jks
+searchguard.ssl.http.truststore_password: TRUSTPASS
+
+searchguard.ssl.http.enable_openssl_if_available: true 
+{% endif %}
+{% endif %}
+{% endfor %}
+

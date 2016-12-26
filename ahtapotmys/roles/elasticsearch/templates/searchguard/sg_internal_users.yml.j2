@@ -1,0 +1,12 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+{% for key,value in searchguard_users.iteritems() %}
+{{ value.username }}:
+  hash: {{ value.passwordhash }}
+  roles:
+{% for rkey,rvalue in value.roles.iteritems() %}
+    - {{ rvalue.rolename }}
+{% endfor %}
+{% endfor %}

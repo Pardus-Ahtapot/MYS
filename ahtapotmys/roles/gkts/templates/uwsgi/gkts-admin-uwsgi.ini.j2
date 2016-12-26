@@ -1,0 +1,19 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+[uwsgi]
+
+chdir           = /var/opt/ahtapot-gkts/admin
+module          = ahtapot_gkts.wsgi
+pythonpath      = /usr/lib/pyton2.7/dist-packages
+pythonpath      = /usr/lib/pyton2.7
+
+uid             = ahtapotops
+gid             = ahtapotops
+master          = true
+processes       = 10
+socket          = /var/run/ahtapot-gkts/gkts-admin.sock
+chmod-socket    = 666
+vacuum          = true
+plugin          = python

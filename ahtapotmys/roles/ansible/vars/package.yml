@@ -1,0 +1,22 @@
+---
+# Paket degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
+ansible_packages:
+    package01:
+        name: "ansible=1.7.2+dfsg-2" 
+        state: "present" 
+    package02:
+        name: "git=1:2.1.4-2.1+deb8u2" 
+        state: "present" 
+    package03:
+        name: "python-requests=2.4.3-6" 
+        state: "present" 
+    package04:
+        name: "rsync=3.1.1-3" 
+        state: "present" 
+#    packageXX:
+#        name: 
+#        state:  
+#    packageXX:
+#        name: 
+#        state:  

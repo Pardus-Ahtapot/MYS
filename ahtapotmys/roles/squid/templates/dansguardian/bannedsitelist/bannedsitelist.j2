@@ -1,0 +1,15 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+# Shalla tarafindan yasaklanmis site listesini icermektedir
+.Include</etc/dansguardian/lists/bannedsitelist_shalla>
+
+# Zeustracker tarafindan yasaklanmis site listesini icermektedir
+.Include</etc/dansguardian/lists/banneddomainlist_zeustracker>
+
+# Local yasaklamalariniz icin bannedsitelist_local dosyasini kullaniniz
+.Include</etc/dansguardian/lists/bannedsitelist_local>
+
+# Ankara karargah tarafindan yasaklanmis site listesini icermektedir
+.Include</etc/dansguardian/lists/bannedsitelist_general>

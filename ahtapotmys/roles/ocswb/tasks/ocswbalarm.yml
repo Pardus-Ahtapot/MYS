@@ -1,0 +1,10 @@
+---
+- name: Ocswbalarm configurasyonu yerlestiriliyor.
+  template:
+        src: "{{ ocswbalarm['conf']['source'] }}"
+        dest: "{{ ocswbalarm['conf']['destination'] }}"
+        owner: "{{ ocswbalarm['conf']['owner'] }}"
+        group: "{{ ocswbalarm['conf']['group'] }}"
+        mode: "{{ ocswbalarm['conf']['mode'] }}"
+  sudo: yes
+  tags: ocswbalarm 

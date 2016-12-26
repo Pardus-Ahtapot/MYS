@@ -1,0 +1,9 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+# Ankara karargah tarafindan izinverilmis site listesini icermektedir
+.Include</etc/dansguardian/lists/exceptionsitelist_general>
+
+# Local izin vermeleriniz icin exceptionsitelist_local dosyasini kullaniniz
+.Include</etc/dansguardian/lists/exceptionsitelist_local>

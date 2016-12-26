@@ -1,0 +1,22 @@
+---
+# Sunucu degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar sunucu eklenebilir.
+
+hosts:
+# /etc/hosts yapilandirmasini belirtmektedir.
+    conf:
+        source: "hosts.j2"
+        destination: "/etc/hosts"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+
+base_host_servers:
+    server01:
+        ip: "X.X.X.X"
+        fqdn: "sunucu_fqdn"
+        hostname: "sunucu_hostname"
+#    serverXX:
+#        ip: 
+#        fqdn:
+#        hostname: 

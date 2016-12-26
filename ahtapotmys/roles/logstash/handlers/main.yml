@@ -1,0 +1,3 @@
+---
+# Logstash'in isleyici dosyasidir.
+- include: logstash.yml

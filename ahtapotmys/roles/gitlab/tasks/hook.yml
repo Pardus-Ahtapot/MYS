@@ -1,0 +1,24 @@
+---
+- name: Gitlab custom hook dizinleri olusturuluyor 
+  file:
+        path: "{{ item.value.path }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+        state: "{{ item.value.state }}"
+  with_dict: "hook_directories"
+  when: ansible_fqdn != "{{ gitlab['backup']['Server'] }}"
+  sudo: yes
+  tags: hook 
+
+- name: GitLab hook scriptleri olusturuluyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "{{ item.value.destination }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+  with_dict: "hook_scripts"
+  when: ansible_fqdn != "{{ gitlab['backup']['Server'] }}"
+  sudo: yes
+  tags: hook 

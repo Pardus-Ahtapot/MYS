@@ -1,0 +1,12 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+## Bu dosyada yapilan degisikliker sistem reboot edilmeden aktive edilemez.
+## Ileri seviye guvenlik ozelligi olan bu durum, denemeler yapilirsa da loglanir.
+{{ ansible_managed }}
+
+-D
+-b 320
+-e 1
+
+-a exit,always -F arch=b64 -S execve -k bilgio-bekci
+-a exit,always -F arch=b32 -S execve -k bilgio-bekci

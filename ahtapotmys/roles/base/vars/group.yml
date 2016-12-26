@@ -1,0 +1,10 @@
+---
+# Grup degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar grup eklenebilir.
+base_user_groups:
+    group1:
+        name: ahtapotops
+        state: present
+#    groupX:
+#        name:  
+#        state:   

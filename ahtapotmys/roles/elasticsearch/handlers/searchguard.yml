@@ -1,0 +1,6 @@
+---
+- name: searchguard konfigurasyonu yeniden yukleniyor 
+  shell: "/bin/bash plugins/search-guard-2/tools/sgadmin.sh -cd plugins/search-guard-2/sgconfig/ -ks /etc/elasticsearch/es03-keystore.jks -kspass KEYPASS -ts /etc/elasticsearch/truststore.jks -tspass TRUSTPASS -cn {{ elasticsearch['conf']['cluster_name'] }} -h es03.gdys.local -p 9300 -nhnv"
+  args:
+    chdir: "/usr/share/elasticsearch/"
+  sudo: yes

@@ -1,0 +1,11 @@
+---
+# Guvenlik Duvarinin gorevlerini iceren dosyadir.
+- include: group.yml
+- include: user.yml
+- include: install.yml
+- include: directory.yml
+- include: profile.yml
+- include: modprobe.yml
+- include: contrackd.yml
+- include: sysctl.yml
+- include: iptables.yml

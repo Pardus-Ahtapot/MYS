@@ -1,0 +1,3 @@
+---
+# Openvpn'in isleyici dosyasidir
+- include: openvpn.yml

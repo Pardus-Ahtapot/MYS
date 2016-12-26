@@ -1,0 +1,13 @@
+---
+- name: Base profil & bashrc scriptleri ayarlaniyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "{{ item.value.destination }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+  with_dict: "base_profile_scripts"
+  notify:
+    - profile uygula 
+  sudo: yes
+  tags: profile

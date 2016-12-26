@@ -1,0 +1,34 @@
+---
+# Paket degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
+pwlm_packages:
+    package01:
+        name: "python-sqlite=1.0.1-11" 
+        state: "present" 
+    package02:
+        name: "python-django=1.9.6-1" 
+        state: "present" 
+    package03:
+        name: "uwsgi=2.0.7-1" 
+        state: "present" 
+    package04:
+        name: "uwsgi-plugin-python=2.0.7-1" 
+        state: "present" 
+    package05:
+        name: "django-jet=0.1.4" 
+        state: "present" 
+    package06:
+        name: "python-requests=2.4.3-6" 
+        state: "present" 
+    package07:
+        name: "ahtapot-pwlm=1.0.2" 
+        state: "present" 
+    package08:
+        name: "nginx=1.6.2-5+deb8u2" 
+        state: "present" 
+    package09:
+        name: "git=1:2.1.4-2.1+deb8u2" 
+        state: "present" 
+#    packageXX:
+#        name: 
+#        state:  

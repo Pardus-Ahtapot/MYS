@@ -1,0 +1,21 @@
+---
+- name: Firewallbuilder reset_iptables hatasi duzeltiliyor.
+  copy:
+        src: "{{ firewallbuilder['fix']['source'] }}"
+        dest: "{{ firewallbuilder['fix']['destination'] }}"
+        owner: "{{ firewallbuilder['fix']['owner'] }}"
+        group: "{{ firewallbuilder['fix']['group'] }}"
+        mode: "{{ firewallbuilder['fix']['mode'] }}"
+        force: "{{ firewallbuilder['fix']['force'] }}"
+  sudo: yes
+  tags: fwbuilder
+
+- name: Profil dosyasi yapilandiriliyor.
+  template:
+        src: "{{ firewallbuilder['bash']['conf']['source'] }}"
+        dest: "{{ firewallbuilder['bash']['conf']['destination'] }}"
+        owner: "{{ firewallbuilder['bash']['conf']['owner'] }}"
+        group: "{{ firewallbuilder['bash']['conf']['group'] }}"
+        mode: "{{ firewallbuilder['bash']['conf']['mode'] }}"
+  sudo: yes
+  tags: fwbuilder 

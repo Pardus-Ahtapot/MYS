@@ -1,0 +1,7 @@
+---
+# Portscanner gorevlerini iceren dosyadir
+- include: install.yml
+- include: portscanner.yml
+- include: cron.yml
+- include: uwsgi.yml
+- include: nginx.yml

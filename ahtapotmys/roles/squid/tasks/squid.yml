@@ -1,0 +1,21 @@
+---
+# Squid rolunun yapilandirma dosyasidir
+- name: Squid yapilandiriliyor.
+  template:
+        src: "{{ squid['conf']['source'] }}/{{ ansible_fqdn }}.conf.j2"
+        dest: "{{ squid['conf']['destination'] }}"
+        owner: "{{ squid['conf']['owner'] }}"
+        group: "{{ squid['conf']['group'] }}"
+        mode: "{{ squid['conf']['mode'] }}"
+  notify:
+    - squid servisini yeniden baslat
+  sudo: yes
+  tags: squid
+
+- name: Squid servisi ayakta
+  service:
+        name: "{{ squid['service']['name'] }}"
+        state: "{{ squid['service']['state'] }}"
+        enabled: "{{ squid['service']['enabled'] }}"
+  sudo: yes
+  tags: squid

@@ -1,0 +1,6 @@
+---
+- name: rsyslog servisini yeniden baslat
+  service:
+    name: "{{ rsyslog['service']['name'] }}"
+    state: restarted
+  sudo: yes

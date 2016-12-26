@@ -1,0 +1,20 @@
+---
+# Zaman sunucusu ayarlarini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar zaman sunucusu eklenebilir.
+ntp:
+    conf:
+        source: "ntp.conf.j2"
+        destination: "/etc/ntp.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    service:
+        name: "ntp"
+        state: "started"
+        enabled: "yes"
+
+global_ntp_servers:
+    server1:
+        fqdn: "global_ntp_Server_fqdn"
+#    serverX:
+#        fqdn: ""

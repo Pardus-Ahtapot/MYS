@@ -1,0 +1,9 @@
+---
+- name: Ansible icin gerekli paketler yukleniyor.
+  apt:
+        name: "{{ item.value.name }}"
+        state: "{{ item.value.state }}"
+        force: "yes"
+  with_dict: "ansible_packages"
+  sudo: yes
+  tags: install

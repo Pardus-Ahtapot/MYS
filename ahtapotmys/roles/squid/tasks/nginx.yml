@@ -1,0 +1,64 @@
+---
+- name: nginx yapilandiriliyor
+  template:
+        src: "{{ nginx['conf']['source'] }}"
+        dest: "{{ nginx['conf']['destination'] }}"
+        owner: "{{ nginx['conf']['owner'] }}"
+        group: "{{ nginx['conf']['group'] }}"
+        mode: "{{ nginx['conf']['mode'] }}"
+  notify:
+    - nginx servisini yeniden baslat
+  sudo: yes
+  tags: nginx
+
+- name: nginx sertifika klasoru yapilandiriliyor
+  file:
+        path: "{{ nginx['ssldir']['path'] }}"
+        owner: "{{ nginx['ssldir']['owner'] }}"
+        group: "{{ nginx['ssldir']['group'] }}"
+        mode: "{{ nginx['ssldir']['mode'] }}"
+        state: "{{ nginx['ssldir']['state'] }}"
+  sudo: yes
+  tags: nginx
+
+- name: nginx sertifika yapilandiriliyor
+  template:
+        src: "{{ nginx['certificate']['source'] }}"
+        dest: "{{ nginx['certificate']['destination'] }}"
+        owner: "{{ nginx['certificate']['owner'] }}"
+        group: "{{ nginx['certificate']['group'] }}"
+        mode: "{{ nginx['certificate']['mode'] }}"
+  notify:
+    - nginx servisini yeniden baslat
+  sudo: yes
+  tags: nginx
+
+- name: nginx anahtar yapilandiriliyor
+  template:
+        src: "{{ nginx['key']['source'] }}"
+        dest: "{{ nginx['key']['destination'] }}"
+        owner: "{{ nginx['key']['owner'] }}"
+        group: "{{ nginx['key']['group'] }}"
+        mode: "{{ nginx['key']['mode'] }}"
+  notify:
+    - nginx servisini yeniden baslat
+  sudo: yes
+  tags: nginx
+
+- name: nginx parolasi yapilandiriliyor
+  template:
+        src: "{{ nginx['htpasswd']['source'] }}"
+        dest: "{{ nginx['htpasswd']['destination'] }}"
+        owner: "{{ nginx['htpasswd']['owner'] }}"
+        group: "{{ nginx['htpasswd']['group'] }}"
+        mode: "{{ nginx['htpasswd']['mode'] }}"
+  sudo: yes
+  tags: nginx
+
+- name: nginx servisi ayakta
+  service:
+        name: "{{ nginx['service']['name'] }}"
+        state: "{{ nginx['service']['state'] }}"
+        enabled: "{{ nginx['service']['enabled'] }}"
+  sudo: yes
+  tags: nginx

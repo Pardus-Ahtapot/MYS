@@ -1,0 +1,16 @@
+---
+# Rsyslog'un degiskenlerini iceren dosyadir
+rsyslog:
+    conf:
+        source: "rsyslog.conf.j2"
+        destination: "/etc/rsyslog.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    service:
+        name: "rsyslog" 
+        state: "started" 
+        enabled: "yes" 
+    WorkDirectory: "/var/spool/rsyslog"
+    IncludeConfig: "/etc/rsyslog.d/*"
+    RemoteLogDirectory: "/data/log/%HOSTNAME%/%fromhost-ip%.log"

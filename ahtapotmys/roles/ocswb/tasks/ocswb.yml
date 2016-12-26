@@ -1,0 +1,10 @@
+---
+- name: Ocswb configurasyonu yerlestiriliyor.
+  template:
+        src: "{{ ocswb['conf']['source'] }}"
+        dest: "{{ ocswb['conf']['destination'] }}"
+        owner: "{{ ocswb['conf']['owner'] }}"
+        group: "{{ ocswb['conf']['group'] }}"
+        mode: "{{ ocswb['conf']['mode'] }}"
+  sudo: yes
+  tags: ocswb 

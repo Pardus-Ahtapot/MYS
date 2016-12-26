@@ -1,0 +1,10 @@
+---
+- name: Pwlm scripti yerlestiriliyor.
+  template:
+        src: "{{ pwlm['conf']['source'] }}"
+        dest: "{{ pwlm['conf']['destination'] }}"
+        owner: "{{ pwlm['conf']['owner'] }}"
+        group: "{{ pwlm['conf']['group'] }}"
+        mode: "{{ pwlm['conf']['mode'] }}"
+  sudo: yes
+  tags: pwlm 

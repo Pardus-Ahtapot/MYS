@@ -1,0 +1,78 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+#################
+#### MODULES ####
+#################
+
+$ModLoad imuxsock 
+$ModLoad imklog   
+
+###############
+#### RULES ####
+###############
+
+:msg, contains, "RULE"         -/var/log/ahtapot/fw/iptables.log
+auth,authpriv.*                 /var/log/auth.log
+*.*;auth,authpriv.none,kern.!=info      -/var/log/syslog
+#cron.*                         /var/log/cron.log
+daemon.*                        -/var/log/daemon.log
+kern.*;kern.!=info              -/var/log/kern.log
+lpr.*                           -/var/log/lpr.log
+mail.*                          -/var/log/mail.log
+user.*                          -/var/log/user.log
+
+mail.info                       -/var/log/mail.info
+mail.warn                       -/var/log/mail.warn
+mail.err                        /var/log/mail.err
+
+news.crit                       /var/log/news/news.crit
+news.err                        /var/log/news/news.err
+news.notice                     -/var/log/news/news.notice
+
+*.=debug;\
+        auth,authpriv.none;\
+        news.none;mail.none     -/var/log/debug
+*.=info;*.=notice;*.=warn;\
+        auth,authpriv.none;\
+        cron,daemon.none;kern.!=info;\
+        mail,news.none          -/var/log/messages
+
+*.emerg                         :omusrmsg:*
+
+###########################
+#### GLOBAL DIRECTIVES ####
+###########################
+
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+
+$FileOwner root
+$FileGroup adm
+$FileCreateMode 0640
+$DirCreateMode 0755
+$Umask 0022
+
+$WorkDirectory {{ rsyslog['WorkDirectory'] }}
+$IncludeConfig {{ rsyslog['IncludeConfig'] }}
+
+$ActionQueueMaxDiskSpace {{ rsyslog['ActionQueueMaxDiskSpace'] }}   
+$ActionQueueSaveOnShutdown {{ rsyslog['ActionQueueSaveOnShutdown'] }}
+$ActionQueueType {{ rsyslog['ActionQueueType'] }} 
+$ActionResumeRetryCount {{ rsyslog['ActionResumeRetryCount'] }} 
+$ActionQueueFileName {{ rsyslog['ActionQueueFileName'] }} 
+
+$DefaultNetstreamDriver gtls
+$DefaultNetstreamDriverCAFile  /etc/ssl/certs/rootCA.pem
+$DefaultNetstreamDriverCertFile /etc/ssl/certs/{{ ansible_fqdn }}.crt
+$DefaultNetstreamDriverKeyFile /etc/ssl/private/{{ ansible_fqdn }}.key
+$ActionSendStreamDriverMode 1
+$ActionSendStreamDriverAuthMode anon
+
+{% for key,value in base_ossimcik_servers.iteritems() %}
+{% for clientkey,clientvalue in value.clients.iteritems() %}
+{% if clientvalue.fqdn == ansible_fqdn %}
+{{ value.severity }}.{{ value.facility }} @@{{ value.fqdn }}:{{ value.port }}  
+{% endif %}
+{% endfor %}
+{% endfor %}

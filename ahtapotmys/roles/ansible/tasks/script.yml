@@ -1,0 +1,11 @@
+---
+- name: Playbook scriptleri sisteme yerlestiriliyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "{{ item.value.destination }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+  with_dict: "scripts" 
+  sudo: yes
+  tags: scripts 

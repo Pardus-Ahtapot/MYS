@@ -1,0 +1,30 @@
+---
+- name: Guvenlik Duvari dosyalari dagitiliyor.
+  synchronize:
+    src: "{{ iptables['deploy']['filepath'] }}"
+    dest: "{{ iptables['deploy']['repopath'] }}"
+    rsync_opts: "{{ iptables['deploy']['rsync_opts'] }}"
+    recursive: "{{ iptables['deploy']['recursive'] }}"
+    dest_port: "{{ iptables['deploy']['dest_port'] }}"
+  sudo: yes
+  tags: deploy
+
+- name: Yeni Guvenlik Duvari Kurallari uygulaniyor.
+  script: "{{ iptables['deploy']['repopath'] }}/{{ ansible_fqdn }}.fw"
+  sudo: yes
+  tags: deploy
+
+- name: iptables servisinin kaydetilmesi
+  shell: /sbin/iptables-save > {{ iptables['service']['v4conf'] }} 
+  sudo: yes
+  tags: iptables-save 
+
+- name: ip6tables servisinin kaydetilmesi
+  shell: /sbin/ip6tables-save > {{ iptables['service']['v6conf'] }}
+  sudo: yes
+  tags: iptables-save 
+
+- name: Guvenlik Duvari dosyalari siliniyor
+  shell: /bin/rm -rf "{{ iptables['deploy']['filepath'] }}"
+  sudo: yes
+  tags: deploy

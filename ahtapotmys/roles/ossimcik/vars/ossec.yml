@@ -1,0 +1,112 @@
+---
+# Ossec'in degiskenlerinin tutuldugu dosyadir.
+ossec:
+    service:
+        name: "ossec"
+        state: "started"
+        enabled: "yes"
+    localrules:
+        source: "local_rules.xml.j2"
+        destination: "/var/ossec/rules/local_rules.xml"
+        owner: "www-data" 
+        group: "ossec" 
+        mode: "0754" 
+    conf:
+        source: "ossec.conf.j2"
+        destination: "/var/ossec/etc/ossec.conf"
+        owner: "ossec" 
+        group: "ossec" 
+        mode: "0640" 
+    email_notification: "no"
+    syscheck_frequency: "21600"
+
+ossec_local_files:
+    file01:
+        log_format: "syslog"
+        location: "/var/log/auth.log"
+    file02:
+        log_format: "syslog"
+        location: "/var/log/syslog"
+    file03:
+        log_format: "syslog"
+        location: "/var/log/mail.info"
+    file04:
+        log_format: "syslog"
+        location: "/var/log/nxlog/client.log*"
+    file05:
+        log_format: "syslog"
+        location: "/var/log/messages"
+    file06:
+        log_format: "syslog"
+        location: "/var/log/dpkg.log"
+    file07:
+        log_format: "apache"
+        location: "/var/log/apache2/access.log"
+    file08:
+        log_format: "apache"
+        location: "/var/log/apache2/access.log"
+    file09:
+        log_format: "syslog"
+        location: "/var/log/client.log"
+    file10:
+        log_format: "multi-line:7"
+        location: "/var/log/usb.log"
+#    fileXX:
+#        log_format: ""
+#        location: ""
+
+ossec_syscheck_ignore_files:
+    file01:
+        ignore: "/etc/mtab"
+    file02:
+        ignore: "/etc/mnttab"
+    file03:
+        ignore: "/etc/hosts.deny"
+    file04:
+        ignore: "/etc/mail/statistics"
+    file05:
+        ignore: "/etc/random-seed"
+    file06:
+        ignore: "/etc/adjtime"
+    file07:
+        ignore: "/etc/httpd/logs"
+    file08:
+        ignore: "/etc/utmpx"
+    file09:
+        ignore: "/etc/wtmpx"
+    file10:
+        ignore: "/etc/cups/certs"
+    file11:
+        ignore: "/etc/dumpdates"
+    file12:
+        ignore: "/etc/svc/volatile"
+    file13:
+        ignore: "C:\\WINDOWS/System32/LogFiles"
+    file14:
+        ignore: "C:\\WINDOWS/Debug"
+    file15:
+        ignore: "C:\\WINDOWS/WindowsUpdate.log"
+    file16:
+        ignore: "C:\\WINDOWS/iis6.log"
+    file17:
+        ignore: "C:\\WINDOWS/system32/wbem/Logs"
+    file18:
+        ignore: "C:\\WINDOWS/system32/wbem/Repository"
+    file19:
+        ignore: "C:\\WINDOWS/Prefetch"
+    file20:
+        ignore: "C:\\WINDOWS/PCHEALTH/HELPCTR/DataColl"
+    file21:
+        ignore: "C:\\WINDOWS/SoftwareDistribution"
+    file22:
+        ignore: "C:\\WINDOWS/Temp"
+    file23:
+        ignore: "C:\\WINDOWS/system32/config"
+    file24:
+        ignore: "C:\\WINDOWS/system32/spool"
+    file25:
+        ignore: "C:\\WINDOWS/system32/CatRoot"
+#    fileXX:
+#        ignore: ""
+#    fileXX:
+#        ignore: ""

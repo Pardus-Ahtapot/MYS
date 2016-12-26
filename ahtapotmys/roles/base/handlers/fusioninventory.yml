@@ -1,0 +1,6 @@
+---
+- name: fusioninventory servisini yeniden baslat
+  service:
+    name: "{{ fusioninventory['service']['name'] }}"
+    state: restarted
+  sudo: yes

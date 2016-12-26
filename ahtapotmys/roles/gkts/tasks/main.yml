@@ -1,0 +1,6 @@
+---
+# PWLM gorevlerini iceren dosyadir
+- include: install.yml
+- include: hook.yml
+- include: uwsgi.yml
+- include: nginx.yml

@@ -1,0 +1,30 @@
+---
+- name: zeustracker scripti konuluyor
+  template:
+        src: "{{ zeustracker['app']['source'] }}"
+        dest: "{{ zeustracker['app']['destination'] }}"
+        owner: "{{ zeustracker['app']['owner'] }}"
+        group: "{{ zeustracker['app']['group'] }}"
+        mode: "{{ zeustracker['app']['mode'] }}"
+  sudo: yes
+  tags: zeustracker
+
+- name: Listeler olusturuluyor.
+  shell: /usr/bin/touch "{{ item.value.path }}"
+  args:
+      creates: "{{ item.value.path }}"
+  with_dict: "zeustracker_lists"
+  notify:
+    - dansguardian konfigurasyonunu yeniden yukle
+  sudo: yes
+  tags: zeustracker 
+
+- name: zeustracker zamanlaniyor
+  template:
+        src: "{{ zeustracker['cron']['source'] }}"
+        dest: "{{ zeustracker['cron']['destination'] }}"
+        owner: "{{ zeustracker['cron']['owner'] }}"
+        group: "{{ zeustracker['cron']['group'] }}"
+        mode: "{{ zeustracker['cron']['mode'] }}"
+  sudo: yes
+  tags: zeustracker

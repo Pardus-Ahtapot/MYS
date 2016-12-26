@@ -1,0 +1,4 @@
+---
+- name: grub yeniden yapilandiriliyor 
+  shell: /usr/sbin/update-grub2 -o {{ grub['confile'] }} 
+  sudo: yes

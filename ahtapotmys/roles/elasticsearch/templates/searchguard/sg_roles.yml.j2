@@ -1,0 +1,131 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+sg_admin:
+  cluster:
+    - CLUSTER_ALL
+  indices:
+    '*':
+      '*':
+        - ALL
+
+sg_power_user:
+  cluster:
+    - CLUSTER_MONITOR
+  indices:
+    '*':
+      '*':
+        - ALL
+
+sg_user:
+  indices:
+    '*':
+      '*':
+        - READ
+
+sg_user_read_location01:
+  indices:
+    '*-location01-*':
+      '*':
+        - READ
+    '?kibana':
+      '*':
+        - indices:admin/exists
+        - indices:admin/mappings/fields/get
+        - indices:admin/refresh
+        - indices:admin/validate/query
+        - indices:data/read/get
+        - indices:data/read/mget
+        - indices:data/read/search
+
+sg_user_read_location02:
+  indices:
+    '*-location02-*':
+      '*':
+        - READ
+    '?kibana':
+      '*':
+        - indices:admin/exists
+        - indices:admin/mappings/fields/get
+        - indices:admin/refresh
+        - indices:admin/validate/query
+        - indices:data/read/get
+        - indices:data/read/mget
+        - indices:data/read/search
+
+sg_transport_client:
+  cluster:
+      - cluster:monitor/nodes/liveness
+      #uncomment the following for sniffing
+      #- cluster:monitor/state
+
+sg_kibana4:
+  cluster:
+      - cluster:monitor/nodes/info
+      - cluster:monitor/health
+  indices:
+    '*':
+      '*':
+        - indices:admin/mappings/fields/get
+        - indices:admin/validate/query
+        - indices:data/read/search-
+        - indices:data/read/msearch
+        - indices:admin/get
+    '?kibana':
+      '*':
+        - indices:admin/exists
+        - indices:admin/mapping/put
+        - indices:admin/mappings/fields/get
+        - indices:admin/refresh
+        - indices:admin/validate/query
+        - indices:data/read/get
+        - indices:data/read/mget
+        - indices:data/read/search
+        - indices:data/write/delete
+        - indices:data/write/index
+        - indices:data/write/update
+
+sg_kibana4_server:
+  cluster:
+      - cluster:monitor/nodes/info
+      - cluster:monitor/health
+  indices:
+    '?kibana':
+      '*':
+        - indices:admin/create
+        - indices:admin/exists
+        - indices:admin/mapping/put
+        - indices:admin/mappings/fields/get
+        - indices:admin/refresh
+        - indices:admin/validate/query
+        - indices:data/read/get
+        - indices:data/read/mget
+        - indices:data/read/search
+        - indices:data/write/delete
+        - indices:data/write/index
+        - indices:data/write/update
+
+sg_logstash_raw:
+  cluster:
+    - indices:admin/template/get
+    - indices:admin/template/put
+  indices:
+    'raw-*':
+      '*':
+        - indices:data/write*
+        - indices:data/read/search
+        - indices:data/read/scroll
+        - CREATE_INDEX
+
+sg_logstash_alert:
+  cluster:
+    - indices:admin/template/get
+    - indices:admin/template/put
+  indices:
+    'alert-*':
+      '*':
+        - indices:data/write*
+        - indices:data/read/search
+        - indices:data/read/scroll
+        - CREATE_INDEX

@@ -1,0 +1,129 @@
+---
+# Searchguard'in degiskenlerinin tutuldugu dosyadir.
+searchguard_configurations:
+    conf01:
+        source: "searchguard/sg_internal_users.yml.j2"
+        destination: "/usr/share/elasticsearch/plugins/search-guard-2/sgconfig/sg_internal_users.yml"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    conf02:
+        source: "searchguard/sg_roles_mapping.yml.j2"
+        destination: "/usr/share/elasticsearch/plugins/search-guard-2/sgconfig/sg_roles_mapping.yml"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    conf03:
+        source: "searchguard/sg_roles.yml.j2"
+        destination: "/usr/share/elasticsearch/plugins/search-guard-2/sgconfig/sg_roles.yml"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+#    confXX:
+#        source: ""
+#        destination: ""
+#        owner: ""
+#        group: ""
+#        mode: ""
+        
+    
+searchguard_users:
+    user01:
+        username: "ahtapotops"
+        passwordhash: "$2a$12$jdVxqIceQSRaeBXKnTKFGuT8rykC49SjxZKLGHB6m/Rhr6xboj6aC"
+        roles: 
+            role01: 
+                rolename: "sg_admin" 
+    user02:
+        username: "logstashraw"
+        passwordhash: "$2a$12$haOqJhERUPsan3sokVuaKuYPr/ulr2b/25qX10kbgi/yRs9Jm40na"
+        roles: 
+            role01: 
+                rolename: "sg_logstash_raw" 
+    user03:
+        username: "logstashalert"
+        passwordhash: "$2a$12$xm01y040ImaKigxZSfhOwetzGTbXaVTHmUmoQ018sB1HEYFXePsqa"
+        roles: 
+            role01: 
+                rolename: "sg_logstash_alert" 
+    user04:
+        username: "userlocation01"
+        passwordhash: "$2a$12$QUchn6JHaxQNM3DGt2XULOq/Re0U6WZAvs7GuY1brjxDbSYAAFimu"
+        roles: 
+            role01: 
+                rolename: "sg_user_read_location01" 
+    user05:
+        username: "userlocation02"
+        passwordhash: "$2a$12$EIMOEpGPVbXL4egC0pwX4OF13VQO6B061mWOoa0WWuF00NhNa47S6"
+        roles: 
+            role01: 
+                rolename: "sg_user_read_location02" 
+#    userXX:
+#        username: ""
+#        passwordhash: ""
+#        roles: 
+#            role01: 
+#                rolename: "" 
+#            role02: 
+#                rolename: "" 
+#            roleXX: 
+#                rolename: "" 
+
+
+searchguard_roles_mapping:
+    rolemapping01:
+        rolemappingname: "sg_admin"
+        backendroles: 
+            backendrole01: 
+                rolename: "sg_admin" 
+        users: 
+            user01: 
+                username: "ahtapotops" 
+    rolemapping02:
+        rolemappingname: "sg_logstash_raw"
+        backendroles: 
+            backendrole01: 
+                rolename: "sg_logstash_raw" 
+        users: 
+            user01: 
+                username: "logstashraw" 
+    rolemapping03:
+        rolemappingname: "sg_logstash_alert"
+        backendroles: 
+            backendrole01: 
+                rolename: "sg_logstash_alert" 
+        users: 
+            user01: 
+                username: "logstashalert" 
+    rolemapping04:
+        rolemappingname: "sg_user_read_location01"
+        backendroles: 
+            backendrole01: 
+                rolename: "sg_user_read_location01" 
+        users: 
+            user01: 
+                username: "userlocation01" 
+    rolemapping05:
+        rolemappingname: "sg_user_read_location02"
+        backendroles: 
+            backendrole01: 
+                rolename: "sg_user_read_location02" 
+        users: 
+            user01: 
+                username: "userlocation02" 
+#    rolemappingXX:
+#        rolemappingname: ""
+#        backendroles: 
+#            backendrole01: 
+#                rolename: "" 
+#            backendrole02: 
+#                rolename: "" 
+#            backendroleXX: 
+#                rolename: "" 
+#        users: 
+#            user01: 
+#                username: "" 
+#            user02: 
+#                username: "" 
+#            userXX: 
+#                username: "" 

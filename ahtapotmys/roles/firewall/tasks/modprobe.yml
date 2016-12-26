@@ -1,0 +1,19 @@
+---
+- name: Guvenlik Duvari icin gerekli cekirdek bilesenlerini yukleniyor.
+  modprobe:
+        name: "{{ item.value.name }}"
+        state: "{{ item.value.state }}"
+  with_dict: "firewall_modules"
+  sudo: yes
+  tags: modprobe
+
+- name: Guvenlik Duvari icin gerekli cekirdek bilesenlerini kalici olarak yapilandiriliyor.
+  template:
+        src: "{{ modprobe['conf']['source'] }}"
+        dest: "{{ modprobe['conf']['destination'] }}"
+        owner: "{{ modprobe['conf']['owner'] }}"
+        group: "{{ modprobe['conf']['group'] }}"
+        mode: "{{ modprobe['conf']['mode'] }}"
+  sudo: yes
+  tags: modprobe
+

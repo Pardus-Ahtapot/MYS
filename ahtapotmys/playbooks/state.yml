@@ -1,0 +1,224 @@
+---
+# Sistem stabilitesini tutacak olan ansible dosyasi
+- hosts: all 
+  remote_user: ahtapotops 
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/base/vars/group.yml
+  - /etc/ansible/roles/base/vars/user.yml
+  - /etc/ansible/roles/base/vars/repo.yml
+  - /etc/ansible/roles/base/vars/rsyslog.yml
+  - /etc/ansible/roles/base/vars/ntp.yml
+  - /etc/ansible/roles/base/vars/package.yml
+  - /etc/ansible/roles/base/vars/blacklist.yml
+  - /etc/ansible/roles/base/vars/host.yml
+  - /etc/ansible/roles/base/vars/audit.yml
+  - /etc/ansible/roles/base/vars/sudo.yml
+  - /etc/ansible/roles/base/vars/ssh.yml
+  - /etc/ansible/roles/base/vars/grub.yml
+  - /etc/ansible/roles/base/vars/profile.yml
+  - /etc/ansible/roles/base/vars/logger.yml
+  - /etc/ansible/roles/base/vars/logrotate.yml
+  - /etc/ansible/roles/base/vars/directory.yml
+  - /etc/ansible/roles/base/vars/fusioninventory.yml
+  roles:
+  - { role: base }
+
+- hosts: ansible
+  remote_user: ahtapotops 
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/ansible/vars/package.yml
+  - /etc/ansible/roles/ansible/vars/ansible.yml
+  - /etc/ansible/roles/ansible/vars/directory.yml
+  - /etc/ansible/roles/ansible/vars/git.yml
+  - /etc/ansible/roles/ansible/vars/gkts.yml
+  roles:
+  - { role: ansible }
+
+- hosts: gitlab
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/gitlab/vars/package.yml
+  - /etc/ansible/roles/gitlab/vars/hook.yml
+  roles:
+  - { role: gitlab }
+
+- hosts: firewallbuilder
+  remote_user: ahtapotops 
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/firewallbuilder/vars/package.yml
+  - /etc/ansible/roles/firewallbuilder/vars/fwbuilder.yml
+  - /etc/ansible/roles/firewallbuilder/vars/directory.yml
+  - /etc/ansible/roles/firewallbuilder/vars/git.yml
+  roles:
+  - { role: firewallbuilder }
+
+- hosts: rsyslog 
+  remote_user: ahtapotops 
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/rsyslog/vars/package.yml
+  - /etc/ansible/roles/rsyslog/vars/logrotate.yml
+  - /etc/ansible/roles/rsyslog/vars/signer.yml
+  - /etc/ansible/roles/rsyslog/vars/rsyslog.yml
+  - /etc/ansible/roles/ntp/vars/package.yml
+  - /etc/ansible/roles/ntp/vars/ntp.yml
+  - /etc/ansible/roles/logstash/vars/package.yml
+  - /etc/ansible/roles/logstash/vars/logstash.yml
+  - /etc/ansible/roles/elasticsearch/vars/elasticsearch.yml
+  roles:
+  - { role: rsyslog }
+  - { role: ntp }
+  - { role: logstash }
+
+- hosts: pwlm
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/pwlm/vars/package.yml
+  - /etc/ansible/roles/pwlm/vars/uwsgi.yml
+  - /etc/ansible/roles/pwlm/vars/pwlm.yml
+  - /etc/ansible/roles/pwlm/vars/git.yml
+  - /etc/ansible/roles/pwlm/vars/nginx.yml
+  roles:
+  - { role: pwlm }
+
+- hosts: gkts
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/gkts/vars/package.yml
+  - /etc/ansible/roles/gkts/vars/gkts.yml
+  - /etc/ansible/roles/gkts/vars/nginx.yml
+  - /etc/ansible/roles/gkts/vars/uwsgi.yml
+  roles:
+  - { role: gkts }
+
+- hosts: testfirewall
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/testfirewall/vars/group.yml
+  - /etc/ansible/roles/testfirewall/vars/user.yml
+  - /etc/ansible/roles/testfirewall/vars/package.yml
+  - /etc/ansible/roles/testfirewall/vars/module.yml
+  - /etc/ansible/roles/testfirewall/vars/sysctl.yml
+  - /etc/ansible/roles/testfirewall/vars/directory.yml
+  roles:
+  - { role: testfirewall }
+
+- hosts: firewall:firewall-proxy-dhcp:firewall-openvpn
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/firewall/vars/group.yml
+  - /etc/ansible/roles/firewall/vars/user.yml
+  - /etc/ansible/roles/firewall/vars/package.yml
+  - /etc/ansible/roles/firewall/vars/module.yml
+  - /etc/ansible/roles/firewall/vars/sysctl.yml
+  - /etc/ansible/roles/firewall/vars/iptables.yml
+  - /etc/ansible/roles/firewall/vars/directory.yml
+  - /etc/ansible/roles/firewall/vars/contrackd.yml
+  - /etc/ansible/roles/firewall/vars/profile.yml
+  roles:
+  - { role: firewall }
+
+- hosts: proxy:proxy-dhcp:firewall-proxy-dhcp
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/squid/vars/package.yml
+  - /etc/ansible/roles/squid/vars/squid.yml
+  - /etc/ansible/roles/squid/vars/dansguardian.yml
+  - /etc/ansible/roles/squid/vars/updshalla.yml
+  - /etc/ansible/roles/squid/vars/zeustracker.yml
+  - /etc/ansible/roles/squid/vars/sarg.yml
+  - /etc/ansible/roles/squid/vars/nginx.yml
+  roles:
+  - { role: squid }
+
+- hosts: dhcp:proxy-dhcp:firewall-proxy-dhcp
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/dhcpd/vars/package.yml
+  - /etc/ansible/roles/dhcpd/vars/dhcpd.yml
+  roles:
+  - { role: dhcpd }
+
+- hosts: openvpn:firewall-openvpn
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/openvpn/vars/package.yml
+  - /etc/ansible/roles/openvpn/vars/openvpn.yml
+  - /etc/ansible/roles/openvpn/vars/sysctl.yml
+  roles:
+  - { role: openvpn }
+
+- hosts: elasticsearch
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/elasticsearch/vars/package.yml
+  - /etc/ansible/roles/elasticsearch/vars/elasticsearch.yml
+  - /etc/ansible/roles/elasticsearch/vars/searchguard.yml
+  roles:
+  - { role: elasticsearch }
+
+- hosts: kibana
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/kibana/vars/package.yml
+  - /etc/ansible/roles/kibana/vars/kibana.yml
+  - /etc/ansible/roles/kibana/vars/nginx.yml
+  roles:
+  - { role: kibana }
+
+- hosts: ossimcik
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/ossimcik/vars/repo.yml
+  - /etc/ansible/roles/ossimcik/vars/package.yml
+  - /etc/ansible/roles/ossimcik/vars/ossec.yml
+  - /etc/ansible/roles/ossimcik/vars/nxlog.yml
+  - /etc/ansible/roles/ossimcik/vars/rsyslog.yml
+  roles:
+  - { role: ossimcik }
+
+- hosts: portscanner
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/portscanner/vars/package.yml
+  - /etc/ansible/roles/portscanner/vars/uwsgi.yml
+  - /etc/ansible/roles/portscanner/vars/portscanner.yml
+  - /etc/ansible/roles/portscanner/vars/nginx.yml
+  roles:
+  - { role: portscanner }
+
+- hosts: ocswb 
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/ocswb/vars/package.yml
+  - /etc/ansible/roles/ocswb/vars/uwsgi.yml
+  - /etc/ansible/roles/ocswb/vars/ocswb.yml
+  - /etc/ansible/roles/ocswb/vars/ocswbalarm.yml
+  - /etc/ansible/roles/ocswb/vars/nginx.yml
+  roles:
+  - { role: ocswb }
+
+- hosts: all:!ossimcik 
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/ossec/vars/package.yml
+  - /etc/ansible/roles/ossec/vars/ossec.yml
+  roles:
+  - { role: ossec }

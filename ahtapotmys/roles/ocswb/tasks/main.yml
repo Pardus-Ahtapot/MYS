@@ -1,0 +1,7 @@
+---
+# Ocswb gorevlerini iceren dosyadir
+- include: install.yml
+- include: ocswb.yml
+- include: ocswbalarm.yml
+- include: uwsgi.yml
+- include: nginx.yml

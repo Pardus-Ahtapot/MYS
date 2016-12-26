@@ -1,0 +1,17 @@
+---
+# Guvenlik Duvari Kurucusunun degiskenlerini iceren dosyadir.
+firewallbuilder:
+    fix:
+        source: "reset_iptables"
+        destination: "/usr/share/fwbuilder-5.1.0.3599/configlets/linux24/reset_iptables"
+        group: "root"
+        owner: "root"
+        mode: "0644"
+        force: "yes" 
+    bash:
+        conf:
+            source: "fwbuilder-ahtapot.sh.j2"
+            destination: "/etc/profile.d/fwbuilder-ahtapot.sh"
+            owner: "root" 
+            group: "root" 
+            mode: "0755"

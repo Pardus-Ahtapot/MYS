@@ -1,0 +1,5 @@
+---
+# Kibana gorevlerini iceren dosyadir
+- include: install.yml
+- include: kibana.yml
+- include: nginx.yml

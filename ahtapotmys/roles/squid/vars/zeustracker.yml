@@ -1,0 +1,31 @@
+---
+zeustracker:
+# zeustracker yapilandirmasini belirtmektedir.
+    app:
+        source: "zeustracker/zeustracker.sh.j2"
+        destination: "/usr/local/bin/zeustracker.sh"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    ipblocklist: "/etc/dansguardian/lists/bannediplist_zeustracker"
+    domainblocklist: "/etc/dansguardian/lists/banneddomainlist_zeustracker"
+    cron:
+        source: "zeustracker/zeustracker-cron.j2"
+        destination: "/etc/cron.d/zeustracker"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    min: "59"
+    hour: "22"
+    week: "*"
+    day: "*"
+    month: "*"
+    user: "root"
+
+zeustracker_lists:
+    list01:
+        path: "/etc/dansguardian/lists/bannediplist_zeustracker"
+    list02:
+        path: "/etc/dansguardian/lists/banneddomainlist_zeustracker"
+#    listXX:
+#        path: ""

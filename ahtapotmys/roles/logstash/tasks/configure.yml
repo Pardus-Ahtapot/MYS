@@ -1,0 +1,33 @@
+---
+- name: Logstash input yapilandirmasi uygulaniyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "{{ item.value.destination }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+  with_dict: "logstash_configs"
+  notify:
+    - Logstash servisi yeniden baslatiliyor
+  sudo: yes
+  tags: logstash
+
+- name: Logstash yapilandirmasi uygulaniyor.
+  template:
+        src: "{{ logstash['conf']['default']['source'] }}"
+        dest: "{{ logstash['conf']['default']['destination'] }}"
+        owner: "{{ logstash['conf']['default']['owner'] }}"
+        group: "{{ logstash['conf']['default']['group'] }}"
+        mode: "{{ logstash['conf']['default']['mode'] }}"
+  notify:
+    - Logstash servisi yeniden baslatiliyor
+  sudo: yes
+  tags: logstash
+
+- name: Logstash servisi ayakta
+  service:
+    name: "{{ logstash['service']['name'] }}"
+    state: "{{ logstash['service']['state']  }}"
+    enabled: "{{ logstash['service']['enabled'] }}"
+  sudo: yes
+  tags: logstash

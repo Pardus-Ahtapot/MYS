@@ -1,0 +1,31 @@
+---
+# Paket degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
+firewallbuilder_packages:
+    package01:
+        name: "fwbuilder=5.1.0-4" 
+        state: "present" 
+    package02:
+        name: "git=1:2.1.4-2.1+deb8u2" 
+        state: "present" 
+    package03:
+        name: "python-qt4=4.11.2+dfsg-1" 
+        state: "present" 
+    package04:
+        name: "python-requests=2.4.3-6" 
+        state: "present" 
+    package05:
+        name: "python-pexpect=3.2-1" 
+        state: "present" 
+    package06:
+        name: "xauth=1:1.0.9-1" 
+        state: "present" 
+    package07:
+        name: "ahtapot-gdys-gui=1.1.1" 
+        state: "present" 
+#    packageXX:
+#        name: 
+#        state:  
+#    packageXX:
+#        name: 
+#        state:  

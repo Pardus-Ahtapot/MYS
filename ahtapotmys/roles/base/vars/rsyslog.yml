@@ -1,0 +1,41 @@
+---
+# Log sunucu ayarlarini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar log sunucusu eklenebilir.
+rsyslog:
+    conf:
+        source: "rsyslog.conf.j2" 
+        destination: "/etc/rsyslog.conf" 
+        owner: "root" 
+        group: "root" 
+        mode: "0644" 
+    service:
+        name: "rsyslog" 
+        state: "started" 
+        enabled: "yes"
+    ActionQueueMaxDiskSpace: "2g"
+    ActionQueueSaveOnShutdown: "on" 
+    ActionQueueType: "LinkedList" 
+    ActionQueueFileName: "srvfrwd" 
+    ActionResumeRetryCount: "-1" 
+    WorkDirectory: "/var/spool/rsyslog" 
+    IncludeConfig: "/etc/rsyslog.d/*" 
+
+base_ossimcik_servers:
+    server1:
+        fqdn: "OSSIMCIK_fqdn"
+        port: "514" 
+        severity: "*" 
+        facility: "*"
+        clients:
+            client01:
+                fqdn: "client_sunucu_fqdn"
+#    serverX:
+#        fqdn: "" 
+#        port: "" 
+#        severity: "" 
+#        facility: ""
+#        clients:
+#            clientXX:
+#                fqdn: ""
+#            clientXX:
+#                fqdn: ""

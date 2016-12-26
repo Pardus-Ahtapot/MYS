@@ -1,0 +1,31 @@
+---
+# Calistirildiginda Pwlm Kurulumu Yapilir
+- hosts: pwlm 
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/base/vars/group.yml
+  - /etc/ansible/roles/base/vars/user.yml
+  - /etc/ansible/roles/base/vars/repo.yml
+  - /etc/ansible/roles/base/vars/rsyslog.yml
+  - /etc/ansible/roles/base/vars/ntp.yml
+  - /etc/ansible/roles/base/vars/package.yml
+  - /etc/ansible/roles/base/vars/blacklist.yml
+  - /etc/ansible/roles/base/vars/host.yml
+  - /etc/ansible/roles/base/vars/audit.yml
+  - /etc/ansible/roles/base/vars/sudo.yml
+  - /etc/ansible/roles/base/vars/ssh.yml
+  - /etc/ansible/roles/base/vars/grub.yml
+  - /etc/ansible/roles/base/vars/logger.yml
+  - /etc/ansible/roles/base/vars/logrotate.yml
+  - /etc/ansible/roles/base/vars/directory.yml
+  - /etc/ansible/roles/base/vars/profile.yml
+  - /etc/ansible/roles/base/vars/fusioninventory.yml
+  - /etc/ansible/roles/pwlm/vars/package.yml
+  - /etc/ansible/roles/pwlm/vars/uwsgi.yml
+  - /etc/ansible/roles/pwlm/vars/git.yml
+  - /etc/ansible/roles/pwlm/vars/pwlm.yml
+  - /etc/ansible/roles/pwlm/vars/nginx.yml
+  roles:
+  - { role: base }
+  - { role: pwlm }

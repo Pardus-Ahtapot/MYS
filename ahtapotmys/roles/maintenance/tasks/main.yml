@@ -1,0 +1,4 @@
+---
+# Maintenance rolunun gorevlerini iceren dosyadir
+- include: install.yml
+- include: maintenance.yml

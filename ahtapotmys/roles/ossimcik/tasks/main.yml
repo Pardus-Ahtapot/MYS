@@ -1,0 +1,7 @@
+---
+# Ossimcik gorevlerini iceren dosyadir.
+- include: repo.yml
+- include: install.yml
+- include: ossec.yml
+- include: nxlog.yml
+- include: rsyslog.yml

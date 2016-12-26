@@ -1,0 +1,53 @@
+# Ansible tarafindan yonetilen sunucularin listesi 
+#
+# /etc/ansible/hosts yerinde bulunmalidir.
+#
+#   - Yorumlar '#' karakteriyle baslamalidir.
+#   - Bos satirlar gormezden gelinir.
+#   - Sunucu gruplari [grup] olarak ifade edilmelidir.
+#   - Hostname veya Ip adresleri girilebilir.
+#   - Bir sunucu birden fazla gruba dahil olabilir.
+
+[firewallbuilder]
+
+[ansible]
+
+[gitlab]
+
+[firewall]
+
+[firewall-openvpn]
+
+[openvpn]
+
+[firewall-proxy-dhcp]
+
+[testfirewall]
+
+[proxy]
+
+[pwlm]
+
+[gkts]
+
+[dhcp]
+
+[kibana]
+
+[elasticsearch]
+
+[base]
+
+[ossimcik]
+
+[proxy-dhcp]
+
+[portscanner]
+
+[ocswb]
+
+[ntp]
+
+[rsyslog]
+
+[test_grubu]

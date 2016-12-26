@@ -1,0 +1,568 @@
+ahtapot-mys (1.1.1) unstable; urgency=low
+
+  * Initial release (Closes: #1)  <0 is the predecessor version number>
+    # **MERKEZI YONETIM SISTEMI ( MYS ) - CHANGELOG **
+
+    Merkezi Yonetim Sistemi'nde yapilan degisikliklerin tarih ve versiyon olarak kayitlarinin tutuldugu dosyadir.
+
+    Bu dosyada MYS sisteminde yapilan degisiklikler, eklenen ve kaldirilan ozellikler dosya bazli olarak kayit edilecektir.
+
+    Dosya ana dizin olarak ( /etc/ansible ) 'i baz almistir.
+
+    Dosyada kullanilan ' ' isareti ile her bir degisiklik, gosterilmekte asagidaki listede ise diger isaretler hakkinda bilgi verilmektedir ;
+    * ' # '   Degisiklik yapilmistir.
+    * ' + '   Dosya ilk defa eklenmistir.
+    * ' - '   Dosya kaldirilmistir.
+
+    _NOT : MYS sisteminin aktif olarak gelistirmesi devam etmektedir.._
+
+    Tum soru ve sorunlar ile ilgili asagidaki iletisim adresini kullanarak iletisim kurulabilir.
+
+    ## ------------------------------------------------------------  1.1.1 / 01.11.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/squid/vars/squid.yml | ldap authentication icin workgroup, user, pass ve option eklendi. | 
+    | # | roles/squid/templates/squid/squid0*.gdys.local.conf.j2 | ldap authentication icin gerekli konfigurasyon parametrize edildi. | 
+    | # | roles/squid/templates/updshalla/updshalla.conf.j2 | updshalla konfigurasyondaki stmp tazim yanlisi smtp olarak duzeltildi. | 
+    | # | roles/squid/vars/package.yml | Nginx ve squid paketinin surumu guncellendi. | 
+    | # | roles/kibana/vars/package.yml | Nginx paketinin surumu guncellendi. | 
+    | # | roles/rsyslog/vars/signer.yml | Signer icin cron konfigurasyon degiskenleri ve proxy konfigurasyon degiskenleri eklendi. | 
+    | # | roles/rsyslog/templates/rsyslog.j2 | Rsyslog rotasyonu icin postrotate eklendi. | 
+    | # | roles/rsyslog/templates/signer.bash.j2 | Signer icin proxy konfigurasyonu eklendi. | 
+    | # | roles/rsyslog/tasks/signer.yml | Signer icin cron taskleri eklendi. | 
+    | + | roles/rsyslog/templates/signercron.sh.j2 | Signer icin cron sablonu eklendi. | 
+    | # | roles/rsyslog/templates/rsyslog.conf.j2 | Rsyslog konfigurasyon sablonu duzenlendi. | 
+    | # | roles/rsyslog/vars/package.yml | openjdk 7 surumu java 8 surumu ile degistirildi. | 
+    | # | roles/elasticsearch/vars/package.yml | openjdk 7 surumu java 8 surumu ile degistirildi. | 
+    | # | roles/elasticsearch/vars/elasticsearch.yml | Elasticsearch serverse instance degiskenleri eklendi. | 
+    | # | roles/elasticsearch/tasks/elasticsearch.yml | Elasticsearch instance taskleri icin kontroller eklendi. | 
+    | # | roles/elasticsearch/templates/elasticsearch.yml.j2 | Elasticsearch template instancelar icin genisletildi. | 
+    | + | roles/elasticsearch/templates/elasticsearch.service.j2 | Elasticsearch instancelar systemd dosyalari eklendi. | 
+    | # | roles/base/tasks/main.yml | Fusion inventory taski main dosyasina eklendi. | 
+    | + | roles/base/tasks/fusioninventory.yml | Fusion inventory taskleri eklendi. | 
+    | + | roles/base/vars/fusioninventory.yml | Fusion inventory degiskenleri eklendi. | 
+    | + | roles/base/templates/fusioninventory.conf.j2 | Fusion inventory konfigurasyon dosyasi eklendi. | 
+    | + | roles/base/handlers/fusioninventory.yml | Fusion inventory icin handler dosyasi eklendi. | 
+    | + | roles/base/templates/ocs_ossim.pem.j2 | Fusion inventory icin ocs_ossim pem dosyasi eklendi. | 
+    | # | roles/base/handlers/main.yml | Fusion inventory main handlera eklendi. | 
+    | # | roles/base/templates/rsyslog.conf.j2 | Rsyslog konfigurasyon sablonu duzenlendi. | 
+    | # | roles/base/templates/ahtapot_logrotate.j2 | Fw loglari rotate araligi 30 dan 45 e cikarildi. | 
+    | # | roles/base/vars/package.yml | Ahtapot-fusioninventory-agent paketi eklendi ve ntp paketinin surumu guncellendi. | 
+    | # | roles/portscanner/vars/package.yml | Nginx paketinin surumu guncellendi. | 
+    | # | roles/ntp/vars/package.yml | Ntp paketinin surumu guncellendi. | 
+    | # | roles/logstash/vars/package.yml | openjdk 7 surumu java 8 surumu ile degistirildi ve logstash paketinin surumu guncellendi. | 
+    | # | roles/logstash/templates/configuration/02-output.conf.j2 | logstash outputa dorduncu lokasyon eklendi. | 
+    | # | roles/logstash/vars/logstash.yml | logstash konfigurasyonu degistirildi. | 
+    | # | roles/ocswb/vars/package.yml | Nginx paketinin surumu guncellendi. | 
+    | # | roles/ossimcik/vars/ossec.yml | client.log client.log* ile degistirildi. | 
+    | # | roles/ossimcik/templates/rsyslog.conf.j2 | Rsyslog konfigurasyon sablonu duzenlendi. | 
+    | # | roles/ossimcik/templates/nxlog.conf.j2 | Nxlog konfigurasyon sablonu duzenlendi. | 
+    | # | roles/pwlm/vars/package.yml | Nginx paketinin surumu guncellendi. | 
+    | # | roles/gitlab/templates/post-receive-mys.sh.j2 | Mys hook optimizasyonu yapildi. | 
+    | # | roles/gitlab/templates/post-receive-gdys.sh.j2 | Gdys hook optimizasyonu yaildi. | 
+    | # | playbooks/* | Base rolunu iceren tum degisken dosyalari icin fusioninventory eklendi. | 
+
+
+    ## ------------------------------------------------------------  1.1.1 / 23.09.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/firewall/vars/package.yml | Man sayfalarindan dolayi ahtapot-lkk versiyon guncellendi. | 
+    | # | roles/firewallbuilder/vars/package.yml | Man sayfalarindan dolayi ahtapot-gdys-gui versiyon guncellendi. | 
+    | # | roles/gkts/vars/package.yml | Man sayfalarindan dolayi ahtapot-gtks versiyon guncellendi. | 
+    | # | roles/ocswb/vars/package.yml | Man sayfalarindan dolayi ahtapot-ocswb versiyon guncellendi. | 
+    | # | roles/pwlm/vars/package.yml | Man sayfalarindan dolayi ahtapot-pwlm versiyon guncellendi. | 
+    | # | roles/portscanner/vars/package.yml | Man sayfalarindan dolayi ahtapot-portscanner versiyon guncellendi. | 
+    | # | roles/kibana/vars/package.yml | Man sayfalarindan dolayi nginx versiyon guncellendi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 06.09.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/rsyslog/templates/signer.bash.j2 | Yerel agda openssl ile imzalamak icin sablon daha gelistirildi. | 
+    | # | roles/rsyslog/vars/signer.yml | Yerel agda openssl ile imzalamak icin yeni ekstra degiskenler eklendi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 26.08.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/base/templates/ahtapot_logrotate.j2 | /var/log/client.log icin rotate eklendi. | 
+    | # | roles/rsyslog/templates/signer.bash.j2 | Yerel agda openssl ile imzalamak icin sablon gelistirildi. | 
+    | # | roles/rsyslog/vars/signer.yml | Yerel agda openssl ile imzalamak icin yeni degiskenler eklendi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 25.08.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | hosts | ntp sunucular icin ntp grubu olusturuldu. | 
+    | + | roles/ntp | ntp sunculari icin ntp rolu olusturuldu. | 
+    | # | roles/base/tasks/ntp.yml | Ntp sunucu grublari icin basedeki ntp konfigurasyonu kaldirildi. | 
+    | + | playbooks/ntp.yml | Ntp rolunu calistiracak playbook eklendi. | 
+    | # | playbooks/state.yml | Ntp rolunun playbooku state'e eklendi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 22.08.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/openvpn/templates/auth-ldap.conf.j2 | Esitlikteki fazladan bosluk kaldirildi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 18.08.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | + | roles/ossimcik/templates/local_rules.xml.j2 | Ossec local_rules sablonu olusturuldu. | 
+    | # | roles/ossimcik/templates/rsyslog.conf.j2 | Ossimcik rsyslog confa usb eklendi. | 
+    | # | roles/ossimcik/tasks/ossec.yml | Ossec local_rules taskleri eklendi. | 
+    | # | roles/ossimcik/vars/ossec.yml | Ossec local_rules degiskenleri eklendi. | 
+    | # | hosts | ossimcik01 ossimcik grubuna eklendi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 17.08.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | + | roles/ossec | Ossec agentlar icin yeni rol olusturuldu. | 
+    | + | playbooks/ossec.yml | Ossec icin yeni playbook olusturuldu. | 
+    | # | playbooks/state.yml | State playbookdan ossec kaldirildi. | 
+    | # | playbooks/base.yml | Base playbookdan ossec kaldirildi. | 
+    | # | roles/base/vars/package.yml | Ossec agent ve python crypto paketleri eklendi. | 
+    | - | roles/base/vars/ossec.yml | Ossec agent degiskenleri kaldirildi. | 
+    | - | roles/base/tasks/ossec.yml | Ossec agent taskleri kaldirildi. | 
+    | - | roles/base/hanlers/ossec.yml | Ossec agent hanler dosyasi kaldirildi. | 
+    | - | roles/base/templates/ossec.conf.j2 | Ossec agent conf dosyasi kaldirildi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 16.08.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | + | roles/base/vars/ossec.yml | Ossec agent degiskenleri eklendi. | 
+    | + | roles/base/tasks/ossec.yml | Ossec agent taskleri eklendi. | 
+    | + | roles/base/hanlers/ossec.yml | Ossec agent hanler dosyasi eklendi. | 
+    | # | roles/base/tasks/main.yml | Genel tasklere ossec taski eklendi. | 
+    | # | roles/base/vars/package.yml | Rsyslog-gnutls paketi eklendi. | 
+    | # | roles/base/vars/rsyslog.yml | Loglar ossimciklere gidecek sekilde ayarlandi. | 
+    | # | roles/base/templates/rsyslog.conf.j2 | Rsyslog konfigurasyonu ossimciklere gore ayarlandi. | 
+    | # | roles/ossimcik/templates/rsyslog.conf.j2 | Ossimcik rsyslog konfigurasyonu ayarlandi. | 
+    | # | roles/ossimcik/templates/nxlog.conf.j2 | Ossimcik nxlog konfigurasyonu ayarlandi. | 
+    | # | roles/ossimcik/vars/rsyslog.yml | Ossimcik rsyslog degiskenleri ayarlandi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 10.08.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/squid/templates/dansguardian/configuration/squid04.gdys.local.conf.j2 | xforwardedfor on yapildi(rate limitin icin gerekli). | 
+    | # | roles/squid/templates/squid/squid04.gdys.local.conf.j2 | Squid dosya upload engellendi(dansguardian whitelistler icin). | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 08.08.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/ossimcik/templates/nxlog.conf.j2 | nxlog konfigurasyonu gelistirildi. | 
+    | # | roles/ossimcik/templates/rsyslog.conf.j2 | rsyslog konfigurasyonu gelistirildi. | 
+    | # | roles/ossimcik/vars/ossec.yml | localfile eklendi. | 
+    | # | roles/ossimcik/vars/rsyslog.yml | ossimcik rsyslog yapilandirmasindaki sunucu adresleri parametrize edildi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 04.08.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/elasticsearch/vars/searchguard.yml | "." iceren parola hashleri degistirildi. | 
+    | # | roles/kibana/vars/kibana.yml | Kibana degiskeninde es https e cevrildi. | 
+    | # | roles/kibana/templates/kibana.yml.j2 | Kibana konfgiruasyonunda duzeltildi. | 
+    | # | roles/pwlm/vars/nginx.yml.j2 | pwlm nginx konfigurasyonu duzeltildi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 29.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | hosts | ocswb ve portscanner grublarina sunucular eklendi. | 
+    | # | roles/ossimcik/templates/ossec.conf.j2 | ossec konfigurasyonu parametrize edildi. | 
+    | # | roles/ossimcik/vars/ossec.yml | ossec konfigurasyonu parametrize edildi. | 
+    | # | roles/logstash/templates/02-output.conf.j2 | logstash output dongusu degistirildi. | 
+    | # | roles/elasticsearch/templates/elasticsearch.yml.j2 | elasticsearch konfigurasyonu degistirildi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 25.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | + | roles/portscanner | Portscanner rolu eklendi. | 
+    | + | roles/oscwb | OCS-NG whitelist blacklist rolu eklendi. | 
+    | # | hosts | ocswb ve portscanner host gruplari eklendi. | 
+    | # | playbooks/state.yml | ocswb.yml ve portscanner.yml state.yml'ye eklendi. | 
+    | + | playbooks/ocswb.yml | ocswb kurulumu yapacak playbook eklendi. | 
+    | + | playbooks/portscanner.yml | portscanner kurulumu yapacak playbook eklendi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 22.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | + | roles/ossimcik/templates/rsyslog.conf.j2 | Ossimcik icin rsyslog eklendi. | 
+    | + | roles/ossimcik/vars/rsyslog.yml | Ossimcik icin rsyslog degiskenleri eklendi. | 
+    | + | roles/ossimcik/hanlders/rsyslog.yml | Ossimcik icin rsyslog hanleri eklendi. | 
+    | + | roles/ossimcik/tasks/rsyslog.yml | Ossimcik icin rsyslog taskleri eklendi. | 
+    | # | roles/base/task/rsyslog.yml | Ossimcik icin base rsyslog taski kaldirildi. | 
+    | # | hosts | Ossimcik testleri icin ossimcik grubuna sunucu eklendi. | 
+    | # | roles/rsyslog/templates/rsyslog.conf.j2 | Rsyslog konfigurasyon duzenlenemeleri yapiliyor. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 22.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/elasticsearch/templates/searchguard/sg_roles.yml.j2 | Roller yapilandiriliyor. | 
+    | # | roles/elasticsearch/vars/searchguard.yml | Roller icin kullanicilar ve role mapleri yapilandiriliyor. | 
+    | # | roles/elasticsearch/handlers/searchguard.yml | sgadmin betigi bin/bash ile cagriliyor. | 
+    | # | hosts | Ossimcik host grubu eklendi. | 
+    | + | playbooks/ossimcik.yml | Ossimcik playbooku eklendi. | 
+    | # | playbooks/state.yml | Kibana ve ossimcik playbooku eklendi, relk kaldirildi. | 
+    | - | playbooks/relk.yml | Relk playbooku kalidirildi. | 
+    | + | playbooks/kibana.yml | Kibana playbooku eklendi. | 
+    | # | playbooks/rsyslog.yml | Rsyslog playbookuna logstash rolu eklendi. | 
+    | # | roles/squid/templates/squid/.conf.j2 | ldap satirlari kaldirildi. | 
+    | # | roles/rsyslog/vars/package.yml | rsyslog-gnutls paketi eklendi. | 
+    | + | roles/ossimcik | Ossimcik rolu eklendi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 20.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | + | README.md | README.md dosyasi eklendi. | 
+    | + | roles/logstash/templates/configuration | Logstash konfigurasyonlari ayri klasor altina alindi. | 
+    | # | roles/elasticsearch/vars/package.yml | SearchGuard ve SearchGuardSsl paketleri eklendi. | 
+    | + | roles/elasticsearch/templates/searchguard/sg_internal_users.yml.j2 | Searchguard internal_users sablonu eklendi. | 
+    | + | roles/elasticsearch/templates/searchguard/sg_roles_mapping.yml.j2 | Searchguard roles_mapping sablonu eklendi. | 
+    | + | roles/elasticsearch/templates/searchguard/sg_roles.yml.j2 | Searchguard roles sablonu eklendi. | 
+    | + | roles/elasticsearch/tasks/searchguard.yml | Searchguard taskleri olusturuldu. | 
+    | # | roles/elasticsearch/tasks/main.yml | searchguard.yml main tasklere eklendi. | 
+    | + | roles/elasticsearch/handlers/searchguard.yml | Searchguard handleri olusturuldu. | 
+    | # | roles/elasticsearch/handlers/main.yml | searchguard.yml main handlere eklendi. | 
+    | + | roles/elasticsearch/vars/searchguard.yml | searchguard.yml degisken dosyasi olusturuldu. | 
+    | # | playbooks/relk.yml | searchguard.yml degiskenleri eklendi. | 
+    | # | playbooks/elasticsearch.yml | searchguard.yml degiskenleri eklendi. | 
+    | # | playbooks/state.yml | searchguard.yml degiskenleri eklendi. | 
+    | # | roles/pwlm/vars/package.yml | python-requests paketi eklendi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 19.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/kibana/vars/nginx.yml | Kibana nginx degiskenleri degistirildi. | 
+    | # | roles/kibana/templates/kibana_nginx.conf.j2 | Kibana nginx konfgiurasyonu degistirildi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 18.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/logstash/vars/logstash.yml | Logstash konfigurasyon degisiklikleri degistirildi. | 
+    | # | roles/logstash/vars/package.yml | Logstash paket versiyonu degistirildi. | 
+    | # | roles/logstash/tasks/configure.yml | Logstash konfigurasyon taskleri degistirildi. |
+    | # | roles/elasticsearch/vars/package.yml | Elasticsearch paket versiyonu degistirildi. | 
+    | # | roles/kibana/vars/kibana.yml | Kibana konfigurasyon degisiklikleri degistirildi. | 
+    | # | roles/kibana/vars/package.yml | Kibana paket versiyonu degistirildi. | 
+    | # | roles/kibana/tasks/kibana.yml | Kibana konfigurasyon taskleri degistirildi. |
+    | # | roles/kibana/vars/nginx.yml | Nginx konfigurasyon degisiklikleri degistirildi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 15.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/squid/vars/dansguardian.yml | Dansguardian yerel liste degiskenleri duzeltildi. | 
+    | # | roles/squid/vars/zeustracker.yml | Zeustracker dosya degiskenleri duzeltildi. |
+    | # | roles/squid/tasks/dansguardian.yml | Dansguardian file modulu shell (touch) modulune cevrildi. | 
+    | # | roles/squid/tasks/zeustracker.yml | Zeustracker file modulu shell (touch) modulune cevrildi. | 
+    | # | playbooks/pwlm.yml | Nginx degiskenleri pwlm playbookuna eklendi. |
+    | + | playbooks/relk.yml | RELK playbooku eklendi. |
+    | + | playbooks/elasticsearch.yml | Elasticsearch playbooku eklendi. |
+    | + | playbooks/state.yml | RELK ve Elasticsearch playbooku state 'e eklendi. |
+    | # | hosts | RELK ve Elasticsearch gruplari olusturuldu. |
+
+
+    ## ------------------------------------------------------------  1.1.0 / 14.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | + | roles/elasticsearch | Elasticsearch SIEM uygulanacak sekilde yazilmaya baslandi ve eklendi. | 
+    | + | roles/logstash | Logstash SIEM uygulanacak sekilde yazilmaya baslandi ve eklendi. | 
+    | + | roles/kibana | Kibana SIEM uygulanacak sekilde yazilmaya baslandi ve eklendi. |
+
+
+    ## ------------------------------------------------------------  1.1.0 / 13.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/gkts/vars/package.yml | Ahtapot-gkts versiyonu guncellendi. | 
+
+
+    ## ------------------------------------------------------------  1.1.0 / 12.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/base/handlers/profile.yml | Profil handlerindeki yazim hatasi duzeltildi. | 
+    | # | roles/base/vars/repo.yml | Varsayilan pardus yenikusak reposu eklendi. |
+    | # | roles/ansible/vars/package.yml | Git versiyonu guncellendi. |
+    | # | roles/gitlab/vars/package.yml | Git versiyonu guncellendi. |
+    | # | roles/firewallbuilder/vars/package.yml | Git versiyonu guncellendi. |
+    | # | roles/dhcpd/vars/dhcpd.yml | Max leases sayisi 201 'e dusuruldu. |
+    | # | roles/base/tasks/install.yml | Apt modulune force parametresi eklendi. |
+    | # | roles/ansible/tasks/install.yml | Apt modulune force parametresi eklendi. |
+    | # | roles/gitlab/tasks/install.yml | Apt modulune force parametresi eklendi. |
+    | # | roles/dhcpd/tasks/install.yml | Apt modulune force parametresi eklendi. |
+    | # | roles/firewallbuilder/tasks/install.yml | Apt modulune force parametresi eklendi. |
+    | # | roles/firewall/tasks/install.yml | Apt modulune force parametresi eklendi. |
+    | # | roles/openvpn/tasks/install.yml | Apt modulune force parametresi eklendi. |
+    | # | roles/gkts/tasks/install.yml | Apt modulune force parametresi eklendi. |
+    | # | roles/pwlm/tasks/install.yml | Apt modulune force parametresi eklendi. | 
+    | # | roles/rsyslog/tasks/install.yml | Apt modulune force parametresi eklendi. |
+    | # | roles/squid/tasks/install.yml | Apt modulune force parametresi eklendi. |
+    | # | roles/testfirewall/tasks/install.yml | Apt modulune force parametresi eklendi. |
+
+    ## ------------------------------------------------------------  1.0.9 / 01.07.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | ansible.cfg | retry dosyalari kaldirildi, scp varsayilan hale getirildi. | 
+    | # | roles/* | Sudo parametreleri task bazli olacak sekilde degistirildi. |
+    | + | roles/base/vars/profile.yml | Profil ve bashrc scriptlerinin degiskenleri ayrildi. |
+    | + | roles/base/tasks/profile.yml | Profil ve bashrc scriptlerinin taskleri eklendi. |
+    | + | roles/openvpn/tasks/sysctl.yml | sysctl taskleri eklendi. |
+    | + | roles/openvpn/tasks/sysctl.yml | sysctl icin gerekli konfigurasyon degiskenleri eklendi. |
+    | # | roles/openvpn/tasks/main.yml | sysctl taski openvpn main taskine eklendi. |
+    | # | roles/openvpn/tasks/openvpn.yml | Openldap, activedirectory destegi verebilecek sekilde taskler eklendi. |
+    | + | roles/openvpn/template/auth-ldap.conf.j2 | Openldap, activedirectory destegi verebilecek sekilde template eklendi. |
+    | - | roles/gitlab/handlers/service.yml | service.yml gitlab.yml olarak degistirildi. |
+    | + | roles/gitlab/handlers/gitlab.yml | service.yml gitlab.yml olarak degistirildi. |
+    | # | roles/gitlab/handlers/main.yml | main.ymldeki service.yml yerine gitlab.yml include edildi. |
+
+
+    ## ------------------------------------------------------------  1.0.9 / 27.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | playbooks/state.yml | state.yml yapisi degistirilerek performance gelistirmeleri yapildi. |
+    | + | playbooks/base.yml | base.yml dosyasi eklendi. |
+    | # | roles/pwlm | Pwlm yeni kod yapi�iına uyumlu hale getirildi|
+    | # | roles/pwlm/vars/package.yml | Git paketi eklendi. |
+    | # | roles/openvpn | Openvpn farkli sunuculari destekleyecek hale getirildi. | 
+    | # | roles/dhcpd | Dhcpd farkli sunuculari destekleyecek hale getirildi. Yeni kod yapisina uygun hale getirildi. |
+    | # | ansible.cfg | retry dosyalari kaldirildi, scp varsayilan hale getirildi. |
+    | # | roles/* | Sudo parametreleri task bazli olacak sekilde degistirildi. |
+    | + | roles/base/vars/profile.yml | Profil ve bashrc scriptlerinin degiskenleri ayrildi. |
+    | + | roles/base/tasks/profile.yml | Profil ve bashrc scriptlerinin taskleri eklendi. |
+    | + | roles/openvpn/tasks/sysctl.yml | sysctl taskleri eklendi. |
+    | + | roles/openvpn/tasks/sysctl.yml | sysctl icin gerekli konfigurasyon degiskenleri eklendi. |
+    | # | roles/openvpn/tasks/main.yml | sysctl taski openvpn main taskine eklendi. |
+    | # | roles/openvpn/tasks/openvpn.yml | Openldap, activedirectory destegi verebilecek sekilde taskler eklendi. | 
+    | + | roles/openvpn/template/auth-ldap.conf.j2 | Openldap, activedirectory destegi verebilecek sekilde template eklendi. | 
+    | - | roles/gitlab/handlers/service.yml | service.yml gitlab.yml olarak degistirildi. |
+    | + | roles/gitlab/handlers/gitlab.yml | service.yml gitlab.yml olarak degistirildi. |
+    | # | roles/gitlab/handlers/main.yml | main.ymldeki service.yml yerine gitlab.yml include edildi. |
+
+
+    ## ------------------------------------------------------------  1.0.9 / 27.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | playbooks/state.yml | state.yml yapisi degistirilerek performance gelistirmeleri yapildi. |
+    | + | playbooks/base.yml | base.yml dosyasi eklendi. |
+    | # | roles/pwlm | Pwlm yeni kod yapisina uyumlu hale getirildi. | 
+    | # | roles/pwlm/vars/package.yml | Git paketi eklendi. |
+    | # | roles/openvpn | Openvpn farkli sunuculari destekleyecek hale getirildi. |
+    | # | roles/dhcpd | Dhcpd farkli sunuculari destekleyecek hale getirildi. Yeni kod yapisina uygun hale getirildi. |
+    | - | roles/standalone-base | Standalone roller kaldirildi. |
+    | - | roles/standalone-firewall | Standalone roller kaldirildi. |
+    | - | roles/standalone-squid | Standalone roller kaldirildi. |
+    | - | roles/standalone-openvpn | Standalone roller kaldirildi. |
+    | - | roles/standalone-openvpn-ldap | Standalone roller kaldirildi. |
+    | - | roles/standalone-openvpn-activedirectory | Standalone roller kaldirildi. |
+    | - | playbooks/standalone-base.yml | Standalone playbooklar kaldirildi. |
+    | - | playbooks/standalone-firewall.yml | Standalone playbooklar kaldirildi. |
+    | - | playbooks/standalone-proxy.yml | Standalone playbooklar kaldirildi. |
+    | - | playbooks/standalone-openvpn.yml | Standalone playbooklar kaldirildi. |
+    | - | playbooks/standalone-openvpn-ldap.yml | Standalone playbooklar kaldirildi. |
+    | - | playbooks/standalone-openvpn-activedirectory.yml | Standalone playbooklar kaldirildi. |
+
+
+    ## ------------------------------------------------------------  1.0.9 / 23.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/rsyslog | Rsyslog yeni kod yapisina uyumlu hale getirildi. |
+    | # | roles/squid | Squid yeni kod yapisina uyumlu hale getirildi. |
+    | # | roles/openvpn | Openvpn yeni kod yapisina uyumlu hale getirildi. | 
+    | # | roles/gkts | Gkts yeni kod yapisina uyumlu hale getirildi. |
+
+
+    ## ------------------------------------------------------------  1.0.9 / 22.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/gitlab/template/post-receive-mys.sh.j2 | Gitlab mys hook scripti optimize edildi. | 
+    | # | roles/gitlab/template/post-receive-gdys.sh.j2 | Gitlab gdys hook scripti optimize edildi. | 
+
+
+    ## ------------------------------------------------------------  1.0.9 / 21.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/gitlab | Gitlab rolu yeni kod yapisina uyumlu hale getiriliyor. |
+    | + | roles/gitlab/task/hook.yml | Gitlab hook gorevleri yeni kod yapisina uyumlu haline getirildi. | 
+    | + | roles/gitlab/vars/hook.yml | Gitlab hook degiskenleri tasindi. |
+    | - | roles/gitlab/templates/post-receive.sh.j2 | Gereksiz post-receive kaldirildi. |
+    | # | roles/firewallbuilder | Fwbuilder rolu yeni kod yapisina uyumlu hale getiriliyor. |
+    | + | roles/firewallbuilder/vars/package.yml | Fwbuilder paket degiskenleri tasindi. Versiyon tutacak sekilde ayarlandi. | 
+    | # | roles/firewallbuilder/tasks/install.yml | Fwbuilder kurulum gorevleri esnetildi. |
+
+
+    ## ------------------------------------------------------------  1.0.9 / 20.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/base | Base rolu yeni kod yapisina uyumlu hale getiriliyor. | 
+    | # | roles/base/handlers/rsyslog.yml | Rsyslog handlers yeni kod yapisi uyumlu haline getirildi. | 
+    | # | roles/base/handlers/ntp.yml | Ntp handlers yeni kod yapisi uyumlu haline getirildi. |
+    | + | roles/base/vars/rsyslog.yml | Ntp sunucu degiskenleri tasindi. |
+    | # | roles/base/templates/rsyslog.conf.j2 | Ntp sunucu konfigurasyonu esnetildi. | 
+    | # | roles/base/taks/rsyslog.yml | Ntp sunucu taskleri yeni kod yapisina esnetildi. |
+    | # | roles/firewall | Guvenlik duvari rolu yeni kod yapisina uyumlu hale getiriliyor. |
+    | + | roles/firewall/vars/user.yml | Guvenlik duvari kullanici degiskenleri tasindi. |
+    | # | roles/firewall/tasks/user.yml | Guvenlik duvari kullanici gorevleri esnetildi. |
+    | + | roles/firewall/vars/group.yml | Guvenlik duvari grup degiskenleri tasindi. |
+    | # | roles/firewall/tasks/group.yml | Guvenlik duvari grub gorevleri esnetildi. |
+    | + | roles/firewall/vars/package.yml | Guvenlik duvari paket degiskenleri tasindi. Versiyon tutacak sekilde ayarlandi. |
+    | # | roles/firewall/tasks/install.yml | Guvenlik duvari kurulum gorevleri esnetildi. |
+    | + | roles/firewall/vars/module.yml | Guvenlik duvari gerekli cekirdek bileseninin degiskenleri tasindi. |
+    | # | roles/firewall/tasks/modprobe.yml | Guvenlik duvari cekirdek bilesenlerinin cekirdege yuklenmesi esnetildi. |
+    | # | roles/firewall/template/modules.j2 | Guvenlik duvari kalici bilesen dosyasi esnetildi. |
+    | - | roles/firewall/handlers/modprobe.yml | Guvenlik duvari gereksiz handler dosyasi kaldirildi. |
+    | # | roles/testfirewall | Test guvenlik duvari rolu yeni kod yapisina uyumlu hale getiriliyor. |
+    | + | roles/testfirewall/vars/user.yml | Test guvenlik duvari kullanici degiskenleri tasindi. |
+    | # | roles/testfirewall/tasks/user.yml | Test guvenlik duvari kullanici gorevleri esnetildi. |
+    | + | roles/testfirewall/vars/group.yml | Test guvenlik duvari grup degiskenleri tasindi. |
+    | # | roles/testfirewall/tasks/group.yml | Test guvenlik duvari grub gorevleri esnetildi. |
+    | + | roles/testfirewall/vars/package.yml | Test guvenlik duvari paket degiskenleri tasindi. Versiyon tutacak sekilde ayarlandi. |
+    | # | roles/testfirewall/tasks/install.yml | Test guvenlik duvari kurulum gorevleri esnetildi. |
+    | + | roles/testfirewall/vars/module.yml | Test guvenlik duvari gerekli cekirdek bileseninin degiskenleri tasindi. |
+    | # | roles/testfirewall/tasks/modprobe.yml | Test guvenlik duvari cekirdek bilesenlerinin cekirdege yuklenmesi esnetildi. |
+    | # | roles/testfirewall/template/modules.j2 | Test guvenlik duvari kalici bilesen dosyasi esnetildi. |
+    | - | roles/testfirewall/handlers/modprobe.yml | Test guvenlik duvari gereksiz handler dosyasi kaldirildi. | 
+    | - | roles/ipsec | Gereksiz rol kaldirildi. |
+    | - | roles/simplerisk | Gereksiz rol kaldirildi. |
+    | - | roles/ocsng | Gereksiz rol kaldirildi. |
+    | - | roles/elasticsearch | Gereksiz rol kaldirildi. |
+    | - | roles/logstash | Gereksiz rol kaldirildi. |
+    | - | roles/kibana | Gereksiz rol kaldirildi. |
+    | - | roles/simplerisk | Gereksiz rol kaldirildi. |
+    | - | roles/ossim | Gereksiz rol kaldirildi. |
+    | - | roles/keydeployer | Gereksiz rol kaldirildi. |
+    | - | playbook/elk.yml | Gereksiz playbook kaldirildi. | 
+    | - | playbook/elasticsearch.yml | Gereksiz playbook kaldirildi. |
+    | - | playbook/ossim.yml | Gereksiz playbook kaldirildi. |
+    | - | playbook/kibana.yml | Gereksiz playbook kaldirildi. |
+    | - | playbook/logstash.yml | Gereksiz playbook kaldirildi. |
+    | - | playbook/ipsec.yml | Gereksiz playbook kaldirildi. |
+    | - | playbook/ocsng.yml | Gereksiz playbook kaldirildi. |
+    | - | playbook/firewallipsec.yml | Gereksiz playbook kaldirildi. |
+    | - | playbook/simplerisk.yml | Gereksiz playbook kaldirildi. |
+    | - | playbook/keydeployer.yml | Gereksiz playbook kaldirildi. |
+    | # | hosts | Gereksiz host gruplari kaldirildi. |
+
+
+    ## ------------------------------------------------------------  1.0.7 / 17.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    |   | roles/base | Code Base esnetiliyor. |
+    |   | roles/base/vars/rsyslog.yml | Rsyslog sunucu degiskenleri tasindi. |
+    |   | roles/base/templates/rsyslog.conf.j2 | Rsyslog sunucu konfigurasyonu esnetildi. |
+    |   | roles/base/taks/rsyslog.yml | Rsyslog sunucu konfigurasyonu esnetildi. |
+    |   | roles/base/vars/user.yml | Kullanici degiskenleri tasindi. |
+    |   | roles/base/tasks/user.yml | Kullanici konfigurasyonu esnetildi. |
+    |   | roles/base/vars/group.yml | Grup degiskenleri tasindi. |
+    |   | roles/base/tasks/group.yml | Grup konfigurasyonu esnetildi. | 
+    |   | roles/base/vars/repo.yml | Repo degiskenleri tasindi. | 
+    |   | roles/base/tasks/repo.yml | Repo konfigurasyonu esnetildi. |
+
+
+    ## ------------------------------------------------------------  1.0.7 / 13.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/base/vars/main.yml | LKK sudoers zcat 'e -f parametresi eklendi. | 
+
+
+    ## ------------------------------------------------------------  1.0.7 / 08.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/firewall/templates/bashrc.j2 | Lkk kullanicisi icin LESS secure moduna alindi. | 
+    | # | roles/ansible/templates/gtks.sh.j2 | GKTSHOOK sablonu duzeltildi. |
+
+
+    ## ------------------------------------------------------------  1.0.7 / 07.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/firewall/vars/main.yml | Bmon paketi kurulum icin eklendi, lkk parolasi degistirildi. | 
+    | # | roles/standalone-firewall/vars/main.yml | Lkk parolasi degistirildi, gereksiz konfigurasyonlar kaldirildi. | 
+    | # | roles/base/vars/main.yml | LKK sudo-io devre disi birakildi, bmon icin gerekli sudo ayarlari yapildi. | 
+
+
+    ## ------------------------------------------------------------  1.0.7 / 03.06.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | + | roles/squid/tasks/zeustracker.yml | Zeustracker block list taskleri eklendi. | 
+    | + | roles/squid/templates/zeustracker.sh.j2 | Zeustracker block list sablonu eklendi. | 
+    | + | roles/squid/templates/zeustracker-cron.j2 | Zeustracker block list cron sablonu eklendi. | 
+    | + | roles/base/templates/revoked_keys.j2 | Revoked anahtar sablonu eklendi. |  
+    | # | roles/base/tasks/ssh.yml | Revoked anahtar taski eklendi. |  
+
+
+    ## ------------------------------------------------------------  1.0.7 / 30.05.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    | # | roles/firewall/vars/main.yml | VPN icin firewalllarda proxy_arp acildi. |
+    | # | roles/firewall/vars/main.yml | LKK icin gerekli paketler kurulum icin eklendi. | 
+    | # | roles/base/vars/main.yml | LKK icin gerekli yeni komutlara sudo yetkisi verildi. | 
+
+
+    ## ------------------------------------------------------------  1.0.6 / 24.05.2016  ------------------------------------------------------------
+
+    | Degisiklik | Dosya | Aciklama |
+    |---|-----|-----|
+    |   | roles/firewallbuilder | Sentaks kontrolu ici farkli kullanici eklendi. |
+    |   | roles/firewallbuilder | Xlock problemi duzeltildi. |
+    |   | roles/gkts | Gkts playbooku yazildi. |
+    |   | roles/pwlm | Pwlm playbooku yazildi. |
+    |   | roles/squid | Proxy dizayni degistirildi izin isteme eklend. |
+    |   | roles/firewall | Conntrackd scripti ve paketi eklendi. |
+    |   | roles/firewall | Iptables loglari farkli dosya yazildi |
+    |   | roles/base | SSH debug acildi. | 
+    |   | roles/base | Ahtapot loglari icin logrotte degistirildi. |
+    |   | roles/base | NTP server degiskenlerinin kontroleri eklendi. |
+    |   | roles/base | Sudoers sudo-io, bakim ve lkk icindegistirildi. |
+    |   | roles/ansible | Rsync paketi eklendi. |
+    |   | roles/squid | Dansguardian reload handleri degistirildi. |
+    |   | roles/rsyslog | 5651 signer task eklendi. |
+    |   | roles/standalone* | Standalone playbooklar yazildi testleri yapildi. |
+
+
+    ## ------------------------------------------------------------  1.0.2 / 20.03.2016  ------------------------------------------------------------

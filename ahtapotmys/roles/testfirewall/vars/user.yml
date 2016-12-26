@@ -1,0 +1,17 @@
+---
+# Kullanici degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar kullanici eklenebilir.
+testfirewall_users:
+    user1:
+        name: "kontrol" 
+        uid: "1020" 
+        group: "kontrol" 
+        shell: "/bin/bash"
+        state: "present" 
+        password: "$6$Q6I6.lT/$iGAJmNHkxMQy2qZAfJ9clPVFFbotTL8LUdkoQHenFqhZPNglPD.Ezr1AsuSGIUV48FeTIUe1VJj8dF7.vkmwv1" 
+#    userX:
+#        name: 
+#        group:
+#        shell: 
+#        state:  
+#        password:  

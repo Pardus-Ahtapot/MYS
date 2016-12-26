@@ -1,0 +1,15 @@
+---
+# Logrotate degiskenlerini iceren dosyadir
+logrotate_scripts:
+    script01:
+        source: "ahtapot_logrotate.j2"
+        destination: "/etc/logrotate.d/ahtapot"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+#    scriptXX:
+#        source: ""
+#        destination: ""
+#        owner: ""
+#        group: ""
+#        mode: "" 

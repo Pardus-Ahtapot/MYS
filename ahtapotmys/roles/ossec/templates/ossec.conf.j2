@@ -1,0 +1,11 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+<ossec_config>
+
+   <client>
+      <server-hostname>{{ ossec['server'] }}</server-hostname>
+      <config-profile>genericlinux</config-profile>
+   </client>
+
+</ossec_config>

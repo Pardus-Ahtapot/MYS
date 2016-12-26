@@ -1,0 +1,6 @@
+---
+- name: dhcpd servisini yeniden baslat
+  service:
+    name: "{{ dhcpd['service']['name'] }}"
+    state: restarted
+  sudo: yes

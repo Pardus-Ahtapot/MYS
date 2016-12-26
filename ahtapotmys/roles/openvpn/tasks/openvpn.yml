@@ -1,0 +1,77 @@
+---
+- name: Default konfigurasyonu uygulaniyor.
+  template:
+        src: "{{ openvpn['default']['source'] }}"
+        dest: "{{ openvpn['default']['destination'] }}"
+        owner: "{{ openvpn['default']['owner'] }}"
+        group: "{{ openvpn['default']['group'] }}"
+        mode: "{{ openvpn['default']['mode'] }}"
+  notify:
+    - openvpn servisini yeniden baslat
+  sudo: yes
+  tags: openvpn
+
+- name: CA sertifikasi uygulaniyor.
+  template:
+        src: "{{ openvpn['cacrt']['source'] }}"
+        dest: "{{ openvpn['cacrt']['destination'] }}"
+        owner: "{{ openvpn['cacrt']['owner'] }}"
+        group: "{{ openvpn['cacrt']['group'] }}"
+        mode: "{{ openvpn['cacrt']['mode'] }}"
+  notify:
+    - openvpn servisini yeniden baslat
+  sudo: yes
+  tags: openvpn
+
+- name: Dh2048 olusturuluyor.
+  shell: openssl dhparam 2048 > /etc/openvpn/dh2048.pem
+  args:
+    creates: "/etc/openvpn/dh2048.pem"
+  sudo: yes
+  tags: openssl
+
+- name: Server sertifikasi uygulaniyor.
+  template:
+        src: "{{ openvpn['cert']['source'] }}/{{ ansible_fqdn }}.cert.j2"
+        dest: "{{ openvpn['cert']['destination'] }}"
+        owner: "{{ openvpn['cert']['owner'] }}"
+        group: "{{ openvpn['cert']['group'] }}"
+        mode: "{{ openvpn['cert']['mode'] }}"
+  notify:
+    - openvpn servisini yeniden baslat
+  sudo: yes
+  tags: openvpn
+
+- name: Server konfigurasyonu uygulaniyor.
+  template:
+        src: "{{ openvpn['conf']['source'] }}"
+        dest: "{{ openvpn['conf']['destination'] }}"
+        owner: "{{ openvpn['conf']['owner'] }}"
+        group: "{{ openvpn['conf']['group'] }}"
+        mode: "{{ openvpn['conf']['mode'] }}"
+  notify:
+    - openvpn servisini yeniden baslat
+  sudo: yes
+  tags: openvpn
+
+- name: Openvpn - Ldap konfigurasyonu uygulaniyor.
+  template:
+        src: "{{ openvpn['ldapconf']['source'] }}"
+        dest: "{{ openvpn['ldapconf']['destination'] }}"
+        owner: "{{ openvpn['ldapconf']['owner'] }}"
+        group: "{{ openvpn['ldapconf']['group'] }}"
+        mode: "{{ openvpn['ldapconf']['mode'] }}"
+  with_dict: "openvpn_servers"
+  when: 'item.value.fqdn == {{ "ansible_fqdn" }} and item.value.auth != "noldap"'
+  notify:
+    - openvpn servisini yeniden baslat
+  sudo: yes
+  tags: openvpn
+
+- name: Openvpn servisi ayakta
+  service:
+        name: "{{ openvpn['service']['name'] }}"
+        state: "{{ openvpn['service']['state'] }}"
+        enabled: "{{ openvpn['service']['enabled'] }}"
+  sudo: yes
+  tags: openvpn

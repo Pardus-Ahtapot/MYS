@@ -1,0 +1,10 @@
+---
+# Logrotate degiskenlerini iceren dosyadir
+logrotate:
+    conf:
+        source: "rsyslog.j2"
+        destination: "/etc/logrotate.d/rsyslog"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    Directory: "/data/log"

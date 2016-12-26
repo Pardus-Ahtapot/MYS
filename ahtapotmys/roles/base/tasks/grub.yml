@@ -1,0 +1,13 @@
+---
+- name: Grub yapilandiriliyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "{{ item.value.destination }}" 
+        owner: "{{ item.value.owner }}" 
+        group: "{{ item.value.group }}" 
+        mode: "{{ item.value.mode }}" 
+  with_dict: "grub_configurations"
+  notify:
+    - grub yeniden yapilandiriliyor 
+  sudo: yes
+  tags: grub 

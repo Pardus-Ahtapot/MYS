@@ -1,0 +1,22 @@
+#! /bin/bash
+# Ahtapot-mys postinst script
+
+logDirectory="/var/log/ahtapot/"
+mysOwner="ahtapotops"
+logFile="/var/log/ahtapot/ansible.log"
+
+if [ ! -d  "$logDirectory" ];
+then
+	mkdir -p "$logDirectory"
+	chown $mysOwner:$mysOwner "$logDirectory"
+else
+	chown $mysOwner:$mysOwner "$logDirectory"
+fi
+
+if [ ! -f  "$logFile" ];
+then
+	touch "$logFile"
+	chown $mysOwner:$mysOwner "$logFile"
+fi
+
+exit 0

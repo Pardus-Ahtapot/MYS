@@ -1,0 +1,6 @@
+---
+# Ansible gorevlerini iceren dosyadir
+- include: install.yml
+- include: directory.yml
+- include: git.yml
+- include: script.yml

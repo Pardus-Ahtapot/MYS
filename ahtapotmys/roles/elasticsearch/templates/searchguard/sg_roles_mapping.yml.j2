@@ -1,0 +1,15 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+{% for key,value in searchguard_roles_mapping.iteritems() %}
+{{ value.rolemappingname }}:
+  backendroles:
+{% for backkey,backvalue in value.backendroles.iteritems() %}
+    - {{ backvalue.rolename }}
+{% endfor %}
+  users:
+{% for userkey,uservalue in value.users.iteritems() %}
+    - {{ uservalue.username }}
+{% endfor %}
+{% endfor %}

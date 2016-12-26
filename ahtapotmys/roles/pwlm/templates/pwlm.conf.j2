@@ -1,0 +1,41 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+upstream django {
+    server unix:///var/run/ahtapot-pwlm/pwlm.sock;
+}
+
+server {
+    listen      {{ nginx['pwlm']['listen'] }};
+    server_name {{ nginx['pwlm']['server_name'] }};
+    charset     utf-8;
+
+    ssl                  on;
+    ssl_certificate      {{ nginx['certificate']['destination'] }};
+    ssl_certificate_key  {{ nginx['key']['destination'] }};
+
+    ssl_session_timeout  5m;
+
+    ssl_protocols  TLSv1;
+    ssl_ciphers  ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+    ssl_prefer_server_ciphers   on;
+
+    client_max_body_size 75M;
+
+    access_log      {{ nginx['pwlm']['access_log'] }};
+    error_log       {{ nginx['pwlm']['error_log'] }};
+
+    location /static_media  {
+        root /var/opt/ahtapot-pwlm;
+    }
+
+    location /static {
+        root /var/opt/ahtapot-pwlm;
+    }
+
+    location / {
+        uwsgi_pass  django;
+        include     /var/opt/ahtapot-pwlm/uwsgi_params;
+    }
+}

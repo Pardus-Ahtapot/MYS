@@ -1,0 +1,27 @@
+---
+# Dizinleri iceren dosyadir.
+firewall_directories:
+    directory01:
+        path: "/var/log/ahtapot/fw"
+        group: "ahtapotops"
+        owner: "ahtapotops"
+        mode: "755"
+        state: "directory"
+    directory02:
+        path: "/etc/fw"
+        group: "ahtapotops"
+        owner: "ahtapotops"
+        mode: "750"
+        state: "directory"
+    directory03:
+        path: "/etc/fw/gdys"
+        group: "ahtapotops"
+        owner: "ahtapotops"
+        mode: "750"
+        state: "directory"
+#    directoryXX:
+#        path: ""
+#        group: ""
+#        owner: ""
+#        mode: ""
+#        state: ""

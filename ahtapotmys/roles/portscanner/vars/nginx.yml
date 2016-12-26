@@ -1,0 +1,39 @@
+---
+# Nginx'in degiskenlerini iceren dosyadir
+nginx:
+    conf:
+        source: "portscanner.conf.j2"
+        destination: "/etc/nginx/conf.d/portscanner.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    portscanner:
+        listen: "443"
+        server_name: "portscanner01.gdys.local"
+        access_log: "/var/log/nginx/portscanner-access.log"
+        error_log: "/var/log/nginx/portscanner-error.log"
+    service:
+        name: "nginx"
+        state: "started"
+        enabled: "yes"
+    default:
+        path: "/etc/nginx/sites-available/default"
+        state: "absent"
+    certificate:
+        source: "portscanner.crt.j2"
+        destination: "/etc/nginx/ssl/portscanner.crt"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    key:
+        source: "portscanner.key.j2"
+        destination: "/etc/nginx/ssl/portscanner.key"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    ssldir:
+        path: "/etc/nginx/ssl"
+        owner: "root"
+        group: "root"
+        mode: "755"
+        state: "directory"

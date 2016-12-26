@@ -1,0 +1,37 @@
+---
+# Paket degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
+base_packages:
+    package01:
+        name: "auditd=1:2.4-1+b1" 
+        state: "present" 
+    package02:
+        name: "sysstat=11.0.1-1" 
+        state: "present" 
+    package03:
+        name: "ntp=1:4.2.6.p5+dfsg-7+deb8u2" 
+        state: "present" 
+    package04:
+        name: "bash=4.3-11+b1" 
+        state: "present" 
+    package05:
+        name: "rsyslog=8.4.2-1+deb8u2" 
+        state: "present" 
+    package06:
+        name: "sudo=1.8.10p3-1+deb8u3" 
+        state: "present" 
+    package07:
+        name: "logrotate=3.8.7-1+b1" 
+        state: "present" 
+    package08:
+        name: "apt-transport-https=1.0.9.8.3" 
+        state: "present"
+    package09:
+        name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
+        state: "present"
+    package10:
+        name: "ahtapot-fusioninventory-agent=1:2.3.10.1-1" 
+        state: "present"
+#    packageXX:
+#        name: 
+#        state:  

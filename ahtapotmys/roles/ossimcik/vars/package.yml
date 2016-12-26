@@ -1,0 +1,22 @@
+---
+# Paket degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
+ossimcik_packages:
+    package01:
+        name: "ossec-hids=2.8.2-3~bpo80+1" 
+        state: "present" 
+    package02:
+        name: "alienvault-ossec=5.2.2-30" 
+        state: "present" 
+    package03:
+        name: "nxlog-ce=2.8.1248" 
+        state: "present" 
+    package04:
+        name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
+        state: "present" 
+#    packageXX:
+#        name: 
+#        state:  
+#    packageXX:
+#        name: 
+#        state:  

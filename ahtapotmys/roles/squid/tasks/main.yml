@@ -1,0 +1,7 @@
+---
+# Squid rolunun ana dosyasidir
+- include: install.yml
+- include: squid.yml
+- include: dansguardian.yml
+- include: sarg.yml
+- include: nginx.yml

@@ -1,0 +1,3 @@
+---
+# Ossec'in isleyici dosyasidir.
+- include: ossec.yml

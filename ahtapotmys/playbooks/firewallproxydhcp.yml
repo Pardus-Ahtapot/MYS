@@ -1,0 +1,45 @@
+---
+# Calistirildiginda Firewall, Web Proxy ve DHCPD Kurulumu Yapilir
+- hosts: firewall-proxy-dhcp 
+  remote_user: ahtapotops
+  vars_files:
+  - /etc/ansible/roles/base/vars/group.yml
+  - /etc/ansible/roles/base/vars/user.yml
+  - /etc/ansible/roles/base/vars/repo.yml
+  - /etc/ansible/roles/base/vars/rsyslog.yml
+  - /etc/ansible/roles/base/vars/ntp.yml
+  - /etc/ansible/roles/base/vars/package.yml
+  - /etc/ansible/roles/base/vars/blacklist.yml
+  - /etc/ansible/roles/base/vars/host.yml
+  - /etc/ansible/roles/base/vars/audit.yml
+  - /etc/ansible/roles/base/vars/sudo.yml
+  - /etc/ansible/roles/base/vars/ssh.yml
+  - /etc/ansible/roles/base/vars/grub.yml
+  - /etc/ansible/roles/base/vars/logger.yml
+  - /etc/ansible/roles/base/vars/logrotate.yml
+  - /etc/ansible/roles/base/vars/directory.yml
+  - /etc/ansible/roles/base/vars/profile.yml
+  - /etc/ansible/roles/base/vars/fusioninventory.yml
+  - /etc/ansible/roles/firewall/vars/group.yml
+  - /etc/ansible/roles/firewall/vars/user.yml
+  - /etc/ansible/roles/firewall/vars/package.yml
+  - /etc/ansible/roles/firewall/vars/module.yml
+  - /etc/ansible/roles/firewall/vars/sysctl.yml
+  - /etc/ansible/roles/firewall/vars/iptables.yml
+  - /etc/ansible/roles/firewall/vars/contrackd.yml
+  - /etc/ansible/roles/firewall/vars/profile.yml
+  - /etc/ansible/roles/firewall/vars/directory.yml
+  - /etc/ansible/roles/squid/vars/package.yml
+  - /etc/ansible/roles/squid/vars/squid.yml
+  - /etc/ansible/roles/squid/vars/dansguardian.yml
+  - /etc/ansible/roles/squid/vars/updshalla.yml
+  - /etc/ansible/roles/squid/vars/zeustracker.yml
+  - /etc/ansible/roles/squid/vars/sarg.yml
+  - /etc/ansible/roles/squid/vars/nginx.yml
+  - /etc/ansible/roles/dhcpd/vars/package.yml
+  sudo: yes
+  roles:
+  - { role: base }
+  - { role: firewall }
+  - { role: squid }
+  - { role: dhcpd }

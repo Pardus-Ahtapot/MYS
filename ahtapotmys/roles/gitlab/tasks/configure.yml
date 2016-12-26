@@ -1,0 +1,70 @@
+---
+- name: GitLab yapilandirmasi uygulaniyor.
+  template:
+        src: "{{ gitlab['conf']['source'] }}"
+        dest: "{{ gitlab['conf']['destination'] }}"
+        owner: "{{ gitlab['conf']['owner'] }}"
+        group: "{{ gitlab['conf']['group'] }}"
+        mode: "{{ gitlab['conf']['mode'] }}"
+  notify:
+    - GitLab servisi yeniden baslatiliyor
+  sudo: yes
+  tags: gitlab
+
+- name: GitLab ssl dizini olusturuluyor
+  file:
+        path: "{{ gitlab['ssl']['directory']['path'] }}"
+        owner: "{{ gitlab['ssl']['directory']['owner'] }}"
+        group: "{{ gitlab['ssl']['directory']['group'] }}"
+        mode: "{{ gitlab['ssl']['directory']['mode'] }}"
+        state: "{{ gitlab['ssl']['directory']['state'] }}"
+        recurse: "{{ gitlab['ssl']['directory']['recurse'] }}"
+  sudo: yes
+  tags: ssl
+
+- name: GitLab ssl anahtari uygulaniyor.
+  template:
+        src: "{{ gitlab['ssl-key']['source'] }}"
+        dest: "{{ gitlab['ssl-key']['destination'] }}"
+        owner: "{{ gitlab['ssl-key']['owner'] }}"
+        group: "{{ gitlab['ssl-key']['group'] }}"
+        mode: "{{ gitlab['ssl-key']['mode'] }}"
+  notify:
+    - GitLab servisi yeniden baslatiliyor
+  sudo: yes
+  tags: ssl
+
+- name: GitLab ssl sertifikasi uygulaniyor.
+  template:
+        src: "{{ gitlab['ssl-crt']['source'] }}"
+        dest: "{{ gitlab['ssl-crt']['destination'] }}"
+        owner: "{{ gitlab['ssl-crt']['owner'] }}"
+        group: "{{ gitlab['ssl-crt']['group'] }}"
+        mode: "{{ gitlab['ssl-crt']['mode'] }}"
+  notify:
+    - GitLab servisi yeniden baslatiliyor
+  sudo: yes
+  tags: ssl
+
+- name: GitLab yeniden yapilandiriliyor (ilk acilis)
+  shell: /usr/bin/gitlab-ctl reconfigure
+  args:
+    creates: "{{ gitlab['firstrunpath'] }}"
+  sudo: yes
+  tags: gitlab
+
+- name: Git kullanicisinin parolasi olusturuluyor
+  user:
+    name: "{{ gitlab['user']['name'] }}"
+    password: "{{ gitlab['user']['password']  }}"
+    state: "{{ gitlab['user']['state'] }}"
+  sudo: yes
+  tags: gitlab
+
+- name: GitLab servisi ayakta
+  service:
+    name: "{{ gitlab['service']['name'] }}"
+    state: "{{ gitlab['service']['state']  }}"
+    enabled: "{{ gitlab['service']['enabled'] }}"
+  sudo: yes
+  tags: gitlab

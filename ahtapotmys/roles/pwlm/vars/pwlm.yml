@@ -1,0 +1,14 @@
+---
+# PWLM'in degiskenlerini iceren dosyadir
+pwlm:
+    conf:
+        source: "config.ini.j2" 
+        destination: "/var/opt/ahtapot-pwlm/config.ini"
+        owner: "ahtapotops"
+        group: "ahtapotops"
+        mode: "0644" 
+    squid_repo_path: "/home/ahtapotops/mys/"
+    whitelist_file: "roles/squid/templates/dansguardian/exceptionsitelist/exceptionsitelist_general.j2"
+    confirm_branch: "onay"
+    master_branch: "master"
+    receiver_mail: "test@test.com"

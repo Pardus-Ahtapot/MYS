@@ -1,0 +1,36 @@
+---
+# Nginx'in degiskenlerini iceren dosyadir
+nginx:
+    conf: 
+        source: "kibana_nginx.conf.j2" 
+        destination: "/etc/nginx/conf.d/kibana.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    service: 
+        name: "nginx"
+        state: "started" 
+        enabled: "yes"
+    default: 
+        path: "/etc/nginx/sites-available/default"
+        state: "absent"
+    certificate: 
+        source: "kibana.crt.j2" 
+        destination: "/etc/nginx/ssl/kibana.crt" 
+        owner: "root"
+        group: "root" 
+        mode: "0644" 
+    key: 
+        source: "kibana.key.j2" 
+        destination: "/etc/nginx/ssl/kibana.key" 
+        owner: "root"
+        group: "root" 
+        mode: "0644"
+    ssldir:
+        path: "/etc/nginx/ssl"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+        state: "directory" 
+    listen: "443" 
+    server_name: "kibana_sunucu_fqdn"

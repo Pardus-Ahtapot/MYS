@@ -1,0 +1,32 @@
+---
+- name: Ossec agent yapilandiriliyor.
+  template:
+        src: "{{ ossec['conf']['source'] }}"
+        dest: "{{ ossec['conf']['destination'] }}"
+        owner: "{{ ossec['conf']['owner'] }}"
+        group: "{{ ossec['conf']['group'] }}"
+        mode: "{{ ossec['conf']['mode'] }}"
+  when: "'ossimcik' not in group_names"
+  notify:
+    - ossec servisini yeniden baslat
+  sudo: yes
+  tags: ossec
+
+- name: Ossec anahtar degisimi yapiliyor.
+  shell: "/usr/bin/python /var/ossec/bin/auto-ossec.py {{ ossec['server'] }} && touch /var/ossec/key_exchange_completed"
+  args: 
+        creates: "/var/ossec/key_exchange_completed"
+  when: "'ossimcik' not in group_names"
+  notify:
+    - ossec servisini yeniden baslat
+  sudo: yes
+  tags: ossec
+
+- name: Ossec agent servisi ayakta
+  service:
+        name: "{{ ossec['service']['name'] }}"
+        state: "{{ ossec['service']['state'] }}"
+        enabled: "{{ ossec['service']['enabled'] }}"
+  when: "'ossimcik' not in group_names"
+  sudo: yes
+  tags: ossec

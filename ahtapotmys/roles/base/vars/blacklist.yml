@@ -1,0 +1,24 @@
+---
+# Karaliste cekirdek modullerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak karalisteye istenilen kadar cekirdek modulu eklenebilir.
+# Usb belleklerin calismasi icin gerekli olan modul bu sekilde karalisteye eklenmektedir
+
+blacklists:
+    conf:
+        source: "blacklist.conf.j2"
+        destination: "/etc/modprobe.d/blacklist.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+
+
+base_blacklist_modules:
+    module01:
+        name: "usb_storage"
+        state: "absent"
+    module02:
+        name: "usb-storage"
+        state: "absent"
+#    moduleXX:
+#        name: 
+#        state:  

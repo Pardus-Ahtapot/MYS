@@ -1,0 +1,37 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+<!-- Modify it at your will. -->
+
+<group name="usblogs,">
+
+  <rule id="140128" level="1">
+      <if_sid>18101</if_sid>
+      <id>^2101$</id>
+      <description>USB device connected.</description>
+    </rule>
+   <rule id="140129" level="10" frequency="0" timeframe="10">
+      <if_matched_sid>140128</if_matched_sid>
+      <description>USB device connected.</description>
+    </rule>
+    <rule id="140127" level="1">
+      <if_sid>18101</if_sid>
+      <id>^2102$</id>
+      <description>USB device disconnect.</description>
+    </rule>
+    <rule id="140130" level="10" frequency="0" timeframe="10">
+      <if_matched_sid>140127</if_matched_sid>
+      <description>USB device disconnect.</description>
+    </rule>
+    <rule id="140140" level="10" >
+      <regex>New USB device found</regex>
+      <description>USB device connected.</description>
+    </rule>
+    <rule id="140141" level="10">
+      <regex>USB disconnect</regex>
+      <description>USB device disconnect.</description>
+    </rule>
+
+</group> 
+
+<!-- EOF -->

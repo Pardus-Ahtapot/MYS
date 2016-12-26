@@ -1,0 +1,9 @@
+---
+# Base rolu icin isleyici dosyasidir
+- include: ssh.yml
+- include: audit.yml
+- include: ntp.yml
+- include: rsyslog.yml
+- include: grub.yml
+- include: profile.yml
+- include: fusioninventory.yml

@@ -1,0 +1,5 @@
+debhelper-build-stamp
+ahtapot-mys.substvars
+files
+ahtapot-mys.debhelper.log
+ahtapot-mys/

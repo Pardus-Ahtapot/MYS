@@ -1,0 +1,32 @@
+---
+- name: Kibana yml konfigurasyonu yerlestiriliyor.
+  template:
+        src: "{{ kibana['yml']['source'] }}"
+        dest: "{{ kibana['yml']['destination'] }}"
+        owner: "{{ kibana['yml']['owner'] }}"
+        group: "{{ kibana['yml']['group'] }}"
+        mode: "{{ kibana['yml']['mode'] }}"
+  notify:
+    - kibana servisini yeniden baslat
+  sudo: yes
+  tags: kibana 
+
+- name: Kibana default konfigurasyonu yerlestiriliyor.
+  template:
+        src: "{{ kibana['default']['source'] }}"
+        dest: "{{ kibana['default']['destination'] }}"
+        owner: "{{ kibana['default']['owner'] }}"
+        group: "{{ kibana['default']['group'] }}"
+        mode: "{{ kibana['default']['mode'] }}"
+  notify:
+    - kibana servisini yeniden baslat
+  sudo: yes
+  tags: kibana 
+
+- name: Kibana servisi ayakta
+  service:
+        name: "{{ kibana['service']['name'] }}"
+        state: "{{ kibana['service']['state'] }}"
+        enabled: "{{ kibana['service']['enabled'] }}"
+  sudo: yes
+  tags: kibana

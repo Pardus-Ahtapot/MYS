@@ -1,0 +1,13 @@
+{{ logrotate['Directory'] }}/*/*.log
+{
+        rotate 60
+        daily
+        missingok
+        notifempty
+    	dateext
+        delaycompress
+        compress
+        postrotate 
+	    invoke-rc.d rsyslog rotate > /dev/null 
+	endscript
+}
