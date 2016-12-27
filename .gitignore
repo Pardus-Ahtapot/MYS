@@ -1,5 +1,5 @@
-debhelper-build-stamp
-ahtapot-mys.substvars
-files
-ahtapot-mys.debhelper.log
-ahtapot-mys/
+debian/debhelper-build-stamp
+debian/ahtapot-mys.substvars
+debian/files
+debian/ahtapot-mys.debhelper.log
+debian/ahtapot-mys/
