@@ -1,0 +1,19 @@
+---
+- name: Gereksiz cekirdek modulleri kaldiriliyor.
+  modprobe:
+        name: "{{ item.value.name }}"
+        state: "{{ item.value.state }}"
+  with_dict: "to_be_removed_modules"
+  sudo: yes
+  tags: modprobe
+
+- name: Gereksiz cekirdek modulleri kalici olarak kaldirilmak icin blackliste aliniyor.
+  template:
+        src: "{{ modules['conf']['source'] }}"
+        dest: "/etc/modprobe.d/{{ item.value.name }}.conf"
+        owner: "{{ modules['conf']['owner'] }}"
+        group: "{{ modules['conf']['group'] }}"
+        mode: "{{ modules['conf']['mode'] }}"
+  with_dict: "to_be_removed_modules"
+  sudo: yes
+  tags: modprobe

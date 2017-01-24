@@ -12,7 +12,7 @@
 - include: audit.yml
 - include: sudo.yml
 - include: rsyslog.yml
-- include: usb-storage.yml
+- include: kernel_modules.yml
 - include: logger.yml
 - include: logrotate.yml
 - include: profile.yml
