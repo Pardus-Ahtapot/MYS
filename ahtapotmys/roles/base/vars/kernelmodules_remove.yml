@@ -30,18 +30,6 @@ to_be_removed_modules:
     module06:
         name: "drm"
         state: "absent"
-    module07:
-        name: "uhci_hcd"
-        state: "absent"
-    module08:
-        name: "ehci_hcd"
-        state: "absent"
-    module09:
-        name: "usbhid"
-        state: "absent"
-    module10:
-        name: "usbcore"
-        state: "absent"
 #    moduleXX:
 #        name:
 #        state:
