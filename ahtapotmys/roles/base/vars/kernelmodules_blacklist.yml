@@ -4,32 +4,27 @@
 # Eklenen cekirdek modullerinin makine her yeniden baslayisinda otomatik eklenmesi engellenir.
 # Cikarilacak modul baska bir modul tarafindan kullaniliyorsa ilk olarak KULANAN modul cikarilmalidir.
 
-modules:
-    conf:
-        source: "kernel_module.conf.j2"
+bla_modules:
+    conf: 
+        source: "kernelmodules_blacklist.conf.j2"
+        destination: "/etc/modprobe.d/blacklist.conf"
         owner: "root"
         group: "root"
         mode: "0644"
 
-to_be_removed_modules:
+to_be_blacklisted_modules:
     module01:
-        name: "usb_storage"
+        name: "uhci_hcd"
         state: "absent"
     module02:
-        name: "usb-storage"
+        name: "ehci_hcd"
         state: "absent"
     module03:
-        name: "joydev"
+        name: "usbhid"
         state: "absent"
     module04:
-        name: "drm_kms_helper"
-        state: "absent"
-    module05:
-        name: "ttm"
-        state: "absent"
-    module06:
-        name: "drm"
+        name: "usbcore"
         state: "absent"
 #    moduleXX:
-#        name: ""
-#        state: ""
+#        name:
+#        state:
