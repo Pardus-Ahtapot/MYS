@@ -5,9 +5,9 @@ gitlab_packages:
     package01:
         name: "git=1:2.1.4-2.1+deb8u2" 
         state: "present" 
-#    package02:
-#        name: "gitlab-ce=8.12.1-ce.0" 
-#        state: "present" 
+    package02:
+        name: "gitlab-ce=8.12.1-ce.0" 
+        state: "present" 
 #    packageXX:
 #        name: 
 #        state:  
