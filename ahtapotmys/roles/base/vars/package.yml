@@ -12,7 +12,7 @@ base_packages:
         name: "ntp=1:4.2.6.p5+dfsg-7+deb8u2" 
         state: "present" 
     package04:
-        name: "bash=4.3-11+b1" 
+        name: "bash=4.3-11+deb8u1" 
         state: "present" 
     package05:
         name: "rsyslog=8.4.2-1+deb8u2" 
