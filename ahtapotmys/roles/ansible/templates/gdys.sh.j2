@@ -4,7 +4,7 @@
 
 #!/bin/bash
 
-/usr/bin/ansible-playbook /etc/ansible/playbooks/updategdysrepo.yml
+cd /etc/fw/gdys && git pull
 
 EXIT=$?
 

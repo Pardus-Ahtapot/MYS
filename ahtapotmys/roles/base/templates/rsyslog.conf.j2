@@ -8,6 +8,7 @@
 
 $ModLoad imuxsock 
 $ModLoad imklog   
+$ModLoad imfile
 
 ###############
 #### RULES ####
@@ -62,6 +63,14 @@ $ActionQueueType {{ rsyslog['ActionQueueType'] }}
 $ActionResumeRetryCount {{ rsyslog['ActionResumeRetryCount'] }} 
 $ActionQueueFileName {{ rsyslog['ActionQueueFileName'] }} 
 
+$InputFileName /var/log/ahtapot/ansible.log
+$InputFileTag ansible
+$InputFileStateFile ansiblelog
+$InputFileFacility local3
+$InputFilePollInterval 1
+$InputFilePersistStateInterval 1
+$InputRunFileMonitor
+
 $DefaultNetstreamDriver gtls
 $DefaultNetstreamDriverCAFile  /etc/ssl/certs/rootCA.pem
 $DefaultNetstreamDriverCertFile /etc/ssl/certs/{{ ansible_fqdn }}.crt
@@ -76,3 +85,4 @@ $ActionSendStreamDriverAuthMode anon
 {% endif %}
 {% endfor %}
 {% endfor %}
+local3.*@@ossimcik01.gdys.local

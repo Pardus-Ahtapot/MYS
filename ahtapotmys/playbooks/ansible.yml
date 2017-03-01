@@ -2,7 +2,6 @@
 # Calistirildiginda Ansible Kurulumu Yapilir
 - hosts: ansible 
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/base/vars/group.yml
   - /etc/ansible/roles/base/vars/user.yml

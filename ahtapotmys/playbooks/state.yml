@@ -2,7 +2,6 @@
 # Sistem stabilitesini tutacak olan ansible dosyasi
 - hosts: all 
   remote_user: ahtapotops 
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/base/vars/group.yml
   - /etc/ansible/roles/base/vars/user.yml
@@ -27,7 +26,6 @@
 
 - hosts: ansible
   remote_user: ahtapotops 
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/ansible/vars/package.yml
   - /etc/ansible/roles/ansible/vars/ansible.yml
@@ -39,7 +37,6 @@
 
 - hosts: gitlab
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/gitlab/vars/package.yml
   - /etc/ansible/roles/gitlab/vars/hook.yml
@@ -48,7 +45,6 @@
 
 - hosts: firewallbuilder
   remote_user: ahtapotops 
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/firewallbuilder/vars/package.yml
   - /etc/ansible/roles/firewallbuilder/vars/fwbuilder.yml
@@ -59,7 +55,6 @@
 
 - hosts: rsyslog 
   remote_user: ahtapotops 
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/rsyslog/vars/package.yml
   - /etc/ansible/roles/rsyslog/vars/logrotate.yml
@@ -77,7 +72,6 @@
 
 - hosts: pwlm
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/pwlm/vars/package.yml
   - /etc/ansible/roles/pwlm/vars/uwsgi.yml
@@ -89,7 +83,6 @@
 
 - hosts: gkts
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/gkts/vars/package.yml
   - /etc/ansible/roles/gkts/vars/gkts.yml
@@ -100,7 +93,6 @@
 
 - hosts: testfirewall
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/testfirewall/vars/group.yml
   - /etc/ansible/roles/testfirewall/vars/user.yml
@@ -113,7 +105,6 @@
 
 - hosts: firewall:firewall-proxy-dhcp:firewall-openvpn
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/firewall/vars/group.yml
   - /etc/ansible/roles/firewall/vars/user.yml
@@ -129,7 +120,6 @@
 
 - hosts: proxy:proxy-dhcp:firewall-proxy-dhcp
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/squid/vars/package.yml
   - /etc/ansible/roles/squid/vars/squid.yml
@@ -143,7 +133,6 @@
 
 - hosts: dhcp:proxy-dhcp:firewall-proxy-dhcp
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/dhcpd/vars/package.yml
   - /etc/ansible/roles/dhcpd/vars/dhcpd.yml
@@ -152,7 +141,6 @@
 
 - hosts: openvpn:firewall-openvpn
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/openvpn/vars/package.yml
   - /etc/ansible/roles/openvpn/vars/openvpn.yml
@@ -162,7 +150,6 @@
 
 - hosts: elasticsearch
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/elasticsearch/vars/package.yml
   - /etc/ansible/roles/elasticsearch/vars/elasticsearch.yml
@@ -172,7 +159,6 @@
 
 - hosts: kibana
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/kibana/vars/package.yml
   - /etc/ansible/roles/kibana/vars/kibana.yml
@@ -182,7 +168,6 @@
 
 - hosts: ossimcik
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/ossimcik/vars/repo.yml
   - /etc/ansible/roles/ossimcik/vars/package.yml
@@ -194,7 +179,6 @@
 
 - hosts: portscanner
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/portscanner/vars/package.yml
   - /etc/ansible/roles/portscanner/vars/uwsgi.yml
@@ -205,7 +189,6 @@
 
 - hosts: ocswb 
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/ocswb/vars/package.yml
   - /etc/ansible/roles/ocswb/vars/uwsgi.yml
@@ -217,7 +200,6 @@
 
 - hosts: all:!ossimcik 
   remote_user: ahtapotops
-  sudo: yes
   vars_files:
   - /etc/ansible/roles/ossec/vars/package.yml
   - /etc/ansible/roles/ossec/vars/ossec.yml

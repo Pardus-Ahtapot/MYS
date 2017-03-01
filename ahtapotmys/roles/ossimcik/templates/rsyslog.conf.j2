@@ -10,12 +10,14 @@ $ModLoad imuxsock
 $ModLoad imklog
 $ModLoad imtcp
 $ModLoad imfile
+$ModLoad imudp
 
 ######################
 #### REMOTE RULES ####
 ######################
 
 $InputTCPServerRun 514
+$UDPServerRun 514 
 $InputTCPServerStreamDriverMode 1
 $InputTCPServerStreamDriverAuthMode anon
 
