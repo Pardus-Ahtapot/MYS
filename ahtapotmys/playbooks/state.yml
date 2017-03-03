@@ -60,15 +60,20 @@
   - /etc/ansible/roles/rsyslog/vars/logrotate.yml
   - /etc/ansible/roles/rsyslog/vars/signer.yml
   - /etc/ansible/roles/rsyslog/vars/rsyslog.yml
-  - /etc/ansible/roles/ntp/vars/package.yml
-  - /etc/ansible/roles/ntp/vars/ntp.yml
   - /etc/ansible/roles/logstash/vars/package.yml
   - /etc/ansible/roles/logstash/vars/logstash.yml
   - /etc/ansible/roles/elasticsearch/vars/elasticsearch.yml
   roles:
   - { role: rsyslog }
-  - { role: ntp }
   - { role: logstash }
+
+- hosts: ntp
+  remote_users: ahtapotops
+  vars_files: 
+  - /etc/ansible/roles/ntp/vars/package.yml
+  - /etc/ansible/roles/ntp/vars/ntp.yml
+  roles:
+  - { role: ntp } 
 
 - hosts: pwlm
   remote_user: ahtapotops
@@ -198,11 +203,11 @@
   roles:
   - { role: ocswb }
 
-- hosts: all:!ossimcik 
-  remote_user: ahtapotops
-  vars_files:
-  - /etc/ansible/roles/ossec/vars/repo.yml
-  - /etc/ansible/roles/ossec/vars/package.yml
-  - /etc/ansible/roles/ossec/vars/ossec.yml
-  roles:
-  - { role: ossec }
+#- hosts: all:!ossimcik 
+#  remote_user: ahtapotops
+#  vars_files:
+#  - /etc/ansible/roles/ossec/vars/repo.yml
+#  - /etc/ansible/roles/ossec/vars/package.yml
+#  - /etc/ansible/roles/ossec/vars/ossec.yml
+#  roles:
+#  - { role: ossec }
