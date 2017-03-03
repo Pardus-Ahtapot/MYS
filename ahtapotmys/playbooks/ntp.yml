@@ -1,6 +1,6 @@
 ---
 # Calistirildiginda Ntp Sunucu Kurulumu Yapilir
-- hosts: rsyslog 
+- hosts: ntp 
   remote_user: ahtapotops
   sudo: yes
   vars_files:
