@@ -24,7 +24,7 @@ base_packages:
         name: "logrotate=3.8.7-1+b1" 
         state: "present" 
     package08:
-        name: "apt-transport-https=1.0.9.8.3" 
+        name: "apt-transport-https=1.0.9.8.4" 
         state: "present"
     package09:
         name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
