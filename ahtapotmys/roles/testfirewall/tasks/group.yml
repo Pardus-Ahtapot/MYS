@@ -1,5 +1,5 @@
 ---
-- name: Kullanici gurublari kontrol ediliyor.
+- name: Kullanici gruplari kontrol ediliyor.
   group:
         name: "{{ item.value.name }}"
         gid: "{{ item.value.gid }}"

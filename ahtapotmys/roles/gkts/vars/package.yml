@@ -21,7 +21,7 @@ gkts_packages:
         name: "ahtapot-gkts=1.0.7" 
         state: "present" 
     package07:
-        name: "nginx=1.6.2-5" 
+        name: "nginx=1.6.2-5+deb8u4" 
         state: "present" 
     package08:
         name: "python-pytz=1.0.0" 
