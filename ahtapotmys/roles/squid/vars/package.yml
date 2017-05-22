@@ -3,20 +3,21 @@
 # Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
 squid_packages:
     package01:
-        name: "squid3=3.4.8-6+deb8u3" 
+        #name: "squid3=3.4.8-6+deb8u3" 
+        name: "squid3" 
         state: "present" 
     package02:
-        name: "nginx=1.6.2-5+deb8u2" 
+        #name: "nginx=1.6.2-5+deb8u2" 
+        name: "nginx" 
         state: "present" 
     package03:
-        name: "dansguardian=2.10.1.1-5.1+b2" 
+        #name: "dansguardian=2.10.1.1-5.1+b2" 
+        name: "dansguardian" 
         state: "present" 
     package04:
-        name: "sarg=2.3.6-1+b1" 
+        #name: "sarg=2.3.6-1+b1" 
+        name: "sarg" 
         state: "present" 
-#    packageXX:
-#        name: 
-#        state:  
 #    packageXX:
 #        name: 
 #        state:  
