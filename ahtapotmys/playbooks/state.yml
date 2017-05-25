@@ -68,7 +68,7 @@
   - { role: logstash }
 
 - hosts: ntp
-  remote_users: ahtapotops
+  remote_user: ahtapotops
   vars_files: 
   - /etc/ansible/roles/ntp/vars/package.yml
   - /etc/ansible/roles/ntp/vars/ntp.yml
