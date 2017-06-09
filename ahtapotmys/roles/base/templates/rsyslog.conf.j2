@@ -6,18 +6,75 @@
 #### MODULES ####
 #################
 
-$ModLoad imuxsock 
-$ModLoad imklog   
-$ModLoad imfile
+module(load="imklog")
+module(load="imfile")
+module(load="imuxsock")
 
-###############
-#### RULES ####
-###############
+$DefaultNetstreamDriver gtls
+$DefaultNetstreamDriverCAFile /etc/ssl/certs/rootCA.pem
 
-:msg, contains, "RULE"         -/var/log/ahtapot/fw/iptables.log
+################
+# Ansible Logs #
+################
+
+ruleset(name="AnsibleLogs") {
+   action(name="AnsibleRemoteLogs"
+      type="omfwd"
+      target="{{ rsyslog['server'] }}"
+      port="{{ rsyslog['port'] }}"
+      protocol="{{ rsyslog['protocol'] }}"
+      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+      queue.Type="{{ rsyslog['QueueType'] }}"
+      queue.FileName="{{ rsyslog['QueueFileNameANS'] }}"
+      queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+      queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
+      StreamDriver="{{ rsyslog['StreamDriver'] }}"
+      StreamDriverMode="{{ rsyslog['StreamDriverMode'] }}"
+      StreamDriverAuthMode="{{ rsyslog['StreamDriverAuthMode'] }}"
+   )
+   stop
+}
+
+input(type="imfile"
+   file="/var/log/ahtapot/ansible.log"
+   tag=""
+   statefile=""
+   ruleset="AnsibleLogs")
+
+#################
+# IPtables Logs #
+#################
+
+if $msg contains 'RULE' then {
+   action(name="YereleLogYazma"
+      type="omfile"
+      file="/var/log/ahtapot/fw/iptables.log"
+      asyncWriting="{{ rsyslog['asyncWriting'] }}"
+      ioBufferSize="{{ rsyslog['ioBufferSize'] }}"
+      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+   )
+   
+   action(name="UzakSunucuyaLogGonderme"
+      type="omfwd"
+      target="{{ rsyslog['server'] }}"
+      port="{{ rsyslog['port'] }}"
+      protocol="{{ rsyslog['protocol'] }}"
+      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+      queue.Type="{{ rsyslog['QueueType'] }}"
+      queue.FileName="{{ rsyslog['QueueFileNameIPT'] }}"
+      queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+      queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
+      StreamDriver="{{ rsyslog['StreamDriver'] }}"
+      StreamDriverMode="{{ rsyslog['StreamDriverMode'] }}"
+      StreamDriverAuthMode="{{ rsyslog['StreamDriverAuthMode'] }}"
+   )
+   stop
+}
+
 auth,authpriv.*                 /var/log/auth.log
 *.*;auth,authpriv.none,kern.!=info      -/var/log/syslog
-#cron.*                         /var/log/cron.log
 daemon.*                        -/var/log/daemon.log
 kern.*;kern.!=info              -/var/log/kern.log
 lpr.*                           -/var/log/lpr.log
@@ -42,46 +99,5 @@ news.notice                     -/var/log/news/news.notice
 
 *.emerg                         :omusrmsg:*
 
-###########################
-#### GLOBAL DIRECTIVES ####
-###########################
-
-$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
-
-$FileOwner root
-$FileGroup adm
-$FileCreateMode 0640
-$DirCreateMode 0755
-$Umask 0022
-
-$WorkDirectory {{ rsyslog['WorkDirectory'] }}
-$IncludeConfig {{ rsyslog['IncludeConfig'] }}
-
-$ActionQueueMaxDiskSpace {{ rsyslog['ActionQueueMaxDiskSpace'] }}   
-$ActionQueueSaveOnShutdown {{ rsyslog['ActionQueueSaveOnShutdown'] }}
-$ActionQueueType {{ rsyslog['ActionQueueType'] }} 
-$ActionResumeRetryCount {{ rsyslog['ActionResumeRetryCount'] }} 
-$ActionQueueFileName {{ rsyslog['ActionQueueFileName'] }} 
-
-$InputFileName /var/log/ahtapot/ansible.log
-$InputFileTag ansible
-$InputFileStateFile ansiblelog
-$InputFileFacility local3
-$InputFilePollInterval 1
-$InputFilePersistStateInterval 1
-$InputRunFileMonitor
-
-$DefaultNetstreamDriver gtls
-$DefaultNetstreamDriverCAFile  /etc/ssl/certs/rootCA.pem
-$DefaultNetstreamDriverCertFile /etc/ssl/certs/{{ ansible_fqdn }}.crt
-$DefaultNetstreamDriverKeyFile /etc/ssl/private/{{ ansible_fqdn }}.key
-$ActionSendStreamDriverMode 1
-$ActionSendStreamDriverAuthMode anon
-
-{% for key,value in base_ossimcik_servers.iteritems() %}
-{% for clientkey,clientvalue in value.clients.iteritems() %}
-{% if clientvalue.fqdn == ansible_fqdn %}
-{{ value.severity }}.{{ value.facility }} @@{{ value.fqdn }}:{{ value.port }}  
-{% endif %}
-{% endfor %}
-{% endfor %}
+$WorkDirectory /var/spool/rsyslog
+$IncludeConfig /etc/rsyslog.d/*
