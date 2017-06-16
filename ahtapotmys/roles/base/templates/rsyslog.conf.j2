@@ -73,6 +73,22 @@ if $msg contains 'RULE' then {
    stop
 }
 
+action(name="TumLogGonderme"
+   type="omfwd"
+   target="{{ rsyslog['server'] }}"
+   port="{{ rsyslog['port'] }}"
+   protocol="{{ rsyslog['protocol'] }}"
+   action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+   action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+   queue.Type="{{ rsyslog['QueueType'] }}"
+   queue.FileName="{{ rsyslog['QueueFileNameALL'] }}"
+   queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+   queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
+   StreamDriver="{{ rsyslog['StreamDriver'] }}"
+   StreamDriverMode="{{ rsyslog['StreamDriverMode'] }}"
+   StreamDriverAuthMode="{{ rsyslog['StreamDriverAuthMode'] }}"
+)
+
 auth,authpriv.*                 /var/log/auth.log
 *.*;auth,authpriv.none,kern.!=info      -/var/log/syslog
 daemon.*                        -/var/log/daemon.log

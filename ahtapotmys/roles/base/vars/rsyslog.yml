@@ -12,7 +12,7 @@ rsyslog:
       name: "rsyslog" 
       state: "started" 
       enabled: "yes"
-   server: "ossimcik.gdys.local"
+   server: "OSSIMCIK_ADRESI"
    port: "514"
    protocol: "tcp"
    ActionResumeRetryCount: "-1"
@@ -20,6 +20,7 @@ rsyslog:
    QueueType: "LinkedList"
    QueueFileNameANS: "srvfrwd_ans"
    QueueFileNameIPT: "srvfrwd_iptables"
+   QueueFileNameALL: "srvfrwd_syslog"
    QueueSaveOnShutdown: "on"
    QueueMaxDiskSpace: "5000m"
    StreamDriver: "gtls"
@@ -32,10 +33,9 @@ rsyslog:
 
 ossimciks:
    server01:
-      fqdn: "ossimcik.gdys.local"
+      fqdn: "OSSIMCIK_ADRESI"
       port: "514"
       protocol: "tcp"
       clients:
-        - "ansible.gdys.local"
-        - "gitlab.gdys.local"
-        - "FW01.gdys.local"
+        - "CLIENT LOG KAYNAGI01"
+        - "CLIENT LOG KAYNAGI02"
