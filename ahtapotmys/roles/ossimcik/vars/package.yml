@@ -15,6 +15,9 @@ ossimcik_packages:
         #name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
         name: "rsyslog-gnutls" 
         state: "present" 
+    package05:
+        name: "rsyslog-relp" 
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  

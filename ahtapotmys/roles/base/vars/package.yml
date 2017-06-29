@@ -41,6 +41,9 @@ base_packages:
     package10:
         name: "ahtapot-fusioninventory-agent=1:2.3.10.1-1" 
         state: "present"
+    package11:
+        name: "rsyslog-relp" 
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  

@@ -24,6 +24,9 @@ rsyslog_packages:
     package06:
         name: "zamaneconsole=1.0.1" 
         state: "present" 
+    package07:
+        name: "rsyslog-relp" 
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  
