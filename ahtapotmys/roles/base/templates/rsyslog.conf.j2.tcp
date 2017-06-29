@@ -9,36 +9,29 @@
 module(load="imklog")
 module(load="imfile")
 module(load="imuxsock")
-module(load="omrelp")
 
-main_queue(
-   queue.size="1000000"
-   queue.debatchsize="1000"
-   queue.workerthreads="2"
-)
+$DefaultNetstreamDriver gtls
+$DefaultNetstreamDriverCAFile /etc/ssl/certs/rootCA.pem
 
-####################
-### Ansible Logs ###
-####################
+################
+# Ansible Logs #
+################
 
 ruleset(name="AnsibleLogs") {
    action(name="AnsibleRemoteLogs"
-      type="omrelp"
-      target="ossimcik.gdys.local"
-      port="20514"
-      tls="{{ rsyslog['tls']['state'] }}"
-      tls.caCert="{{ rsyslog['tls']['cacert'] }}"
-      tls.myCert="{{ rsyslog['tls']['mycert'] }}"
-      tls.myPrivKey="{{ rsyslog['tls']['mykey'] }}"
-      tls.authmode="{{ rsyslog['tls']['authmode'] }}"
-      tls.permittedpeer=["{{ rsyslog['tls']['permittedpeer'] }}"]
+      type="omfwd"
+      target="{{ rsyslog['server'] }}"
+      port="{{ rsyslog['port'] }}"
+      protocol="{{ rsyslog['protocol'] }}"
+      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
       queue.Type="{{ rsyslog['QueueType'] }}"
       queue.FileName="{{ rsyslog['QueueFileNameANS'] }}"
       queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
       queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
-      queue.MaxFileSize="{{ rsyslog['QueueMaxFileSize'] }}"
-      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
-      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+      StreamDriver="{{ rsyslog['StreamDriver'] }}"
+      StreamDriverMode="{{ rsyslog['StreamDriverMode'] }}"
+      StreamDriverAuthMode="{{ rsyslog['StreamDriverAuthMode'] }}"
    )
    stop
 }
@@ -49,9 +42,9 @@ input(type="imfile"
    statefile=""
    ruleset="AnsibleLogs")
 
-#####################
-### IPtables Logs ###
-#####################
+#################
+# IPtables Logs #
+#################
 
 if $msg contains 'RULE' then {
    action(name="YereleLogYazma"
@@ -63,52 +56,41 @@ if $msg contains 'RULE' then {
    )
    
    action(name="UzakSunucuyaLogGonderme"
-      type="omrelp"
-      target="ossimcik.gdys.local"
-      port="20514"
-      tls="{{ rsyslog['tls']['state'] }}"
-      tls.caCert="{{ rsyslog['tls']['cacert'] }}"
-      tls.myCert="{{ rsyslog['tls']['mycert'] }}"
-      tls.myPrivKey="{{ rsyslog['tls']['mykey'] }}"
-      tls.authmode="{{ rsyslog['tls']['authmode'] }}"
-      tls.permittedpeer=["{{ rsyslog['tls']['permittedpeer'] }}"]
+      type="omfwd"
+      target="{{ rsyslog['server'] }}"
+      port="{{ rsyslog['port'] }}"
+      protocol="{{ rsyslog['protocol'] }}"
+      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
       queue.Type="{{ rsyslog['QueueType'] }}"
       queue.FileName="{{ rsyslog['QueueFileNameIPT'] }}"
       queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
       queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
-      queue.MaxFileSize="{{ rsyslog['QueueMaxFileSize'] }}"
-      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
-      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+      StreamDriver="{{ rsyslog['StreamDriver'] }}"
+      StreamDriverMode="{{ rsyslog['StreamDriverMode'] }}"
+      StreamDriverAuthMode="{{ rsyslog['StreamDriverAuthMode'] }}"
    )
    stop
 }
 
-###################
-### ALL Syslogs ###
-###################
-
-action(name="ButunSYSLOG"
-   type="omrelp"
-   target="ossimcik.gdys.local"
-   port="20514"
-   tls="{{ rsyslog['tls']['state'] }}"
-   tls.caCert="{{ rsyslog['tls']['cacert'] }}"
-   tls.myCert="{{ rsyslog['tls']['mycert'] }}"
-   tls.myPrivKey="{{ rsyslog['tls']['mykey'] }}"
-   tls.authmode="{{ rsyslog['tls']['authmode'] }}"
-   tls.permittedpeer=["{{ rsyslog['tls']['permittedpeer'] }}"]
-   queue.Type="{{ rsyslog['QueueType'] }}"
-   queue.FileName="{{ rsyslog['QueueFileNameSYS'] }}"
-   queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
-   queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
-   queue.MaxFileSize="{{ rsyslog['QueueMaxFileSize'] }}"
+action(name="TumLogGonderme"
+   type="omfwd"
+   target="{{ rsyslog['server'] }}"
+   port="{{ rsyslog['port'] }}"
+   protocol="{{ rsyslog['protocol'] }}"
    action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
    action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+   queue.Type="{{ rsyslog['QueueType'] }}"
+   queue.FileName="{{ rsyslog['QueueFileNameALL'] }}"
+   queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+   queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
+   StreamDriver="{{ rsyslog['StreamDriver'] }}"
+   StreamDriverMode="{{ rsyslog['StreamDriverMode'] }}"
+   StreamDriverAuthMode="{{ rsyslog['StreamDriverAuthMode'] }}"
 )
 
 auth,authpriv.*                 /var/log/auth.log
 *.*;auth,authpriv.none,kern.!=info      -/var/log/syslog
-#cron.*                         /var/log/cron.log
 daemon.*                        -/var/log/daemon.log
 kern.*;kern.!=info              -/var/log/kern.log
 lpr.*                           -/var/log/lpr.log
@@ -133,5 +115,5 @@ news.notice                     -/var/log/news/news.notice
 
 *.emerg                         :omusrmsg:*
 
-$WorkDirectory {{ rsyslog['WorkDirectory'] }} 
-$IncludeConfig {{ rsyslog['IncludeConfig'] }}
+$WorkDirectory /var/spool/rsyslog
+$IncludeConfig /etc/rsyslog.d/*
