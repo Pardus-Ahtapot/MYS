@@ -1,126 +1,160 @@
-## Bu dosya ansible tarafindan yonetilmektedir!
-## Burada yapilan degisikliklerin uzerine yazilir!!
-{{ ansible_managed }}
-
 #################
 #### MODULES ####
 #################
 
-$ModLoad imuxsock
-$ModLoad imklog
-$ModLoad imtcp
-$ModLoad imfile
-$ModLoad imudp
+module(load="imuxsock")
+module(load="imklog")
+module(load="imrelp")
+module(load="omrelp")
+module(load="imfile")
 
-######################
-#### REMOTE RULES ####
-######################
+main_queue(
+   queue.size="1000000"
+   queue.debatchsize="1000"
+   queue.workerthreads="2"
+)
 
-$InputTCPServerRun 514
-$UDPServerRun 514 
-$InputTCPServerStreamDriverMode 1
-$InputTCPServerStreamDriverAuthMode anon
+#############################
+### Listening To Clients ####
+#############################
 
-$DefaultNetstreamDriver gtls 
-$DefaultNetstreamDriverCAFile /etc/ssl/certs/rootCA.pem
-$DefaultNetstreamDriverCertFile /etc/ssl/certs/{{ ansible_fqdn }}.crt
-$DefaultNetstreamDriverKeyFile /etc/ssl/private/{{ ansible_fqdn }}.key
+input(type="imrelp"
+   port="{{ ossimcik_rsyslog['port'] }}"
+   ruleset="LogsFromClients"
+   tls="{{ ossimcik_rsyslog['tls']['state'] }}"
+   tls.caCert="{{ ossimcik_rsyslog['tls']['cacert'] }}"
+   tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
+   tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
+   tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
+   tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
+)
 
-$InputFileName /var/ossec/logs/alerts/alerts.log
-$InputFileTag ossimcik02
-$InputFileStateFile ossec-alerts
-$InputFileFacility local4
-$InputFilePollInterval 1
-$InputFilePersistStateInterval 1
-$InputRunFileMonitor
+ruleset(name="LogsFromClients") {
+   if $msg contains 'AV - Alert -' then stop
 
-$InputFileName /var/log/nxlog/client.log
-$InputFileTag client
-$InputFileStateFile clientraw
-$InputFileFacility local6
-$InputFilePollInterval 1
-$InputFilePersistStateInterval 1
-$InputRunFileMonitor
+   if $msg contains 'New USB device found' or $msg contains 'Product' or \
+      $msg contains 'Manufacturer' or $msg contains 'SerialNumber' then {
+      action(name="YereleUSBLogYazma"
+         type="omfile"
+         file="/var/log/usb.log"
+         asyncwriting="{{ ossimcik_rsyslog['asyncWriting'] }}"
+         iobuffersize="{{ ossimcik_rsyslog['ioBufferSize'] }}"
+         action.reportsuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
+      )
+   }
 
-$InputFileName /var/log/client.log
-$InputFileTag client_rsyslog
-$InputFileStateFile client_raw
-$InputFileFacility local6
-$InputFilePollInterval 1
-$InputFilePersistStateInterval 1
-$InputRunFileMonitor
+   action(name="YereleButunLoglariYazma"
+      type="omfile"
+      file="/var/log/client.log"
+      asyncwriting="{{ ossimcik_rsyslog['asyncWriting'] }}"
+      iobuffersize="{{ ossimcik_rsyslog['ioBufferSize'] }}"
+      action.reportsuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
+   )
 
-if $syslogfacility-text == 'local4' then {
-        action( type="omfwd"
-                Target="{{ ossimcik_rsyslog['ossim_server'] }}"
-                Port="514"
-                Protocol="tcp"
-                Action.ResumeRetryCount="-1"
-                StreamDriver="gtls"
-                StreamDriverMode="1"
-                StreamDriverAuthMode="anon"
-                StreamDriverCertFile="/etc/ssl/certs/{{ ansible_fqdn }}.crt"
-                StreamDriverKeyFile="/etc/ssl/private/{{ ansible_fqdn }}.key"
-                queue.Type="LinkedList"
-                queue.FileName="forwarding"
-                queue.SaveOnShutdown="on"
-                queue.MaxDiskSpace="5000m"
-                                )
-        action( type="omfwd"
-                Target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
-                Port="514"
-                Protocol="tcp"
-                Action.ResumeRetryCount="-1"
-                StreamDriver="gtls"
-                StreamDriverMode="1"
-                StreamDriverAuthMode="anon"
-                StreamDriverCertFile="/etc/ssl/certs/{{ ansible_fqdn }}.crt"
-                StreamDriverKeyFile="/etc/ssl/private/{{ ansible_fqdn }}.key"
-                queue.Type="LinkedList"
-                queue.FileName="forwarding"
-                queue.SaveOnShutdown="on"
-                queue.MaxDiskSpace="5000m"
-                                )
-    stop
+   action(type="omrelp"
+      target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
+      port="{{ ossimcik_rsyslog['port'] }}"
+      tls="{{ ossimcik_rsyslog['tls']['state'] }}"
+      tls.caCert="{{ ossimcik_rsyslog['tls']['cacert'] }}"
+      tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
+      tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
+      tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
+      tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
+      queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName01'] }}"
+      queue.maxDiskspace="{{ ossimcik_rsyslog['ActionQueueMaxDiskSpace'] }}"
+      queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
+      queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
+      queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
+      action.reportSuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
+   )
+   stop
 }
 
-if $syslogfacility-text == 'local6' then {
-        action( type="omfwd"
-                Target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
-                Port="514"
-                Protocol="tcp"
-                Action.ResumeRetryCount="-1"
-                StreamDriver="gtls"
-                StreamDriverMode="1"
-                StreamDriverAuthMode="anon"
-                StreamDriverCertFile="/etc/ssl/certs/{{ ansible_fqdn }}.crt"
-                StreamDriverKeyFile="/etc/ssl/private/{{ ansible_fqdn }}.key"
-                queue.Type="LinkedList"
-                queue.FileName="forwarding"
-                queue.SaveOnShutdown="on"
-                queue.MaxDiskSpace="5000m"
-                                )
-    stop
+#################################
+### To RsyslogSvr/OSSIM Rules ###
+#################################
+
+ruleset(name="AlertRules") {
+   action(name="SendRsyslogSvr"
+      type="omrelp"
+      target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
+      port="{{ ossimcik_rsyslog['port'] }}"
+      tls="{{ ossimcik_rsyslog['tls']['state'] }}"
+      tls.caCert="{{ ossimcik_rsyslog['tls']['cacert'] }}"
+      tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
+      tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
+      tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
+      tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
+      queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName02'] }}"
+      queue.maxDiskspace="{{ ossimcik_rsyslog['ActionQueueMaxDiskSpace'] }}"
+      queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
+      queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
+      queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
+      action.reportSuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
+   )
+   action(name="SendOSSIM"
+      type="omrelp"
+      target="{{ ossimcik_rsyslog['ossim_server'] }}"
+      port="{{ ossimcik_rsyslog['port'] }}"
+      tls="{{ ossimcik_rsyslog['tls']['state'] }}"
+      tls.caCert="{{ ossimcik_rsyslog['tls']['cacert'] }}"
+      tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
+      tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
+      tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
+      tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
+      queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName03'] }}"
+      queue.maxDiskspace="{{ ossimcik_rsyslog['ActionQueueMaxDiskSpace'] }}"
+      queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
+      queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
+      queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
+      action.reportSuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
+   )
+   stop
 }
 
-:msg, contains, "AV - Alert -" ~
-$template USB, "/var/log/usb.log"
-$template RemoteHost, "/var/log/client.log"
-if($fromhost-ip != '127.0.0.1' and $msg contains 'New USB device found') then -?USB
-if($fromhost-ip != '127.0.0.1' and $msg contains 'Product') then -?USB
-if($fromhost-ip != '127.0.0.1' and $msg contains 'Manufacturer') then -?USB
-if($fromhost-ip != '127.0.0.1' and $msg contains 'SerialNumber') then -?USB
-if($fromhost-ip != '127.0.0.1' and $msg contains 'USB disconnect') then -?RemoteHost
-if($fromhost-ip != '127.0.0.1' and $msg contains ' usb ') then ~
-& ~
-if $fromhost-ip != '127.0.0.1' then -?RemoteHost
-if $fromhost-ip != '127.0.0.1' then ~
+ruleset(name="WinRules") {
+   action(name="SendRsyslogSvr"
+      type="omrelp"
+      target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
+      port="{{ ossimcik_rsyslog['port'] }}"
+      tls="{{ ossimcik_rsyslog['tls']['state'] }}"
+      tls.caCert="{{ ossimcik_rsyslog['tls']['cacert'] }}"
+      tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
+      tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
+      tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
+      tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
+      queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName04'] }}"
+      queue.maxDiskspace="{{ ossimcik_rsyslog['ActionQueueMaxDiskSpace'] }}"
+      queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
+      queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
+      queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
+      action.reportSuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
+   )
+   stop
+}
 
-###################
-#### OWN RULES ####
-###################
+####################################
+### Read Windows Logs and Alerts ###
+####################################
 
-:msg, contains, "RULE"         -/var/log/ahtapot/fw/iptables.log
+input(type="imfile"
+   file="/var/ossec/logs/alerts/alerts.log"
+   tag="ossecAlerts"
+   statefile=""
+   ruleset="AlertRules"
+)
+
+input(type="imfile"
+   file="/var/log/nxlog/client.log"
+   tag="WindowsLogs"
+   statefile=""
+   ruleset="WinRules"
+)
+
 auth,authpriv.*                 /var/log/auth.log
 *.*;auth,authpriv.none,kern.!=info      -/var/log/syslog
 #cron.*                         /var/log/cron.log
@@ -152,19 +186,5 @@ news.notice                     -/var/log/news/news.notice
 #### GLOBAL DIRECTIVES ####
 ###########################
 
-$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
-
-$FileOwner root
-$FileGroup adm
-$FileCreateMode 0640
-$DirCreateMode 0755
-$Umask 0022
-
 $WorkDirectory {{ ossimcik_rsyslog['WorkDirectory'] }}
 $IncludeConfig {{ ossimcik_rsyslog['IncludeConfig'] }}
-
-$ActionQueueMaxDiskSpace {{ ossimcik_rsyslog['ActionQueueMaxDiskSpace'] }}
-$ActionQueueSaveOnShutdown {{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}
-$ActionQueueType {{ ossimcik_rsyslog['ActionQueueType'] }}
-$ActionResumeRetryCount {{ ossimcik_rsyslog['ActionResumeRetryCount'] }}
-$ActionQueueFileName {{ ossimcik_rsyslog['ActionQueueFileName'] }}
