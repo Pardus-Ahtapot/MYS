@@ -1,16 +1,47 @@
 ---
 # Rsyslog'un degiskenlerini iceren dosyadir
 rsyslog:
-    conf:
-        source: "rsyslog.conf.j2"
-        destination: "/etc/rsyslog.conf"
-        owner: "root"
-        group: "root"
-        mode: "0644" 
-    service:
-        name: "rsyslog" 
-        state: "started" 
-        enabled: "yes" 
-    WorkDirectory: "/var/spool/rsyslog"
-    IncludeConfig: "/etc/rsyslog.d/*"
-    RemoteLogDirectory: "/data/log/%HOSTNAME%/%fromhost-ip%.log"
+   conf:
+      source: "rsyslog.conf.j2"
+      destination: "/etc/rsyslog.conf"
+      owner: "root"
+      group: "root"
+      mode: "0644" 
+   service:
+      name: "rsyslog" 
+      state: "started" 
+      enabled: "yes" 
+   
+   tls:
+      state: "on"
+      cacert: "/etc/ssl/certs/ca.pem"
+      mycert: "/etc/ssl/certs/cert.pem"
+      myprivkey: "/etc/ssl/private/key.pem"
+      authmode: "name"
+      permittedpeer: "CERT CN GIRILMELI"
+   port: "20514"
+   ioBufferSize: "64k"
+   asyncWriting: "on"
+   ActionReportSuspension: "on"
+   WorkDirectory: "/var/spool/rsyslog"
+   IncludeConfig: "/etc/rsyslog.d/*"
+
+sources:
+   src01:
+      addr: "OSSIM_FQDN"
+      alertname: "OSSIM_AV_Alerts"
+      alertfile: "/data/log/ossim/ossimalerts.log"
+      rawname: "OSSIM_All"
+      rawfile: "/data/log/ossim/ossim_raw.log"
+   src02:
+      addr: "OSSIMCIK_FQDN"
+      alertname: "OSSIMCIK_AV_Alerts"
+      alertfile: "/data/log/ossimcik/ossimcikalerts.log"
+      rawname: "OSSIMCIK_All"
+      rawfile: "/data/log/ossimcik/ossimcik_raw.log"
+   src03:
+      addr: "OSSIMCORR_FQDN"
+      alertname: "OSSIMCORR_AV_Alerts"
+      alertfile: "/data/log/ossimcorr/ossimcorr_alerts.log"
+      rawname: "OSSIMCORR_All"
+      rawfile: "/data/log/ossimcorr/ossimcorr_raw.log"
