@@ -1,3 +1,7 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
 #################
 #### MODULES ####
 #################
@@ -5,18 +9,26 @@
 module(load="imuxsock")
 module(load="imklog")
 module(load="imrelp")
-module(load="omrelp")
 module(load="imfile")
+module(load="imudp" threads="{{ ossimcik_rsyslog['imthreads'] }}")
+module(load="omrelp")
+module(load="omfwd")
 
 main_queue(
-   queue.size="1000000"
-   queue.debatchsize="1000"
-   queue.workerthreads="2"
+   queue.size="{{ ossimcik_rsyslog['MainQueueSize'] }}"
+   queue.workerthreads="{{ ossimcik_rsyslog['MainQueueWorkerThreads'] }}"
 )
+
+$DefaultNetstreamDriverCAFile "{{ ossimcik_rsyslog['tls']['cacert'] }}"
 
 #############################
 ### Listening To Clients ####
 #############################
+
+input(type="imudp"
+   port="{{ ossimcik_rsyslog['port_udp'] }}"
+   ruleset="LogsFromClients"
+)
 
 input(type="imrelp"
    port="{{ ossimcik_rsyslog['port'] }}"
@@ -34,24 +46,23 @@ ruleset(name="LogsFromClients") {
 
    if $msg contains 'New USB device found' or $msg contains 'Product' or \
       $msg contains 'Manufacturer' or $msg contains 'SerialNumber' then {
-      action(name="YereleUSBLogYazma"
+      action(name="USB-Log-Yerele-Yazma"
          type="omfile"
          file="/var/log/usb.log"
-         asyncwriting="{{ ossimcik_rsyslog['asyncWriting'] }}"
+         asyncWriting="{{ ossimcik_rsyslog['asyncWriting'] }}"
          iobuffersize="{{ ossimcik_rsyslog['ioBufferSize'] }}"
-         action.reportsuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
       )
    }
 
-   action(name="YereleButunLoglariYazma"
+   action(name="Butun-Log-Yerele-Yazma"
       type="omfile"
       file="/var/log/client.log"
-      asyncwriting="{{ ossimcik_rsyslog['asyncWriting'] }}"
+      asyncWriting="{{ ossimcik_rsyslog['asyncWriting'] }}"
       iobuffersize="{{ ossimcik_rsyslog['ioBufferSize'] }}"
-      action.reportsuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
    )
 
-   action(type="omrelp"
+   action(name="RsyslogSvr-Log-Gonderme"
+      type="omrelp"
       target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
       port="{{ ossimcik_rsyslog['port'] }}"
       tls="{{ ossimcik_rsyslog['tls']['state'] }}"
@@ -61,12 +72,11 @@ ruleset(name="LogsFromClients") {
       tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
       tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
       queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName01'] }}"
-      queue.maxDiskspace="{{ ossimcik_rsyslog['ActionQueueMaxDiskSpace'] }}"
       queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
       queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
       queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
       action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
-      action.reportSuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
    )
    stop
 }
@@ -76,7 +86,7 @@ ruleset(name="LogsFromClients") {
 #################################
 
 ruleset(name="AlertRules") {
-   action(name="SendRsyslogSvr"
+   action(name="RsyslogSvr-Alarm-Gonderme"
       type="omrelp"
       target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
       port="{{ ossimcik_rsyslog['port'] }}"
@@ -87,36 +97,32 @@ ruleset(name="AlertRules") {
       tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
       tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
       queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName02'] }}"
-      queue.maxDiskspace="{{ ossimcik_rsyslog['ActionQueueMaxDiskSpace'] }}"
       queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
       queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
       queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
       action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
-      action.reportSuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
    )
-   action(name="SendOSSIM"
-      type="omrelp"
+   action(name="OSSIM-Alarm-Gonderme" 
+      type="omfwd"
       target="{{ ossimcik_rsyslog['ossim_server'] }}"
-      port="{{ ossimcik_rsyslog['port'] }}"
-      tls="{{ ossimcik_rsyslog['tls']['state'] }}"
-      tls.caCert="{{ ossimcik_rsyslog['tls']['cacert'] }}"
-      tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
-      tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
-      tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
-      tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
+      port="{{ ossimcik_rsyslog['port_udp'] }}"
+      protocol="tcp"
+      StreamDriver="gtls"
+      StreamDriverMode="1"
+      StreamDriverAuthMode="anon"
       queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName03'] }}"
-      queue.maxDiskspace="{{ ossimcik_rsyslog['ActionQueueMaxDiskSpace'] }}"
       queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
       queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
       queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
       action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
-      action.reportSuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
    )
    stop
 }
 
 ruleset(name="WinRules") {
-   action(name="SendRsyslogSvr"
+   action(name="RsyslogSvr-Win-Log-Gonderme"
       type="omrelp"
       target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
       port="{{ ossimcik_rsyslog['port'] }}"
@@ -127,12 +133,11 @@ ruleset(name="WinRules") {
       tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
       tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
       queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName04'] }}"
-      queue.maxDiskspace="{{ ossimcik_rsyslog['ActionQueueMaxDiskSpace'] }}"
       queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
       queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
       queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
       action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
-      action.reportSuspension="{{ ossimcik_rsyslog['ActionReportSuspension'] }}"
    )
    stop
 }
@@ -144,14 +149,12 @@ ruleset(name="WinRules") {
 input(type="imfile"
    file="/var/ossec/logs/alerts/alerts.log"
    tag="ossecAlerts"
-   statefile=""
    ruleset="AlertRules"
 )
 
 input(type="imfile"
    file="/var/log/nxlog/client.log"
    tag="WindowsLogs"
-   statefile=""
    ruleset="WinRules"
 )
 

@@ -12,9 +12,8 @@ module(load="imuxsock")
 module(load="omrelp")
 
 main_queue(
-   queue.size="1000000"
-   queue.debatchsize="1000"
-   queue.workerthreads="2"
+   queue.size="{{ rsyslog['MainQueueSize'] }}"
+   queue.workerthreads="{{ rsyslog['MainQueueWorkerThreads']}}"
 )
 
 ####################
@@ -22,10 +21,10 @@ main_queue(
 ####################
 
 ruleset(name="AnsibleLogs") {
-   action(name="AnsibleRemoteLogs"
+   action(name="Ansible-Log-Gonderme"
       type="omrelp"
-      target="ossimcik.gdys.local"
-      port="20514"
+      target="{{ rsyslog['server']}}"
+      port="{{ rsyslog['port'] }}"
       tls="{{ rsyslog['tls']['state'] }}"
       tls.caCert="{{ rsyslog['tls']['cacert'] }}"
       tls.myCert="{{ rsyslog['tls']['mycert'] }}"
@@ -35,10 +34,8 @@ ruleset(name="AnsibleLogs") {
       queue.Type="{{ rsyslog['QueueType'] }}"
       queue.FileName="{{ rsyslog['QueueFileNameANS'] }}"
       queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
-      queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
       queue.MaxFileSize="{{ rsyslog['QueueMaxFileSize'] }}"
       action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
-      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
    )
    stop
 }
@@ -46,7 +43,6 @@ ruleset(name="AnsibleLogs") {
 input(type="imfile"
    file="/var/log/ahtapot/ansible.log"
    tag=""
-   statefile=""
    ruleset="AnsibleLogs")
 
 #####################
@@ -54,18 +50,17 @@ input(type="imfile"
 #####################
 
 if $msg contains 'RULE' then {
-   action(name="YereleLogYazma"
+   action(name="IPtables-Yerele-Log-Yazma"
       type="omfile"
       file="/var/log/ahtapot/fw/iptables.log"
       asyncWriting="{{ rsyslog['asyncWriting'] }}"
       ioBufferSize="{{ rsyslog['ioBufferSize'] }}"
-      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
    )
    
-   action(name="UzakSunucuyaLogGonderme"
+   action(name="IPtables-Log-Gonderme"
       type="omrelp"
-      target="ossimcik.gdys.local"
-      port="20514"
+      target="{{ rsyslog['server']}}"
+      port="{{ rsyslog['port'] }}"
       tls="{{ rsyslog['tls']['state'] }}"
       tls.caCert="{{ rsyslog['tls']['cacert'] }}"
       tls.myCert="{{ rsyslog['tls']['mycert'] }}"
@@ -75,10 +70,9 @@ if $msg contains 'RULE' then {
       queue.Type="{{ rsyslog['QueueType'] }}"
       queue.FileName="{{ rsyslog['QueueFileNameIPT'] }}"
       queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
-      queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
       queue.MaxFileSize="{{ rsyslog['QueueMaxFileSize'] }}"
+      queue.size="{{ rsyslog['QueueSize'] }}"
       action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
-      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
    )
    stop
 }
@@ -87,10 +81,10 @@ if $msg contains 'RULE' then {
 ### ALL Syslogs ###
 ###################
 
-action(name="ButunSYSLOG"
+action(name="Butun-SYSLOG-Gonderme"
    type="omrelp"
-   target="ossimcik.gdys.local"
-   port="20514"
+   target="{{ rsyslog['server']}}"
+   port="{{ rsyslog['port'] }}"
    tls="{{ rsyslog['tls']['state'] }}"
    tls.caCert="{{ rsyslog['tls']['cacert'] }}"
    tls.myCert="{{ rsyslog['tls']['mycert'] }}"
@@ -100,10 +94,9 @@ action(name="ButunSYSLOG"
    queue.Type="{{ rsyslog['QueueType'] }}"
    queue.FileName="{{ rsyslog['QueueFileNameSYS'] }}"
    queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
-   queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
    queue.MaxFileSize="{{ rsyslog['QueueMaxFileSize'] }}"
+   queue.size="{{ rsyslog['QueueSize'] }}"
    action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
-   action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
 )
 
 auth,authpriv.*                 /var/log/auth.log

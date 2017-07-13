@@ -9,11 +9,11 @@
 module(load="imuxsock")
 module(load="imklog")
 module(load="imrelp")
+module(load="imudp" threads="{{ rsyslog['imthreads'] }}")
 
 main_queue(
-   queue.size="1000000"
-   queue.debatchsize="1000"
-   queue.workerthreads="4"
+   queue.size="{{ rsyslog['MainQueueSize'] }}"
+   queue.workerthreads="{{ rsyslog['MainQueueWorkerThreads'] }}"
 )
 
 template(name="MsgFormat" type="string" string="%msg:2:10000%\n")
@@ -21,6 +21,11 @@ template(name="MsgFormat" type="string" string="%msg:2:10000%\n")
 ############################
 ### Listening To Sources ###
 ############################
+
+input(type="imudp"
+   port="{{ rsyslog['port_udp'] }}"
+   ruleset="RawLogs"
+)
 
 input(type="imrelp"
    port="{{ rsyslog['port'] }}"
@@ -45,7 +50,6 @@ ruleset(name="RawLogs") {
          file="{{ value.alertfile }}"
          asyncWriting="{{ rsyslog['asyncWriting'] }}"
          ioBufferSize="{{ rsyslog['ioBufferSize'] }}"
-         action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
          template="MsgFormat"
       )
       stop
@@ -55,7 +59,6 @@ ruleset(name="RawLogs") {
          file="{{ value.rawfile }}"
          asyncWriting="{{ rsyslog['asyncWriting'] }}"
          ioBufferSize="{{ rsyslog['ioBufferSize'] }}"
-         action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
       )
       stop
    }

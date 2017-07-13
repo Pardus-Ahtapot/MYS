@@ -12,7 +12,7 @@
     - "clients"
   notify:
     - rsyslog servisini yeniden baslat
-  sudo: yes 
+  sudo: yes
   tags: rsyslog
 
 - name: Rsyslog servisi ayakta
@@ -20,5 +20,5 @@
         name: "{{ rsyslog['service']['name'] }}"
         state: "{{ rsyslog['service']['state'] }}"
         enabled: "{{ rsyslog['service']['enabled'] }}"
-  sudo: yes 
+  sudo: yes
   tags: rsyslog
