@@ -12,14 +12,13 @@ module(load="imrelp")
 module(load="imfile")
 module(load="imudp" threads="{{ ossimcik_rsyslog['imthreads'] }}")
 module(load="omrelp")
-module(load="omfwd")
 
 main_queue(
    queue.size="{{ ossimcik_rsyslog['MainQueueSize'] }}"
    queue.workerthreads="{{ ossimcik_rsyslog['MainQueueWorkerThreads'] }}"
 )
 
-$DefaultNetstreamDriverCAFile "{{ ossimcik_rsyslog['tls']['cacert'] }}"
+$DefaultNetstreamDriverCAFile {{ ossimcik_rsyslog['tls']['cacert'] }}
 
 #############################
 ### Listening To Clients ####
