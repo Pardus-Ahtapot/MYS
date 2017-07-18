@@ -20,9 +20,9 @@ scripts:
         owner: "root" 
         group: "root" 
         mode: "0755" 
-#    scriptXX:
-#        source: 
-#        destination: 
-#        owner: 
-#        group: 
-#        mode:  
+    script04:
+        source: "update-ahtapot.sh"
+        destination: "/usr/bin/update-ahtapot.sh"
+        owner: "root"
+        group: "root"
+        mode:  "0755"

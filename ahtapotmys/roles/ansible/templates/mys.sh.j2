@@ -4,13 +4,4 @@
 
 #!/bin/bash
 
-cd /etc/ansible && git pull
-
-EXIT=$?
-
-if [ "$EXIT" -eq 0 ]
-then
-        /usr/bin/ansible-playbook /etc/ansible/playbooks/state.yml
-else
-        logger -p local5.crit "Ansible MYS Repo Update Failed !!"
-fi
+sudo touch /var/run/state
