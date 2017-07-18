@@ -4,4 +4,13 @@
 
 #!/bin/bash
 
-sudo touch /var/run/firewall
+/usr/bin/ansible-playbook /etc/ansible/playbooks/updategdysrepo.yml
+
+EXIT=$?
+
+if [ "$EXIT" -eq 0 ]
+then
+        /usr/bin/ansible-playbook /etc/ansible/playbooks/firewall.yml
+else
+        logger -p local5.crit "Ansible GDYS Repo Update Failed !!"
+fi

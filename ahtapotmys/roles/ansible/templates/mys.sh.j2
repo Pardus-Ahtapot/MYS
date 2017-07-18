@@ -4,4 +4,13 @@
 
 #!/bin/bash
 
-sudo touch /var/run/state
+/usr/bin/ansible-playbook /etc/ansible/playbooks/updatemysrepo.yml
+
+EXIT=$?
+
+if [ "$EXIT" -eq 0 ]
+then
+        /usr/bin/ansible-playbook /etc/ansible/playbooks/state.yml
+else
+        logger -p local5.crit "Ansible MYS Repo Update Failed !!"
+fi
