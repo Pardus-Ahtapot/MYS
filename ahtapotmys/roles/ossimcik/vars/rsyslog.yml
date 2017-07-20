@@ -36,5 +36,6 @@ ossimcik_rsyslog:
    ActionQueueType: "LinkedList"
    ActionQueueMaxFileSize: "100m"
    ActionQueueSize: "1000000"
+   Mode: "inotify"
    WorkDirectory: "/var/spool/rsyslog"
    IncludeConfig: "/etc/rsyslog.d/*"

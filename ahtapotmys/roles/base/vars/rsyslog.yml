@@ -35,6 +35,7 @@ rsyslog:
    QueueSize: "250000"
    asyncWriting: "on" 
    ioBufferSize: "256k" 
+   Mode: "inotify"
    WorkDirectory: "/var/spool/rsyslog" 
    IncludeConfig: "/etc/rsyslog.d/*" 
 

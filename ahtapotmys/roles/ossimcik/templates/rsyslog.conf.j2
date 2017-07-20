@@ -9,7 +9,7 @@
 module(load="imuxsock")
 module(load="imklog")
 module(load="imrelp")
-module(load="imfile")
+module(load="imfile" mode="{{ ossimcik_rsyslog['Mode'] }}")
 module(load="imudp" threads="{{ ossimcik_rsyslog['imthreads'] }}")
 module(load="omrelp")
 

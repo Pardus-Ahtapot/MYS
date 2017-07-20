@@ -7,7 +7,7 @@
 #################
 
 module(load="imklog")
-module(load="imfile")
+module(load="imfile" mode="{{ rsyslog['Mode'] }}")
 module(load="imuxsock")
 module(load="omrelp")
 
