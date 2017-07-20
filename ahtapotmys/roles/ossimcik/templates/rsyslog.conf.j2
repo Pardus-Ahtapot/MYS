@@ -1,7 +1,3 @@
-## Bu dosya ansible tarafindan yonetilmektedir!
-## Burada yapilan degisikliklerin uzerine yazilir!!
-{{ ansible_managed }}
-
 #################
 #### MODULES ####
 #################
@@ -47,7 +43,7 @@ ruleset(name="LogsFromClients") {
       $msg contains 'Manufacturer' or $msg contains 'SerialNumber' then {
       action(name="USB-Log-Yerele-Yazma"
          type="omfile"
-         file="/var/log/usb.log"
+         file="{{ ossimcik_rsyslog['LogLocationUSB'] }}"
          asyncWriting="{{ ossimcik_rsyslog['asyncWriting'] }}"
          iobuffersize="{{ ossimcik_rsyslog['ioBufferSize'] }}"
       )
@@ -55,7 +51,7 @@ ruleset(name="LogsFromClients") {
 
    action(name="Butun-Log-Yerele-Yazma"
       type="omfile"
-      file="/var/log/client.log"
+      file="{{ ossimcik_rsyslog['LogLocationALL'] }}"
       asyncWriting="{{ ossimcik_rsyslog['asyncWriting'] }}"
       iobuffersize="{{ ossimcik_rsyslog['ioBufferSize'] }}"
    )
