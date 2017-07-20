@@ -7,6 +7,12 @@ logrotate_scripts:
         owner: "root"
         group: "root"
         mode: "0644" 
+    script02:
+        source: "ahtapot_rsyslog.j2"
+        destination: "/etc/logrotate.d/rsyslog"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
 #    scriptXX:
 #        source: ""
 #        destination: ""
