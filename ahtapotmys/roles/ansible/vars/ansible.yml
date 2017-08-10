@@ -21,7 +21,7 @@ scripts:
         group: "root" 
         mode: "0755" 
     script04:
-        source: "update-ahtapot.sh"
+        source: "update-ahtapot.sh.j2"
         destination: "/usr/bin/update-ahtapot.sh"
         owner: "root"
         group: "root"
