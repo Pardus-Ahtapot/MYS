@@ -188,6 +188,7 @@
   - /etc/ansible/roles/ossimcik/vars/ossec.yml
   - /etc/ansible/roles/ossimcik/vars/nxlog.yml
   - /etc/ansible/roles/ossimcik/vars/rsyslog.yml
+  - /etc/ansible/roles/ossimcik/vars/logrotate.yml
   roles:
   - { role: ossimcik }
 
