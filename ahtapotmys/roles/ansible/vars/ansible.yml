@@ -21,8 +21,8 @@ scripts:
         group: "root" 
         mode: "0755" 
     script04:
-        source: "update-ahtapot.sh.j2"
-        destination: "/usr/bin/update-ahtapot.sh"
+        source: "update-ahtapot.py.j2"
+        destination: "/usr/bin/update-ahtapot.py"
         owner: "root"
         group: "root"
         mode:  "0755"

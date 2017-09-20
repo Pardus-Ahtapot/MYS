@@ -1,0 +1,50 @@
+## Bu dosya ansible tarafindan yonetilmektedir!		
+## Burada yapilan degisikliklerin uzerine yazilir!!		
+	
+#!/usr/bin.env python
+# -*- coding: utf-8 -*-
+import os,sys,shlex,time
+import subprocess as sp
+kwargs = {}
+kwargs['stdout'] = sp.PIPE
+kwargs['stderr'] = sp.PIPE
+fw_dir = "/etc/fw/gdys/"	#Working Directory
+cr_time = int(time.time())	#Current Unix Time Stamp of the server
+ch_fw = []			#Changed Firewall List
+fw_list = ""
+if os.path.exists("/var/run/state"):
+	sp.call(["sudo","rm","/var/run/state"])
+	proc = sp.Popen(shlex.split("git -C /etc/ansible pull"), **kwargs)
+	(stdout_str, stderr_str) = proc.communicate()
+	return_code = proc.wait()
+
+	if return_code == 0:
+		sp.call(["/usr/bin/ansible-playbook","/etc/ansible/playbooks/state.yml"])
+	
+	else:
+		os.system("logger -p local5.crit \"Ansible MYS Repo Update Failed !!\" ")
+	
+elif os.path.exists("/var/run/firewall"):
+        sp.call(["sudo","rm","/var/run/firewall"])
+        proc = sp.Popen(shlex.split("git -C /etc/fw/gdys pull"), **kwargs)
+        (stdout_str, stderr_str) = proc.communicate()
+        return_code = proc.wait()
+        
+	if return_code == 0:
+		for root,_, files in os.walk(fw_dir):
+        		for f in files:
+                		full_path = os.path.join(root, f)
+                		if f[-3:] == ".fw" and os.access(full_path, os.X_OK):
+                        		ts = int(os.path.getmtime(full_path))
+                        		if cr_time - ts < 300:   #If the difference between current time and modification time of the file is less than 5 minutes.
+                                		ch_fw.append(f[:-3)
+
+		if len(ch_fw) > 0:
+        		for l in ch_fw:
+                		fw_list = fw_list + l + "," 
+
+        		fw_list = fw_list[:-1]
+        		sp.call(["/usr/bin/ansible-playbook","-l", fw_list,"/etc/ansible/playbooks/firewall.yml"])
+
+        else:
+                os.system("logger -p local5.crit \"Ansible GDYS Repo Update Failed !!\" ")
