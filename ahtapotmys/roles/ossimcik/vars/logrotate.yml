@@ -3,7 +3,7 @@
 logrotate:
     conf:
         source: "rsyslog_logrotate.j2"
-        destination: "/etc/logrotate.d/rsyslog"
+        destination: "/etc/logrotate.d/ossimcik"
         owner: "root"
         group: "root"
         mode: "0644"
