@@ -6,7 +6,6 @@
         owner: "{{ rsyslog['conf']['owner'] }}"
         group: "{{ rsyslog['conf']['group'] }}"
         mode: "{{ rsyslog['conf']['mode'] }}"
-#  when: "'rsyslog' not in group_names and 'ossimcik' not in group_names"
   when: '{{ "ansible_fqdn" }} in item.1'
   with_subelements: 
     - "ossimciks"
@@ -23,6 +22,7 @@
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
+  when: "'rsyslog' not in group_names and 'ossimcik' not in group_names"
   with_dict: "logrotate_scripts"
   sudo: yes
   tags: rsyslog 
