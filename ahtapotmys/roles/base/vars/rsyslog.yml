@@ -25,8 +25,6 @@ rsyslog:
       mykey: "/etc/ssl/private/{{ ansible_fqdn }}.key"   
       authmode: "name"
       permittedpeer: ""
-   server: "OSSIMCIK_FQDN"
-   port: "20514"
    MainQueueSize: "100000"
    MainQueueWorkerThreads: "2"
    ActionResumeRetryCount: "-1"

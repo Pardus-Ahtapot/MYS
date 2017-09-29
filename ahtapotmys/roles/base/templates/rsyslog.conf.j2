@@ -23,8 +23,12 @@ main_queue(
 ruleset(name="AnsibleLogs") {
    action(name="Ansible-Log-Gonderme"
       type="omrelp"
-      target="{{ rsyslog['server']}}"
-      port="{{ rsyslog['port'] }}"
+{% for key, value in ossimciks.iteritems() %}
+{% if ansible_fqdn in value.clients %}
+      target="{{ value.fqdn }}"
+      port="{{ value.port }}"
+{% endif %}
+{% endfor %}
       tls="{{ rsyslog['tls']['state'] }}"
       tls.caCert="{{ rsyslog['tls']['cacert'] }}"
       tls.myCert="{{ rsyslog['tls']['mycert'] }}"
@@ -59,8 +63,12 @@ if $msg contains 'RULE' then {
    
    action(name="IPtables-Log-Gonderme"
       type="omrelp"
-      target="{{ rsyslog['server']}}"
-      port="{{ rsyslog['port'] }}"
+{% for key, value in ossimciks.iteritems() %}
+{% if ansible_fqdn in value.clients %}
+      target="{{ value.fqdn }}"
+      port="{{ value.port }}"
+{% endif %}
+{% endfor %}
       tls="{{ rsyslog['tls']['state'] }}"
       tls.caCert="{{ rsyslog['tls']['cacert'] }}"
       tls.myCert="{{ rsyslog['tls']['mycert'] }}"
@@ -83,8 +91,12 @@ if $msg contains 'RULE' then {
 
 action(name="Butun-SYSLOG-Gonderme"
    type="omrelp"
-   target="{{ rsyslog['server']}}"
-   port="{{ rsyslog['port'] }}"
+{% for key, value in ossimciks.iteritems() %}
+{% if ansible_fqdn in value.clients %}
+   target="{{ value.fqdn }}"
+   port="{{ value.port }}"
+{% endif %}
+{% endfor %}
    tls="{{ rsyslog['tls']['state'] }}"
    tls.caCert="{{ rsyslog['tls']['cacert'] }}"
    tls.myCert="{{ rsyslog['tls']['mycert'] }}"
