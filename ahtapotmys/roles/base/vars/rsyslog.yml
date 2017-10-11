@@ -12,12 +12,6 @@ rsyslog:
       name: "rsyslog" 
       state: "started" 
       enabled: "yes"
-   logrotate:
-      source: "cron_logrotate.j2"
-      destination: "/etc/cron.daily/logrotate"
-      owner: "root"
-      group: "root"
-      mode: "0755"    
    tls:
       state: "on"
       cacert: "/etc/ssl/certs/rootCA.pem"
