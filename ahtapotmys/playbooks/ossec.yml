@@ -1,6 +1,6 @@
 ---
 # Tum hostlarda ossec rolunu calistiracak olan playbook dosyasidir 
-- hosts: all:!ossimcik 
+- hosts: all: 
   remote_user: ahtapotops 
   sudo: yes
   vars_files:

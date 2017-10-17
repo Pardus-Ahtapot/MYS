@@ -204,11 +204,11 @@
   roles:
   - { role: ocswb }
 
-#- hosts: all:!ossimcik 
-#  remote_user: ahtapotops
-#  vars_files:
-#  - /etc/ansible/roles/ossec/vars/repo.yml
-#  - /etc/ansible/roles/ossec/vars/package.yml
-#  - /etc/ansible/roles/ossec/vars/ossec.yml
-#  roles:
-#  - { role: ossec }
+- hosts: all 
+  remote_user: ahtapotops
+  vars_files:
+  - /etc/ansible/roles/ossec/vars/repo.yml
+  - /etc/ansible/roles/ossec/vars/package.yml
+  - /etc/ansible/roles/ossec/vars/ossec.yml
+  roles:
+  - { role: ossec }
