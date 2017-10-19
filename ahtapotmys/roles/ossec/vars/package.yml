@@ -12,6 +12,11 @@ ossec_packages:
 #    packageXX:
 #        name: 
 #        state:  
+
+ossec_server_packages:
+    package01:
+        name: "ossec-auto-server" 
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  
