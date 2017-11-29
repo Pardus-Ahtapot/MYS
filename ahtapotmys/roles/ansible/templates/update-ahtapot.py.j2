@@ -3,13 +3,13 @@
 	
 #!/usr/bin.env python
 # -*- coding: utf-8 -*-
-import os,sys,shlex,time
+import os,sys,shlex
 import subprocess as sp
+import CheckFWs
+
 kwargs = {}
 kwargs['stdout'] = sp.PIPE
 kwargs['stderr'] = sp.PIPE
-fw_dir = "/etc/fw/gdys/"	#Working Directory
-cr_time = int(time.time())	#Current Unix Time Stamp of the server
 ch_fw = []			#Changed Firewall List
 fw_list = ""
 if os.path.exists("/var/run/state"):
@@ -31,17 +31,11 @@ elif os.path.exists("/var/run/firewall"):
         return_code = proc.wait()
         
 	if return_code == 0:
-		for root,_, files in os.walk(fw_dir):
-        		for f in files:
-                		full_path = os.path.join(root, f)
-                		if f[-3:] == ".fw" and os.access(full_path, os.X_OK):
-                        		ts = int(os.path.getmtime(full_path))
-                        		if cr_time - ts < 300:   #If the difference between current time and modification time of the file is less than 5 minutes.
-                                		ch_fw.append(f[:-3)
+		ch_fw = CheckFWs.CheckModifiedFWs()
 
 		if len(ch_fw) > 0:
         		for l in ch_fw:
-                		fw_list = fw_list + l + "," 
+                		fw_list = fw_list + l[:-3] + "," 
 
         		fw_list = fw_list[:-1]
         		sp.call(["/usr/bin/ansible-playbook","-l", fw_list,"/etc/ansible/playbooks/firewall.yml"])

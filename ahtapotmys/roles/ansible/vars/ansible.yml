@@ -26,3 +26,9 @@ scripts:
         owner: "root"
         group: "root"
         mode:  "0755"
+    script05:
+        source: "CheckFWs.py.j2"
+        destination: "/usr/bin/CheckFWs.py"
+        owner: "root"
+        group: "root"
+        mode:  "0755"
