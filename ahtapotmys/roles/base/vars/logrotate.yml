@@ -1,6 +1,6 @@
 ---
 # Logrotate degiskenlerini iceren dosyadir
-logrotate:
+logrotate_base:
    source: "cron_logrotate.j2"
    destination: "/etc/cron.daily/logrotate"
    owner: "root"
