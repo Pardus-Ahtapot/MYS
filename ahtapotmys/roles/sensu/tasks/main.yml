@@ -1,0 +1,48 @@
+---
+# tasks/main.yml: "Master" playbook for the cmacrae.sensu role
+
+  #- include_vars: "/etc/ansible/roles/sensu/vars/main.yml"
+
+  - include: "/etc/ansible/roles/sensu/tasks/Pardus/main.yml"
+    tags: setup
+    when: sensu_master
+          or sensu_client
+
+  - include: "/etc/ansible/roles/sensu/tasks/redis.yml"
+    tags: redis
+    when: redis_server
+          and sensu_deploy_redis_server
+    static: false
+
+  - include: "/etc/ansible/roles/sensu/tasks/ssl.yml"
+    tags: ssl
+
+  - include: "/etc/ansible/roles/sensu/tasks/rabbit.yml"
+    tags: rabbitmq
+    when: rabbitmq_server
+          and sensu_deploy_rabbitmq_server
+    static: false
+
+  - include: "/etc/ansible/roles/sensu/tasks/common.yml"
+    tags: common
+    when: sensu_master
+          or sensu_client
+
+  - include: "/etc/ansible/roles/sensu/tasks/server.yml"
+    tags: server
+    when: sensu_master
+    static: false
+
+  - include: "/etc/ansible/roles/sensu/tasks/dashboard.yml"
+    tags: dashboard
+    when: sensu_include_dashboard
+    static: false
+
+  - include: "/etc/ansible/roles/sensu/tasks/client.yml"
+    tags: client
+    when: sensu_client
+
+  - include: "/etc/ansible/roles/sensu/tasks/plugins.yml"
+    tags: plugins
+    when: sensu_include_plugins
+    static: false
