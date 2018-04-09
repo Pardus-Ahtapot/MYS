@@ -1,0 +1,18 @@
+---
+# tasks/Pardus/dashboard.yml: Deployment of the Uchiwa dashboard
+# Specific to Pardus
+
+  #- include_vars: "main.yml"
+
+  - name: Install uchiwa
+    sudo: yes
+    apt:
+      name: uchiwa
+      state: present
+
+  - name: Deploy Uchiwa config
+    sudo: yes
+    template:
+      src: /etc/ansible/roles/sensu/templates/uchiwa_config.json.j2
+      dest: "{{ sensu_config_path }}/uchiwa.json"
+    notify: restart uchiwa service
