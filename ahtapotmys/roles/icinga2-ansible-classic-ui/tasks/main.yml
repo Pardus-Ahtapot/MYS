@@ -1,0 +1,4 @@
+---
+# tasks file for icinga2-ansible-classic-ui
+
+- include: icinga2_classic_ui_Debian_install.yml
