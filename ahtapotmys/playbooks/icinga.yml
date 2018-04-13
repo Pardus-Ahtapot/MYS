@@ -1,0 +1,44 @@
+- hosts: icinga
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/base/vars/group.yml
+  - /etc/ansible/roles/base/vars/user.yml
+  - /etc/ansible/roles/base/vars/repo.yml
+  - /etc/ansible/roles/base/vars/rsyslog.yml
+  - /etc/ansible/roles/base/vars/ntp.yml
+  - /etc/ansible/roles/base/vars/package.yml
+  - /etc/ansible/roles/base/vars/kernelmodules_remove.yml
+  - /etc/ansible/roles/base/vars/kernelmodules_blacklist.yml
+  - /etc/ansible/roles/base/vars/host.yml
+  - /etc/ansible/roles/base/vars/audit.yml
+  - /etc/ansible/roles/base/vars/sudo.yml
+  - /etc/ansible/roles/base/vars/ssh.yml
+  - /etc/ansible/roles/base/vars/grub.yml
+  - /etc/ansible/roles/base/vars/logger.yml
+  - /etc/ansible/roles/base/vars/logrotate.yml
+  - /etc/ansible/roles/base/vars/directory.yml
+  - /etc/ansible/roles/base/vars/profile.yml
+  - /etc/ansible/roles/base/vars/fusioninventory.yml
+  - /etc/ansible/roles/icinga2-ansible-no-ui/vars/hosts.yml
+  - /etc/ansible/roles/icinga2-ansible-no-ui/vars/main.yml
+  - /etc/ansible/roles/icinga2-ansible-classic-ui/vars/main.yml
+  roles:
+  - { role: base }
+  - { role: icinga2-ansible-no-ui,
+       icinga2_conf_global:
+                 [{ directive: 'include "constants.conf"' },
+                   { directive: 'include "zones.conf"' },
+                   { directive: 'include <itl>' },
+                   { directive: 'include <plugins>' },
+                   { directive: 'include "features-enabled/*.conf"' },
+                   { directive: 'include_recursive "conf.d"' }],
+       check_commands: {
+           check_disk: { -H: "\"$address$\"", -c: "\"check_disk\", \"-a\", \"30%\", \"10%\", \"/\"" },
+           check_load: { -H: "\"$address$\"", -c: "\"check_load\", \"-a\", \"0.1,0.1,0.1\", \"5,5,5\"" },
+           check_mem: { -H: "\"$address$\"", -c: "\"check_mem\", \"-a\", \"10\", \"5\"" },
+           check_eth: { -H: "\"$address$\"", -c: "\"check_eth\", \"-a\", \"eth1\", \"1024K Bps\", \"2048K Bps\"" },
+           check_website: { -H: "\"$address$\"", -c: "\"check_website\", \"-a\", \"www.labrisnetworks.com\"" }
+       },
+       tags: icinga2-no-ui }
+#  - { role: icinga2-ansible-classic-ui,
+#      tags: icinga2-classic-ui }

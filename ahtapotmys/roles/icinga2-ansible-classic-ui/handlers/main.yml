@@ -1,0 +1,20 @@
+---
+# handlers file for icinga2-ansible-classic-ui
+
+- name: restart httpd
+  sudo: yes
+  service: name=httpd
+           state=restarted
+           enabled=yes
+
+- name: restart apache2
+  sudo: yes
+  service: name=apache2
+           state=restarted
+           enabled=yes
+
+- name: restart icinga2
+  sudo: yes
+  service: name=icinga2
+           state=restarted
+           enabled=yes

@@ -1,0 +1,34 @@
+---
+- name: Copy Main Icinga2 Configuration
+  sudo: yes
+  template: src=icinga2.conf.j2
+            dest={{ icinga2_main_conf }}
+            backup=yes
+            owner=root
+            group=root
+            mode=0644
+  notify:
+   - restart icinga2
+
+- name: Copy Check Commands Configuration
+  sudo: yes
+  template: src=icinga2_check_commands.j2
+            dest={{ icinga2_conf_d }}/check_commands.conf
+            backup=yes
+            owner=root
+            group=root
+            mode=0644
+  notify:
+   - restart icinga2
+
+- name: Create hosts
+  sudo: yes
+  template: src=hosts.j2
+            dest={{ icinga2_conf_d }}/hosts/{{item.hostname}}.conf
+            owner=root
+            group=root
+            mode=0644
+  with_items: "{{ hosts }}"
+  notify:
+   - restart icinga2
+
