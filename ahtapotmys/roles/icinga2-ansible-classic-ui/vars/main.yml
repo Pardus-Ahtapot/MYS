@@ -1,0 +1,12 @@
+---
+# defaults file for icinga2-ansible-classic-ui
+
+icinga2_classic_ui_passwd: "labris"
+
+# Vars for Debian OS Family
+icinga2_classic_ui_pkg:
+ - icinga2-classicui
+ - python-passlib
+
+htpasswd_deb: "/etc/icinga2/classicui/htpasswd.users"
+

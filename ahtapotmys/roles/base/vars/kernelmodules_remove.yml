@@ -1,0 +1,35 @@
+---
+# Cikarilacak cekirdek modullerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak cikarilmak istenilen kadar cekirdek modulu eklenebilir.
+# Eklenen cekirdek modullerinin makine her yeniden baslayisinda otomatik eklenmesi engellenir.
+# Cikarilacak modul baska bir modul tarafindan kullaniliyorsa ilk olarak KULANAN modul cikarilmalidir.
+
+rem_modules:
+    conf:
+        source: "kernelmodules_remove.conf.j2" 
+        owner: "root"
+        group: "root"
+        mode: "0644"
+
+to_be_removed_modules:
+    module01:
+        name: "usb_storage"
+        state: "absent"
+    module02:
+        name: "usb-storage"
+        state: "absent"
+    module03:
+        name: "joydev"
+        state: "absent"
+    module04:
+        name: "drm_kms_helper"
+        state: "absent"
+    module05:
+        name: "ttm"
+        state: "absent"
+    module06:
+        name: "drm"
+        state: "absent"
+#    moduleXX:
+#        name:
+#        state:

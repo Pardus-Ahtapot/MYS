@@ -1,0 +1,39 @@
+---
+# tasks/Pardus/rabbit.yml: Deploy RabbitMQ
+# Specific to Pardus
+
+  #- include_vars: "main.yml"
+
+#  - name: Ensure the RabbitMQ APT repo GPG key is present
+#    sudo: yes
+#    apt_key:
+#      url: https://dl.bintray.com/rabbitmq/Keys/rabbitmq-release-signing-key.asc
+#      state: present
+#
+#  - name: Ensure the RabbitMQ APT repo is present
+#    sudo: yes
+#    apt_repository:
+#      repo: "deb https://dl.bintray.com/rabbitmq/debian jessie main"
+#      state: present
+#      update_cache: true
+#
+#  - name: Ensure the Erlang APT repo GPG key is present
+#    sudo: yes
+#    apt_key:
+#      url: https://packages.erlang-solutions.com/debian/erlang_solutions.asc
+#      state: present
+#
+#  - name: Ensure the Erlang APT repo is present
+#    sudo: yes
+#    apt_repository:
+#      repo: "deb https://packages.erlang-solutions.com/debian jessie contrib"
+#      state: present
+#      update_cache: true
+
+  - name: Ensure RabbitMQ is installed
+    sudo: yes
+    apt:
+      name: rabbitmq-server
+      state: "{{ rabbitmq_pkg_state }}"
+      cache_valid_time: 600
+      update_cache: true

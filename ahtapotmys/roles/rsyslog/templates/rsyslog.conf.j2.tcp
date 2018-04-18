@@ -1,0 +1,93 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+#################
+#### MODULES ####
+#################
+
+$ModLoad imuxsock
+$ModLoad imklog
+#$ModLoad immark
+
+$ModLoad imudp
+$UDPServerRun 514
+
+$ModLoad imtcp
+$InputTCPServerRun 514
+$InputTCPServerStreamDriverMode 1
+$InputTCPServerStreamDriverAuthMode anon
+
+$DefaultNetstreamDriver gtls
+$DefaultNetstreamDriverCAFile  /etc/ssl/certs/rootCA.pem
+$DefaultNetstreamDriverCertFile /etc/ssl/certs/{{ ansible_fqdn }}.crt
+$DefaultNetstreamDriverKeyFile /etc/ssl/private/{{ ansible_fqdn }}.key
+
+###############
+#### RULES ####
+###############
+
+$template OssimcorrAlerts, "/data/log/ossimcorr/ossimcorr_alerts.log"
+$template MsgFormat,"%msg:2:10000%\n"
+$template Ossimcorr, "/data/log/ossimcorr/ossimcorr_raw.log"
+$template OssimAlerts, "/data/log/ossim/ossimalerts.log"
+$template MsgFormat,"%msg:2:10000%\n"
+$template Ossim, "/data/log/ossim/ossim_raw.log"
+$template OssimcikAlerts, "/data/log/ossimcik/ossimcikalerts.log"
+$template MsgFormat,"%msg:2:10000%\n"
+$template Ossimcik, "/data/log/ossimcik/ossimcik_raw.log"
+#$template Ossimcik01Alerts, "/data/log/ossimcik01/ossimcik01alerts.log"
+#$template MsgFormat,"%msg:2:10000%\n"
+#$template Ossimcik01, "/data/log/ossimcik01/ossimcik01_raw.log"
+
+if($fromhost-ip == 'OSSIM_IP' and $msg contains 'AV - Alert -') then -?OssimAlerts;MsgFormat
+if($fromhost-ip == 'OSSIM_IP' and $msg contains 'AV - Alert -') then ~
+if $fromhost-ip == 'OSSIM_IP' then -?Ossim
+& ~
+if($fromhost-ip == 'OSSIMCIK_IP' and $msg contains 'AV - Alert -') then -?OssimcikAlerts;MsgFormat
+if($fromhost-ip == 'OSSIMCIK_IP' and $msg contains 'AV - Alert -') then ~
+if $fromhost-ip == 'OSSIMCIK_IP' then -?Ossimcik
+& ~
+if($fromhost-ip == 'OSSIMCORR_IP' and $msg contains 'AV - Alert -') then -?OssimcorrAlerts;MsgFormat
+if($fromhost-ip == 'OSSIMCORR_IP' and $msg contains 'AV - Alert -') then ~
+if $fromhost-ip == 'OSSIMCORR_IP' then -?Ossimcorr
+& ~
+
+auth,authpriv.*			/var/log/auth.log
+*.*;auth,authpriv.none		-/var/log/syslog
+#cron.*				/var/log/cron.log
+daemon.*			-/var/log/daemon.log
+kern.*				-/var/log/kern.log
+lpr.*				-/var/log/lpr.log
+mail.*				-/var/log/mail.log
+user.*				-/var/log/user.log
+
+mail.info			-/var/log/mail.info
+mail.warn			-/var/log/mail.warn
+mail.err			/var/log/mail.err
+
+news.crit			/var/log/news/news.crit
+news.err			/var/log/news/news.err
+news.notice			-/var/log/news/news.notice
+
+###########################
+#### GLOBAL DIRECTIVES ####
+###########################
+
+$ActionSendStreamDriverMode 1
+$ActionSendStreamDriverAuthMode anon
+$ActionQueueType LinkedList
+$ActionQueueFileName srvrfwd
+$ActionResumeRetryCount -1
+$ActionQueueSaveOnShutdown on
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+
+$FileOwner root
+$FileGroup adm
+$FileCreateMode 0640
+$DirCreateMode 0755
+$Umask 0022
+
+$WorkDirectory {{ rsyslog['WorkDirectory'] }}
+$IncludeConfig {{ rsyslog['IncludeConfig'] }}
+

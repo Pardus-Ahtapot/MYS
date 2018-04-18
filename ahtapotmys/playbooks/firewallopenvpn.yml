@@ -9,7 +9,8 @@
   - /etc/ansible/roles/base/vars/rsyslog.yml
   - /etc/ansible/roles/base/vars/ntp.yml
   - /etc/ansible/roles/base/vars/package.yml
-  - /etc/ansible/roles/base/vars/blacklist.yml
+  - /etc/ansible/roles/base/vars/kernelmodules_remove.yml
+  - /etc/ansible/roles/base/vars/kernelmodules_blacklist.yml
   - /etc/ansible/roles/base/vars/host.yml
   - /etc/ansible/roles/base/vars/audit.yml
   - /etc/ansible/roles/base/vars/sudo.yml

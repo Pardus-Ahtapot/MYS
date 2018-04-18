@@ -1,0 +1,37 @@
+---
+- name: Gereksiz cekirdek modulleri kaldiriliyor (fake install).
+  modprobe:
+        name: "{{ item.value.name }}"
+        state: "{{ item.value.state }}"
+  with_dict: "to_be_removed_modules"
+  sudo: yes
+  tags: modprobe
+
+- name: Gereksiz cekirdek modulleri kalici olarak kaldirilmak icin blackliste aliniyor (fake install).
+  template:
+        src: "{{ rem_modules['conf']['source'] }}"
+        dest: "/etc/modprobe.d/{{ item.value.name }}.conf"
+        owner: "{{ rem_modules['conf']['owner'] }}"
+        group: "{{ rem_modules['conf']['group'] }}"
+        mode: "{{ rem_modules['conf']['mode'] }}"
+  with_dict: "to_be_removed_modules"
+  sudo: yes
+  tags: modprobe
+
+- name: Gereksiz cekirdek modulleri kaldiriliyori (blacklist).
+  modprobe:
+        name: "{{ item.value.name }}"
+        state: "{{ item.value.state }}"
+  with_dict: "to_be_blacklisted_modules"
+  sudo: yes
+  tags: modprobe
+
+- name: Gereksiz cekirdek modulleri kalici olarak kaldirilmak icin blackliste aliniyor (blacklist).
+  template:
+        src: "{{ bla_modules['conf']['source'] }}"
+        dest: "{{ bla_modules['conf']['destination'] }}"
+        owner: "{{ bla_modules['conf']['owner'] }}"
+        group: "{{ bla_modules['conf']['group'] }}"
+        mode: "{{ bla_modules['conf']['mode'] }}"
+  sudo: yes
+  tags: modprobe

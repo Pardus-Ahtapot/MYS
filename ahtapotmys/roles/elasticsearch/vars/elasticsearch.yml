@@ -8,7 +8,7 @@ elasticsearch:
     conf:
         yml:
             source: "elasticsearch.yml.j2"
-            destination: "/etc/elasticsearch/elasticsearch"
+            destination: "/etc/elasticsearch/elasticsearch.yml"
             owner: "elasticsearch" 
             group: "elasticsearch" 
             mode: "0640" 

@@ -8,5 +8,5 @@ iptables:
         repopath: "/etc/fw/gdys" 
         filepath: "/etc/fw/gdys/files"
         rsync_opts: "--force"
-        dest_port: "SSH_PORT"
+        dest_port: "22"
         recursive: "yes"

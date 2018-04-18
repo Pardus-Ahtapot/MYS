@@ -51,3 +51,10 @@
 [rsyslog]
 
 [test_grubu]
+
+[zabbix]
+
+[sensu]
+
+[icinga]
+

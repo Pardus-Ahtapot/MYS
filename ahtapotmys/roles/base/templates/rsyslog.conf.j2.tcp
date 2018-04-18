@@ -1,0 +1,119 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+#################
+#### MODULES ####
+#################
+
+module(load="imklog")
+module(load="imfile")
+module(load="imuxsock")
+
+$DefaultNetstreamDriver gtls
+$DefaultNetstreamDriverCAFile /etc/ssl/certs/rootCA.pem
+
+################
+# Ansible Logs #
+################
+
+ruleset(name="AnsibleLogs") {
+   action(name="AnsibleRemoteLogs"
+      type="omfwd"
+      target="{{ rsyslog['server'] }}"
+      port="{{ rsyslog['port'] }}"
+      protocol="{{ rsyslog['protocol'] }}"
+      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+      queue.Type="{{ rsyslog['QueueType'] }}"
+      queue.FileName="{{ rsyslog['QueueFileNameANS'] }}"
+      queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+      queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
+      StreamDriver="{{ rsyslog['StreamDriver'] }}"
+      StreamDriverMode="{{ rsyslog['StreamDriverMode'] }}"
+      StreamDriverAuthMode="{{ rsyslog['StreamDriverAuthMode'] }}"
+   )
+   stop
+}
+
+input(type="imfile"
+   file="/var/log/ahtapot/ansible.log"
+   tag=""
+   statefile=""
+   ruleset="AnsibleLogs")
+
+#################
+# IPtables Logs #
+#################
+
+if $msg contains 'RULE' then {
+   action(name="YereleLogYazma"
+      type="omfile"
+      file="/var/log/ahtapot/fw/iptables.log"
+      asyncWriting="{{ rsyslog['asyncWriting'] }}"
+      ioBufferSize="{{ rsyslog['ioBufferSize'] }}"
+      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+   )
+   
+   action(name="UzakSunucuyaLogGonderme"
+      type="omfwd"
+      target="{{ rsyslog['server'] }}"
+      port="{{ rsyslog['port'] }}"
+      protocol="{{ rsyslog['protocol'] }}"
+      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+      action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+      queue.Type="{{ rsyslog['QueueType'] }}"
+      queue.FileName="{{ rsyslog['QueueFileNameIPT'] }}"
+      queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+      queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
+      StreamDriver="{{ rsyslog['StreamDriver'] }}"
+      StreamDriverMode="{{ rsyslog['StreamDriverMode'] }}"
+      StreamDriverAuthMode="{{ rsyslog['StreamDriverAuthMode'] }}"
+   )
+   stop
+}
+
+action(name="TumLogGonderme"
+   type="omfwd"
+   target="{{ rsyslog['server'] }}"
+   port="{{ rsyslog['port'] }}"
+   protocol="{{ rsyslog['protocol'] }}"
+   action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+   action.reportSuspension="{{ rsyslog['ActionReportSuspension'] }}"
+   queue.Type="{{ rsyslog['QueueType'] }}"
+   queue.FileName="{{ rsyslog['QueueFileNameALL'] }}"
+   queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+   queue.MaxDiskSpace="{{ rsyslog['QueueMaxDiskSpace'] }}"
+   StreamDriver="{{ rsyslog['StreamDriver'] }}"
+   StreamDriverMode="{{ rsyslog['StreamDriverMode'] }}"
+   StreamDriverAuthMode="{{ rsyslog['StreamDriverAuthMode'] }}"
+)
+
+auth,authpriv.*                 /var/log/auth.log
+*.*;auth,authpriv.none,kern.!=info      -/var/log/syslog
+daemon.*                        -/var/log/daemon.log
+kern.*;kern.!=info              -/var/log/kern.log
+lpr.*                           -/var/log/lpr.log
+mail.*                          -/var/log/mail.log
+user.*                          -/var/log/user.log
+
+mail.info                       -/var/log/mail.info
+mail.warn                       -/var/log/mail.warn
+mail.err                        /var/log/mail.err
+
+news.crit                       /var/log/news/news.crit
+news.err                        /var/log/news/news.err
+news.notice                     -/var/log/news/news.notice
+
+*.=debug;\
+        auth,authpriv.none;\
+        news.none;mail.none     -/var/log/debug
+*.=info;*.=notice;*.=warn;\
+        auth,authpriv.none;\
+        cron,daemon.none;kern.!=info;\
+        mail,news.none          -/var/log/messages
+
+*.emerg                         :omusrmsg:*
+
+$WorkDirectory /var/spool/rsyslog
+$IncludeConfig /etc/rsyslog.d/*

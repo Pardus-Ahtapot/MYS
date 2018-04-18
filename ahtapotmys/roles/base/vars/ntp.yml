@@ -15,6 +15,8 @@ ntp:
 
 base_ntp_servers:
     server1:
-        fqdn: "ntp_sunucu_fqdn"
+        fqdn: "0.tr.pool.ntp.org"
+    server2:
+        fqdn: "1.tr.pool.ntp.org"
 #    serverX:
 #        fqdn: "" 

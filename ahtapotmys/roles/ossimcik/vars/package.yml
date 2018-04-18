@@ -12,11 +12,12 @@ ossimcik_packages:
         name: "nxlog-ce=2.8.1248" 
         state: "present" 
     package04:
-        name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
+        #name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
+        name: "rsyslog-gnutls" 
         state: "present" 
-#    packageXX:
-#        name: 
-#        state:  
+    package05:
+        name: "rsyslog-relp" 
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  

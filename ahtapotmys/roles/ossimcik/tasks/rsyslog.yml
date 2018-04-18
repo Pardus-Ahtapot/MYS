@@ -1,20 +1,30 @@
 ---
 - name: Ossimcik rsyslog yapilandirmasi uygulaniyor.
   template:
-        src: "{{ ossimcik_rsyslog['conf']['source'] }}"
-        dest: "{{ ossimcik_rsyslog['conf']['destination'] }}"
-        owner: "{{ ossimcik_rsyslog['conf']['owner'] }}"
-        group: "{{ ossimcik_rsyslog['conf']['group'] }}"
-        mode: "{{ ossimcik_rsyslog['conf']['mode'] }}"
+     src: "{{ ossimcik_rsyslog['conf']['source'] }}"
+     dest: "{{ ossimcik_rsyslog['conf']['destination'] }}"
+     owner: "{{ ossimcik_rsyslog['conf']['owner'] }}"
+     group: "{{ ossimcik_rsyslog['conf']['group'] }}"
+     mode: "{{ ossimcik_rsyslog['conf']['mode'] }}"
   notify:
     - rsyslog servisi yeniden baslatiliyor
   sudo: yes
   tags: ossimcik_rsyslog
 
+- name: Ryslog icin logrotate configurasyonu yapilandiriliyor.
+  template:
+     src: "{{ logrotate['conf']['source'] }}"
+     dest: "{{ logrotate['conf']['destination'] }}"
+     owner: "{{ logrotate['conf']['owner'] }}"
+     group: "{{ logrotate['conf']['group'] }}"
+     mode: "{{ logrotate['conf']['mode'] }}"
+  sudo: yes
+  tags: ossimcik_rsyslog 
+
 - name: Ossimcik rsyslog servisi ayakta
   service:
-    name: "{{ ossimcik_rsyslog['service']['name'] }}"
-    state: "{{ ossimcik_rsyslog['service']['state']  }}"
-    enabled: "{{ ossimcik_rsyslog['service']['enabled'] }}"
+     name: "{{ ossimcik_rsyslog['service']['name'] }}"
+     state: "{{ ossimcik_rsyslog['service']['state']  }}"
+     enabled: "{{ ossimcik_rsyslog['service']['enabled'] }}"
   sudo: yes
   tags: ossimcik_rsyslog

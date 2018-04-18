@@ -1,0 +1,56 @@
+---
+# tasks file for wdijkerman.zabbix
+
+- name: "Include OS-specific variables"
+  include_vars: "Pardus.yml"
+
+
+- name: "Install the correct repository"
+  include: "Pardus.yml"
+
+- name: "Installing the postgresql database"
+  include: "postgresql.yml"
+  when:
+    - database_type_long == "postgresql"
+
+- name: "Installing the mysql database"
+  include: "mysql.yml"
+  when:
+    - database_type_long == "mysql"
+
+- name: "Configure zabbix-server"
+  sudo: yes
+  template:
+    src: zabbix_server.conf.j2
+    dest: /etc/zabbix/zabbix_server.conf
+    owner: zabbix
+    group: zabbix
+    mode: 0644
+  notify:
+    - zabbix-server restarted
+  tags:
+    - zabbix-server
+    - init
+    - config
+
+- name: "Create include dir zabbix-server"
+  sudo: yes
+  file:
+    path: "{{ zabbix_server_include }}"
+    owner: zabbix
+    group: zabbix
+    state: directory
+    mode: 0755
+  tags:
+    - zabbix-server
+    - init
+    - config
+
+- name: "Zabbix-server started"
+  service:
+        name: zabbix-server
+        state: started
+        enabled: yes
+  sudo: yes
+  tags: zabbix-server
+
