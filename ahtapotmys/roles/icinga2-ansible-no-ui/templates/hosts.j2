@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+
+object Host "{{item.hostname}}" {
+  import "generic-host"
+  address = "{{item.ip}}"
+  check_command = "hostalive"
+}
+{% for elem in item.check_commands %}
+object Service "{{ elem.service }}" {
+  check_command = "{{ elem.check_command }}"
+  host_name =  "{{item.hostname}}"
+}
+{% endfor %}
+
+

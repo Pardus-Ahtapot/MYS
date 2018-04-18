@@ -1,0 +1,11 @@
+---
+# defaults file for icinga2-ansible-no-ui
+
+icinga2_pkg:
+ - icinga2
+ - nagios-plugins
+ - bsd-mailx
+ - nagios-nrpe-plugin
+
+icinga2_main_conf: "/etc/icinga2/icinga2.conf"
+icinga2_conf_d: "/etc/icinga2/conf.d"
