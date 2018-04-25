@@ -1,33 +1,33 @@
 ---
 - name: Copy Main Icinga2 Configuration
   sudo: yes
-  template: src=icinga2.conf.j2
-            dest={{ icinga2_main_conf }}
-            backup=yes
-            owner=root
-            group=root
-            mode=0644
+  template: src="{{ icinga2['main_conf']['src'] }}"
+            dest="{{ icinga2['main_conf']['dest'] }}"
+            backup="{{ icinga2['main_conf']['backup'] }}"
+            owner="{{ icinga2['main_conf']['owner'] }}"
+            group="{{ icinga2['main_conf']['group'] }}"
+            mode="{{ icinga2['main_conf']['mode'] }}"
   notify:
    - restart icinga2
 
 - name: Copy Check Commands Configuration
   sudo: yes
-  template: src=icinga2_check_commands.j2
-            dest={{ icinga2_conf_d }}/check_commands.conf
-            backup=yes
-            owner=root
-            group=root
-            mode=0644
+  template: src="{{ icinga2['check_commands_conf']['src'] }}"
+            dest="{{ icinga2['check_commands_conf']['dest'] }}"
+            backup="{{ icinga2['check_commands_conf']['backup'] }}"
+            owner="{{ icinga2['check_commands_conf']['owner'] }}"
+            group="{{ icinga2['check_commands_conf']['group'] }}"
+            mode="{{ icinga2['check_commands_conf']['mode'] }}"
   notify:
    - restart icinga2
 
 - name: Create hosts
   sudo: yes
-  template: src=hosts.j2
-            dest={{ icinga2_conf_d }}/hosts/{{item.hostname}}.conf
-            owner=root
-            group=root
-            mode=0644
+  template: src="{{ icinga2['create_hosts']['src'] }}"
+            dest="{{ icinga2['create_hosts']['dest'] }}{{item.hostname}}.conf"
+            owner="{{ icinga2['create_hosts']['owner'] }}"
+            group="{{ icinga2['create_hosts']['group'] }}"
+            mode="{{ icinga2['create_hosts']['mode'] }}"
   with_items: "{{ icinga_clients | default([])}}"
   notify:
    - restart icinga2
