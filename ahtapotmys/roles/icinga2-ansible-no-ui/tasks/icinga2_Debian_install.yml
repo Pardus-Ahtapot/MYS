@@ -2,13 +2,13 @@
 - name: Install Icinga2 on Debian OS family
   sudo: yes
   apt: pkg={{ item }}
-       update_cache=yes
-       state=latest
-       install_recommends=no
+       update_cache="{{ icinga2['install']['update_cache'] }}"
+       state="{{ icinga2['install']['state'] }}"
+       install_recommends="{{ icinga2['install']['install_recommends'] }}"
   with_items: "{{ icinga2_pkg }}"
 
 - name: Start Icinga2
   sudo: yes
-  service: name=icinga2
-           state=started
-           enabled=yes
+  service: name="{{ icinga2['start_service']['name'] }}"
+           state="{{ icinga2['start_service']['state'] }}"
+           enabled="{{ icinga2['start_service']['enabled'] }}"

@@ -7,5 +7,35 @@ icinga2_pkg:
  - bsd-mailx
  - nagios-nrpe-plugin
 
-icinga2_main_conf: "/etc/icinga2/icinga2.conf"
-icinga2_conf_d: "/etc/icinga2/conf.d"
+
+
+icinga2:
+  install:
+    update_cache: "yes"
+    state: "latest"
+    install_recommends: "no"
+  start_service:
+    name: "icinga2"
+    state: "started"
+    enabled: "yes"
+  main_conf:
+    src: "icinga2.conf.j2"
+    dest: "/etc/icinga2/icinga2.conf"
+    backup: "yes"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  check_commands_conf:
+    src: "icinga2_check_commands.j2"
+    dest: "/etc/icinga2/conf.d/check_commands.conf"
+    backup: "yes"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  create_hosts:
+    src: "hosts.j2"
+    dest: "/etc/icinga2/conf.d/hosts/"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
