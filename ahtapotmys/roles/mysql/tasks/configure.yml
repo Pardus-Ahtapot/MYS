@@ -1,5 +1,6 @@
 ---
 - name: Copy my.cnf global MySQL configuration.
+  sudo: yes
   template:
     src: my.cnf.j2
     dest: "{{ mysql_config_file }}"
@@ -37,6 +38,7 @@
   when: mysql_slow_query_log_enabled
 
 - name: Create datadir if it does not exist
+  sudo: yes
   file:
     path: "{{ mysql_datadir }}"
     state: directory
