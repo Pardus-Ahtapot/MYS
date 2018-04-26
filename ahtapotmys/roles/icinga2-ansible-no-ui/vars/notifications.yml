@@ -1,0 +1,15 @@
+---
+notifications:
+  - { name: "mail-icingaadmin",
+      type: "Host",
+      user_groups: "[\"icingaadmins\"]",
+      #users: [],
+      condition : host.name == "serverX.ahtapot"
+    }
+
+  - { name: "mail-icingaadmin",
+      type: "Service",
+      user_groups: "[\"icingaadmins\"]",
+      #users: [],
+      condition : host.name == "serverX.ahtapot"
+    }

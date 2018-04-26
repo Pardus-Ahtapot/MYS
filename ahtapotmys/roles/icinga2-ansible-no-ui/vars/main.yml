@@ -38,4 +38,29 @@ icinga2:
     owner: "root"
     group: "root"
     mode: "0644"
+  create_notifications:
+    src: "notifications.j2"
+    dest: "/etc/icinga2/conf.d/notifications.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  create_users:
+    src: "users.j2"
+    dest: "/etc/icinga2/conf.d/users.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  mail_host_notification:
+    src: "mail-host-notification.sh.j2"
+    dest: "/etc/icinga2/scripts/mail-host-notification.sh"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  mail_service_notification:
+    src: "mail-service-notification.sh.j2"
+    dest: "/etc/icinga2/scripts/mail-service-notification.sh"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
 
