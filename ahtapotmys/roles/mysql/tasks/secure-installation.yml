@@ -13,6 +13,10 @@
     state: present
   when: mysql_user_name != mysql_root_username
 
+- name: Get Hostname
+  command: "hostname"
+  register: hostname
+
 # Has to be after the password assignment, for idempotency.
 - name: Copy user-my.cnf file with password credentials.
   template:
@@ -23,14 +27,13 @@
   when: mysql_user_name != mysql_root_username and (mysql_install_packages | bool or mysql_user_password_update)
 
 - name: Disallow root login remotely
-  command: 'mysql -NBe "{{ item }}"'
+  command: 'mysql -u "{{ mysql_root_username }}" -NBe "{{ item }}"'
   with_items:
-    - DELETE FROM mysql.user WHERE User='{{ mysql_root_username }}' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+    - DELETE FROM mysql.user WHERE User='{{ mysql_root_username }}' AND Host NOT IN ('{{ hostname.stdout }}','localhost', '127.0.0.1', '::1')
   changed_when: false
-  sudo: yes
 
 - name: Get list of hosts for the root user.
-  command: mysql -NBe "SELECT Host FROM mysql.user WHERE User = '{{ mysql_root_username }}' ORDER BY (Host='localhost') ASC"
+  command: mysql -u "{{ mysql_root_username }}"  -NBe "SELECT Host FROM mysql.user WHERE User = '{{ mysql_root_username }}' ORDER BY (Host='localhost') ASC"
   register: mysql_root_hosts
   changed_when: false
   when: mysql_install_packages | bool or mysql_root_password_update
@@ -48,7 +51,7 @@
 # Set root password for MySQL < 5.7.x.
 - name: Update MySQL root password for localhost root account (< 5.7.x).
   shell: >
-    mysql -NBe
+    mysql  -u "{{ mysql_root_username }}" -NBe
     'SET PASSWORD FOR "{{ mysql_root_username }}"@"{{ item }}" = PASSWORD("{{ mysql_root_password }}");'
   with_items: "{{ mysql_root_hosts.stdout_lines|default([]) }}"
   when: ((mysql_install_packages | bool) or mysql_root_password_update) and ('5.7.' not in mysql_cli_version.stdout)
@@ -62,9 +65,10 @@
     group: root
     mode: 0600
   when: mysql_install_packages | bool or mysql_root_password_update
+  sudo: yes
 
 - name: Get list of hosts for the anonymous user.
-  command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = ""'
+  command: mysql -u "{{ mysql_root_username }}" -NBe 'SELECT Host FROM mysql.user WHERE User = ""'
   register: mysql_anonymous_hosts
   changed_when: false
   sudo: yes
@@ -76,6 +80,6 @@
      state: absent
   with_items: "{{ mysql_anonymous_hosts.stdout_lines|default([]) }}"
 
-- name: Remove MySQL test database.
-  mysql_db: "name='test' state=absent"
-  sudo: yes
+#- name: Remove MySQL test database.
+#  mysql_db: "name='test' state=absent"
+#  sudo: yes
