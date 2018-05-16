@@ -4,6 +4,6 @@
         repo: "{{ item.value.url }}"
         update_cache: "{{ item.value.updatecache }}"
         state: "{{ item.value.state }}"
-  with_dict: "base_repositories"
+  with_dict: "{{base_repositories}}"
   sudo: yes
   tags: repo

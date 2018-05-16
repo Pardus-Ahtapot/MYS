@@ -20,9 +20,9 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/hosts.yml
-  - /etc/ansible/roles/icinga2-ansible-no-ui/vars/main.yml
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/users.yml
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/notifications.yml
+  - /etc/ansible/roles/icinga2-ansible-no-ui/vars/main.yml
   - /etc/ansible/roles/icinga2-ansible-classic-ui/vars/main.yml
   roles:
   - { role: base }
@@ -37,8 +37,10 @@
        check_commands: {
            check_disk: { -H: "\"$address$\"", -c: "\"check_disk\", \"-a\", \"30%\", \"10%\", \"/\"" },
            check_load: { -H: "\"$address$\"", -c: "\"check_load\", \"-a\", \"0.1,0.1,0.1\", \"5,5,5\"" },
+           check_load2: { -H: "\"$address$\"", -c: "\"check_load\", \"-a\", \"0.01,0.01,0.01\", \"0.1,0.1,0.1\"" },
            check_mem: { -H: "\"$address$\"", -c: "\"check_mem\", \"-a\", \"10\", \"5\"" },
            check_eth: { -H: "\"$address$\"", -c: "\"check_eth\", \"-a\", \"eth1\", \"1024K Bps\", \"2048K Bps\"" },
+           check_website2: { -H: "\"$address$\"", -c: "\"check_website\", \"-a\", \"www.ipnedir.com\"" },
            check_website: { -H: "\"$address$\"", -c: "\"check_website\", \"-a\", \"www.labrisnetworks.com\"" }
        },
        tags: icinga2-no-ui }

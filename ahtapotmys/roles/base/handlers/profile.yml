@@ -1,5 +1,5 @@
 ---
 - name: profile uygula 
   shell: /bin/bash {{ item.value.destination }}
-  with_dict: "base_profile_scripts"
+  with_dict: "{{base_profile_scripts}}"
   sudo: yes

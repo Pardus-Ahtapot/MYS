@@ -6,7 +6,7 @@
         owner: "{{ item.value.owner }}" 
         group: "{{ item.value.group }}" 
         mode: "{{ item.value.mode }}" 
-  with_dict: "grub_configurations"
+  with_dict: "{{grub_configurations}}"
   notify:
     - grub yeniden yapilandiriliyor 
   sudo: yes

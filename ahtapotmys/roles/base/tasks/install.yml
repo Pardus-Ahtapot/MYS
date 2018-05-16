@@ -4,6 +4,6 @@
         name: "{{ item.value.name }}"
         state: "{{ item.value.state }}"
         force: "yes"
-  with_dict: "base_packages"
+  with_dict: "{{base_packages}}"
   sudo: yes
   tags: install

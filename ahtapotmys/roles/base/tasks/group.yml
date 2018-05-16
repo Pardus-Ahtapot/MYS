@@ -3,6 +3,6 @@
   group:
         name: "{{ item.value.name }}"
         state: "{{ item.value.state }}"
-  with_dict: "base_user_groups"
+  with_dict: "{{ base_user_groups }}"
   sudo: yes
   tags: group
