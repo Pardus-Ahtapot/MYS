@@ -3,7 +3,7 @@
   modprobe:
         name: "{{ item.value.name }}"
         state: "{{ item.value.state }}"
-  with_dict: "to_be_removed_modules"
+  with_dict: "{{to_be_removed_modules}}"
   sudo: yes
   tags: modprobe
 
@@ -14,7 +14,7 @@
         owner: "{{ rem_modules['conf']['owner'] }}"
         group: "{{ rem_modules['conf']['group'] }}"
         mode: "{{ rem_modules['conf']['mode'] }}"
-  with_dict: "to_be_removed_modules"
+  with_dict: "{{to_be_removed_modules}}"
   sudo: yes
   tags: modprobe
 
@@ -22,7 +22,7 @@
   modprobe:
         name: "{{ item.value.name }}"
         state: "{{ item.value.state }}"
-  with_dict: "to_be_blacklisted_modules"
+  with_dict: "{{to_be_blacklisted_modules}}"
   sudo: yes
   tags: modprobe
 

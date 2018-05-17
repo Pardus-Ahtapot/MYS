@@ -1,0 +1,16 @@
+icinga_server_ip: "169.254.1.9"
+
+nrpe_deps:
+  - nagios-nrpe-server
+  - nagios-plugins
+
+icinga2_clients:
+  install:
+    update_cache: "yes"
+    state: "latest"
+    install_recommends: "no"
+
+  start_service:
+    name: "nagios-nrpe-server"
+    state: "started"
+    enabled: "yes"

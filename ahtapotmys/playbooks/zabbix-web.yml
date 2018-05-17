@@ -21,9 +21,6 @@
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/zabbix-web/vars/main.yml
   roles:
-     - { role: base }
-     - { role: apache }
-     - { role: mysql }
      - { role: zabbix }
      - { role: zabbix-web }
 

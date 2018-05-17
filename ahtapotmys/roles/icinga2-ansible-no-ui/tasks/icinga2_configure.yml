@@ -21,6 +21,14 @@
   notify:
    - restart icinga2
 
+- name: Create hosts directory
+  sudo: yes
+  file: path="{{ icinga2['create_hosts']['dest'] }}"
+            state=directory
+            owner="{{ icinga2['create_hosts']['owner'] }}"
+            group="{{ icinga2['create_hosts']['group'] }}"
+            mode="{{ icinga2['create_hosts']['mode'] }}"
+
 - name: Create hosts
   sudo: yes
   template: src="{{ icinga2['create_hosts']['src'] }}"
