@@ -1,0 +1,8 @@
+# Calistirildiginda icinga2-clients yapilandirmalarini yapar
+- hosts: icinga2-clients
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/icinga2-clients/vars/main.yml
+  roles:
+  - { role: icinga2-clients }
+

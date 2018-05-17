@@ -54,7 +54,8 @@
 
 [zabbix]
 
-[sensu]
-
 [icinga]
+
+[icinga2-clients]
+
 
