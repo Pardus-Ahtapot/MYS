@@ -3,9 +3,17 @@
   sudo: yes
   apt: pkg={{ item }}
        update_cache="{{ icinga2['install']['update_cache'] }}"
-       state="{{ icinga2['install']['state'] }}"
        install_recommends="{{ icinga2['install']['install_recommends'] }}"
   with_items: "{{ icinga2_pkg }}"
+
+- name: Change icinga init file
+  sudo: yes
+  template: src=icinga2.init.j2
+            dest=/etc/init.d/icinga2
+            owner=root
+            group=root
+            mode=0755
+
 
 - name: Start Icinga2
   sudo: yes

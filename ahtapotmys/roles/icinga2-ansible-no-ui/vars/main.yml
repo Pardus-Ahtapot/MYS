@@ -2,11 +2,13 @@
 # defaults file for icinga2-ansible-no-ui
 
 icinga2_pkg:
- - icinga2
+ - icinga2=2.1.1-1
+ - icinga2-bin=2.1.1-1
+ - icinga2-common=2.1.1-1
  - nagios-plugins
  - bsd-mailx
  - nagios-nrpe-plugin
-
+ - postfix
 
 
 icinga2:

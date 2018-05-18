@@ -1,19 +1,18 @@
 ---
+
 - name: Install Icinga Classic UI on Debian OS family
   sudo: yes
   apt: pkg={{ item }}
-       state=latest
        update_cache=yes
        cache_valid_time=30
   with_items: "{{ icinga2_classic_ui_pkg }}"
 
+- name: Enable apache cgi module
+  shell: /usr/sbin/a2enmod cgi
+
 - name: Configure a password for icingaadmin user
   sudo: yes
-  htpasswd: name=icingaadmin
-            state=present
-            path={{ htpasswd_deb }}
-            create=no
-            password={{ icinga2_classic_ui_passwd }}
+  shell: htpasswd -b  {{ htpasswd_deb }} icingaadmin {{ icinga2_classic_ui_passwd }}
   notify:
    - restart apache2
 
