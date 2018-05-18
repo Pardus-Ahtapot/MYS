@@ -25,10 +25,10 @@
 #    - init
 #    - config
 
-- name: "Install php5-{{ database_type }}"
+- name: "Install php7.0-{{ database_type }}"
   sudo: yes
   apt:
-    pkg: php5-{{ database_type }}
+    pkg: php7.0-{{ database_type }}
     state: present
     update_cache: yes
     cache_valid_time: 3600
@@ -67,7 +67,7 @@
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
     mode: 0644
-  #when: zabbix_vhost
+  when: zabbix_vhost
   notify:
     - restart apache
   tags:

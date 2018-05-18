@@ -1,0 +1,9 @@
+---
+# handlers file for zabbix-web
+
+- name: restart apache
+  sudo: yes
+  service: name=apache2
+           state=restarted
+           enabled=yes
+

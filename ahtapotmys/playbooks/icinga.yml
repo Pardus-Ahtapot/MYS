@@ -44,5 +44,5 @@
            check_website: { -H: "\"$address$\"", -c: "\"check_website\", \"-a\", \"www.labrisnetworks.com\"" }
        },
        tags: icinga2-no-ui }
-#  - { role: icinga2-ansible-classic-ui,
-#      tags: icinga2-classic-ui }
+  - { role: icinga2-ansible-classic-ui,
+      tags: icinga2-classic-ui }

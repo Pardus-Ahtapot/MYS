@@ -5,7 +5,7 @@ icinga2_classic_ui_passwd: "labris"
 
 # Vars for Debian OS Family
 icinga2_classic_ui_pkg:
- - icinga2-classicui
+ - icinga2-classicui=2.1.1-1
  - python-passlib
 
 htpasswd_deb: "/etc/icinga2/classicui/htpasswd.users"

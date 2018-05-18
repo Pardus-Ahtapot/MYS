@@ -1,4 +1,4 @@
-icinga_server_ip: "169.254.1.9"
+icinga_server_ip: "127.0.0.1"
 
 nrpe_deps:
   - nagios-nrpe-server

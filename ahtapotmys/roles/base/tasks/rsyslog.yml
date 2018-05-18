@@ -6,12 +6,10 @@
         owner: "{{ rsyslog['conf']['owner'] }}"
         group: "{{ rsyslog['conf']['group'] }}"
         mode: "{{ rsyslog['conf']['mode'] }}"
-  when: ansible_fqdn == "{{ item.1 }}"
+  when: "ansible_fqdn == item.1"
   with_subelements:
-    - "{{ossimciks}}"
-    - clients
-    - flags:
-      skip_missing: true
+    - "ossimciks"
+    - "clients"
   notify:
     - rsyslog servisini yeniden baslat
   sudo: yes

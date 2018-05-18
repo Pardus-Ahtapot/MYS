@@ -31,7 +31,7 @@
 - name: "Create zabbix-web directory"
   sudo: yes
   file:
-    path: /etc/zabbix/web
+    path: /etc/zabbix
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
     state: directory
@@ -41,11 +41,17 @@
     - init
     - config
 
+- name: Enable zabbix on apache
+  sudo: yes
+  shell: cp -r /etc/apache2/conf-available/zabbix-frontend-php.conf /etc/apache2/conf-enabled/
+  notify:
+    - restart apache
+
 - name: "Configure zabbix-web"
   sudo: yes
   template:
     src: zabbix.conf.php.j2
-    dest: /etc/zabbix/web/zabbix.conf.php
+    dest: /etc/zabbix/zabbix.conf.php
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
     mode: 0644

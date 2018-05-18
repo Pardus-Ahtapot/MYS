@@ -1,0 +1,41 @@
+Format: 1.8
+Date: Thu, 17 May 2018 16:34:47 +0300
+Source: nagios-nrpe
+Binary: nagios-nrpe-server nagios-nrpe-plugin
+Architecture: source amd64
+Version: 3.0.1-3+deb9u2
+Distribution: unstable
+Urgency: medium
+Maintainer: Debian Nagios Maintainer Group <pkg-nagios-devel@lists.alioth.debian.org>
+Changed-By: Fatih USTA <fatihusta86@gmail.com>
+Description:
+ nagios-nrpe-plugin - Nagios Remote Plugin Executor Plugin
+ nagios-nrpe-server - Nagios Remote Plugin Executor Server
+Changes:
+ nagios-nrpe (3.0.1-3+deb9u2) unstable; urgency=medium
+ .
+   * Enabled configure parameters --enable-command-args
+Checksums-Sha1:
+ 8ce471c42b7b6daae155ba2ec1748f2f19eaba77 1264 nagios-nrpe_3.0.1-3+deb9u2.dsc
+ ac57ea14268fc1f87c3cd2ec1766e36bbd2bc490 14300 nagios-nrpe_3.0.1-3+deb9u2.debian.tar.xz
+ f41d3edbc6b619897cc07e8340792c0d29d9a250 53374 nagios-nrpe-plugin-dbgsym_3.0.1-3+deb9u2_amd64.deb
+ 9198f5ee05499fd2cc662ac0ebb904bb0b780efc 30624 nagios-nrpe-plugin_3.0.1-3+deb9u2_amd64.deb
+ 52f254f539b4a953217415b767e82cfb0b219c1f 73616 nagios-nrpe-server-dbgsym_3.0.1-3+deb9u2_amd64.deb
+ cae20e34926785c99931e2f44fe9587716cac40f 348040 nagios-nrpe-server_3.0.1-3+deb9u2_amd64.deb
+ de8d507a8c99eeb3c9c29f7853c6f8a0f2c06d96 6375 nagios-nrpe_3.0.1-3+deb9u2_amd64.buildinfo
+Checksums-Sha256:
+ ffd2b0a1fe993aab43fdb25249d727ef97ac811dbdf9535c56f7b834ec5b6a4d 1264 nagios-nrpe_3.0.1-3+deb9u2.dsc
+ 5a91edbcfcc4726f5f7008af0d65be1fdca9f219a8b71c83e3e0bd1190b92791 14300 nagios-nrpe_3.0.1-3+deb9u2.debian.tar.xz
+ 4ba71c2edad71e42c98dbd77b46fe12cdb2fbd3c8f5eafe2ca66ff3de87e4570 53374 nagios-nrpe-plugin-dbgsym_3.0.1-3+deb9u2_amd64.deb
+ 7a3f80eb300b59b213acf970f5b867eeb58f6146ed421e84e620024046ad792f 30624 nagios-nrpe-plugin_3.0.1-3+deb9u2_amd64.deb
+ b80d8687946bd99735dbeb1e09d1d12c9ac7cfd9861095df45366b66dd72302e 73616 nagios-nrpe-server-dbgsym_3.0.1-3+deb9u2_amd64.deb
+ bf132dc220e22cf9b4bb7233a045e2a0b40a6f38679e80360f606e0074eba3ff 348040 nagios-nrpe-server_3.0.1-3+deb9u2_amd64.deb
+ 8e64bf7ae5798ac2c40acfc8de7e246e9b77320085547ecc0ed2b4a2151ad96d 6375 nagios-nrpe_3.0.1-3+deb9u2_amd64.buildinfo
+Files:
+ 4045f4b34b768fea07619f1235fc3a48 1264 net optional nagios-nrpe_3.0.1-3+deb9u2.dsc
+ 465a98284ef63610766d219c923301fc 14300 net optional nagios-nrpe_3.0.1-3+deb9u2.debian.tar.xz
+ bb44edc1b038f7e17b401b29ff667093 53374 debug extra nagios-nrpe-plugin-dbgsym_3.0.1-3+deb9u2_amd64.deb
+ 8d240b6790c94adadaa85b9c058fbb02 30624 net optional nagios-nrpe-plugin_3.0.1-3+deb9u2_amd64.deb
+ b6467facbffa54b9ca2c441619326c53 73616 debug extra nagios-nrpe-server-dbgsym_3.0.1-3+deb9u2_amd64.deb
+ 6d29e1a433eae314cc783b28d5d99304 348040 net optional nagios-nrpe-server_3.0.1-3+deb9u2_amd64.deb
+ 56bf5437f49cd568b9c38fa492c78c96 6375 net optional nagios-nrpe_3.0.1-3+deb9u2_amd64.buildinfo

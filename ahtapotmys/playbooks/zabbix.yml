@@ -27,4 +27,4 @@
   - { role: apache }
   - { role: mysql }
   - { role: zabbix }
-
+  - { role: zabbix-web }
