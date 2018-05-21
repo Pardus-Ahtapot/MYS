@@ -1,0 +1,20 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: ciari
+  description: Apache mod_security2 modulu kurulum ve konfigurasyonu
+  company: "ULAKBIM"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.2
+  platforms:
+    - name: Pardus
+      versions:
+      - all
+    - name: Debian
+      versions:
+      - all
+  galaxy_tags:
+    - apache2
+    - web
+    - waf
