@@ -1,0 +1,12 @@
+<IfModule mod_evasive20.c>
+  DOSHashTableSize    {{mod_evasive_conf['hash_table_size']}}
+  DOSPageCount        {{mod_evasive_conf['page_count']}}
+  DOSSiteCount        {{mod_evasive_conf['site_count']}}
+  DOSPageInterval     {{mod_evasive_conf['page_interval']}}
+  DOSSiteInterval     {{mod_evasive_conf['site_interval']}}
+  DOSBlockingPeriod   {{mod_evasive_conf['block_period']}}
+
+  DOSEmailNotify      "{{mod_evasive_email_notify}}"
+  DOSLogDir           "{{mod_evasive_log_dir}}"
+  #DOSSystemCommand    "su - someuser -c '/sbin/... %s ...'"
+</IfModule>

@@ -1,0 +1,100 @@
+---
+# On tanimli OS bagimli degismekleri ekle ve tanimla
+- name: Isletim sistemi bagimli degiskenler.
+  include_vars: "Pardus.yml"
+
+- name: apache_packages degiskenini tanimla.
+  set_fact:
+    apache_packages: "{{ __apache_packages | list }}"
+  when: apache_packages is not defined
+
+# gorevleri yukle calistir.
+#  include_tasks: "setup-Pardus.yml"
+
+- name: apt bellegini temizle/guncelle.
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Apachenin kuruldugundan emin ol.
+  apt: "name={{ item }} state={{ apache_packages_state }}"
+  with_items: "{{ apache_packages }}"
+
+
+# Figure out what version of Apache is installed.
+- name: Get installed version of Apache.
+  shell: "{{ apache_daemon_path }}{{ apache_daemon }} -v"
+  changed_when: false
+#  check_mode: no
+  register: _apache_version
+
+- name: Create apache_version variable.
+  set_fact:
+    apache_version: "{{ _apache_version.stdout.split()[2].split('/')[1] }}"
+
+- include_vars: apache-22.yml
+  when: "apache_version.split('.')[1] == '2'"
+
+- include_vars: apache-24.yml
+  when: "apache_version.split('.')[1] == '4'"
+
+# Configure Apache.
+#- include_tasks: "configure-Pardus.yml"
+
+- name: Apache Konfigurasyonu.
+  lineinfile:
+    dest: "{{ apache_server_root }}/ports.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items: "{{ apache_ports_configuration_items }}"
+  notify: restart apache
+
+- name: Apache Modul aktivasyonu.
+  file:
+    src: "{{ apache_server_root }}/mods-available/{{ item }}"
+    dest: "{{ apache_server_root }}/mods-enabled/{{ item }}"
+    state: link
+  with_items: "{{ apache_mods_enabled }}"
+  notify: restart apache
+
+- name: Apache Modul Deaktivasyonu.
+  file:
+    path: "{{ apache_server_root }}/mods-enabled/{{ item }}"
+    state: absent
+  with_items: "{{ apache_mods_disabled }}"
+  notify: restart apache
+
+- name: vhost için sertifika tanımlanmış mı kontrol et.
+  stat: "path={{ item.certificate_file }}"
+  register: apache_ssl_certificates
+  with_items: "{{ apache_vhosts_ssl }}"
+
+- name: apache vhost konfigurasyonunu ekle.
+  template:
+    src: "{{ apache_vhosts_template }}"
+    dest: "{{ apache_conf_path }}/sites-available/{{ apache_vhosts_filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart apache
+  when: apache_create_vhosts
+
+- name: sites-enabled altına vhost sembolik linklerini ekle.
+  file:
+    src: "{{ apache_conf_path }}/sites-available/{{ apache_vhosts_filename }}"
+    dest: "{{ apache_conf_path }}/sites-enabled/{{ apache_vhosts_filename }}"
+    state: link
+  notify: restart apache
+  when: apache_create_vhosts
+
+- name: Varsayılan vhost u sites-enabled altından kaldır.
+  file:
+    path: "{{ apache_conf_path }}/sites-enabled/{{ apache_default_vhost_filename }}"
+    state: absent
+  notify: restart apache
+  when: apache_remove_default_vhost
+
+- name: Ensure Apache has selected state and enabled on boot.
+  service:
+    name: "{{ apache_service }}"
+    state: "{{ apache_state }}"
+    enabled: yes
