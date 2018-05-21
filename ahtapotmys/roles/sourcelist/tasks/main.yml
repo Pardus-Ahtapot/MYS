@@ -1,0 +1,21 @@
+---
+- name: "sourcelist ekle"
+  apt_repository:
+    repo: deb http://depo.pardus.org.tr/pardus onyedi main non-free contrib
+  register: sourcelist_added
+
+- name: "ekleme islemi sonrasi repo guncelle"
+  apt:
+    update_cache: yes
+  when: sourcelist_added.get("changed", False)
+
+- lineinfile:
+    dest: "/etc/apt/apt.conf.d/50unattended-upgrades"
+    regexp: '^//        "o=Debian,n=jessie-updates";'
+    line: '        "o=Debian,n=jessie-updates";'
+
+
+- lineinfile:
+    dest: "/etc/apt/apt.conf.d/50unattended-upgrades"
+    regexp: '^//        "o=Debian,n=stable-updates";'
+    line: '        "o=Debian,n=staable-updates";'
