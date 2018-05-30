@@ -12,5 +12,5 @@ icinga2_clients:
 
   start_service:
     name: "nagios-nrpe-server"
-    state: "started"
+    state: "restarted"
     enabled: "yes"
