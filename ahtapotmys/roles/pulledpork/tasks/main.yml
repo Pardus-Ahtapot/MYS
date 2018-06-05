@@ -1,0 +1,43 @@
+- name: install_pulledpork
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - pulledpork
+
+- name: configure_pulledpork
+  sudo: yes
+  template:
+    src: "pulledpork.conf.j2"
+    dest: "/etc/pulledpork/pulledpork.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: configure_pulledpork_timer
+  sudo: yes
+  template:
+    src: "pulledpork.timer.j2"
+    dest: "/lib/systemd/system/pulledpork.timer"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable pulledpork service
+  sudo: yes
+  shell: systemctl enable pulledpork.service
+
+- name: Enable pulledpork timer
+  sudo: yes  
+  shell: systemctl enable pulledpork.timer
+
+- name: Start pulledpork service
+  sudo: yes  
+  shell: systemctl start pulledpork.service
+
+- name: Start pulledpork timer
+  sudo: yes  
+  shell: systemctl start pulledpork.timer
+
+
