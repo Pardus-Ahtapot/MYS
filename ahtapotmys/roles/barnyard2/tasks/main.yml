@@ -1,0 +1,36 @@
+---
+#- name: installing barnyard2
+#  sudo: yes
+#  apt:
+#    name: "{{ item }}"
+#    state: present
+#  with_items:
+#    - barnyard2
+
+- name: configure_barnyard2
+  sudo: yes
+  template:
+    src: "barnyard2.conf.j2"
+    dest: "/etc/barnyard2.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: restart suricata
+  sudo: yes
+  service:
+    name: suricata
+    enabled: yes
+    state: restarted
+
+- name: Enable barnyard2 service
+  sudo: yes
+  shell: systemctl enable barnyard2
+
+- name: restart barnyard2
+  sudo: yes
+  service:
+    name: barnyard2
+    enabled: yes
+    state: restarted
+

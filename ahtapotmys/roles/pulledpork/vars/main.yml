@@ -1,0 +1,6 @@
+pulledpork_etpro_key: open
+pulledpork_rule_url: https://rules.emergingthreats.net/
+pulledpork_rule_file: emerging.rules.tar.gz
+pulledpork_exclude_rules:
+#  - pass
+pulledpork_update_frequency: daily
