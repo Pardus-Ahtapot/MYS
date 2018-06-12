@@ -23,6 +23,7 @@
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/users.yml
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/notifications.yml
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/main.yml
+  - /etc/ansible/roles/icinga2-ansible-no-ui/vars/commands.yml
   - /etc/ansible/roles/icinga2-ansible-classic-ui/vars/main.yml
   roles:
   - { role: base }

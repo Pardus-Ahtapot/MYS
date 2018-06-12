@@ -64,5 +64,15 @@ icinga2:
     owner: "root"
     group: "root"
     mode: "0755"
-
-
+  create_commands:
+    src: "commands.j2"
+    dest: "/etc/icinga2/conf.d/commands.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  sms:
+    src: "sms.py.j2"
+    dest: "/etc/icinga2/scripts/sms.py"
+    owner: "root"
+    group: "root"
+    mode: "0755"
