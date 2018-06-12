@@ -70,6 +70,23 @@
             group="{{ icinga2['mail_service_notification']['group'] }}"
             mode="{{ icinga2['mail_service_notification']['mode'] }}"
 
+- name: Copy sms.py
+  sudo: yes
+  template: src="{{ icinga2['sms']['src'] }}"
+            dest="{{ icinga2['sms']['dest'] }}"
+            owner="{{ icinga2['sms']['owner'] }}"
+            group="{{ icinga2['sms']['group'] }}"
+            mode="{{ icinga2['sms']['mode'] }}"
+
+- name: Create commands
+  sudo: yes
+  template: src="{{ icinga2['create_commands']['src'] }}"
+            dest="{{ icinga2['create_commands']['dest'] }}"
+            owner="{{ icinga2['create_commands']['owner'] }}"
+            group="{{ icinga2['create_commands']['group'] }}"
+            mode="{{ icinga2['create_commands']['mode'] }}"
+  with_items: "{{ icinga_clients | default([])}}"
+
 - name: Restart icinga
   sudo: yes
   service: name=icinga2

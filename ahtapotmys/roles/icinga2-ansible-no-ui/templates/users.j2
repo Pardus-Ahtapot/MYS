@@ -7,6 +7,10 @@ object User "{{ elem.name }}" {
   enable_notifications = {{ elem.enable_notifications }}
   email = "{{ elem.email }}"
   groups = {{ elem.groups }}
+{% if elem.pager is defined %}
+  pager = "{{ elem.pager }}"
+{% endif %}
+
 }
 {% endfor %}
 

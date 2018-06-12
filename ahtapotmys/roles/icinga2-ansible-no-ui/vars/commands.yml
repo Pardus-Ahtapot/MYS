@@ -1,0 +1,5 @@
+activate_sms: "yes"
+sms_username: "MBT_USERNAME"
+sms_password: "MBT_PASSWORD"
+sms_company: "MBT_COMPANY"
+
