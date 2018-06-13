@@ -59,11 +59,46 @@ object Service "snmp-int-{{iface.interface_label}}" {
 
 {% endif %}
 
+{% if item.nsclient_check == "true" %}
+
+{% if item.nsclient_disk.check == "true" %}
+object Service "check_disk" { 
+  check_command = "nscp"
+  host_name = "{{item.hostname}}"
+  vars.nscp_password = "{{item.nsclient_password}}"
+  vars.nscp_variable = "USEDDISKSPACE"
+  vars.nscp_params = "{{item.nsclient_disk.drive}}"
+  vars.nscp_warn = "{{item.nsclient_disk.warning}}"
+  vars.nscp_crit = "{{item.nsclient_disk.critical}}"
+}
+{% endif %}
+{% if item.nsclient_cpu.check == "true" %}
+object Service "check_cpu" {
+  check_command = "nscp"
+  host_name = "{{item.hostname}}"
+  vars.nscp_password = "{{item.nsclient_password}}"
+  vars.nscp_variable = "CPULOAD"
+  vars.nscp_params = "{{item.nsclient_cpu.minutes}},{{item.nsclient_cpu.warning}},{{item.nsclient_cpu.critical}}"
+}
+{% endif %}
+{% if item.nsclient_memory.check == "true" %}
+object Service "check_memory" {
+  check_command = "nscp"
+  host_name = "{{item.hostname}}"
+  vars.nscp_password = "{{item.nsclient_password}}"
+  vars.nscp_variable = "MEMUSE"
+  vars.nscp_warn = "{{item.nsclient_memory.warning}}"
+  vars.nscp_crit = "{{item.nsclient_memory.critical}}"
+}
+{% endif %}
+{% endif %}
+
+{% if item.check_commands is defined %}
 {% for elem in item.check_commands %}
 object Service "{{ elem.service }}" {
   check_command = "{{ elem.check_command }}"
   host_name =  "{{item.hostname}}"
 }
 {% endfor %}
-
+{% endif %}
 
