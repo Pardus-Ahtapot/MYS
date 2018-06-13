@@ -1,7 +1,10 @@
 # {{ ansible_managed }}
 
-{% if icinga2_conf_global is defined %}
-{% for element in icinga2_conf_global %}
-{{ element.directive }}
-{% endfor %}
-{% endif %}
+include "constants.conf"
+include "zones.conf"
+include <itl>
+include <plugins>
+include <manubulon>
+include "features-enabled/*.conf"
+include_recursive "conf.d"
+
