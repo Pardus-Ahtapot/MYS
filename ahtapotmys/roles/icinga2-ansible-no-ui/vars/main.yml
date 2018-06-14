@@ -9,7 +9,8 @@ icinga2_pkg:
  - bsd-mailx
  - nagios-nrpe-plugin
  - postfix
-
+ - nagios-snmp-plugins
+ - snmp
 
 icinga2:
   install:

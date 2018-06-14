@@ -9,4 +9,10 @@ icinga2_classic_ui_pkg:
  - python-passlib
 
 htpasswd_deb: "/etc/icinga2/classicui/htpasswd.users"
-
+icinga_ldap_auth: "false"
+icinga_ldap_url: "ldap://IP/CN=Users,DC=example,DC=org?sAMAccountName?sub?(objectClass=*)"
+icinga_ldap_user: "admin@example.org"
+icinga_ldap_pass: "password"
+icinga_ldap_require: "valid-user"
+#icinga_ldap_require: "ldap-user user1 user2"
+#icinga_ldap_require: "ldap-group CN={group},CN=Users,dc=example,dc=org"
