@@ -1,0 +1,68 @@
+---
+apache_listen_ip: "*"
+apache_listen_port: 80
+apache_listen_port_ssl: 443
+
+apache_create_vhosts: true
+apache_vhosts_filename: "vhosts.conf"
+apache_vhosts_template: "vhosts.conf.j2"
+
+apache_remove_default_vhost: false
+
+apache_global_vhost_settings: |
+  DirectoryIndex index.php index.html
+
+apache_vhosts:
+  # Additional properties:
+  # 'serveradmin, serveralias, allow_override, options, extra_parameters'.
+  - servername: "local.dev"
+    documentroot: "/var/www/html"
+
+apache_allow_override: "All"
+apache_options: "-Indexes +FollowSymLinks"
+
+apache_vhosts_ssl: []
+  # Additional properties:
+  # 'serveradmin, serveralias, allow_override, options, extra_parameters'.
+  # - servername: "local.dev",
+  #   documentroot: "/var/www/html",
+  #   certificate_file: "/path/to/certificate.crt",
+  #   certificate_key_file: "/path/to/certificate.key",
+  #   # Optional.
+  #   certificate_chain_file: "/path/to/certificate_chain.crt"
+
+apache_ignore_missing_ssl_certificate: true
+
+apache_ssl_protocol: "All -SSLv2 -SSLv3"
+apache_ssl_cipher_suite: "AES256+EECDH:AES256+EDH"
+
+apache_mods_enabled:
+  - rewrite.load
+  - ssl.load
+apache_mods_disabled: []
+
+# Set initial apache state. Recommended values: `started` or `stopped`
+apache_state: started
+
+# Set apache state when configuration changes are made. Recommended values:
+# `restarted` or `reloaded`
+apache_restart_state: restarted
+
+# Apache package state; use `installed` to make sure it's installed, or `latest` if
+# you want to upgrade or switch versions using a new repo.
+apache_packages_state: installed
+
+apache_service: apache2
+apache_daemon: apache2
+apache_daemon_path: /usr/sbin/
+apache_server_root: /etc/apache2
+apache_conf_path: /etc/apache2
+
+__apache_packages:
+  - apache2
+  - apache2-utils
+
+apache_ports_configuration_items:
+  - regexp: "^Listen "
+    line: "Listen {{ apache_listen_port }}"
+

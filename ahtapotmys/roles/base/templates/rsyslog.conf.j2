@@ -6,14 +6,111 @@
 #### MODULES ####
 #################
 
-$ModLoad imuxsock 
-$ModLoad imklog   
+module(load="imklog")
+module(load="imfile" mode="{{ rsyslog['Mode'] }}")
+module(load="imuxsock")
+module(load="omrelp")
 
-###############
-#### RULES ####
-###############
+main_queue(
+   queue.size="{{ rsyslog['MainQueueSize'] }}"
+   queue.workerthreads="{{ rsyslog['MainQueueWorkerThreads']}}"
+)
 
-:msg, contains, "RULE"         -/var/log/ahtapot/fw/iptables.log
+####################
+### Ansible Logs ###
+####################
+
+ruleset(name="AnsibleLogs") {
+   action(name="Ansible-Log-Gonderme"
+      type="omrelp"
+{% for key, value in ossimciks.iteritems() %}
+{% if ansible_fqdn in value.clients %}
+      target="{{ value.fqdn }}"
+      port="{{ value.port }}"
+{% endif %}
+{% endfor %}
+      tls="{{ rsyslog['tls']['state'] }}"
+      tls.caCert="{{ rsyslog['tls']['cacert'] }}"
+      tls.myCert="{{ rsyslog['tls']['mycert'] }}"
+      tls.myPrivKey="{{ rsyslog['tls']['mykey'] }}"
+      tls.authmode="{{ rsyslog['tls']['authmode'] }}"
+      tls.permittedpeer=["{{ rsyslog['tls']['permittedpeer'] }}"]
+      queue.Type="{{ rsyslog['QueueType'] }}"
+      queue.FileName="{{ rsyslog['QueueFileNameANS'] }}"
+      queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+      queue.MaxFileSize="{{ rsyslog['QueueMaxFileSize'] }}"
+      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+   )
+   stop
+}
+
+input(type="imfile"
+   file="/var/log/ahtapot/ansible.log"
+   tag=""
+   ruleset="AnsibleLogs")
+
+#####################
+### IPtables Logs ###
+#####################
+
+if $msg contains 'RULE' then {
+   action(name="IPtables-Yerele-Log-Yazma"
+      type="omfile"
+      file="/var/log/ahtapot/fw/iptables.log"
+      asyncWriting="{{ rsyslog['asyncWriting'] }}"
+      ioBufferSize="{{ rsyslog['ioBufferSize'] }}"
+   )
+   
+   action(name="IPtables-Log-Gonderme"
+      type="omrelp"
+{% for key, value in ossimciks.iteritems() %}
+{% if ansible_fqdn in value.clients %}
+      target="{{ value.fqdn }}"
+      port="{{ value.port }}"
+{% endif %}
+{% endfor %}
+      tls="{{ rsyslog['tls']['state'] }}"
+      tls.caCert="{{ rsyslog['tls']['cacert'] }}"
+      tls.myCert="{{ rsyslog['tls']['mycert'] }}"
+      tls.myPrivKey="{{ rsyslog['tls']['mykey'] }}"
+      tls.authmode="{{ rsyslog['tls']['authmode'] }}"
+      tls.permittedpeer=["{{ rsyslog['tls']['permittedpeer'] }}"]
+      queue.Type="{{ rsyslog['QueueType'] }}"
+      queue.FileName="{{ rsyslog['QueueFileNameIPT'] }}"
+      queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+      queue.MaxFileSize="{{ rsyslog['QueueMaxFileSize'] }}"
+      queue.size="{{ rsyslog['QueueSize'] }}"
+      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+   )
+   stop
+}
+
+###################
+### ALL Syslogs ###
+###################
+
+action(name="Butun-SYSLOG-Gonderme"
+   type="omrelp"
+{% for key, value in ossimciks.iteritems() %}
+{% if ansible_fqdn in value.clients %}
+   target="{{ value.fqdn }}"
+   port="{{ value.port }}"
+{% endif %}
+{% endfor %}
+   tls="{{ rsyslog['tls']['state'] }}"
+   tls.caCert="{{ rsyslog['tls']['cacert'] }}"
+   tls.myCert="{{ rsyslog['tls']['mycert'] }}"
+   tls.myPrivKey="{{ rsyslog['tls']['mykey'] }}"
+   tls.authmode="{{ rsyslog['tls']['authmode'] }}"
+   tls.permittedpeer=["{{ rsyslog['tls']['permittedpeer'] }}"]
+   queue.Type="{{ rsyslog['QueueType'] }}"
+   queue.FileName="{{ rsyslog['QueueFileNameSYS'] }}"
+   queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+   queue.MaxFileSize="{{ rsyslog['QueueMaxFileSize'] }}"
+   queue.size="{{ rsyslog['QueueSize'] }}"
+   action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+)
+
 auth,authpriv.*                 /var/log/auth.log
 *.*;auth,authpriv.none,kern.!=info      -/var/log/syslog
 #cron.*                         /var/log/cron.log
@@ -41,38 +138,5 @@ news.notice                     -/var/log/news/news.notice
 
 *.emerg                         :omusrmsg:*
 
-###########################
-#### GLOBAL DIRECTIVES ####
-###########################
-
-$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
-
-$FileOwner root
-$FileGroup adm
-$FileCreateMode 0640
-$DirCreateMode 0755
-$Umask 0022
-
-$WorkDirectory {{ rsyslog['WorkDirectory'] }}
+$WorkDirectory {{ rsyslog['WorkDirectory'] }} 
 $IncludeConfig {{ rsyslog['IncludeConfig'] }}
-
-$ActionQueueMaxDiskSpace {{ rsyslog['ActionQueueMaxDiskSpace'] }}   
-$ActionQueueSaveOnShutdown {{ rsyslog['ActionQueueSaveOnShutdown'] }}
-$ActionQueueType {{ rsyslog['ActionQueueType'] }} 
-$ActionResumeRetryCount {{ rsyslog['ActionResumeRetryCount'] }} 
-$ActionQueueFileName {{ rsyslog['ActionQueueFileName'] }} 
-
-$DefaultNetstreamDriver gtls
-$DefaultNetstreamDriverCAFile  /etc/ssl/certs/rootCA.pem
-$DefaultNetstreamDriverCertFile /etc/ssl/certs/{{ ansible_fqdn }}.crt
-$DefaultNetstreamDriverKeyFile /etc/ssl/private/{{ ansible_fqdn }}.key
-$ActionSendStreamDriverMode 1
-$ActionSendStreamDriverAuthMode anon
-
-{% for key,value in base_ossimcik_servers.iteritems() %}
-{% for clientkey,clientvalue in value.clients.iteritems() %}
-{% if clientvalue.fqdn == ansible_fqdn %}
-{{ value.severity }}.{{ value.facility }} @@{{ value.fqdn }}:{{ value.port }}  
-{% endif %}
-{% endfor %}
-{% endfor %}

@@ -1,16 +1,49 @@
 ---
 # Rsyslog'un degiskenlerini iceren dosyadir
 rsyslog:
-    conf:
-        source: "rsyslog.conf.j2"
-        destination: "/etc/rsyslog.conf"
-        owner: "root"
-        group: "root"
-        mode: "0644" 
-    service:
-        name: "rsyslog" 
-        state: "started" 
-        enabled: "yes" 
-    WorkDirectory: "/var/spool/rsyslog"
-    IncludeConfig: "/etc/rsyslog.d/*"
-    RemoteLogDirectory: "/data/log/%HOSTNAME%/%fromhost-ip%.log"
+   conf:
+      source: "rsyslog.conf.j2"
+      destination: "/etc/rsyslog.conf"
+      owner: "root"
+      group: "root"
+      mode: "0644" 
+   service:
+      name: "rsyslog" 
+      state: "started" 
+      enabled: "yes" 
+   tls:
+      state: "on"
+      cacert: "/etc/ssl/certs/rootCA.pem"
+      mycert: "/etc/ssl/certs/{{ ansible_fqdn }}.crt"
+      myprivkey: "/etc/ssl/private/{{ ansible_fqdn }}.key"
+      authmode: "name"
+      permittedpeer: "CERTIFICATE COMMON NAME"
+   port: "20514"
+   port_udp: "514"
+   imthreads: "5"
+   MainQueueSize: "100000000"
+   MainQueueWorkerThreads: "5"
+   asyncWriting: "on"
+   ioBufferSize: "1024k"
+   WorkDirectory: "/var/spool/rsyslog"
+   IncludeConfig: "/etc/rsyslog.d/*"
+
+sources:
+   src01:
+      addr: "OSSIM_IP"
+      alertname: "OSSIM_AV_Alerts"
+      alertfile: "{{ logrotate['Directory'] }}/ossim/ossimalerts.log"
+      rawname: "OSSIM_All"
+      rawfile: "{{ logrotate['Directory'] }}/ossim/ossim_raw.log"
+   src02:
+      addr: "OSSIMCIK_IP"
+      alertname: "OSSIMCIK_AV_Alerts"
+      alertfile: "{{ logrotate['Directory'] }}/ossimcik/ossimcikalerts.log"
+      rawname: "OSSIMCIK_All"
+      rawfile: "{{ logrotate['Directory'] }}/ossimcik/ossimcik_raw.log"
+   src03:
+      addr: "OSSIMCORR_IP"
+      alertname: "OSSIMCORR_AV_Alerts"
+      alertfile: "{{ logrotate['Directory'] }}/ossimcorr/ossimcorr_alerts.log"
+      rawname: "OSSIMCORR_All"
+      rawfile: "{{ logrotate['Directory'] }}/ossimcorr/ossimcorr_raw.log"

@@ -1,0 +1,37 @@
+---
+# tasks/Pardus/main.yml: Pardus specific set-up
+# This takes care of base prerequisites for Pardus
+
+  #- include_vars: "main.yml"
+
+#  - name: Ensure apt-transport-https is installed
+#    sudo: yes
+#    apt:
+#      name: apt-transport-https
+#      state: present
+#      cache_valid_time: 3600
+#      update_cache: true
+#
+#  - name: Ensure that gnupg is installed for apt_key
+#    apt:
+#      name: gnupg
+#      state: present
+#
+#  - name: Ensure the Sensu APT repo GPG key is present
+#    apt_key:
+#      url: "{{ sensu_apt_key_url }}"
+#      state: present
+#    sudo: yes
+#
+#  - name: Ensure the Sensu Core APT repo is present
+#    sudo: yes
+#    apt_repository:
+#      repo: "{{ sensu_apt_repo_url }}"
+#      state: present
+#      update_cache: true
+#
+  - name: Ensure Sensu is installed
+    sudo: yes
+    apt:
+      name: "{{ sensu_package }}"
+      state: "{{ sensu_pkg_state }}"

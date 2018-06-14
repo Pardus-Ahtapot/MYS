@@ -1,0 +1,22 @@
+---
+- name: Install Icinga2 on Debian OS family
+  sudo: yes
+  apt: pkg={{ item }}
+       update_cache="{{ icinga2['install']['update_cache'] }}"
+       install_recommends="{{ icinga2['install']['install_recommends'] }}"
+  with_items: "{{ icinga2_pkg }}"
+
+- name: Change icinga init file
+  sudo: yes
+  template: src=icinga2.init.j2
+            dest=/etc/init.d/icinga2
+            owner=root
+            group=root
+            mode=0755
+
+
+#- name: Start Icinga2
+#  sudo: yes
+#  service: name="{{ icinga2['start_service']['name'] }}"
+#           state="{{ icinga2['start_service']['state'] }}"
+#           enabled="{{ icinga2['start_service']['enabled'] }}"

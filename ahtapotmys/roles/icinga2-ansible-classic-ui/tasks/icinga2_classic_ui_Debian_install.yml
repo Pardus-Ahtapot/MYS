@@ -1,0 +1,33 @@
+---
+
+- name: Install Icinga Classic UI on Debian OS family
+  sudo: yes
+  apt: pkg={{ item }}
+       update_cache=yes
+       cache_valid_time=30
+  with_items: "{{ icinga2_classic_ui_pkg }}"
+
+- name: Enable apache cgi module
+  shell: /usr/sbin/a2enmod cgi
+
+- name: Enable apache ldap module
+  shell: /usr/sbin/a2enmod authnz_ldap
+
+- name: Copy Check Commands Configuration
+  sudo: yes
+  template: src="icinga2-classicui.conf.j2"
+            dest="/etc/icinga2/classicui/apache2.conf"
+            owner="root"
+            group="root"
+            mode=644
+  notify:
+    - restart apache2
+
+- name: Configure a password for icingaadmin user
+  sudo: yes
+  shell: htpasswd -b  {{ htpasswd_deb }} icingaadmin {{ icinga2_classic_ui_passwd }}
+  notify:
+   - restart apache2
+
+- name: Icinga Classic UI Installation finished (Debian)
+  debug: msg="Login at http://IP/icinga2-classicui with user icingaadmin and password {{ icinga2_classic_ui_passwd }}"

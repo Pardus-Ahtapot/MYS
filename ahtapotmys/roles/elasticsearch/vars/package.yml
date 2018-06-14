@@ -6,7 +6,8 @@ elasticsearch_packages:
         name: "oracle-java8-installer=8u101+8u101arm-1~webupd8~2" 
         state: "present" 
     package02:
-        name: "elasticsearch=2.3.3" 
+        #name: "elasticsearch=2.3.3" 
+        name: "elasticsearch" 
         state: "present" 
     package03:
         name: "search-guard-ssl=2.3.3" 
@@ -14,9 +15,6 @@ elasticsearch_packages:
     package04:
         name: "search-guard=2.3.3" 
         state: "present" 
-#    packageXX:
-#        name: 
-#        state:  
 #    packageXX:
 #        name: 
 #        state:  

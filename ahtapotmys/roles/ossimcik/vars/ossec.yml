@@ -11,6 +11,12 @@ ossec:
         owner: "www-data" 
         group: "ossec" 
         mode: "0754" 
+    localdecoder:
+        source: "local_decoder.xml.j2"
+        destination: "/var/ossec/etc/local_decoder.xml"
+        owner: "www-data" 
+        group: "ossec" 
+        mode: "0754" 
     conf:
         source: "ossec.conf.j2"
         destination: "/var/ossec/etc/ossec.conf"

@@ -1,0 +1,22 @@
+---
+# tasks/server.yml: Deploy Sensu Server/API
+
+  #- include_vars: "main.yml"
+
+  - name: Deploy Sensu server API configuration
+    sudo: yes
+    template:
+      dest: "{{ sensu_config_path }}/conf.d/api.json"
+      owner: "{{ sensu_user_name }}"
+      group: "{{ sensu_group_name }}"
+      src: sensu-api.json.j2
+    notify: restart sensu-api service
+
+  - name: Ensure Sensu server service is running
+    service: name={{ sensu_server_service_name if not se_enterprise else sensu_enterprise_service_name }} state=started enabled=yes
+    sudo: yes
+
+  - name: Ensure Sensu API service is running
+    service: name=sensu-api state=started enabled=yes
+    when: not se_enterprise
+    sudo: yes

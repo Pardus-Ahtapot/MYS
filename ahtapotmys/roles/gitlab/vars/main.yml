@@ -55,7 +55,7 @@ gitlab:
         redirect_http_to_https: "true"
     backup:
         Server: gitlab02.gdys.local
-        Port: 4444
+        Port: 22
     ansible:
         Server: ansible01.gdys.local
-        Port: 4444
+        Port: 22

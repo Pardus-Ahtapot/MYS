@@ -6,12 +6,36 @@
         owner: "{{ rsyslog['conf']['owner'] }}"
         group: "{{ rsyslog['conf']['group'] }}"
         mode: "{{ rsyslog['conf']['mode'] }}"
-  when: "'rsyslog' not in group_names and 'ossimcik' not in group_names"
-  with_dict: "base_ossimcik_servers"
+  when: "ansible_fqdn == item.1"
+  with_subelements:
+    - "ossimciks"
+    - "clients"
   notify:
     - rsyslog servisini yeniden baslat
   sudo: yes
   tags: rsyslog
+
+- name: Rsyslog icin logrotate dosyasi yapilandiriliyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "{{ item.value.destination }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+  when: "'rsyslog' not in group_names and 'ossimcik' not in group_names"
+  with_dict: "{{logrotate_scripts}}"
+  sudo: yes
+  tags: rsyslog 
+
+#- name: Rsyslog logrotate cron.hourly'e ataniyor.
+#  template:
+#        src: "{{ logrotate_base['source'] }}"
+#        dest: "{{ logrotate_base['destination'] }}"
+#        owner: "{{ logrotate_base['owner'] }}"
+#        group: "{{ logrotate_base['group'] }}"
+#        mode: "{{ logrotate_base['mode'] }}"
+#  sudo: yes
+#  tags: rsyslog 
 
 - name: Rsyslog servisi ayakta
   service:

@@ -14,7 +14,7 @@
 - name: Elasticsearch yapilandirmasi uygulaniyor.
   template:
         src: "{{ elasticsearch['conf']['yml']['source'] }}"
-        dest: "{{ elasticsearch['conf']['yml']['destination'] }}-{{ item.value.instance_name }}.yml"
+        dest: "{{ elasticsearch['conf']['yml']['destination'] }}-{{ item.value.instance_name }}/elasticsearch.yml"
         owner: "{{ elasticsearch['conf']['yml']['owner'] }}"
         group: "{{ elasticsearch['conf']['yml']['group'] }}"
         mode: "{{ elasticsearch['conf']['yml']['mode'] }}"

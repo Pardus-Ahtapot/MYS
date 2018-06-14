@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+
+{% for elem in icingausers %}
+object User "{{ elem.name }}" {
+  import "generic-user"
+  display_name = "{{ elem.display_name }}"
+  enable_notifications = {{ elem.enable_notifications }}
+  email = "{{ elem.email }}"
+  groups = {{ elem.groups }}
+{% if elem.pager is defined %}
+  pager = "{{ elem.pager }}"
+{% endif %}
+
+}
+{% endfor %}
+
+{% for elem in icingagroups %}
+object UserGroup "{{ elem.name }}" {
+  display_name = "{{ elem.display_name }}"
+}
+{% endfor %}
+

@@ -1,0 +1,18 @@
+---
+# defaults file for icinga2-ansible-classic-ui
+
+icinga2_classic_ui_passwd: "labris"
+
+# Vars for Debian OS Family
+icinga2_classic_ui_pkg:
+ - icinga2-classicui=2.1.1-1
+ - python-passlib
+
+htpasswd_deb: "/etc/icinga2/classicui/htpasswd.users"
+icinga_ldap_auth: "false"
+icinga_ldap_url: "ldap://IP/CN=Users,DC=example,DC=org?sAMAccountName?sub?(objectClass=*)"
+icinga_ldap_user: "admin@example.org"
+icinga_ldap_pass: "password"
+icinga_ldap_require: "valid-user"
+#icinga_ldap_require: "ldap-user user1 user2"
+#icinga_ldap_require: "ldap-group CN={group},CN=Users,dc=example,dc=org"

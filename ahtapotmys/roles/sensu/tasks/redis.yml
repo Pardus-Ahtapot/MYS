@@ -1,0 +1,8 @@
+---
+# tasks/redis.yml: Deploy redis
+
+  - include: "/etc/ansible/roles/sensu/tasks/Pardus/redis.yml"
+
+  - name: Ensure redis is running
+    service: name={{ redis_service_name }} state=started enabled=true
+    sudo: yes

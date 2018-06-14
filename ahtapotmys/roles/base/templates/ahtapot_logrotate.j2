@@ -2,39 +2,43 @@
 ## Burada yapilan degisikliklerin uzerine yazilir!!
 {{ ansible_managed }}
 
+{% if ansible_fqdn in groups['ansible'] %}
 /var/log/ahtapot/*.log
 {
         rotate 7 
         daily
+        maxsize 500M
         missingok
         notifempty
         dateext
         compress
+        postrotate
+                invoke-rc.d rsyslog rotate > /dev/null
+        endscript
 }
+{% endif %}
 
+{% if ansible_fqdn in groups['firewall'] %}
 /var/log/ahtapot/fw/*.log
 {
         rotate 45 
-        daily
+        hourly
+        maxsize 500M
         missingok
         notifempty
         compress
+        postrotate
+                invoke-rc.d rsyslog rotate > /dev/null
+        endscript
 }
+{% endif %}
 
+{% if ansible_fqdn not in groups['ossimcik'] %}
 /var/log/client.log
 {
         rotate 7 
-        daily
-        missingok
-        notifempty
-        dateext
-        compress
-}
-
-/var/log/syslog
-{
-        rotate 7
-        daily
+        hourly 
+        maxsize 500M
         missingok
         notifempty
         dateext
@@ -43,28 +47,4 @@
                 invoke-rc.d rsyslog rotate > /dev/null
         endscript
 }
-
-/var/log/mail.info
-/var/log/mail.warn
-/var/log/mail.err
-/var/log/mail.log
-/var/log/daemon.log
-/var/log/kern.log
-/var/log/auth.log
-/var/log/user.log
-/var/log/lpr.log
-/var/log/cron.log
-/var/log/debug
-/var/log/messages
-{
-        rotate 7 
-        daily
-        missingok
-        notifempty
-        dateext
-        compress
-        sharedscripts
-        postrotate
-                invoke-rc.d rsyslog rotate > /dev/null
-        endscript
-}
+{% endif %}

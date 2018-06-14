@@ -1,0 +1,170 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+#################
+#### MODULES ####
+#################
+
+$ModLoad imuxsock
+$ModLoad imklog
+$ModLoad imtcp
+$ModLoad imfile
+$ModLoad imudp
+
+######################
+#### REMOTE RULES ####
+######################
+
+$InputTCPServerRun 514
+$UDPServerRun 514 
+$InputTCPServerStreamDriverMode 1
+$InputTCPServerStreamDriverAuthMode anon
+
+$DefaultNetstreamDriver gtls 
+$DefaultNetstreamDriverCAFile /etc/ssl/certs/rootCA.pem
+$DefaultNetstreamDriverCertFile /etc/ssl/certs/{{ ansible_fqdn }}.crt
+$DefaultNetstreamDriverKeyFile /etc/ssl/private/{{ ansible_fqdn }}.key
+
+$InputFileName /var/ossec/logs/alerts/alerts.log
+$InputFileTag ossimcik02
+$InputFileStateFile ossec-alerts
+$InputFileFacility local4
+$InputFilePollInterval 1
+$InputFilePersistStateInterval 1
+$InputRunFileMonitor
+
+$InputFileName /var/log/nxlog/client.log
+$InputFileTag client
+$InputFileStateFile clientraw
+$InputFileFacility local6
+$InputFilePollInterval 1
+$InputFilePersistStateInterval 1
+$InputRunFileMonitor
+
+$InputFileName /var/log/client.log
+$InputFileTag client_rsyslog
+$InputFileStateFile client_raw
+$InputFileFacility local6
+$InputFilePollInterval 1
+$InputFilePersistStateInterval 1
+$InputRunFileMonitor
+
+if $syslogfacility-text == 'local4' then {
+        action( type="omfwd"
+                Target="{{ ossimcik_rsyslog['ossim_server'] }}"
+                Port="514"
+                Protocol="tcp"
+                Action.ResumeRetryCount="-1"
+                StreamDriver="gtls"
+                StreamDriverMode="1"
+                StreamDriverAuthMode="anon"
+                StreamDriverCertFile="/etc/ssl/certs/{{ ansible_fqdn }}.crt"
+                StreamDriverKeyFile="/etc/ssl/private/{{ ansible_fqdn }}.key"
+                queue.Type="LinkedList"
+                queue.FileName="forwarding"
+                queue.SaveOnShutdown="on"
+                queue.MaxDiskSpace="5000m"
+                                )
+        action( type="omfwd"
+                Target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
+                Port="514"
+                Protocol="tcp"
+                Action.ResumeRetryCount="-1"
+                StreamDriver="gtls"
+                StreamDriverMode="1"
+                StreamDriverAuthMode="anon"
+                StreamDriverCertFile="/etc/ssl/certs/{{ ansible_fqdn }}.crt"
+                StreamDriverKeyFile="/etc/ssl/private/{{ ansible_fqdn }}.key"
+                queue.Type="LinkedList"
+                queue.FileName="forwarding"
+                queue.SaveOnShutdown="on"
+                queue.MaxDiskSpace="5000m"
+                                )
+    stop
+}
+
+if $syslogfacility-text == 'local6' then {
+        action( type="omfwd"
+                Target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
+                Port="514"
+                Protocol="tcp"
+                Action.ResumeRetryCount="-1"
+                StreamDriver="gtls"
+                StreamDriverMode="1"
+                StreamDriverAuthMode="anon"
+                StreamDriverCertFile="/etc/ssl/certs/{{ ansible_fqdn }}.crt"
+                StreamDriverKeyFile="/etc/ssl/private/{{ ansible_fqdn }}.key"
+                queue.Type="LinkedList"
+                queue.FileName="forwarding"
+                queue.SaveOnShutdown="on"
+                queue.MaxDiskSpace="5000m"
+                                )
+    stop
+}
+
+:msg, contains, "AV - Alert -" ~
+$template USB, "/var/log/usb.log"
+$template RemoteHost, "/var/log/client.log"
+if($fromhost-ip != '127.0.0.1' and $msg contains 'New USB device found') then -?USB
+if($fromhost-ip != '127.0.0.1' and $msg contains 'Product') then -?USB
+if($fromhost-ip != '127.0.0.1' and $msg contains 'Manufacturer') then -?USB
+if($fromhost-ip != '127.0.0.1' and $msg contains 'SerialNumber') then -?USB
+if($fromhost-ip != '127.0.0.1' and $msg contains 'USB disconnect') then -?RemoteHost
+if($fromhost-ip != '127.0.0.1' and $msg contains ' usb ') then ~
+& ~
+if $fromhost-ip != '127.0.0.1' then -?RemoteHost
+if $fromhost-ip != '127.0.0.1' then ~
+
+###################
+#### OWN RULES ####
+###################
+
+:msg, contains, "RULE"         -/var/log/ahtapot/fw/iptables.log
+auth,authpriv.*                 /var/log/auth.log
+*.*;auth,authpriv.none,kern.!=info      -/var/log/syslog
+#cron.*                         /var/log/cron.log
+daemon.*                        -/var/log/daemon.log
+kern.*;kern.!=info              -/var/log/kern.log
+lpr.*                           -/var/log/lpr.log
+mail.*                          -/var/log/mail.log
+user.*                          -/var/log/user.log
+
+mail.info                       -/var/log/mail.info
+mail.warn                       -/var/log/mail.warn
+mail.err                        /var/log/mail.err
+
+news.crit                       /var/log/news/news.crit
+news.err                        /var/log/news/news.err
+news.notice                     -/var/log/news/news.notice
+
+*.=debug;\
+        auth,authpriv.none;\
+        news.none;mail.none     -/var/log/debug
+*.=info;*.=notice;*.=warn;\
+        auth,authpriv.none;\
+        cron,daemon.none;kern.!=info;\
+        mail,news.none          -/var/log/messages
+
+*.emerg                         :omusrmsg:*
+
+###########################
+#### GLOBAL DIRECTIVES ####
+###########################
+
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+
+$FileOwner root
+$FileGroup adm
+$FileCreateMode 0640
+$DirCreateMode 0755
+$Umask 0022
+
+$WorkDirectory {{ ossimcik_rsyslog['WorkDirectory'] }}
+$IncludeConfig {{ ossimcik_rsyslog['IncludeConfig'] }}
+
+$ActionQueueMaxDiskSpace {{ ossimcik_rsyslog['ActionQueueMaxDiskSpace'] }}
+$ActionQueueSaveOnShutdown {{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}
+$ActionQueueType {{ ossimcik_rsyslog['ActionQueueType'] }}
+$ActionResumeRetryCount {{ ossimcik_rsyslog['ActionResumeRetryCount'] }}
+$ActionQueueFileName {{ ossimcik_rsyslog['ActionQueueFileName'] }}

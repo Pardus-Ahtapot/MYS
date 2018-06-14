@@ -1,6 +1,5 @@
 ---
 # Rsyslog gorevlerini iceren dosyadir
 - include: install.yml
-- include: logrotate.yml
 - include: signer.yml
 - include: rsyslog.yml

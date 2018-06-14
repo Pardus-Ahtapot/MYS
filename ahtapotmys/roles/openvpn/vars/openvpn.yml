@@ -35,6 +35,13 @@ openvpn:
         owner: "root"
         group: "root"
         mode: "0644"
+    key:
+        source: "certificates"
+        destination: "/etc/openvpn/server.key"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+
     common_conf: 
         dev: "tun"
         ca: "/etc/openvpn/ca.crt" 

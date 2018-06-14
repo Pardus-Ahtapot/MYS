@@ -11,6 +11,18 @@
   sudo: yes
   tags: ossec
 
+- name: Ossec local decoder uygulaniyor.
+  template:
+        src: "{{ ossec['localdecoder']['source'] }}"
+        dest: "{{ ossec['localdecoder']['destination'] }}"
+        owner: "{{ ossec['localdecoder']['owner'] }}"
+        group: "{{ ossec['localdecoder']['group'] }}"
+        mode: "{{ ossec['localdecoder']['mode'] }}"
+  notify:
+    - ossec servisi yeniden baslatiliyor
+  sudo: yes
+  tags: ossec
+
 - name: Ossec local rules uygulaniyor.
   template:
         src: "{{ ossec['localrules']['source'] }}"

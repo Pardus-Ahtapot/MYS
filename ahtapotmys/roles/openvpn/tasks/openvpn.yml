@@ -42,6 +42,18 @@
   sudo: yes
   tags: openvpn
 
+- name: Server Key sertifikasi uygulaniyor.
+  template:
+        src: "{{ openvpn['key']['source'] }}/{{ ansible_fqdn }}.key.j2"
+        dest: "{{ openvpn['key']['destination'] }}"
+        owner: "{{ openvpn['key']['owner'] }}"
+        group: "{{ openvpn['key']['group'] }}"
+        mode: "{{ openvpn['key']['mode'] }}"      
+  notify:
+    - openvpn servisini yeniden baslat
+  sudo: yes
+  tags: openvpn
+
 - name: Server konfigurasyonu uygulaniyor.
   template:
         src: "{{ openvpn['conf']['source'] }}"

@@ -1,0 +1,31 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+{{ ossimcik_rsyslog['LogLocationUSB'] }}
+{
+        rotate 60
+        daily
+        missingok
+        notifempty
+    	dateext
+        delaycompress
+        compress
+        postrotate 
+	    invoke-rc.d rsyslog rotate > /dev/null 
+	endscript
+}
+
+{{ ossimcik_rsyslog['LogLocationALL'] }}
+{
+        rotate 60
+        hourly 
+        maxsize 500M
+        missingok
+        notifempty
+        delaycompress
+        compress
+        postrotate 
+	    invoke-rc.d rsyslog rotate > /dev/null 
+	endscript
+}

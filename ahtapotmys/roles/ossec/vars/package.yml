@@ -3,7 +3,8 @@
 # Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
 ossec_packages:
     package01:
-        name: "python-crypto=2.6.1-5+b2" 
+        #name: "python-crypto=2.6.1-5+deb8u1" 
+        name: "python-crypto" 
         state: "present"
     package02:
         name: "ossec-hids-agent=1.0.1" 
@@ -11,6 +12,11 @@ ossec_packages:
 #    packageXX:
 #        name: 
 #        state:  
+
+ossec_server_packages:
+    package01:
+        name: "ossec-auto-server" 
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  

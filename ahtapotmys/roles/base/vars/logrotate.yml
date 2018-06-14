@@ -1,15 +1,28 @@
 ---
 # Logrotate degiskenlerini iceren dosyadir
+logrotate_base:
+   source: "cron_logrotate.j2"
+   destination: "/etc/cron.daily/logrotate"
+   owner: "root"
+   group: "root"
+   mode: "0755"    
+
 logrotate_scripts:
-    script01:
-        source: "ahtapot_logrotate.j2"
-        destination: "/etc/logrotate.d/ahtapot"
-        owner: "root"
-        group: "root"
-        mode: "0644" 
-#    scriptXX:
-#        source: ""
-#        destination: ""
-#        owner: ""
-#        group: ""
-#        mode: "" 
+   script01:
+      source: "ahtapot_logrotate.j2"
+      destination: "/etc/logrotate.d/ahtapot"
+      owner: "root"
+      group: "root"
+      mode: "0644" 
+   script02:
+      source: "ahtapot_rsyslog.j2"
+      destination: "/etc/logrotate.d/rsyslog"
+      owner: "root"
+      group: "root"
+      mode: "0644" 
+#   scriptXX:
+#      source: ""
+#      destination: ""
+#      owner: ""
+#      group: ""
+#      mode: "" 

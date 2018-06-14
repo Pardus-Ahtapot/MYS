@@ -13,8 +13,8 @@ signer:
         owner: "root"
         group: "root"
         mode: "0750"
-    min: "00"
-    hour: "07"
+        min: "00"
+        hour: "07"
     directory:
         path: "/data/log/5651"
         owner: "root"

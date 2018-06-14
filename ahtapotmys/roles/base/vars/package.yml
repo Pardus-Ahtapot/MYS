@@ -3,34 +3,46 @@
 # Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
 base_packages:
     package01:
-        name: "auditd=1:2.4-1+b1" 
+        #name: "auditd=1:2.4-1+b1" 
+        name: "auditd" 
         state: "present" 
     package02:
-        name: "sysstat=11.0.1-1" 
+        #name: "sysstat=11.0.1-1" 
+        name: "sysstat" 
         state: "present" 
     package03:
-        name: "ntp=1:4.2.6.p5+dfsg-7+deb8u2" 
+        #name: "ntp=1:4.2.6.p5+dfsg-7+deb8u2" 
+        name: "ntp" 
         state: "present" 
     package04:
-        name: "bash=4.3-11+b1" 
+        #name: "bash=4.3-11+deb8u1" 
+        name: "bash" 
         state: "present" 
     package05:
-        name: "rsyslog=8.4.2-1+deb8u2" 
+        #name: "rsyslog=8.4.2-1+deb8u2" 
+        name: "rsyslog" 
         state: "present" 
     package06:
-        name: "sudo=1.8.10p3-1+deb8u3" 
+        #name: "sudo=1.8.10p3-1+deb8u3" 
+        name: "sudo" 
         state: "present" 
     package07:
-        name: "logrotate=3.8.7-1+b1" 
+        #name: "logrotate=3.8.7-1+b1" 
+        name: "logrotate" 
         state: "present" 
     package08:
-        name: "apt-transport-https=1.0.9.8.3" 
+        #name: "apt-transport-https=1.0.9.8.4" 
+        name: "apt-transport-https" 
         state: "present"
     package09:
-        name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
+        #name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
+        name: "rsyslog-gnutls" 
         state: "present"
     package10:
         name: "ahtapot-fusioninventory-agent=1:2.3.10.1-1" 
+        state: "present"
+    package11:
+        name: "rsyslog-relp" 
         state: "present"
 #    packageXX:
 #        name: 
