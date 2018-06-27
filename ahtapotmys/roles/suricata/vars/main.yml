@@ -1,8 +1,12 @@
 ---
 # defaults file for ansible-suricata
-suricata_mode: ids #ids|ips
+suricata_mode: "ids"#ids|ips
+fwbuilder_exists: "false"
+suricata_ips_mode: "bridge" #nat|bridge
+ips_int_iface: enp1s3
+ips_ext_iface: enp0s3
 config_suricata: true  #defines if suricata should be configured
-scripts_dir: /opt/scripts
+scripts_dir: /opt/"scripts
 suricata_action_order:
   - pass
   - drop
@@ -242,7 +246,7 @@ suricata_rules:
   - emerging-ftp.rules
   - emerging-games.rules
   - emerging-icmp_info.rules
-#        - emerging-icmp.rules
+# - emerging-icmp.rules
   - emerging-imap.rules
   - emerging-inappropriate.rules
   - emerging-malware.rules
@@ -269,6 +273,11 @@ suricata_rules:
   - emerging-web_specific_apps.rules
   - emerging-worm.rules
   - tor.rules
+  - dns_query.rules
+  - protocol-anomaly.rules
+  - blacklist.rules
+  - local.rules
+  - content.rules
   - decoder-events.rules # available in suricata sources under rules dir
   - stream-events.rules  # available in suricata sources under rules dir
   - http-events.rules    # available in suricata sources under rules dir

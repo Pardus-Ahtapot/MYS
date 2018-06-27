@@ -1,0 +1,4 @@
+---
+suricata_blocked_domains:
+  - testsite123.com
+  - badsitetesting.com

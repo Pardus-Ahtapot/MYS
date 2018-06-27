@@ -1,0 +1,10 @@
+---
+suricata_keyword_action: alert
+suricata_keyword_src: any
+suricata_keyword_src_port: any
+suricata_keyword_dst: any
+suricata_keyword_dst_port: any
+suricata_keyword_msg: "Content detection: "
+suricata_keyword_proto: ['tcp','udp']
+suricata_keywords:
+  - test zararli deneme

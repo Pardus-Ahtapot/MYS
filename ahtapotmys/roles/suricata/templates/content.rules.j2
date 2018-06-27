@@ -1,0 +1,7 @@
+{% if suricata_keywords %}
+{% for keyword in suricata_keywords %}
+{% for proto in suricata_keyword_proto %}
+{{suricata_keyword_action}} {{proto}} {{suricata_keyword_src}} {{suricata_keyword_src_port}} -> {{suricata_keyword_dst}} {{suricata_keyword_dst_port}} (msg:"{{suricata_keyword_msg}} {{keyword}}"; content:"{{keyword}}"; nocase; classtype:string-detect; sid:{{ range(3000000, 10000000) | random }}; rev:1;)
+{% endfor %}
+{% endfor %}
+{% endif %}
