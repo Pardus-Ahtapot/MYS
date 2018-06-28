@@ -40,6 +40,131 @@
     mode: 0644
   notify: restart suricata
 
+- name: configure_suricata | configuring blocked domains
+  sudo: yes
+  template:
+    src: "dns_query.rules.j2"
+    dest: "/etc/suricata/rules/dns_query.rules"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart suricata
+
+- name: configure_suricata | configuring protocol anomaly rules
+  sudo: yes
+  template:
+    src: "protocol-anomaly.rules.j2"
+    dest: "/etc/suricata/rules/protocol-anomaly.rules"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart suricata
+
+- name: configure_suricata | configuring blacklist md5
+  sudo: yes
+  template:
+    src: "fileblacklist.md5.j2"
+    dest: "/etc/suricata/rules/fileblacklist.md5"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart suricata
+
+- name: configure_suricata | configuring blacklist sha1
+  sudo: yes
+  template:
+    src: "fileblacklist.sha1.j2"
+    dest: "/etc/suricata/rules/fileblacklist.sha1"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart suricata
+
+- name: configure_suricata | configuring blacklist sha256
+  sudo: yes
+  template:
+    src: "fileblacklist.sha256.j2"
+    dest: "/etc/suricata/rules/fileblacklist.sha256"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart suricata
+
+- name: configure_suricata | configuring blacklist rules
+  sudo: yes
+  template:
+    src: "blacklist.rules.j2"
+    dest: "/etc/suricata/rules/blacklist.rules"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart suricata
+
+- name: configure_suricata | configuring local rules
+  sudo: yes
+  template:
+    src: "local.rules.j2"
+    dest: "/etc/suricata/rules/local.rules"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart suricata
+
+- name: configure_suricata | configuring content rules
+  sudo: yes
+  template:
+    src: "content.rules.j2"
+    dest: "/etc/suricata/rules/content.rules"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart suricata
+
+- name: configure_suricata | copying IPS NAT mode script
+  sudo: yes
+  template:
+    src: "natmode-ips.sh.j2"
+    dest: "/usr/sbin/natmode-ips.sh"
+    owner: "root"
+    group: "root"
+    mode: 0755
+  when: (fwbuilder_exists == "false") and (suricata_mode == "ips") and (suricata_ips_mode == "nat")
+
+- name: configure_suricata | running IPS NAT mode script
+  sudo: yes
+  command: /usr/sbin/natmode-ips.sh
+  when: (fwbuilder_exists == "false") and (suricata_mode == "ips") and (suricata_ips_mode == "nat")
+
+- name: configure_suricata | copying IPS BRIDGE mode script
+  sudo: yes
+  template:
+    src: "bridgemode-ips.sh.j2"
+    dest: "/usr/sbin/bridgemode-ips.sh"
+    owner: "root"
+    group: "root"
+    mode: 0755
+  when: (fwbuilder_exists == "false") and (suricata_mode == "ips") and (suricata_ips_mode == "bridge")
+
+- name: configure_suricata | copying bridge script
+  sudo: yes
+  template:
+    src: "br0.j2"
+    dest: "/etc/network/interfaces.d/br0"
+    owner: "root"
+    group: "root"
+    mode: 0755
+  when: (fwbuilder_exists == "false") and (suricata_mode == "ips") and (suricata_ips_mode == "bridge")
+
+- name: configure_suricata | ifup br0
+  sudo: yes
+  command: /sbin/ifup br0
+  when: (fwbuilder_exists == "false") and (suricata_mode == "ips") and (suricata_ips_mode == "bridge")
+
+- name: configure_suricata | running IPS BRIDGE mode script
+  sudo: yes
+  command: /usr/sbin/bridgemode-ips.sh
+  when: (fwbuilder_exists == "false") and (suricata_mode == "ips") and (suricata_ips_mode == "bridge")
+
 #- name: configure_suricata | configuring oinkmaster cron job
 #  cron:
 #    name: "oinkmaster rules update"
