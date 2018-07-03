@@ -1,4 +1,4 @@
-- hosts: suricata
+- hosts: suricata-ips
   sudo: yes
   vars_files:
   - /etc/ansible/roles/base/vars/group.yml
@@ -19,23 +19,23 @@
   - /etc/ansible/roles/base/vars/directory.yml
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
-  - /etc/ansible/roles/suricata/vars/main.yml
+  - /etc/ansible/roles/ips/vars/main.yml
   - /etc/ansible/roles/pulledpork/vars/main.yml
   - /etc/ansible/roles/barnyard2/vars/main.yml
   - /etc/ansible/roles/snorby/vars/main.yml
   - /etc/ansible/roles/mysql/vars/main.yml
-  - /etc/ansible/roles/suricata/vars/blocked-domains.yml
-  - /etc/ansible/roles/suricata/vars/protocol-anomaly.rules.yml
-  - /etc/ansible/roles/suricata/vars/fileblacklist.sha256.yml
-  - /etc/ansible/roles/suricata/vars/fileblacklist.sha1.yml
-  - /etc/ansible/roles/suricata/vars/fileblacklist.md5.yml
-  - /etc/ansible/roles/suricata/vars/local.rules.yml
-  - /etc/ansible/roles/suricata/vars/content.yml
+  - /etc/ansible/roles/ips/vars/blocked-domains.yml
+  - /etc/ansible/roles/ips/vars/protocol-anomaly.rules.yml
+  - /etc/ansible/roles/ips/vars/fileblacklist.sha256.yml
+  - /etc/ansible/roles/ips/vars/fileblacklist.sha1.yml
+  - /etc/ansible/roles/ips/vars/fileblacklist.md5.yml
+  - /etc/ansible/roles/ips/vars/local.rules.yml
+  - /etc/ansible/roles/ips/vars/content.yml
   roles:
     - role: base
     - role: mysql
     - role: snorby
-    - role: suricata
+    - role: ips
     - role: barnyard2
     - role: pulledpork
 

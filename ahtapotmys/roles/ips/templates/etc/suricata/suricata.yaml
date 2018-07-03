@@ -37,13 +37,7 @@
 # If set to auto, the variable is internally switch to 'router' in IPS mode
 # and 'sniffer-only' in IDS mode.
 # This feature is currently only used by the reject* keywords.
-{% if suricata_host_mode is defined %}
-host-mode: {{ suricata_host_mode }}
-{% endif %}
-{% if suricata_host_mode is not defined %}
 host-mode: auto
-{% endif %}
-
 
 # Run suricata as user and group.
 #run-as:
@@ -67,12 +61,7 @@ host-mode: auto
 # The default logging directory.  Any log or output file will be
 # placed here if its not specified with a full path name.  This can be
 # overridden with the -l command line parameter.
-{% if suricata_log_dir is defined %}
-default-log-dir: {{ suricata_log_dir }}
-{% endif %}
-{% if suricata_log_dir is not defined %}
 default-log-dir: /var/log/suricata/
-{% endif %}
 
 # Unix command socket can be used to pass commands to suricata.
 # An external tool can then connect to get information from suricata
@@ -80,96 +69,202 @@ default-log-dir: /var/log/suricata/
 # to activate the feature. You can use the filename variable to set
 # the file name of the socket.
 unix-command:
-  enabled: {{ suricata_unix_command.enabled }}
-{% if suricata_unix_command.filename is defined %}
-  filename: {{ suricata_unix_command.filename }}
-{% endif %}
+  enabled: no
+  #filename: custom.socket
 
 # Configure the type of alert (and other) logging you would like.
-{% if suricata_outputs is defined and (suricata_config_outputs is defined and suricata_config_outputs) %}
 outputs:
-{%   for output in suricata_outputs %}
-  - {{ output.name }}:
-{%     if output.enabled is defined %}
-      enabled: {{ output.enabled }}
-{%     endif %}
-{%     if output.profile is defined %}
-      profile: {{ output.profile }}
-{%     endif %}
-{%     if output.log_packet_content is defined %}
-      log-packet-content: {{ output.log_packet_content }}
-{%     endif %}
-{%     if output.log_packet_header is defined %}
-      log-packet-header: {{ output.log_packet_header }}
-{%     endif %}
-{%     if output.interval is defined %}
-      interval: {{ output.interval }}
-{%     endif %}
-{%     if output.facility is defined %}
-      facility: {{ output.facility }}
-{%     endif %}
-{%     if output.level is defined %}
-      level: {{ output.level }}
-{%     endif %}
-{%     if output.log_dir is defined %}
-      log-dir: {{ output.log_dir }}
-{%     endif %}
-{%     if output.filename is defined %}
-      filename: {{ output.filename }}
-{%     endif %}
-{%     if output.limit is defined %}
-      limit: {{ output.limit }}
-{%     endif %}
-{%     if output.max_files is defined %}
-      max-files: {{ output.max_files }}
-{%     endif %}
-{%     if output.mode is defined %}
-      mode: {{ output.mode }}
-{%     endif %}
-{%     if output.use_stream_depth is defined %}
-      use-stream-depth: {{ output.use_stream_depth }}
-{%     endif %}
-{%     if output.xff is defined %}
-      xff:
-{%       for xff_var in output.xff %}
-        {{ xff_var.var }}: {{ xff_var.val }}
-{%       endfor %}
-{%     endif %}
-{%     if output.append is defined %}
-      append: {{ output.append }}
-{%     endif %}
-{%     if output.certs_log_dir is defined %}
-      certs-log-dir: {{ output.certs_log_dir }}
-{%     endif %}
-{%     if output.type is defined %}
-      type: {{ output.type }}
-{%     endif %}
-{%     if output.types is defined %}
-      types:
-{%       for type in output.types %}
-{%         if type.config_addl is defined and type.config_addl %}
-        - {{ type.name }}:
-{%         endif %}
-{%         if type.config_addl is defined and not type.config_addl %}
-        - {{ type.name }}
-{%         endif %}
-{%         if type.config_addl is not defined %}
-        - {{ type.name }}
-{%         endif %}
-{%         if type.extended is defined %}
-          extended: {{ type.extended }}
-{%         endif %}
-{%         if type.force_magic is defined %}
-          force-magic: {{ type.force_magic }}
-{%         endif %}
-{%         if type.force_md5 is defined %}
-          force-md5: {{ type.force_md5 }}
-{%         endif %}
-{%       endfor %}
-{%     endif %}
-{%   endfor %}
-{% endif %}
 
+  # a line based alerts log similar to Snort's fast.log
+  - fast:
+      enabled: yes
+      filename: fast.log
+      append: yes
+      #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'
+
+  # Extensible Event Format (nicknamed EVE) event log in JSON format
+  - eve-log:
+      enabled: yes
+      type: file #file|syslog|unix_dgram|unix_stream
+      filename: eve.json
+      # the following are valid when type: syslog above
+      #identity: "suricata"
+      #facility: local5
+      #level: Info ## possible levels: Emergency, Alert, Critical,
+                   ## Error, Warning, Notice, Info, Debug
+      types:
+        - alert
+        - http:
+            extended: yes     # enable this for extended logging information
+            # custom allows additional http fields to be included in eve-log
+            # the example below adds three additional fields when uncommented
+            #custom: [Accept-Encoding, Accept-Language, Authorization]
+        - dns
+        - tls:
+            extended: yes     # enable this for extended logging information
+        - files:
+            force-magic: no   # force logging magic on all logged files
+            force-md5: no     # force logging of md5 checksums
+        #- drop
+        - ssh
+
+  # alert output for use with Barnyard2
+  - unified2-alert:
+      enabled: yes
+      filename: unified2.alert
+
+      # File size limit.  Can be specified in kb, mb, gb.  Just a number
+      # is parsed as bytes.
+      #limit: 32mb
+
+      # Sensor ID field of unified2 alerts.
+      #sensor-id: 0
+
+      # HTTP X-Forwarded-For support by adding the unified2 extra header that
+      # will contain the actual client IP address or by overwriting the source
+      # IP address (helpful when inspecting traffic that is being reversed
+      # proxied).
+      xff:
+        enabled: no
+        # Two operation modes are available, "extra-data" and "overwrite". Note
+        # that in the "overwrite" mode, if the reported IP address in the HTTP
+        # X-Forwarded-For header is of a different version of the packet
+        # received, it will fall-back to "extra-data" mode.
+        mode: extra-data
+        # Header name were the actual IP address will be reported, if more than
+        # one IP address is present, the last IP address will be the one taken
+        # into consideration.
+        header: X-Forwarded-For 
+
+  # a line based log of HTTP requests (no alerts)
+  - http-log:
+      enabled: yes
+      filename: http.log
+      append: yes
+      #extended: yes     # enable this for extended logging information
+      #custom: yes       # enabled the custom logging format (defined by customformat)
+      #customformat: "%{%D-%H:%M:%S}t.%z %{X-Forwarded-For}i %H %m %h %u %s %B %a:%p -> %A:%P"
+      #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'
+
+  # a line based log of TLS handshake parameters (no alerts)
+  - tls-log:
+      enabled: no  # Log TLS connections.
+      filename: tls.log # File to store TLS logs.
+      append: yes
+      #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'
+      #extended: yes # Log extended information like fingerprint
+      certs-log-dir: certs # directory to store the certificates files
+
+  # a line based log of DNS requests and/or replies (no alerts)
+  - dns-log:
+      enabled: no
+      filename: dns.log
+      append: yes
+      #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'
+
+  # a line based log to used with pcap file study.
+  # this module is dedicated to offline pcap parsing (empty output
+  # if used with another kind of input). It can interoperate with
+  # pcap parser like wireshark via the suriwire plugin.
+  - pcap-info:
+      enabled: no
+
+  # Packet log... log packets in pcap format. 2 modes of operation: "normal"
+  # and "sguil".
+  #
+  # In normal mode a pcap file "filename" is created in the default-log-dir,
+  # or are as specified by "dir". In Sguil mode "dir" indicates the base directory.
+  # In this base dir the pcaps are created in th directory structure Sguil expects:
+  #
+  # $sguil-base-dir/YYYY-MM-DD/$filename.<timestamp>
+  #
+  # By default all packets are logged except:
+  # - TCP streams beyond stream.reassembly.depth
+  # - encrypted streams after the key exchange
+  #
+  - pcap-log:
+      enabled:  no
+      filename: log.pcap
+
+      # File size limit.  Can be specified in kb, mb, gb.  Just a number
+      # is parsed as bytes.
+      limit: 1000mb
+
+      # If set to a value will enable ring buffer mode. Will keep Maximum of "max-files" of size "limit"
+      max-files: 2000
+
+      mode: normal # normal or sguil.
+      #sguil-base-dir: /nsm_data/
+      #ts-format: usec # sec or usec second format (default) is filename.sec usec is filename.sec.usec
+      use-stream-depth: no #If set to "yes" packets seen after reaching stream inspection depth are ignored. "no" logs all packets
+
+  # a full alerts log containing much information for signature writers
+  # or for investigating suspected false positives.
+  - alert-debug:
+      enabled: no
+      filename: alert-debug.log
+      append: yes
+      #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'
+
+  # alert output to prelude (http://www.prelude-technologies.com/) only
+  # available if Suricata has been compiled with --enable-prelude
+  - alert-prelude:
+      enabled: no
+      profile: suricata
+      log-packet-content: no
+      log-packet-header: yes
+
+  # Stats.log contains data from various counters of the suricata engine.
+  # The interval field (in seconds) tells after how long output will be written
+  # on the log file.
+  - stats:
+      enabled: yes
+      filename: stats.log
+      interval: 8
+
+  # a line based alerts log similar to fast.log into syslog
+  - syslog:
+      enabled: no
+      # reported identity to syslog. If ommited the program name (usually
+      # suricata) will be used.
+      #identity: "suricata"
+      facility: local5
+      #level: Info ## possible levels: Emergency, Alert, Critical,
+                   ## Error, Warning, Notice, Info, Debug
+
+  # a line based information for dropped packets in IPS mode
+  - drop:
+      enabled: no
+      filename: drop.log
+      append: yes
+      #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'
+
+  # output module to store extracted files to disk
+  #
+  # The files are stored to the log-dir in a format "file.<id>" where <id> is
+  # an incrementing number starting at 1. For each file "file.<id>" a meta
+  # file "file.<id>.meta" is created.
+  #
+  # File extraction depends on a lot of things to be fully done:
+  # - stream reassembly depth. For optimal results, set this to 0 (unlimited)
+  # - http request / response body sizes. Again set to 0 for optimal results.
+  # - rules that contain the "filestore" keyword.
+  - file-store:
+      enabled: no       # set to yes to enable
+      log-dir: files    # directory to store the files
+      force-magic: no   # force logging magic on all stored files
+      force-md5: no     # force logging of md5 checksums
+      #waldo: file.waldo # waldo file to store the file_id across runs
+
+  # output module to log files tracked in a easily parsable json format
+  - file-log:
+      enabled: no
+      filename: files-json.log
+      append: yes
+      #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'
+
+      force-magic: no   # force logging magic on all logged files
+      force-md5: no     # force logging of md5 checksums
 
 # Magic file. The extension .mgc is added to the value here.
 #magic-file: /usr/share/file/magic
@@ -215,18 +310,67 @@ nflog:
 # af-packet support
 # Set threads to > 1 to use PACKET_FANOUT support
 af-packet:
-{% for item in suricata_af_packet_interfaces %}
-  - interface: {{ item.int }}
-    threads: {{ item.threads }}
-    defrag: {{ item.defrag }}
-    cluster-type: {{ item.cluster_type }}
-    cluster-id: {{ item.cluster_id }}
-    copy-mode: {{ item.copy_mode }}
-    copy-iface: {{ item.copy_iface }}
-    buffer-size: {{ item.buffer_size }}
-    disable-promisc: {{ item.disable_promisc }}
-    use-nmap: {{ item.use_nmap }}
-{% endfor %}
+  - interface: eth0
+    # Number of receive threads (>1 will enable experimental flow pinned
+    # runmode)
+    threads: 1
+    # Default clusterid.  AF_PACKET will load balance packets based on flow.
+    # All threads/processes that will participate need to have the same
+    # clusterid.
+    cluster-id: 99
+    # Default AF_PACKET cluster type. AF_PACKET can load balance per flow or per hash.
+    # This is only supported for Linux kernel > 3.1
+    # possible value are:
+    #  * cluster_round_robin: round robin load balancing
+    #  * cluster_flow: all packets of a given flow are send to the same socket
+    #  * cluster_cpu: all packets treated in kernel by a CPU are send to the same socket
+    cluster-type: cluster_flow
+    # In some fragmentation case, the hash can not be computed. If "defrag" is set
+    # to yes, the kernel will do the needed defragmentation before sending the packets.
+    defrag: yes
+    # To use the ring feature of AF_PACKET, set 'use-mmap' to yes
+    use-mmap: yes
+    # Ring size will be computed with respect to max_pending_packets and number
+    # of threads. You can set manually the ring size in number of packets by setting
+    # the following value. If you are using flow cluster-type and have really network
+    # intensive single-flow you could want to set the ring-size independantly of the number
+    # of threads:
+    #ring-size: 2048
+    # On busy system, this could help to set it to yes to recover from a packet drop
+    # phase. This will result in some packets (at max a ring flush) being non treated.
+    #use-emergency-flush: yes
+    # recv buffer size, increase value could improve performance
+    # buffer-size: 32768
+    # Set to yes to disable promiscuous mode
+    # disable-promisc: no
+    # Choose checksum verification mode for the interface. At the moment
+    # of the capture, some packets may be with an invalid checksum due to
+    # offloading to the network card of the checksum computation.
+    # Possible values are:
+    #  - kernel: use indication sent by kernel for each packet (default)
+    #  - yes: checksum validation is forced
+    #  - no: checksum validation is disabled
+    #  - auto: suricata uses a statistical approach to detect when
+    #  checksum off-loading is used.
+    # Warning: 'checksum-validation' must be set to yes to have any validation
+    #checksum-checks: kernel
+    # BPF filter to apply to this interface. The pcap filter syntax apply here.
+    #bpf-filter: port 80 or udp
+    # You can use the following variables to activate AF_PACKET tap od IPS mode.
+    # If copy-mode is set to ips or tap, the traffic coming to the current
+    # interface will be copied to the copy-iface interface. If 'tap' is set, the
+    # copy is complete. If 'ips' is set, the packet matching a 'drop' action
+    # will not be copied.
+    #copy-mode: ips
+    #copy-iface: eth1
+  - interface: eth1
+    threads: 1
+    cluster-id: 98
+    cluster-type: cluster_flow
+    defrag: yes
+    # buffer-size: 32768
+    # disable-promisc: no
+  # Put default values here
   - interface: default
     #threads: 2
     #use-mmap: yes
@@ -236,7 +380,7 @@ legacy:
 
 # You can specify a threshold config file by setting "threshold-file"
 # to the path of the threshold config file:
-threshold-file: /etc/suricata/threshold.config
+# threshold-file: /etc/suricata/threshold.config
 
 # The detection engine builds internal groups of signatures. The engine
 # allow us to specify the profile to use for them, to manage memory on an
@@ -491,19 +635,31 @@ vlan:
 # icmp.
 
 flow-timeouts:
-{% for item in suricata_flow_timeouts %}
-  {{ item.name }}:
-    new: {{ item.new }}
-    establised: {{ item.established }}
-{%   if item.closed is defined %}
-    closed: {{ item.closed }}
-{%   endif %}
-    emergency-new: {{ item.emergency_new }}
-    emergency-established: {{ item.emergency_established }}
-{%   if item.emergency_closed is defined %}
-    emergency-closed: {{ item.emergency_closed }}
-{%   endif %}
-{% endfor %}
+
+  default:
+    new: 30
+    established: 300
+    closed: 0
+    emergency-new: 10
+    emergency-established: 100
+    emergency-closed: 0
+  tcp:
+    new: 60
+    established: 3600
+    closed: 120
+    emergency-new: 10
+    emergency-established: 300
+    emergency-closed: 20
+  udp:
+    new: 30
+    established: 300
+    emergency-new: 10
+    emergency-established: 100
+  icmp:
+    new: 30
+    established: 300
+    emergency-new: 10
+    emergency-established: 100
 
 # Stream engine settings. Here the TCP stream tracking and reassembly
 # engine is configured.
@@ -665,25 +821,68 @@ mpipe:
 # PF_RING configuration. for use with native PF_RING support
 # for more info see http://www.ntop.org/PF_RING.html
 pfring:
-{% for item in suricata_pfring_interfaces %}
-  - interface: {{ item.int }}
-    threads: {{ item.threads }}
-    cluster-id: {{ item.cluster_id }}
-    cluster-type: {{ item.cluster_type }}
-{% endfor %}
+  - interface: eth0
+    # Number of receive threads (>1 will enable experimental flow pinned
+    # runmode)
+    threads: 1
+
+    # Default clusterid.  PF_RING will load balance packets based on flow.
+    # All threads/processes that will participate need to have the same
+    # clusterid.
+    cluster-id: 99
+
+    # Default PF_RING cluster type. PF_RING can load balance per flow or per hash.
+    # This is only supported in versions of PF_RING > 4.1.1.
+    cluster-type: cluster_flow
+    # bpf filter for this interface
+    #bpf-filter: tcp
+    # Choose checksum verification mode for the interface. At the moment
+    # of the capture, some packets may be with an invalid checksum due to
+    # offloading to the network card of the checksum computation.
+    # Possible values are:
+    #  - rxonly: only compute checksum for packets received by network card.
+    #  - yes: checksum validation is forced
+    #  - no: checksum validation is disabled
+    #  - auto: suricata uses a statistical approach to detect when
+    #  checksum off-loading is used. (default)
+    # Warning: 'checksum-validation' must be set to yes to have any validation
+    #checksum-checks: auto
+  # Second interface
+  #- interface: eth1
+  #  threads: 3
+  #  cluster-id: 93
+  #  cluster-type: cluster_flow
+  # Put default values here
   - interface: default
     #threads: 2
 
 pcap:
-{% for item in suricata_pcap_interfaces %}
-  - interface: {{ item.int }}
-    buffer-size: {{ item.buffer_size }}
-    bpf-filter: {{ item.bpf_filter }}
-    checksum-checks: {{ item.checksum_checks }}
-    threads: {{ item.threads }}
-    promisc: {{ item.promisc }}
-    snaplen: {{ item.snaplen }}
-{% endfor %}
+  - interface: eth0
+    # On Linux, pcap will try to use mmaped capture and will use buffer-size
+    # as total of memory used by the ring. So set this to something bigger
+    # than 1% of your bandwidth.
+    #buffer-size: 16777216
+    #bpf-filter: "tcp and port 25"
+    # Choose checksum verification mode for the interface. At the moment
+    # of the capture, some packets may be with an invalid checksum due to
+    # offloading to the network card of the checksum computation.
+    # Possible values are:
+    #  - yes: checksum validation is forced
+    #  - no: checksum validation is disabled
+    #  - auto: suricata uses a statistical approach to detect when
+    #  checksum off-loading is used. (default)
+    # Warning: 'checksum-validation' must be set to yes to have any validation
+    #checksum-checks: auto
+    # With some accelerator cards using a modified libpcap (like myricom), you
+    # may want to have the same number of capture threads as the number of capture
+    # rings. In this case, set up the threads variable to N to start N threads
+    # listening on the same interface.
+    #threads: 16
+    # set to no to disable promiscuous mode:
+    #promisc: no
+    # set snaplen, if not set it defaults to MTU if MTU can be known
+    # via ioctl call and to full capture if not.
+    #snaplen: 1518
   # Put default values here
   - interface: default
     #checksum-checks: auto
@@ -725,14 +924,59 @@ ipfw:
 
 # Set the default rule path here to search for the files.
 # if not set, it will look at the current working dir
-default-rule-path: {{ suricata_default_rule_path }}
+default-rule-path: /etc/suricata/rules
 rule-files:
-{% for rule in suricata_rules %}
- - {{ rule }}
-{% endfor %}
+ - botcc.rules
+ - ciarmy.rules
+ - compromised.rules
+ - drop.rules
+ - dshield.rules
+ - emerging-activex.rules
+ - emerging-attack_response.rules
+ - emerging-chat.rules
+ - emerging-current_events.rules
+ - emerging-dns.rules
+ - emerging-dos.rules
+ - emerging-exploit.rules
+ - emerging-ftp.rules
+ - emerging-games.rules
+ - emerging-icmp_info.rules
+# - emerging-icmp.rules
+ - emerging-imap.rules
+ - emerging-inappropriate.rules
+ - emerging-malware.rules
+ - emerging-misc.rules
+ - emerging-mobile_malware.rules
+ - emerging-netbios.rules
+ - emerging-p2p.rules
+ - emerging-policy.rules
+ - emerging-pop3.rules
+ - emerging-rpc.rules
+ - emerging-scada.rules
+ - emerging-scan.rules
+ - emerging-shellcode.rules
+ - emerging-smtp.rules
+ - emerging-snmp.rules
+ - emerging-sql.rules
+ - emerging-telnet.rules
+ - emerging-tftp.rules
+ - emerging-trojan.rules
+ - emerging-user_agents.rules
+ - emerging-voip.rules
+ - emerging-web_client.rules
+ - emerging-web_server.rules
+ - emerging-web_specific_apps.rules
+ - emerging-worm.rules
+ - tor.rules
+ - decoder-events.rules # available in suricata sources under rules dir
+ - stream-events.rules  # available in suricata sources under rules dir
+ - http-events.rules    # available in suricata sources under rules dir
+ - smtp-events.rules    # available in suricata sources under rules dir
+ - dns-events.rules     # available in suricata sources under rules dir
+ - tls-events.rules     # available in suricata sources under rules dir
 
-classification-file: {{ suricata_classification_file }}
-reference-config-file: {{ suricata_reference_config_file }}
+classification-file: /etc/suricata/classification.config
+reference-config-file: /etc/suricata/reference.config
 
 # Holds variables that would be used by the engine.
 vars:
@@ -786,9 +1030,10 @@ vars:
 # Set the order of alerts bassed on actions
 # The default order is pass, drop, reject, alert
 action-order:
-{% for item in suricata_action_order %}
-  - {{ item }}
-{% endfor %}
+  - pass
+  - drop
+  - reject
+  - alert
 
 # IP Reputation
 #reputation-categories-file: /etc/suricata/iprep/categories.txt
@@ -1075,8 +1320,7 @@ napatech:
     # The streams to listen on
     streams: [1, 2, 3]
 
-{% if suricata_include_files is defined %}
-{%   for item in suricata_include_files %}
-include: {{ item }}
-{%   endfor %}
-{% endif %}
+# Includes.  Files included here will be handled as if they were
+# inlined in this configuration file.
+#include: include1.yaml
+#include: include2.yaml

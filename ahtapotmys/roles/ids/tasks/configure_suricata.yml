@@ -165,6 +165,10 @@
   command: /usr/sbin/bridgemode-ips.sh
   when: (fwbuilder_exists == "false") and (suricata_mode == "ips") and (suricata_ips_mode == "bridge")
 
+- name: Create sid-msg.map | Creating sid-msg.map
+  sudo: yes
+  command: /usr/share/oinkmaster/create-sidmap.pl /etc/suricata/rules/ > /etc/suricata/rules/sid-msg.map
+
 #- name: configure_suricata | configuring oinkmaster cron job
 #  cron:
 #    name: "oinkmaster rules update"
