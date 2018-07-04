@@ -1,0 +1,8 @@
+---
+# handlers file for ansible-suricata
+- name: restart suricata
+  sudo: yes
+  service:
+    name: suricata
+    enabled: yes
+    state: restarted

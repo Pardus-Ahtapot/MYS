@@ -1,0 +1,6 @@
+{% if suricata_blacklistmd5 %}
+{% for rule in suricata_blacklistmd5 %}
+{{rule}}
+{% endfor %}
+{% endif %}
+
