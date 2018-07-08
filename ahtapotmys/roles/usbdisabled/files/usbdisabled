@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for host in /sys/bus/usb/devices/usb*
+  do
+     echo "0" > $host/authorized_default
+     echo "0" > $host/authorized
+  done

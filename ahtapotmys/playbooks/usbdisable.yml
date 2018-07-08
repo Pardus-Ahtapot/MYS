@@ -1,0 +1,4 @@
+- hosts: pardus_masaustu
+#  remote_user: ahtapotops
+  roles:
+    - usbdisabled
