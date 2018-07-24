@@ -1,9 +1,15 @@
 auto br0
 iface br0 inet manual
-        bridge_ports {{ips_int_iface}} {{ips_ext_iface}}
+{% if ansible_hostname == ips_master_hostname %}
+        bridge_ports {{ips_int_iface_master}} {{ips_ext_iface_master}}
+{% else %}
+	bridge_ports {{ips_int_iface_backup}} {{ips_ext_iface_backup}}
+{% endif %}
         bridge_stp on
         bridge_fd 5
-
+{% if ansible_hostname == ips_master_hostname %}
+        bridge_bridgeprio 30000
+{% endif %}
         #Advanced Inteface Settings
         #post-up /sbin/ethtool -K eth1 tx off rx off sg off gso off gro off 1>/dev/null
         #post-up /sbin/ethtool -K eth2 tx off rx off sg off gso off gro off  1>/dev/null

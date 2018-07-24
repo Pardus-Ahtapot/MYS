@@ -58,7 +58,7 @@
 
 [icinga2-clients]
 
-[suricata-ids]
+[suricata_ids]
 
-[suricata-ips]
+[suricata_ips]
 

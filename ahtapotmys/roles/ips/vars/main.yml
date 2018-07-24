@@ -3,8 +3,11 @@
 suricata_mode: "ips"#ids|ips
 fwbuilder_exists: "false"
 suricata_ips_mode: "bridge" #nat|bridge
-ips_int_iface: enp1s3
-ips_ext_iface: enp0s3
+ips_int_iface_master: enp1s3
+ips_ext_iface_master: enp0s3
+ips_int_iface_backup: enp1s3
+ips_ext_iface_backup: enp0s3
+ips_master_hostname: ahtapot-ips
 config_suricata: true  #defines if suricata should be configured
 scripts_dir: /opt/scripts
 suricata_home_net: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
@@ -21,7 +24,7 @@ suricata_modbus_client: "$HOME_NET"
 suricata_modbus_server: "$HOME_NET"
 suricata_enip_client: "$HOME_NET"
 suricata_enip_server: "$HOME_NET"
-suricata_action_order: "$HOME_NET"
+suricata_action_order:
   - pass
   - drop
   - reject
@@ -312,5 +315,5 @@ suricata_suppress_list:  #Defines a list of alerts to suppress
     sig_id: 2210029
 suricata_ubuntu_ppa: ppa:oisf/suricata-stable  #Options are ppa:oisf/suricata-stable, ppa:oisf/suricata-beta or ppa:oisf/suricata-daily
 suricata_unix_command:
-  enabled: "no"
-#        filename: custom.socket
+  enabled: "yes"
+  filename: /var/run/suricata-command.socket
