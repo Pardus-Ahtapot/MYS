@@ -6,14 +6,14 @@ config reference_file:      /etc/suricata/reference.config
 config classification_file: /etc/suricata/classification.config
 config gen_file:            /etc/suricata/rules/gen-msg.map
 config sid_file:            /etc/suricata/rules/sid-msg.map
-config interface: {{ barnyard2_interface }}
+#config interface: {{ barnyard2_interface }}
 input unified2
 
 # define the full waldo filepath.
 config waldo_file: /var/log/suricata/suricata.waldo
 
 # database: log to a variety of databases
-output database: log, mysql, user={{ barnyard2_mysql_user }} password={{ barnyard2_mysql_password}} dbname=snorby host={{ barnyard2_host }} sensor_name={{ barnyard2_sensor_name }}
+output database: log, mysql, user={{ barnyard2_mysql_user }} password={{ barnyard2_mysql_password}} dbname=snorby host={{ barnyard2_mysql_host }} sensor_name={{ ansible_hostname }}
 
 #
 # This file contains a sample barnyard2 configuration.

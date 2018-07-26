@@ -3,6 +3,5 @@
 barnyard2_interface: enp0s3
 barnyard2_mysql_user: root
 barnyard2_mysql_password: root
-barnyard2_host: 127.0.0.1
-barnyard2_sensor_name: ids_1
+barnyard2_mysql_host: 127.0.0.1
 

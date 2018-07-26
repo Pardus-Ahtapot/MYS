@@ -28,6 +28,15 @@
     group: root
     mode: 0644
 
+- name: copy GeoIP.dat
+  sudo: yes
+  template:
+    src: "GeoIP.dat"
+    dest: "/opt/snorby/config/snorby-geoip.dat"
+    owner: root
+    group: root
+    mode: 0644
+
 - name: configure database.yml
   sudo: yes
   template:
