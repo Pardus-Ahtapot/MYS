@@ -174,7 +174,6 @@
 - hosts: ossimcik
   remote_user: ahtapotops
   vars_files:
-  - /etc/ansible/roles/ossimcik/vars/repo.yml
   - /etc/ansible/roles/ossimcik/vars/package.yml
   - /etc/ansible/roles/ossimcik/vars/ossec.yml
   - /etc/ansible/roles/ossimcik/vars/nxlog.yml
@@ -207,7 +206,6 @@
 - hosts: all 
   remote_user: ahtapotops
   vars_files:
-  - /etc/ansible/roles/ossec/vars/repo.yml
   - /etc/ansible/roles/ossec/vars/package.yml
   - /etc/ansible/roles/ossec/vars/ossec.yml
   roles:

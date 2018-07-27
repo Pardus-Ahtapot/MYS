@@ -1,5 +1,4 @@
 ---
 # Ossec gorevlerini iceren dosyadir.
-- include: repo.yml
 - include: install.yml
 - include: configure.yml
