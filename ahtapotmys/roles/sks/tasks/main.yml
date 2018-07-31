@@ -1,0 +1,32 @@
+---
+- name: sks | installing sks packages
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - nginx
+    - sks
+    - pgpkeyserver-lite
+
+- name: sks | creating sks database
+  sudo: yes
+  shell: >
+    su - debian-sks -c "sks build"
+  notify: restart sks
+
+- name: pgpkeyserver-lite | configuring pgpkeyserver-lite nginx conf
+  sudo: yes
+  template:
+    src: "pgpkeyserver-lite.conf.j2"
+    dest: "/etc/nginx/sites-available/pgpkeyserver-lite.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+
+- name: pgpkeyserver-lite | activating pgpkeyserver-lite nginx conf
+  sudo: yes
+  shell: >
+    ln -s /etc/nginx/sites-available/pgpkeyserver-lite.conf /etc/nginx/sites-enabled/
+  notify: restart nginx
+

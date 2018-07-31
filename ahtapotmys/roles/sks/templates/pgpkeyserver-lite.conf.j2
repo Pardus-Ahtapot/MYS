@@ -1,0 +1,43 @@
+# OpenPGP Public SKS Key Server
+#
+
+# Unsecured HTTP server
+server {
+
+    # IPv4 private address (Port-forwarded from NAT firewall/router)
+    listen  {{sks_listen_ip}}:80;
+    listen  {{sks_listen_ip}}:11371; 
+
+    # IPv6 global address
+    # listen  [2001:db8::37]:80;
+    # listen  [2001:db8::37]:11371;
+
+    server_name {{sks_server_name}};
+
+    # Public Documents Root
+    root    /var/www/pgpkeyserver-lite;
+
+    # SKS Keyserver Proxy
+    #
+    
+    rewrite ^/stats         /pks/lookup?op=stats;
+    rewrite ^/s/(.*)        /pks/lookup?search=$1;
+    rewrite ^/search/(.*)   /pks/lookup?search=$1;
+    rewrite ^/g/(.*)        /pks/lookup?op=get&search=$1;
+    rewrite ^/get/(.*)      /pks/lookup?op=get&search=$1;
+    rewrite ^/d/(.*)        /pks/lookup?op=get&options=mr&search=$1;
+    rewrite ^/download/(.*) /pks/lookup?op=get&options=mr&search=$1;
+    
+    location /pks {
+        proxy_pass                  http://127.0.0.1:11371;
+        proxy_pass_header           Server;
+        add_header                  Via "1.1 $server_name:$proxy_port (nginx)";
+        proxy_ignore_client_abort   on;
+        client_max_body_size        8m;
+        proxy_intercept_errors      off;
+    
+        # Disallow Search Engines to index keyserver search results
+        add_header                  X-Robots-Tag 'noindex, nofollow' always;
+    }
+}
+

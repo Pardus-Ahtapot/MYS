@@ -1,0 +1,110 @@
+---
+- name: antispam | modify /etc/hosts
+  sudo: yes
+  shell: >
+    sed -i "/127.0.0.1/ s/127.0.0.1.*/127.0.0.1\t{{antispam_avas_hostname}}.{{antispam_domain}}\t{{antispam_avas_hostname}}/" /etc/hosts
+
+- name: antispam | setting hostname
+  sudo: yes
+  shell: >
+    hostnamectl set-hostname {{antispam_avas_hostname}}.{{antispam_domain}}
+
+- name: antispam | modifying resolv.conf
+  sudo: yes
+  template:
+    src: "resolv.conf.j2"
+    dest: "/etc/resolv.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: antispam | installing antispam packages
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - postfix
+    - amavisd-new
+    - spamassassin
+    - clamav-daemon
+    - gross
+    - arj
+    - cabextract
+    - lhasa
+    - liblhasa0
+    - nomarch
+    - rar
+    - unrar
+    - unzip
+    - zip
+    - postfix-policyd-spf-python
+
+- name: antispam | configuring postfix
+  sudo: yes
+  template:
+    src: "main.cf.j2"
+    dest: "/etc/postfix/main.cf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfix
+
+- name: antispam | creating postfix transport file
+  sudo: yes
+  template:
+    src: "transport.j2"
+    dest: "/etc/postfix/transport"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfix
+
+- name: antispam | creating postmap 
+  sudo: yes
+  shell: >
+    postmap hash:/etc/postfix/transport
+  notify: restart postfix
+
+- name: antispam | modifying hosts file
+  sudo: yes
+  shell: >
+    sed -i '/^mydestination/ s/$myhostname/$myhostname\, $mydomain/' /etc/postfix/main.cf
+
+- name: antispam | modifying master.cf
+  sudo: yes
+  template:
+    src: "master.cf.j2"
+    dest: "/etc/postfix/master.cf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfix
+
+- name: antispam | modifying local.cf
+  sudo: yes
+  template:
+    src: "local.cf.j2"
+    dest: "/etc/spamassassin/local.cf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart spamassassin
+
+- name: antispam | modifying amavis content filter
+  sudo: yes
+  shell: |
+    sed -i "/^#@bypass_virus_checks_maps/,// s/#//" /etc/amavis/conf.d/15-content_filter_mode
+    sed -i "/^#@bypass_spam_checks_maps/,// s/#//" /etc/amavis/conf.d/15-content_filter_mode
+  notify: restart amavis
+
+- name: antispam | modifying freshclam.conf
+  sudo: yes
+  template:
+    src: "freshclam.conf.j2"
+    dest: "/etc/clamav/freshclam.conf"
+    owner: "clamav"
+    group: "adm"
+    mode: 0444
+  notify: restart clamav-freshclam
+
+
