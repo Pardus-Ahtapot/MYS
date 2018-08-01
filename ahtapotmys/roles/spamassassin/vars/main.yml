@@ -1,0 +1,18 @@
+---
+antispam_smtpd_tls_cert_file: /etc/postfix/ssl/smtpd.crt
+antispam_smtpd_tls_key_file: /etc/postfix/ssl/smtpd.key
+antispam_smtpd_tls_CAfile: /etc/postfix/ssl/cacert.pem
+antispam_avas_hostname: avas
+antispam_domain: ahtapot
+antispam_inet_protocols: ipv4 #ipv4, ipv6, all
+antispam_nameserver: 8.8.8.8
+clamav_check_freq: 24
+clamav_mirrors:
+  - db.local.clamav.net
+  - database.clamav.net
+spam_regexes:
+  - name: PORN
+    where: full
+    regex: /porn/i
+    score: 20
+    describe: Spam Warning

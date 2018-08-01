@@ -1,0 +1,10 @@
+Antispam Sistem Gereksinimleri
+En Az
+CPU Core: 2 veya daha fazlası
+RAM: 2GB
+Disk: Min 25GB (SSD disk kullanımı önerilir)(Karantina mailleri sayısına ve Log boyutuna göre değerlendirilmeli.)
+
+Önerilen
+CPU Core: 4 veya daha fazlası
+RAM: 4GB veya daha fazlası
+Disk: Min 100GB (SSD disk kullanımı önerilir)(Karantina mailleri sayısına ve Log boyutuna göre değerlendirilmeli.)

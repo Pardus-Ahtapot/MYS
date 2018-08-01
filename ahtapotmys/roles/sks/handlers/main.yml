@@ -1,0 +1,14 @@
+- name: restart nginx
+  sudo: yes
+  service:
+    name: nginx
+    enabled: yes
+    state: restarted
+
+- name: restart sks
+  sudo: yes
+  service:
+    name: sks
+    enabled: yes
+    state: restarted
+
