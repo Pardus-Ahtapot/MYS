@@ -5,6 +5,13 @@
     enabled: yes
     state: restarted
 
+- name: restart clamav-daemon
+  sudo: yes
+  service:
+    name: clamav-daemon
+    enabled: yes
+    state: restarted
+
 - name: restart amavis
   sudo: yes
   service:

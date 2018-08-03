@@ -39,6 +39,28 @@
     - zip
     - postfix-policyd-spf-python
 
+- name: Check if ssl certificate exists
+  sudo: yes
+  stat:
+    path: /etc/postfix/ssl/smtpd.crt
+  register: ssl_exists
+
+- name: Create ssl certificate
+  sudo: yes
+  shell: |
+    mkdir /etc/postfix/ssl
+    cd /etc/postfix/ssl/
+    openssl genrsa -des3 -passout pass:xxxx -out /etc/postfix/ssl/smtpd.pass.key 2048
+    openssl rsa -passin pass:xxxx -in /etc/postfix/ssl/smtpd.pass.key -out /etc/postfix/ssl/smtpd.key
+    chmod 600 smtpd.key
+    rm /etc/postfix/ssl/smtpd.pass.key
+    openssl req -new -key /etc/postfix/ssl/smtpd.key -out /etc/postfix/ssl/smtpd.csr -subj "/C={{antispam_ssl_country}}/ST={{antispam_ssl_state}}/L={{antispam_ssl_locality}}/O={{antispam_ssl_organization}}/OU={{antispam_ssl_organizationalunit}}/CN={{antispam_ssl_commonname}}"
+    openssl x509 -req -days 3650 -in /etc/postfix/ssl/smtpd.csr -signkey /etc/postfix/ssl/smtpd.key -out /etc/postfix/ssl/smtpd.crt
+    openssl rsa -in /etc/postfix/ssl/smtpd.key -out /etc/postfix/ssl/smtpd.key.unencrypted
+    mv -f smtpd.key.unencrypted smtpd.key
+    openssl req -new -key /etc/postfix/ssl/smtpd.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{antispam_ssl_country}}/ST={{antispam_ssl_state}}/L={{antispam_ssl_locality}}/O={{antispam_ssl_organization}}/OU={{antispam_ssl_organizationalunit}}/CN={{antispam_ssl_commonname}}"
+  when: ssl_exists.stat.exists == False
+
 - name: antispam | configuring postfix
   sudo: yes
   template:
@@ -107,4 +129,12 @@
     mode: 0444
   notify: restart clamav-freshclam
 
-
+- name: antispam | modifying clamd.conf
+  sudo: yes
+  template:
+    src: "clamd.conf.j2"
+    dest: "/etc/clamav/clamd.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart clamav-daemon
