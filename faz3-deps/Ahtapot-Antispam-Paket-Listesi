@@ -1,0 +1,2343 @@
+Postfix: Temiz e-postaların, e-posta sunucuya relay edilebilmesi amacıyla kurulmuştur.
+Description: High-performance mail transport agent
+
+    ├─ postfix
+    │    ├─ adduser (>= 3.48)
+    │    ├─ cpio
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ dpkg (>= 1.8.3)
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libdb5.3
+    │    ├─ libicu57 (>= 57.1-1~)
+    │    ├─ libsasl2-2
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ lsb-base (>= 3.0-6)
+    │    ├─ netbase
+    │    ├─ postfix-sqlite
+    │    └─ ssl-cert
+    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ passwd
+    ├─ debconf
+    │    └─ perl-base (>= 5.20.1-3~)
+    ├─ perl-base
+    │    ├─ dpkg (>= 1.17.17)
+    │    └─ libc6 (>= 2.23)
+    ├─ dpkg
+    │    ├─ tar (>= 1.28-1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ liblzma5 (>= 5.2.2)
+    │    ├─ libselinux1 (>= 2.3)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ tar
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libacl1
+    │    ├─ libattr1 (>= 1:2.4.46-8)
+    │    └─ libc6 (>= 2.14)
+    ├─ libattr1
+    │    └─ libc6 (>= 2.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    ├─ libselinux1
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libpcre3
+    ├─ libpcre3
+    │    ├─ libc6 (>= 2.14)
+    │    └─ multiarch-support
+    ├─ multiarch-support
+    │    └─ libc6 (>= 2.3.6-2)
+    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.4)
+    ├─ liblzma5
+    │    └─ libc6 (>= 2.17)
+    ├─ zlib1g
+    │    └─ libc6 (>= 2.14)
+    ├─ debconf-2.0
+    ├─ passwd
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam-modules
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    ├─ libselinux1 (>= 1.32)
+    │    └─ libsemanage1 (>= 2.0.3)
+    ├─ libaudit1
+    │    ├─ libaudit-common (>= 1:2.6.7-2)
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libcap-ng0
+    ├─ libaudit-common
+    ├─ libcap-ng0
+    │    └─ libc6 (>= 2.8)
+    ├─ libpam-modules
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libdb5.3
+    │    ├─ libpam-modules-bin (= 1.1.8-3.6)
+    │    ├─ libpam0g (>= 1.1.3-2)
+    │    └─ libselinux1 (>= 2.1.9)
+    ├─ libdb5.3
+    │    └─ libc6 (>= 2.17)
+    ├─ libpam-modules-bin
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libpam0g
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    └─ libc6 (>= 2.14)
+    ├─ libsemanage1
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libselinux1 (>= 2.6)
+    │    ├─ libsemanage-common (= 2.6-2)
+    │    ├─ libsepol1 (>= 2.6)
+    │    └─ libustr-1.0-1 (>= 1.0.4)
+    ├─ libsemanage-common
+    ├─ libsepol1
+    │    └─ libc6 (>= 2.14)
+    ├─ libustr-1.0-1
+    │    └─ libc6 (>= 2.14)
+    ├─ cpio
+    │    └─ libc6 (>= 2.17)
+    ├─ init-system-helpers
+    │    └─ perl-base (>= 5.20.1-3)
+    ├─ libicu57
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    └─ libstdc++6 (>= 5.2)
+    ├─ libstdc++6
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    ├─ libc6 (>= 2.18)
+    │    └─ libgcc1 (>= 1:4.2)
+    ├─ libsasl2-2
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libsasl2-modules-db (>= 2.1.27~101-g0780600+dfsg-3)
+    ├─ libsasl2-modules-db
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libdb5.3
+    ├─ libssl1.1
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ libc6 (>= 2.14)
+    ├─ lsb-base
+    ├─ netbase
+    ├─ postfix-sqlite
+    │    ├─ libc6 (>= 2.2.5)
+    │    └─ libsqlite3-0 (>= 3.5.9)
+    ├─ libsqlite3-0
+    │    └─ libc6 (>= 2.14)
+    ├─ ssl-cert
+    │    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ openssl (>= 0.9.8g-9)
+    └─ openssl
+         ├─ libc6 (>= 2.15)
+         └─ libssl1.1 (>= 1.1.0)
+
+Amavisd-new: ClamAV ile mail trafiğinde virus taraması yapabilmek için kuruluyor.
+Description: Interface between MTA and virus scanner/content filters
+
+    ├─ amavisd-new
+    │    ├─ adduser (>= 3.34)
+    │    ├─ debconf
+    │    ├─ debconf-2.0
+    │    ├─ file
+    │    ├─ libarchive-tar-perl
+    │    ├─ libarchive-zip-perl (>= 1.14)
+    │    ├─ libberkeleydb-perl
+    │    ├─ libcompress-raw-zlib-perl (>= 2.017)
+    │    ├─ libconvert-tnef-perl (>= 0.06)
+    │    ├─ libconvert-uulib-perl (>= 1.0.5)
+    │    ├─ libdigest-md5-perl
+    │    ├─ libio-stringy-perl
+    │    ├─ libmail-dkim-perl
+    │    ├─ libmailtools-perl (>= 1.58)
+    │    ├─ libmime-base64-perl
+    │    ├─ libmime-tools-perl
+    │    ├─ libnet-libidn-perl
+    │    ├─ libnet-server-perl
+    │    ├─ libtime-hires-perl
+    │    ├─ libunix-syslog-perl
+    │    ├─ pax
+    │    └─ perl
+    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ passwd
+    ├─ debconf
+    │    └─ perl-base (>= 5.20.1-3~)
+    ├─ perl-base
+    │    ├─ dpkg (>= 1.17.17)
+    │    └─ libc6 (>= 2.23)
+    ├─ dpkg
+    │    ├─ tar (>= 1.28-1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ liblzma5 (>= 5.2.2)
+    │    ├─ libselinux1 (>= 2.3)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ tar
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libacl1
+    │    ├─ libattr1 (>= 1:2.4.46-8)
+    │    └─ libc6 (>= 2.14)
+    ├─ libattr1
+    │    └─ libc6 (>= 2.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    ├─ libselinux1
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libpcre3
+    ├─ libpcre3
+    │    ├─ libc6 (>= 2.14)
+    │    └─ multiarch-support
+    ├─ multiarch-support
+    │    └─ libc6 (>= 2.3.6-2)
+    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.4)
+    ├─ liblzma5
+    │    └─ libc6 (>= 2.17)
+    ├─ zlib1g
+    │    └─ libc6 (>= 2.14)
+    ├─ debconf-2.0
+    ├─ passwd
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam-modules
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    ├─ libselinux1 (>= 1.32)
+    │    └─ libsemanage1 (>= 2.0.3)
+    ├─ libaudit1
+    │    ├─ libaudit-common (>= 1:2.6.7-2)
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libcap-ng0
+    ├─ libaudit-common
+    ├─ libcap-ng0
+    │    └─ libc6 (>= 2.8)
+    ├─ libpam-modules
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libdb5.3
+    │    ├─ libpam-modules-bin (= 1.1.8-3.6)
+    │    ├─ libpam0g (>= 1.1.3-2)
+    │    └─ libselinux1 (>= 2.1.9)
+    ├─ libdb5.3
+    │    └─ libc6 (>= 2.17)
+    ├─ libpam-modules-bin
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libpam0g
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    └─ libc6 (>= 2.14)
+    ├─ libsemanage1
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libselinux1 (>= 2.6)
+    │    ├─ libsemanage-common (= 2.6-2)
+    │    ├─ libsepol1 (>= 2.6)
+    │    └─ libustr-1.0-1 (>= 1.0.4)
+    ├─ libsemanage-common
+    ├─ libsepol1
+    │    └─ libc6 (>= 2.14)
+    ├─ libustr-1.0-1
+    │    └─ libc6 (>= 2.14)
+    ├─ file
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ libmagic1 (= 1:5.30-1+deb9u1)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libmagic1
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libmagic-mgc (= 1:5.30-1+deb9u1)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libmagic-mgc
+    ├─ libarchive-tar-perl
+    ├─ libarchive-zip-perl
+    │    └─ perl
+    ├─ perl
+    │    ├─ libperl5.24 (= 5.24.1-3+deb9u4)
+    │    ├─ perl-base (= 5.24.1-3+deb9u4)
+    │    ├─ perl-modules-5.24 (>= 5.24.1-3+deb9u4)
+    │    └─ dpkg (>= 1.17.17)
+    ├─ libperl5.24
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.23)
+    │    ├─ libdb5.3
+    │    ├─ libgdbm3 (>= 1.8.3)
+    │    ├─ perl-modules-5.24 (>= 5.24.1-3+deb9u4)
+    │    └─ zlib1g (>= 1:1.2.2.3)
+    ├─ libgdbm3
+    │    ├─ dpkg (>= 1.15.4)
+    │    ├─ install-info
+    │    └─ libc6 (>= 2.14)
+    ├─ install-info
+    │    ├─ libc6 (>= 2.14)
+    │    └─ dpkg (>= 1.16.1)
+    ├─ perl-modules-5.24
+    │    ├─ perl-base (>= 5.24.1-1)
+    │    └─ dpkg (>= 1.17.17)
+    ├─ libberkeleydb-perl
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libdb5.3
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    └─ perlapi-5.24.1
+    ├─ perlapi-5.24.1
+    ├─ libcompress-raw-zlib-perl
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    ├─ perlapi-5.24.1
+    │    └─ zlib1g (>= 1:1.2.2.3)
+    ├─ libconvert-tnef-perl
+    │    ├─ libio-stringy-perl
+    │    ├─ libmime-tools-perl
+    │    └─ perl
+    ├─ libio-stringy-perl
+    │    └─ perl
+    ├─ libmime-tools-perl
+    │    ├─ libconvert-binhex-perl
+    │    ├─ libmailtools-perl
+    │    └─ perl
+    ├─ libconvert-binhex-perl
+    │    └─ perl
+    ├─ libmailtools-perl
+    │    ├─ libnet-perl
+    │    ├─ libnet-smtp-ssl-perl
+    │    ├─ libtimedate-perl
+    │    └─ perl
+    ├─ libnet-perl
+    ├─ libnet-smtp-ssl-perl
+    │    ├─ libio-socket-ssl-perl
+    │    └─ perl
+    ├─ libio-socket-ssl-perl
+    │    ├─ libnet-ssleay-perl (>= 1.59)
+    │    ├─ netbase
+    │    └─ perl
+    ├─ libnet-ssleay-perl
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ perl (>= 5.24.1~rc4-1)
+    │    ├─ perl-openssl-abi-1.1
+    │    └─ perlapi-5.24.1
+    ├─ libssl1.1
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ libc6 (>= 2.14)
+    ├─ perl-openssl-abi-1.1
+    ├─ netbase
+    ├─ libtimedate-perl
+    │    └─ perl
+    ├─ libconvert-uulib-perl
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    └─ perlapi-5.24.1
+    ├─ libdigest-md5-perl
+    ├─ libmail-dkim-perl
+    │    ├─ libcrypt-openssl-rsa-perl (>= 0.24)
+    │    ├─ libdigest-sha-perl
+    │    ├─ liberror-perl
+    │    ├─ libmailtools-perl
+    │    ├─ libnet-dns-perl
+    │    └─ perl
+    ├─ libcrypt-openssl-rsa-perl
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ libcrypt-openssl-bignum-perl
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ perl (>= 5.24.1~rc4-1)
+    │    ├─ perl-openssl-abi-1.1
+    │    └─ perlapi-5.24.1
+    ├─ libcrypt-openssl-bignum-perl
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ perl (>= 5.24.1~rc4-1)
+    │    ├─ perl-openssl-abi-1.1
+    │    └─ perlapi-5.24.1
+    ├─ libdigest-sha-perl
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    └─ perlapi-5.24.1
+    ├─ liberror-perl
+    │    └─ perl
+    ├─ libnet-dns-perl
+    │    ├─ libdigest-hmac-perl
+    │    ├─ libio-socket-inet6-perl
+    │    ├─ libnet-ip-perl
+    │    └─ perl
+    ├─ libdigest-hmac-perl
+    │    └─ perl
+    ├─ libio-socket-inet6-perl
+    │    ├─ libsocket6-perl
+    │    └─ perl
+    ├─ libsocket6-perl
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    └─ perlapi-5.24.1
+    ├─ libnet-ip-perl
+    │    └─ perl
+    ├─ libmime-base64-perl
+    ├─ libnet-libidn-perl
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ libidn11 (>= 1.13)
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    └─ perlapi-5.24.1
+    ├─ libidn11
+    │    └─ libc6 (>= 2.14)
+    ├─ libnet-server-perl
+    │    ├─ libcgi-pm-perl
+    │    ├─ libio-multiplex-perl
+    │    ├─ libio-socket-inet6-perl
+    │    ├─ libnet-cidr-perl
+    │    ├─ libsocket6-perl
+    │    └─ perl (<< 5.19)
+    ├─ libcgi-pm-perl
+    │    ├─ libhtml-parser-perl
+    │    └─ perl
+    ├─ libhtml-parser-perl
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ libhtml-tagset-perl
+    │    ├─ liburi-perl
+    │    ├─ perl (>= 5.24.1~rc3-3)
+    │    └─ perlapi-5.24.1
+    ├─ libhtml-tagset-perl
+    │    └─ perl
+    ├─ liburi-perl
+    │    └─ perl
+    ├─ libio-multiplex-perl
+    │    └─ perl
+    ├─ libnet-cidr-perl
+    │    └─ perl
+    ├─ libtime-hires-perl
+    ├─ libunix-syslog-perl
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    └─ perlapi-5.24.1
+    └─ pax
+
+Spamassassin: Şartname maddesi 5.4.1.1 ile talep edildiği için kurulmuştur.
+Description: Perl-based spam filter using text analysis
+
+    ├─ spamassassin
+    │    ├─ adduser
+    │    ├─ curl
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    ├─ libarchive-tar-perl
+    │    ├─ libhtml-parser-perl
+    │    ├─ libhttp-date-perl
+    │    ├─ libmail-dkim-perl
+    │    ├─ libnet-dns-perl
+    │    ├─ libnetaddr-ip-perl
+    │    ├─ libsocket6-perl
+    │    ├─ libsys-hostname-long-perl
+    │    ├─ libwww-perl
+    │    ├─ lsb-base (>= 3.0-6)
+    │    ├─ perl
+    │    └─ w3m
+    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ passwd
+    ├─ debconf
+    │    └─ perl-base (>= 5.20.1-3~)
+    ├─ perl-base
+    │    ├─ dpkg (>= 1.17.17)
+    │    └─ libc6 (>= 2.23)
+    ├─ dpkg
+    │    ├─ tar (>= 1.28-1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ liblzma5 (>= 5.2.2)
+    │    ├─ libselinux1 (>= 2.3)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ tar
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libacl1
+    │    ├─ libattr1 (>= 1:2.4.46-8)
+    │    └─ libc6 (>= 2.14)
+    ├─ libattr1
+    │    └─ libc6 (>= 2.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    ├─ libselinux1
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libpcre3
+    ├─ libpcre3
+    │    ├─ libc6 (>= 2.14)
+    │    └─ multiarch-support
+    ├─ multiarch-support
+    │    └─ libc6 (>= 2.3.6-2)
+    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.4)
+    ├─ liblzma5
+    │    └─ libc6 (>= 2.17)
+    ├─ zlib1g
+    │    └─ libc6 (>= 2.14)
+    ├─ debconf-2.0
+    ├─ passwd
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam-modules
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    ├─ libselinux1 (>= 1.32)
+    │    └─ libsemanage1 (>= 2.0.3)
+    ├─ libaudit1
+    │    ├─ libaudit-common (>= 1:2.6.7-2)
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libcap-ng0
+    ├─ libaudit-common
+    ├─ libcap-ng0
+    │    └─ libc6 (>= 2.8)
+    ├─ libpam-modules
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libdb5.3
+    │    ├─ libpam-modules-bin (= 1.1.8-3.6)
+    │    ├─ libpam0g (>= 1.1.3-2)
+    │    └─ libselinux1 (>= 2.1.9)
+    ├─ libdb5.3
+    │    └─ libc6 (>= 2.17)
+    ├─ libpam-modules-bin
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libpam0g
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    └─ libc6 (>= 2.14)
+    ├─ libsemanage1
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libselinux1 (>= 2.6)
+    │    ├─ libsemanage-common (= 2.6-2)
+    │    ├─ libsepol1 (>= 2.6)
+    │    └─ libustr-1.0-1 (>= 1.0.4)
+    ├─ libsemanage-common
+    ├─ libsepol1
+    │    └─ libc6 (>= 2.14)
+    ├─ libustr-1.0-1
+    │    └─ libc6 (>= 2.14)
+    ├─ curl
+    │    ├─ libc6 (>= 2.17)
+    │    ├─ libcurl3 (= 7.52.1-5+deb9u6)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libcurl3
+    │    ├─ libc6 (>= 2.17)
+    │    ├─ libcomerr2 (>= 1.01)
+    │    ├─ libgssapi-krb5-2 (>= 1.14+dfsg)
+    │    ├─ libidn2-0 (>= 0.6)
+    │    ├─ libk5crypto3 (>= 1.6.dfsg.2)
+    │    ├─ libkrb5-3 (>= 1.6.dfsg.2)
+    │    ├─ libldap-2.4-2 (>= 2.4.7)
+    │    ├─ libnghttp2-14 (>= 1.12.0)
+    │    ├─ libpsl5 (>= 0.13.0)
+    │    ├─ librtmp1 (>= 2.4+20131018.git79459a2-3~)
+    │    ├─ libssh2-1 (>= 1.7.0)
+    │    ├─ libssl1.0.2 (>= 1.0.2d)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libcomerr2
+    │    └─ libc6 (>= 2.17)
+    ├─ libgssapi-krb5-2
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libcomerr2 (>= 1.34)
+    │    ├─ libk5crypto3 (>= 1.8+dfsg)
+    │    ├─ libkeyutils1 (>= 1.4)
+    │    ├─ libkrb5-3 (= 1.15-1+deb9u1)
+    │    └─ libkrb5support0 (>= 1.15~beta1)
+    ├─ libk5crypto3
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libkeyutils1 (>= 1.4)
+    │    └─ libkrb5support0 (>= 1.15~beta1)
+    ├─ libkeyutils1
+    │    └─ libc6 (>= 2.14)
+    ├─ libkrb5support0
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libkeyutils1 (>= 1.4)
+    ├─ libkrb5-3
+    │    ├─ libc6 (>= 2.16)
+    │    ├─ libcomerr2 (>= 1.34)
+    │    ├─ libk5crypto3 (>= 1.15~beta1)
+    │    ├─ libkeyutils1 (>= 1.5.9)
+    │    └─ libkrb5support0 (= 1.15-1+deb9u1)
+    ├─ libidn2-0
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libunistring0
+    ├─ libunistring0
+    │    └─ libc6 (>= 2.14)
+    ├─ libldap-2.4-2
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgnutls30 (>= 3.5.6)
+    │    ├─ libldap-common (>= 2.4.44+dfsg-5+deb9u1)
+    │    └─ libsasl2-2
+    ├─ libgnutls30
+    │    ├─ libc6 (>= 2.22)
+    │    ├─ libgmp10 (>= 2:6)
+    │    ├─ libhogweed4
+    │    ├─ libidn11 (>= 1.13)
+    │    ├─ libnettle6
+    │    ├─ libp11-kit0 (>= 0.23.1)
+    │    ├─ libtasn1-6 (>= 4.9)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libgmp10
+    │    └─ libc6 (>= 2.14)
+    ├─ libhogweed4
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgmp10 (>= 2:6.0.0)
+    │    └─ libnettle6 (= 3.3-1+b2)
+    ├─ libnettle6
+    │    └─ libc6 (>= 2.14)
+    ├─ libidn11
+    │    └─ libc6 (>= 2.14)
+    ├─ libp11-kit0
+    │    ├─ libc6 (>= 2.16)
+    │    └─ libffi6 (>= 3.0.4)
+    ├─ libffi6
+    │    └─ libc6 (>= 2.14)
+    ├─ libtasn1-6
+    │    └─ libc6 (>= 2.14)
+    ├─ libldap-common
+    ├─ libsasl2-2
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libsasl2-modules-db (>= 2.1.27~101-g0780600+dfsg-3)
+    ├─ libsasl2-modules-db
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libdb5.3
+    ├─ libnghttp2-14
+    │    └─ libc6 (>= 2.14)
+    ├─ libpsl5
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ libidn2-0 (>= 0.16)
+    │    └─ libunistring0
+    ├─ librtmp1
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgmp10
+    │    ├─ libgnutls30 (>= 3.5.6)
+    │    ├─ libhogweed4
+    │    ├─ libnettle6
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libssh2-1
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgcrypt20 (>= 1.7.0)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libgcrypt20
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libgpg-error0 (>= 1.14)
+    ├─ libgpg-error0
+    │    └─ libc6 (>= 2.15)
+    ├─ libssl1.0.2
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ libc6 (>= 2.14)
+    ├─ init-system-helpers
+    │    └─ perl-base (>= 5.20.1-3)
+    ├─ libarchive-tar-perl
+    ├─ libhtml-parser-perl
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ libhtml-tagset-perl
+    │    ├─ liburi-perl
+    │    ├─ perl (>= 5.24.1~rc3-3)
+    │    └─ perlapi-5.24.1
+    ├─ libhtml-tagset-perl
+    │    └─ perl
+    ├─ perl
+    │    ├─ libperl5.24 (= 5.24.1-3+deb9u4)
+    │    ├─ perl-base (= 5.24.1-3+deb9u4)
+    │    ├─ perl-modules-5.24 (>= 5.24.1-3+deb9u4)
+    │    └─ dpkg (>= 1.17.17)
+    ├─ libperl5.24
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.23)
+    │    ├─ libdb5.3
+    │    ├─ libgdbm3 (>= 1.8.3)
+    │    ├─ perl-modules-5.24 (>= 5.24.1-3+deb9u4)
+    │    └─ zlib1g (>= 1:1.2.2.3)
+    ├─ libgdbm3
+    │    ├─ dpkg (>= 1.15.4)
+    │    ├─ install-info
+    │    └─ libc6 (>= 2.14)
+    ├─ install-info
+    │    ├─ libc6 (>= 2.14)
+    │    └─ dpkg (>= 1.16.1)
+    ├─ perl-modules-5.24
+    │    ├─ perl-base (>= 5.24.1-1)
+    │    └─ dpkg (>= 1.17.17)
+    ├─ liburi-perl
+    │    └─ perl
+    ├─ perlapi-5.24.1
+    ├─ libhttp-date-perl
+    │    ├─ libtimedate-perl
+    │    └─ perl
+    ├─ libtimedate-perl
+    │    └─ perl
+    ├─ libmail-dkim-perl
+    │    ├─ libcrypt-openssl-rsa-perl (>= 0.24)
+    │    ├─ libdigest-sha-perl
+    │    ├─ liberror-perl
+    │    ├─ libmailtools-perl
+    │    ├─ libnet-dns-perl
+    │    └─ perl
+    ├─ libcrypt-openssl-rsa-perl
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ libcrypt-openssl-bignum-perl
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ perl (>= 5.24.1~rc4-1)
+    │    ├─ perl-openssl-abi-1.1
+    │    └─ perlapi-5.24.1
+    ├─ libcrypt-openssl-bignum-perl
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ perl (>= 5.24.1~rc4-1)
+    │    ├─ perl-openssl-abi-1.1
+    │    └─ perlapi-5.24.1
+    ├─ libssl1.1
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ libc6 (>= 2.14)
+    ├─ perl-openssl-abi-1.1
+    ├─ libdigest-sha-perl
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    └─ perlapi-5.24.1
+    ├─ liberror-perl
+    │    └─ perl
+    ├─ libmailtools-perl
+    │    ├─ libnet-perl
+    │    ├─ libnet-smtp-ssl-perl
+    │    ├─ libtimedate-perl
+    │    └─ perl
+    ├─ libnet-perl
+    ├─ libnet-smtp-ssl-perl
+    │    ├─ libio-socket-ssl-perl
+    │    └─ perl
+    ├─ libio-socket-ssl-perl
+    │    ├─ libnet-ssleay-perl (>= 1.59)
+    │    ├─ netbase
+    │    └─ perl
+    ├─ libnet-ssleay-perl
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ perl (>= 5.24.1~rc4-1)
+    │    ├─ perl-openssl-abi-1.1
+    │    └─ perlapi-5.24.1
+    ├─ netbase
+    ├─ libnet-dns-perl
+    │    ├─ libdigest-hmac-perl
+    │    ├─ libio-socket-inet6-perl
+    │    ├─ libnet-ip-perl
+    │    └─ perl
+    ├─ libdigest-hmac-perl
+    │    └─ perl
+    ├─ libio-socket-inet6-perl
+    │    ├─ libsocket6-perl
+    │    └─ perl
+    ├─ libsocket6-perl
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    └─ perlapi-5.24.1
+    ├─ libnet-ip-perl
+    │    └─ perl
+    ├─ libnetaddr-ip-perl
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    └─ perlapi-5.24.1
+    ├─ libsys-hostname-long-perl
+    │    └─ perl
+    ├─ libwww-perl
+    │    ├─ ca-certificates
+    │    ├─ libencode-locale-perl
+    │    ├─ libfile-listing-perl
+    │    ├─ libhtml-parser-perl
+    │    ├─ libhtml-tagset-perl
+    │    ├─ libhtml-tree-perl
+    │    ├─ libhttp-cookies-perl
+    │    ├─ libhttp-date-perl
+    │    ├─ libhttp-message-perl
+    │    ├─ libhttp-negotiate-perl
+    │    ├─ liblwp-mediatypes-perl
+    │    ├─ liblwp-protocol-https-perl
+    │    ├─ libnet-http-perl (>= 6.07)
+    │    ├─ liburi-perl
+    │    ├─ libwww-robotrules-perl
+    │    ├─ netbase
+    │    └─ perl
+    ├─ ca-certificates
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ openssl (>= 1.0.0)
+    ├─ openssl
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libssl1.1 (>= 1.1.0)
+    ├─ libencode-locale-perl
+    │    └─ perl
+    ├─ libfile-listing-perl
+    │    ├─ libhttp-date-perl
+    │    └─ perl
+    ├─ libhtml-tree-perl
+    │    ├─ libhtml-parser-perl
+    │    ├─ libhtml-tagset-perl
+    │    └─ perl
+    ├─ libhttp-cookies-perl
+    │    ├─ libhttp-date-perl
+    │    ├─ libhttp-message-perl
+    │    └─ perl
+    ├─ libhttp-message-perl
+    │    ├─ libencode-locale-perl
+    │    ├─ libhttp-date-perl
+    │    ├─ libio-compress-perl
+    │    ├─ libio-html-perl
+    │    ├─ liblwp-mediatypes-perl
+    │    ├─ liburi-perl
+    │    └─ perl (>= 5.11)
+    ├─ libio-compress-perl
+    ├─ libio-html-perl
+    │    └─ perl
+    ├─ liblwp-mediatypes-perl
+    │    └─ perl
+    ├─ libhttp-negotiate-perl
+    │    ├─ libhttp-message-perl
+    │    └─ perl
+    ├─ liblwp-protocol-https-perl
+    │    ├─ ca-certificates
+    │    ├─ libio-socket-ssl-perl (>= 1.54)
+    │    ├─ libnet-http-perl
+    │    ├─ libwww-perl (>= 6.05-2)
+    │    └─ perl
+    ├─ libnet-http-perl
+    │    ├─ libio-socket-inet6-perl
+    │    ├─ libio-socket-ip-perl
+    │    ├─ liburi-perl
+    │    └─ perl (>= 5.19.8)
+    ├─ libio-socket-ip-perl
+    │    ├─ libsocket-perl (>= 1.97)
+    │    ├─ netbase
+    │    └─ perl-base (>= 5.15.6)
+    ├─ libsocket-perl
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ perl (>= 5.24.1~rc3-2)
+    │    └─ perlapi-5.24.1
+    ├─ libwww-robotrules-perl
+    │    ├─ liburi-perl
+    │    └─ perl
+    ├─ lsb-base
+    ├─ w3m
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libgc1c2 (>= 1:7.2d)
+    │    ├─ libgpm2 (>= 1.20.4)
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ libtinfo5 (>= 6)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libgc1c2
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    └─ libstdc++6 (>= 4.1.1)
+    ├─ libstdc++6
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    ├─ libc6 (>= 2.18)
+    │    └─ libgcc1 (>= 1:4.2)
+    ├─ libgpm2
+    │    └─ libc6 (>= 2.14)
+    └─ libtinfo5
+         └─ libc6 (>= 2.16)
+
+Clamav-Daemon: Şartname maddesi 5.4.1.2 ile talep edildiği için kurulmuştur.
+Description: anti-virus utility for Unix - scanner daemon
+
+    ├─ clamav-daemon
+    │    ├─ adduser
+    │    ├─ clamav-base (= 0.99.4+dfsg-1+deb9u1)
+    │    ├─ clamav-data
+    │    ├─ clamav-freshclam (>= 0.99.4+dfsg)
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ dpkg (>= 1.16.1)
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libclamav7 (>= 0.99.4+dfsg-1+deb9u1)
+    │    ├─ libncurses5 (>= 6)
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ libsystemd0
+    │    ├─ libtinfo5 (>= 6)
+    │    ├─ lsb-base (>= 3.2-13)
+    │    ├─ procps (>= 1:3.3.2)
+    │    ├─ ucf
+    │    └─ zlib1g (>= 1:1.2.0.2)
+    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ passwd
+    ├─ debconf
+    │    └─ perl-base (>= 5.20.1-3~)
+    ├─ perl-base
+    │    ├─ dpkg (>= 1.17.17)
+    │    └─ libc6 (>= 2.23)
+    ├─ dpkg
+    │    ├─ tar (>= 1.28-1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ liblzma5 (>= 5.2.2)
+    │    ├─ libselinux1 (>= 2.3)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ tar
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libacl1
+    │    ├─ libattr1 (>= 1:2.4.46-8)
+    │    └─ libc6 (>= 2.14)
+    ├─ libattr1
+    │    └─ libc6 (>= 2.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    ├─ libselinux1
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libpcre3
+    ├─ libpcre3
+    │    ├─ libc6 (>= 2.14)
+    │    └─ multiarch-support
+    ├─ multiarch-support
+    │    └─ libc6 (>= 2.3.6-2)
+    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.4)
+    ├─ liblzma5
+    │    └─ libc6 (>= 2.17)
+    ├─ zlib1g
+    │    └─ libc6 (>= 2.14)
+    ├─ debconf-2.0
+    ├─ passwd
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam-modules
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    ├─ libselinux1 (>= 1.32)
+    │    └─ libsemanage1 (>= 2.0.3)
+    ├─ libaudit1
+    │    ├─ libaudit-common (>= 1:2.6.7-2)
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libcap-ng0
+    ├─ libaudit-common
+    ├─ libcap-ng0
+    │    └─ libc6 (>= 2.8)
+    ├─ libpam-modules
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libdb5.3
+    │    ├─ libpam-modules-bin (= 1.1.8-3.6)
+    │    ├─ libpam0g (>= 1.1.3-2)
+    │    └─ libselinux1 (>= 2.1.9)
+    ├─ libdb5.3
+    │    └─ libc6 (>= 2.17)
+    ├─ libpam-modules-bin
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libpam0g
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    └─ libc6 (>= 2.14)
+    ├─ libsemanage1
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libselinux1 (>= 2.6)
+    │    ├─ libsemanage-common (= 2.6-2)
+    │    ├─ libsepol1 (>= 2.6)
+    │    └─ libustr-1.0-1 (>= 1.0.4)
+    ├─ libsemanage-common
+    ├─ libsepol1
+    │    └─ libc6 (>= 2.14)
+    ├─ libustr-1.0-1
+    │    └─ libc6 (>= 2.14)
+    ├─ clamav-base
+    │    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ logrotate
+    │    └─ ucf
+    ├─ logrotate
+    │    ├─ anacron
+    │    ├─ base-passwd (>= 2.0.3.4)
+    │    ├─ cron
+    │    ├─ cron-daemon
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpopt0 (>= 1.14)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ anacron
+    │    ├─ debianutils (>= 1.7)
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    ├─ libc6 (>= 2.7)
+    │    └─ lsb-base (>= 3.0-10)
+    ├─ debianutils
+    │    ├─ sensible-utils
+    │    └─ libc6 (>= 2.15)
+    ├─ sensible-utils
+    ├─ init-system-helpers
+    │    └─ perl-base (>= 5.20.1-3)
+    ├─ lsb-base
+    ├─ base-passwd
+    │    ├─ libc6 (>= 2.8)
+    │    └─ libdebconfclient0 (>= 0.145)
+    ├─ libdebconfclient0
+    │    └─ libc6 (>= 2.4)
+    ├─ cron
+    │    ├─ adduser
+    │    ├─ debianutils (>= 1.7)
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    ├─ libc6 (>= 2.7)
+    │    ├─ libpam-runtime (>= 1.0.1-11)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    ├─ libselinux1 (>= 1.32)
+    │    ├─ lsb-base (>= 3.0-10)
+    │    └─ dpkg (>= 1.15.7.2)
+    ├─ libpam-runtime
+    │    ├─ cdebconf
+    │    ├─ debconf (>= 1.5.19)
+    │    ├─ debconf-2.0
+    │    └─ libpam-modules (>= 1.0.1-6)
+    ├─ cdebconf
+    │    ├─ debconf
+    │    ├─ dpkg (>= 1.15.4)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libdebian-installer4 (>= 0.110)
+    │    ├─ libnewt0.52
+    │    ├─ libselinux1 (>= 2.3)
+    │    ├─ libslang2 (>= 2.2.4)
+    │    └─ libtextwrap1
+    ├─ libdebian-installer4
+    │    └─ libc6 (>= 2.4)
+    ├─ libnewt0.52
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libslang2 (>= 2.2.4)
+    ├─ libslang2
+    │    └─ libc6 (>= 2.14)
+    ├─ libtextwrap1
+    │    └─ libc6 (>= 2.4)
+    ├─ cron-daemon
+    ├─ libpopt0
+    │    └─ libc6 (>= 2.17)
+    ├─ ucf
+    │    ├─ coreutils (>= 5.91)
+    │    └─ debconf (>= 1.5.19)
+    ├─ coreutils
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libattr1 (>= 1:2.4.46-8)
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libselinux1 (>= 2.1.13)
+    ├─ clamav-data
+    ├─ clamav-freshclam
+    │    ├─ clamav-base (>= 0.99.4+dfsg-1+deb9u1)
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ dpkg (>= 1.16.1)
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libclamav7 (>= 0.99.4+dfsg-1+deb9u1)
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ logrotate
+    │    ├─ lsb-base (>= 3.2-13)
+    │    ├─ procps (>= 1:3.3.2)
+    │    ├─ ucf
+    │    └─ zlib1g (>= 1:1.2.3.3)
+    ├─ libclamav7
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    ├─ libjson-c3 (>= 0.10)
+    │    ├─ libllvm3.8 (>= 1:3.8.1-19~)
+    │    ├─ libltdl7 (>= 2.4.6)
+    │    ├─ libmspack0 (>= 0.4)
+    │    ├─ libpcre3
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ libstdc++6 (>= 5.2)
+    │    ├─ libtfm1 (>= 0.13)
+    │    ├─ libxml2 (>= 2.7.4)
+    │    └─ zlib1g (>= 1:1.2.3.4)
+    ├─ libjson-c3
+    │    └─ libc6 (>= 2.14)
+    ├─ libllvm3.8
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libedit2 (>= 2.11-20080614)
+    │    ├─ libffi6 (>= 3.0.4)
+    │    ├─ libgcc1 (>= 1:3.4)
+    │    ├─ libstdc++6 (>= 6)
+    │    ├─ libtinfo5 (>= 6)
+    │    └─ zlib1g (>= 1:1.2.0)
+    ├─ libedit2
+    │    ├─ libbsd0 (>= 0.0)
+    │    ├─ libc6 (>= 2.17)
+    │    ├─ libncurses5 (>= 6)
+    │    └─ libtinfo5 (>= 6)
+    ├─ libbsd0
+    │    └─ libc6 (>= 2.16)
+    ├─ libncurses5
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libtinfo5 (= 6.0+20161126-1+deb9u2)
+    ├─ libtinfo5
+    │    └─ libc6 (>= 2.16)
+    ├─ libffi6
+    │    └─ libc6 (>= 2.14)
+    ├─ libstdc++6
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    ├─ libc6 (>= 2.18)
+    │    └─ libgcc1 (>= 1:4.2)
+    ├─ libltdl7
+    │    └─ libc6 (>= 2.14)
+    ├─ libmspack0
+    │    └─ libc6 (>= 2.14)
+    ├─ libssl1.1
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ libc6 (>= 2.14)
+    ├─ libtfm1
+    │    └─ libc6 (>= 2.14)
+    ├─ libxml2
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libicu57 (>= 57.1-1~)
+    │    ├─ liblzma5 (>= 5.1.1alpha+20120614)
+    │    └─ zlib1g (>= 1:1.2.3.3)
+    ├─ libicu57
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    └─ libstdc++6 (>= 5.2)
+    ├─ procps
+    │    ├─ init-system-helpers (>= 1.29~)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libncurses5 (>= 6)
+    │    ├─ libncursesw5 (>= 6)
+    │    ├─ libprocps6
+    │    ├─ libtinfo5 (>= 6)
+    │    └─ lsb-base (>= 3.0-10)
+    ├─ libncursesw5
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libtinfo5 (= 6.0+20161126-1+deb9u2)
+    ├─ libprocps6
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libsystemd0 (>= 209)
+    ├─ libsystemd0
+    │    ├─ libc6 (>= 2.17)
+    │    ├─ libgcrypt20 (>= 1.7.0)
+    │    ├─ liblz4-1 (>= 0.0~r113)
+    │    ├─ liblzma5 (>= 5.1.1alpha+20120614)
+    │    └─ libselinux1 (>= 2.1.9)
+    ├─ libgcrypt20
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libgpg-error0 (>= 1.14)
+    ├─ libgpg-error0
+    │    └─ libc6 (>= 2.15)
+    └─ liblz4-1
+         └─ libc6 (>= 2.14)
+
+Gross: Şartname maddesi 5.4.1.3 ile talep edildiği için kurulmuştur.
+Description: fast and efficient greylist server with DNSBL support
+
+    ├─ gross
+    │    ├─ adduser
+    │    ├─ exim4-daemon-heavy
+    │    ├─ exim4-daemon-light
+    │    ├─ libc-ares2 (>= 1.7.0)
+    │    ├─ libc6 (>= 2.17)
+    │    ├─ postfix
+    │    └─ sendmail
+    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ passwd
+    ├─ debconf
+    │    └─ perl-base (>= 5.20.1-3~)
+    ├─ perl-base
+    │    ├─ dpkg (>= 1.17.17)
+    │    └─ libc6 (>= 2.23)
+    ├─ dpkg
+    │    ├─ tar (>= 1.28-1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ liblzma5 (>= 5.2.2)
+    │    ├─ libselinux1 (>= 2.3)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ tar
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libacl1
+    │    ├─ libattr1 (>= 1:2.4.46-8)
+    │    └─ libc6 (>= 2.14)
+    ├─ libattr1
+    │    └─ libc6 (>= 2.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    ├─ libselinux1
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libpcre3
+    ├─ libpcre3
+    │    ├─ libc6 (>= 2.14)
+    │    └─ multiarch-support
+    ├─ multiarch-support
+    │    └─ libc6 (>= 2.3.6-2)
+    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.4)
+    ├─ liblzma5
+    │    └─ libc6 (>= 2.17)
+    ├─ zlib1g
+    │    └─ libc6 (>= 2.14)
+    ├─ debconf-2.0
+    ├─ passwd
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam-modules
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    ├─ libselinux1 (>= 1.32)
+    │    └─ libsemanage1 (>= 2.0.3)
+    ├─ libaudit1
+    │    ├─ libaudit-common (>= 1:2.6.7-2)
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libcap-ng0
+    ├─ libaudit-common
+    ├─ libcap-ng0
+    │    └─ libc6 (>= 2.8)
+    ├─ libpam-modules
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libdb5.3
+    │    ├─ libpam-modules-bin (= 1.1.8-3.6)
+    │    ├─ libpam0g (>= 1.1.3-2)
+    │    └─ libselinux1 (>= 2.1.9)
+    ├─ libdb5.3
+    │    └─ libc6 (>= 2.17)
+    ├─ libpam-modules-bin
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libpam0g
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    └─ libc6 (>= 2.14)
+    ├─ libsemanage1
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libselinux1 (>= 2.6)
+    │    ├─ libsemanage-common (= 2.6-2)
+    │    ├─ libsepol1 (>= 2.6)
+    │    └─ libustr-1.0-1 (>= 1.0.4)
+    ├─ libsemanage-common
+    ├─ libsepol1
+    │    └─ libc6 (>= 2.14)
+    ├─ libustr-1.0-1
+    │    └─ libc6 (>= 2.14)
+    ├─ exim4-daemon-heavy
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ exim4-base (>= 4.89)
+    │    ├─ libc6 (>= 2.16)
+    │    ├─ libdb5.3
+    │    ├─ libgnutls30 (>= 3.5.6)
+    │    ├─ libldap-2.4-2 (>= 2.4.7)
+    │    ├─ libmariadbclient18 (>= 5.5.36)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    ├─ libpcre3
+    │    ├─ libperl5.24 (>= 5.24.0)
+    │    ├─ libpq5
+    │    ├─ libsasl2-2
+    │    └─ libsqlite3-0 (>= 3.5.9)
+    ├─ exim4-base
+    │    ├─ adduser
+    │    ├─ anacron
+    │    ├─ cron
+    │    ├─ cron-daemon
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ exim4-config (>= 4.82)
+    │    ├─ exim4-config-2
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libdb5.3
+    │    ├─ lsb-base (>= 3.0-6)
+    │    └─ netbase
+    ├─ anacron
+    │    ├─ debianutils (>= 1.7)
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    ├─ libc6 (>= 2.7)
+    │    └─ lsb-base (>= 3.0-10)
+    ├─ debianutils
+    │    ├─ sensible-utils
+    │    └─ libc6 (>= 2.15)
+    ├─ sensible-utils
+    ├─ init-system-helpers
+    │    └─ perl-base (>= 5.20.1-3)
+    ├─ lsb-base
+    ├─ cron
+    │    ├─ adduser
+    │    ├─ debianutils (>= 1.7)
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    ├─ libc6 (>= 2.7)
+    │    ├─ libpam-runtime (>= 1.0.1-11)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    ├─ libselinux1 (>= 1.32)
+    │    ├─ lsb-base (>= 3.0-10)
+    │    └─ dpkg (>= 1.15.7.2)
+    ├─ libpam-runtime
+    │    ├─ cdebconf
+    │    ├─ debconf (>= 1.5.19)
+    │    ├─ debconf-2.0
+    │    └─ libpam-modules (>= 1.0.1-6)
+    ├─ cdebconf
+    │    ├─ debconf
+    │    ├─ dpkg (>= 1.15.4)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libdebian-installer4 (>= 0.110)
+    │    ├─ libnewt0.52
+    │    ├─ libselinux1 (>= 2.3)
+    │    ├─ libslang2 (>= 2.2.4)
+    │    └─ libtextwrap1
+    ├─ libdebian-installer4
+    │    └─ libc6 (>= 2.4)
+    ├─ libnewt0.52
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libslang2 (>= 2.2.4)
+    ├─ libslang2
+    │    └─ libc6 (>= 2.14)
+    ├─ libtextwrap1
+    │    └─ libc6 (>= 2.4)
+    ├─ cron-daemon
+    ├─ exim4-config
+    │    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    └─ debconf-2.0
+    ├─ exim4-config-2
+    ├─ netbase
+    ├─ libgnutls30
+    │    ├─ libc6 (>= 2.22)
+    │    ├─ libgmp10 (>= 2:6)
+    │    ├─ libhogweed4
+    │    ├─ libidn11 (>= 1.13)
+    │    ├─ libnettle6
+    │    ├─ libp11-kit0 (>= 0.23.1)
+    │    ├─ libtasn1-6 (>= 4.9)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libgmp10
+    │    └─ libc6 (>= 2.14)
+    ├─ libhogweed4
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgmp10 (>= 2:6.0.0)
+    │    └─ libnettle6 (= 3.3-1+b2)
+    ├─ libnettle6
+    │    └─ libc6 (>= 2.14)
+    ├─ libidn11
+    │    └─ libc6 (>= 2.14)
+    ├─ libp11-kit0
+    │    ├─ libc6 (>= 2.16)
+    │    └─ libffi6 (>= 3.0.4)
+    ├─ libffi6
+    │    └─ libc6 (>= 2.14)
+    ├─ libtasn1-6
+    │    └─ libc6 (>= 2.14)
+    ├─ libldap-2.4-2
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgnutls30 (>= 3.5.6)
+    │    ├─ libldap-common (>= 2.4.44+dfsg-5+deb9u1)
+    │    └─ libsasl2-2
+    ├─ libldap-common
+    ├─ libsasl2-2
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libsasl2-modules-db (>= 2.1.27~101-g0780600+dfsg-3)
+    ├─ libsasl2-modules-db
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libdb5.3
+    ├─ libmariadbclient18
+    │    ├─ libc6 (>= 2.17)
+    │    ├─ libstdc++6 (>= 5)
+    │    ├─ mysql-common
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libstdc++6
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    ├─ libc6 (>= 2.18)
+    │    └─ libgcc1 (>= 1:4.2)
+    ├─ mysql-common
+    ├─ libperl5.24
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.23)
+    │    ├─ libdb5.3
+    │    ├─ libgdbm3 (>= 1.8.3)
+    │    ├─ perl-modules-5.24 (>= 5.24.1-3+deb9u4)
+    │    └─ zlib1g (>= 1:1.2.2.3)
+    ├─ libgdbm3
+    │    ├─ dpkg (>= 1.15.4)
+    │    ├─ install-info
+    │    └─ libc6 (>= 2.14)
+    ├─ install-info
+    │    ├─ libc6 (>= 2.14)
+    │    └─ dpkg (>= 1.16.1)
+    ├─ perl-modules-5.24
+    │    ├─ perl-base (>= 5.24.1-1)
+    │    └─ dpkg (>= 1.17.17)
+    ├─ libpq5
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgssapi-krb5-2 (>= 1.14+dfsg)
+    │    ├─ libldap-2.4-2 (>= 2.4.7)
+    │    └─ libssl1.1 (>= 1.1.0)
+    ├─ libgssapi-krb5-2
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libcomerr2 (>= 1.34)
+    │    ├─ libk5crypto3 (>= 1.8+dfsg)
+    │    ├─ libkeyutils1 (>= 1.4)
+    │    ├─ libkrb5-3 (= 1.15-1+deb9u1)
+    │    └─ libkrb5support0 (>= 1.15~beta1)
+    ├─ libcomerr2
+    │    └─ libc6 (>= 2.17)
+    ├─ libk5crypto3
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libkeyutils1 (>= 1.4)
+    │    └─ libkrb5support0 (>= 1.15~beta1)
+    ├─ libkeyutils1
+    │    └─ libc6 (>= 2.14)
+    ├─ libkrb5support0
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libkeyutils1 (>= 1.4)
+    ├─ libkrb5-3
+    │    ├─ libc6 (>= 2.16)
+    │    ├─ libcomerr2 (>= 1.34)
+    │    ├─ libk5crypto3 (>= 1.15~beta1)
+    │    ├─ libkeyutils1 (>= 1.5.9)
+    │    └─ libkrb5support0 (= 1.15-1+deb9u1)
+    ├─ libssl1.1
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ libc6 (>= 2.14)
+    ├─ libsqlite3-0
+    │    └─ libc6 (>= 2.14)
+    ├─ exim4-daemon-light
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ exim4-base (>= 4.89)
+    │    ├─ libc6 (>= 2.16)
+    │    ├─ libdb5.3
+    │    ├─ libgnutls30 (>= 3.5.6)
+    │    └─ libpcre3
+    ├─ libc-ares2
+    │    └─ libc6 (>= 2.17)
+    ├─ postfix
+    │    ├─ adduser (>= 3.48)
+    │    ├─ cpio
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ dpkg (>= 1.8.3)
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libdb5.3
+    │    ├─ libicu57 (>= 57.1-1~)
+    │    ├─ libsasl2-2
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ lsb-base (>= 3.0-6)
+    │    ├─ netbase
+    │    ├─ postfix-sqlite
+    │    └─ ssl-cert
+    ├─ cpio
+    │    └─ libc6 (>= 2.17)
+    ├─ libicu57
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    └─ libstdc++6 (>= 5.2)
+    ├─ postfix-sqlite
+    │    ├─ libc6 (>= 2.2.5)
+    │    └─ libsqlite3-0 (>= 3.5.9)
+    ├─ ssl-cert
+    │    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ openssl (>= 0.9.8g-9)
+    ├─ openssl
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libssl1.1 (>= 1.1.0)
+    ├─ sendmail
+    │    ├─ sendmail-base
+    │    ├─ sendmail-bin
+    │    ├─ sendmail-cf
+    │    └─ sensible-mda
+    ├─ sendmail-base
+    │    ├─ adduser
+    │    ├─ lockfile-progs
+    │    ├─ m4
+    │    ├─ make
+    │    ├─ netbase
+    │    └─ perl:any
+    ├─ lockfile-progs
+    │    ├─ libc6 (>= 2.2.5)
+    │    └─ liblockfile1 (>= 1.0)
+    ├─ liblockfile1
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ liblockfile-bin (>= 1.14-1+b1)
+    │    └─ multiarch-support
+    ├─ liblockfile-bin
+    │    └─ libc6 (>= 2.14)
+    ├─ m4
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libsigsegv2 (>= 2.9)
+    ├─ libsigsegv2
+    │    └─ libc6 (>= 2.4)
+    ├─ make
+    │    └─ libc6 (>= 2.17)
+    ├─ perl:any
+    ├─ sendmail-bin
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libdb5.3
+    │    ├─ libldap-2.4-2 (>= 2.4.7)
+    │    ├─ liblockfile1 (>= 1.0)
+    │    ├─ libsasl2-2
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ libwrap0 (>= 7.6-4~)
+    │    ├─ lsb-base (>= 3.0-6)
+    │    ├─ procps
+    │    ├─ sendmail-base (= 8.15.2-8)
+    │    ├─ sendmail-cf (= 8.15.2-8)
+    │    └─ debconf
+    ├─ libwrap0
+    │    └─ libc6 (>= 2.14)
+    ├─ procps
+    │    ├─ init-system-helpers (>= 1.29~)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libncurses5 (>= 6)
+    │    ├─ libncursesw5 (>= 6)
+    │    ├─ libprocps6
+    │    ├─ libtinfo5 (>= 6)
+    │    └─ lsb-base (>= 3.0-10)
+    ├─ libncurses5
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libtinfo5 (= 6.0+20161126-1+deb9u2)
+    ├─ libtinfo5
+    │    └─ libc6 (>= 2.16)
+    ├─ libncursesw5
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libtinfo5 (= 6.0+20161126-1+deb9u2)
+    ├─ libprocps6
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libsystemd0 (>= 209)
+    ├─ libsystemd0
+    │    ├─ libc6 (>= 2.17)
+    │    ├─ libgcrypt20 (>= 1.7.0)
+    │    ├─ liblz4-1 (>= 0.0~r113)
+    │    ├─ liblzma5 (>= 5.1.1alpha+20120614)
+    │    └─ libselinux1 (>= 2.1.9)
+    ├─ libgcrypt20
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libgpg-error0 (>= 1.14)
+    ├─ libgpg-error0
+    │    └─ libc6 (>= 2.15)
+    ├─ liblz4-1
+    │    └─ libc6 (>= 2.14)
+    ├─ sendmail-cf
+    │    └─ m4
+    ├─ sensible-mda
+    │    ├─ deliver
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ mail-transport-agent
+    │    ├─ maildrop
+    │    ├─ procmail
+    │    └─ sendmail-bin
+    ├─ deliver
+    ├─ mail-transport-agent
+    ├─ maildrop
+    │    ├─ courier-authlib (>= 0.66.4-5~)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libcourier-unicode1
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    ├─ libgdbm3 (>= 1.8.3)
+    │    ├─ libpcre3
+    │    └─ libstdc++6 (>= 5.2)
+    ├─ courier-authlib
+    │    ├─ adduser
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libgdbm3 (>= 1.8.3)
+    │    ├─ libltdl7 (>= 2.4.6)
+    │    └─ libpam0g (>= 0.99.7.1)
+    ├─ libltdl7
+    │    └─ libc6 (>= 2.14)
+    ├─ libcourier-unicode1
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    └─ libstdc++6 (>= 5.2)
+    └─ procmail
+         └─ libc6 (>= 2.14)
+
+Arj: arj uzantılı arşiv dosyalarının açılabilmesi için kurulmuştur.
+Description: archiver for .arj files
+
+    ├─ arj
+    │    └─ libc6 (>= 2.14)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    └─ gcc-6-base
+
+Cabextract: cab uzantılı arşiv dosyalarının açılabilmesi için kurulmuştur.
+Description: Microsoft Cabinet file unpacker
+
+    ├─ cabextract
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libmspack0 (>= 0.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    └─ libmspack0
+         └─ libc6 (>= 2.14)
+
+Lhasa: lzh uzantılı arşiv dosyalarının açılabilmesi için kurulmuştur.
+lzh archive decompressor
+
+    ├─ lhasa
+    │    ├─ libc6 (>= 2.4)
+    │    └─ liblhasa0 (= 0.3.1-2+b1)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    └─ liblhasa0
+         └─ libc6 (>= 2.14)
+
+Liblhasa0: lzh uzantılı arşiv dosyalarının açılabilmesi için kurulmuştur.
+Description: lzh archive decompression library
+
+    ├─ liblhasa0
+    │    └─ libc6 (>= 2.14)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    └─ gcc-6-base
+
+Nomarch: arc ve ark uzantılı arşiv dosyalarının açılabilmesi için kurulmuştur.
+Description: Unpacks .ARC and .ARK MS-DOS archives
+
+    ├─ nomarch
+    │    └─ libc6 (>= 2.3)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    └─ gcc-6-base
+
+Rar: rar uzantılı arşiv dosyalarının açılabilmesi için kurulmuştur.
+Description: Archiver for .rar files
+
+    ├─ rar
+    │    ├─ libc6 (>= 2.7)
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    └─ libstdc++6 (>= 4.1.1)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    └─ libstdc++6
+         ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+         ├─ libc6 (>= 2.18)
+         └─ libgcc1 (>= 1:4.2)
+
+Unrar: rar uzantılı arşiv dosyalarının açılabilmesi için kurulmuştur.
+Description: Unarchiver for .rar files (non-free version)
+
+    ├─ unrar
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    └─ libstdc++6 (>= 5)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    └─ libstdc++6
+         ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+         ├─ libc6 (>= 2.18)
+         └─ libgcc1 (>= 1:4.2)
+
+Unzip: zip uzantılı arşiv dosyalarının açılabilmesi için kurulmuştur.
+Description: De-archiver for .zip files
+
+    ├─ unzip
+    │    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.14)
+    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    └─ gcc-6-base
+
+Zip: zip uzantılı arşiv dosyalarının açılabilmesi için kurulmuştur.
+Description: Archiver for .zip files
+
+    ├─ zip
+    │    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.14)
+    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    └─ gcc-6-base
+
+Postfix-policyd-spf-python: SPF desteği sağlanması amacıyla kurulmuştur.
+Description: Postfix policy server for SPF checking
+
+    ├─ postfix-policyd-spf-python
+    │    ├─ adduser
+    │    ├─ postfix
+    │    ├─ python3-authres
+    │    ├─ python3-spf (>= 2.0.9)
+    │    └─ python3:any (>= 3.3.2-2~)
+    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ passwd
+    ├─ debconf
+    │    └─ perl-base (>= 5.20.1-3~)
+    ├─ perl-base
+    │    ├─ dpkg (>= 1.17.17)
+    │    └─ libc6 (>= 2.23)
+    ├─ dpkg
+    │    ├─ tar (>= 1.28-1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ liblzma5 (>= 5.2.2)
+    │    ├─ libselinux1 (>= 2.3)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ tar
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libacl1
+    │    ├─ libattr1 (>= 1:2.4.46-8)
+    │    └─ libc6 (>= 2.14)
+    ├─ libattr1
+    │    └─ libc6 (>= 2.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    ├─ libselinux1
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libpcre3
+    ├─ libpcre3
+    │    ├─ libc6 (>= 2.14)
+    │    └─ multiarch-support
+    ├─ multiarch-support
+    │    └─ libc6 (>= 2.3.6-2)
+    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.4)
+    ├─ liblzma5
+    │    └─ libc6 (>= 2.17)
+    ├─ zlib1g
+    │    └─ libc6 (>= 2.14)
+    ├─ debconf-2.0
+    ├─ passwd
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam-modules
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    ├─ libselinux1 (>= 1.32)
+    │    └─ libsemanage1 (>= 2.0.3)
+    ├─ libaudit1
+    │    ├─ libaudit-common (>= 1:2.6.7-2)
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libcap-ng0
+    ├─ libaudit-common
+    ├─ libcap-ng0
+    │    └─ libc6 (>= 2.8)
+    ├─ libpam-modules
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libdb5.3
+    │    ├─ libpam-modules-bin (= 1.1.8-3.6)
+    │    ├─ libpam0g (>= 1.1.3-2)
+    │    └─ libselinux1 (>= 2.1.9)
+    ├─ libdb5.3
+    │    └─ libc6 (>= 2.17)
+    ├─ libpam-modules-bin
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libpam0g
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    └─ libc6 (>= 2.14)
+    ├─ libsemanage1
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libselinux1 (>= 2.6)
+    │    ├─ libsemanage-common (= 2.6-2)
+    │    ├─ libsepol1 (>= 2.6)
+    │    └─ libustr-1.0-1 (>= 1.0.4)
+    ├─ libsemanage-common
+    ├─ libsepol1
+    │    └─ libc6 (>= 2.14)
+    ├─ libustr-1.0-1
+    │    └─ libc6 (>= 2.14)
+    ├─ postfix
+    │    ├─ adduser (>= 3.48)
+    │    ├─ cpio
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ dpkg (>= 1.8.3)
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libdb5.3
+    │    ├─ libicu57 (>= 57.1-1~)
+    │    ├─ libsasl2-2
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ lsb-base (>= 3.0-6)
+    │    ├─ netbase
+    │    ├─ postfix-sqlite
+    │    └─ ssl-cert
+    ├─ cpio
+    │    └─ libc6 (>= 2.17)
+    ├─ init-system-helpers
+    │    └─ perl-base (>= 5.20.1-3)
+    ├─ libicu57
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    └─ libstdc++6 (>= 5.2)
+    ├─ libstdc++6
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    ├─ libc6 (>= 2.18)
+    │    └─ libgcc1 (>= 1:4.2)
+    ├─ libsasl2-2
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libsasl2-modules-db (>= 2.1.27~101-g0780600+dfsg-3)
+    ├─ libsasl2-modules-db
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libdb5.3
+    ├─ libssl1.1
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ libc6 (>= 2.14)
+    ├─ lsb-base
+    ├─ netbase
+    ├─ postfix-sqlite
+    │    ├─ libc6 (>= 2.2.5)
+    │    └─ libsqlite3-0 (>= 3.5.9)
+    ├─ libsqlite3-0
+    │    └─ libc6 (>= 2.14)
+    ├─ ssl-cert
+    │    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ openssl (>= 0.9.8g-9)
+    ├─ openssl
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libssl1.1 (>= 1.1.0)
+    ├─ python3-authres
+    │    └─ python3:any (>= 3.3.2-2~)
+    ├─ python3:any
+    ├─ python3-spf
+    │    ├─ python3-authres
+    │    ├─ python3-dns (>= 3.0.2-1+deb7u1)
+    │    └─ python3:any (>= 3.3.2-2~)
+    └─ python3-dns
+         └─ python3:any (>= 3.3.2-2~)
+
+Nginx: pgpkeyserver-lite yazılımının web üzerinden sunulabilmesi için kurulmaktadır.
+Description: small, powerful, scalable web/proxy server
+
+
+    ├─ nginx
+    │    ├─ nginx-extras (>= 1.10.3-1+deb9u1)
+    │    ├─ nginx-full (>= 1.10.3-1+deb9u1)
+    │    └─ nginx-light (>= 1.10.3-1+deb9u1)
+    ├─ nginx-extras
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libnginx-mod-http-auth-pam (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-cache-purge (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-dav-ext (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-echo (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-fancyindex (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-geoip (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-headers-more-filter (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-image-filter (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-lua (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-perl (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-subs-filter (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-uploadprogress (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-upstream-fair (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-xslt-filter (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-mail (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-nchan (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-stream (= 1.10.3-1+deb9u1)
+    │    ├─ libpcre3
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ nginx-common (= 1.10.3-1+deb9u1)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    ├─ libnginx-mod-http-auth-pam
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libpam0g
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    └─ libc6 (>= 2.14)
+    ├─ debconf
+    │    └─ perl-base (>= 5.20.1-3~)
+    ├─ perl-base
+    │    ├─ dpkg (>= 1.17.17)
+    │    └─ libc6 (>= 2.23)
+    ├─ dpkg
+    │    ├─ tar (>= 1.28-1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ liblzma5 (>= 5.2.2)
+    │    ├─ libselinux1 (>= 2.3)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ tar
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libacl1
+    │    ├─ libattr1 (>= 1:2.4.46-8)
+    │    └─ libc6 (>= 2.14)
+    ├─ libattr1
+    │    └─ libc6 (>= 2.4)
+    ├─ libselinux1
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libpcre3
+    ├─ libpcre3
+    │    ├─ libc6 (>= 2.14)
+    │    └─ multiarch-support
+    ├─ multiarch-support
+    │    └─ libc6 (>= 2.3.6-2)
+    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.4)
+    ├─ liblzma5
+    │    └─ libc6 (>= 2.17)
+    ├─ zlib1g
+    │    └─ libc6 (>= 2.14)
+    ├─ debconf-2.0
+    ├─ libaudit1
+    │    ├─ libaudit-common (>= 1:2.6.7-2)
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libcap-ng0
+    ├─ libaudit-common
+    ├─ libcap-ng0
+    │    └─ libc6 (>= 2.8)
+    ├─ nginx-common
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ init-system-helpers (>= 1.18~)
+    │    └─ lsb-base (>= 3.0-6)
+    ├─ init-system-helpers
+    │    └─ perl-base (>= 5.20.1-3)
+    ├─ lsb-base
+    ├─ libnginx-mod-http-cache-purge
+    │    ├─ libc6 (>= 2.14)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libnginx-mod-http-dav-ext
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libexpat1 (>= 2.0.1)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libexpat1
+    │    └─ libc6 (>= 2.14)
+    ├─ libnginx-mod-http-echo
+    │    ├─ libc6 (>= 2.14)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libnginx-mod-http-fancyindex
+    │    ├─ libc6 (>= 2.14)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libnginx-mod-http-geoip
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgeoip1
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libgeoip1
+    │    └─ libc6 (>= 2.4)
+    ├─ libnginx-mod-http-headers-more-filter
+    │    ├─ libc6 (>= 2.14)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libnginx-mod-http-image-filter
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgd3 (>= 2.1.0~alpha~)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libgd3
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libfontconfig1 (>= 2.11)
+    │    ├─ libfreetype6 (>= 2.2.1)
+    │    ├─ libjpeg62-turbo (>= 1.3.1)
+    │    ├─ libpng16-16 (>= 1.6.2-1)
+    │    ├─ libtiff5 (>= 4.0.3)
+    │    ├─ libwebp6 (>= 0.5.1)
+    │    ├─ libx11-6
+    │    ├─ libxpm4
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libfontconfig1
+    │    ├─ fontconfig-config (>= 2.11.0-6.7)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libexpat1 (>= 2.0.1)
+    │    └─ libfreetype6 (>= 2.2.1)
+    ├─ fontconfig-config
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ fonts-dejavu-core
+    │    ├─ fonts-freefont
+    │    ├─ fonts-liberation
+    │    ├─ ttf-bitstream-vera
+    │    └─ ucf (>= 0.29)
+    ├─ fonts-dejavu-core
+    ├─ fonts-freefont
+    ├─ fonts-liberation
+    ├─ ttf-bitstream-vera
+    ├─ ucf
+    │    ├─ coreutils (>= 5.91)
+    │    └─ debconf (>= 1.5.19)
+    ├─ coreutils
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libattr1 (>= 1:2.4.46-8)
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libselinux1 (>= 2.1.13)
+    ├─ libfreetype6
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpng16-16 (>= 1.6.2-1)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libpng16-16
+    │    ├─ libc6 (>= 2.14)
+    │    └─ zlib1g (>= 1:1.2.3.4)
+    ├─ libjpeg62-turbo
+    │    └─ libc6 (>= 2.14)
+    ├─ libtiff5
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libjbig0 (>= 2.0)
+    │    ├─ libjpeg62-turbo (>= 1.3.1)
+    │    ├─ liblzma5 (>= 5.1.1alpha+20120614)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ libjbig0
+    │    └─ libc6 (>= 2.4)
+    ├─ libwebp6
+    │    └─ libc6 (>= 2.14)
+    ├─ libx11-6
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libx11-data
+    │    └─ libxcb1 (>= 1.11.1)
+    ├─ libx11-data
+    ├─ libxcb1
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libxau6
+    │    └─ libxdmcp6
+    ├─ libxau6
+    │    ├─ libc6 (>= 2.4)
+    │    └─ multiarch-support
+    ├─ libxdmcp6
+    │    ├─ libbsd0 (>= 0.2.0)
+    │    └─ libc6 (>= 2.4)
+    ├─ libbsd0
+    │    └─ libc6 (>= 2.16)
+    ├─ libxpm4
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libx11-6
+    ├─ libnginx-mod-http-lua
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libluajit-5.1-2
+    │    ├─ libnginx-mod-http-ndk (= 1.10.3-1+deb9u1)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libluajit-5.1-2
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgcc1 (>= 1:3.3)
+    │    └─ libluajit-5.1-common (= 2.0.4+dfsg-1)
+    ├─ libluajit-5.1-common
+    ├─ libnginx-mod-http-ndk
+    │    ├─ libc6 (>= 2.4)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libnginx-mod-http-perl
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libperl5.24 (>= 5.24.0)
+    │    ├─ nginx-common (= 1.10.3-1+deb9u1)
+    │    ├─ perl (>= 5.24.1-3)
+    │    └─ perlapi-5.24.1
+    ├─ libperl5.24
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.23)
+    │    ├─ libdb5.3
+    │    ├─ libgdbm3 (>= 1.8.3)
+    │    ├─ perl-modules-5.24 (>= 5.24.1-3+deb9u4)
+    │    └─ zlib1g (>= 1:1.2.2.3)
+    ├─ libdb5.3
+    │    └─ libc6 (>= 2.17)
+    ├─ libgdbm3
+    │    ├─ dpkg (>= 1.15.4)
+    │    ├─ install-info
+    │    └─ libc6 (>= 2.14)
+    ├─ install-info
+    │    ├─ libc6 (>= 2.14)
+    │    └─ dpkg (>= 1.16.1)
+    ├─ perl-modules-5.24
+    │    ├─ perl-base (>= 5.24.1-1)
+    │    └─ dpkg (>= 1.17.17)
+    ├─ perl
+    │    ├─ libperl5.24 (= 5.24.1-3+deb9u4)
+    │    ├─ perl-base (= 5.24.1-3+deb9u4)
+    │    ├─ perl-modules-5.24 (>= 5.24.1-3+deb9u4)
+    │    └─ dpkg (>= 1.17.17)
+    ├─ perlapi-5.24.1
+    ├─ libnginx-mod-http-subs-filter
+    │    ├─ libc6 (>= 2.14)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libnginx-mod-http-uploadprogress
+    │    ├─ libc6 (>= 2.14)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libnginx-mod-http-upstream-fair
+    │    ├─ libc6 (>= 2.4)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libnginx-mod-http-xslt-filter
+    │    ├─ libc6 (>= 2.4)
+    │    ├─ libxml2 (>= 2.7.4)
+    │    ├─ libxslt1.1 (>= 1.1.25)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libxml2
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libicu57 (>= 57.1-1~)
+    │    ├─ liblzma5 (>= 5.1.1alpha+20120614)
+    │    └─ zlib1g (>= 1:1.2.3.3)
+    ├─ libicu57
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libgcc1 (>= 1:3.0)
+    │    └─ libstdc++6 (>= 5.2)
+    ├─ libstdc++6
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    ├─ libc6 (>= 2.18)
+    │    └─ libgcc1 (>= 1:4.2)
+    ├─ libxslt1.1
+    │    ├─ libc6 (>= 2.17)
+    │    ├─ libgcrypt20 (>= 1.7.0)
+    │    └─ libxml2 (>= 2.9.0)
+    ├─ libgcrypt20
+    │    ├─ libc6 (>= 2.15)
+    │    └─ libgpg-error0 (>= 1.14)
+    ├─ libgpg-error0
+    │    └─ libc6 (>= 2.15)
+    ├─ libnginx-mod-mail
+    │    ├─ libc6 (>= 2.14)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libnginx-mod-nchan
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libhiredis0.13 (>= 0.13.1)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libhiredis0.13
+    │    └─ libc6 (>= 2.14)
+    ├─ libnginx-mod-stream
+    │    ├─ libc6 (>= 2.14)
+    │    └─ nginx-common (= 1.10.3-1+deb9u1)
+    ├─ libssl1.1
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ libc6 (>= 2.14)
+    ├─ nginx-full
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libnginx-mod-http-auth-pam (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-dav-ext (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-echo (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-geoip (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-image-filter (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-subs-filter (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-upstream-fair (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-http-xslt-filter (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-mail (= 1.10.3-1+deb9u1)
+    │    ├─ libnginx-mod-stream (= 1.10.3-1+deb9u1)
+    │    ├─ libpcre3
+    │    ├─ libssl1.1 (>= 1.1.0)
+    │    ├─ nginx-common (= 1.10.3-1+deb9u1)
+    │    └─ zlib1g (>= 1:1.1.4)
+    └─ nginx-light
+         ├─ libc6 (>= 2.14)
+         ├─ libnginx-mod-http-echo (= 1.10.3-1+deb9u1)
+         ├─ libpcre3
+         ├─ libssl1.1 (>= 1.1.0)
+         ├─ nginx-common (= 1.10.3-1+deb9u1)
+         └─ zlib1g (>= 1:1.1.4)
+
+Sks: Şartname maddesi 5.4.1.3de istendiği için kurulmuştur.
+Description: Synchronizing OpenPGP Key Server
+
+    ├─ sks
+    │    ├─ adduser
+    │    ├─ db-util
+    │    ├─ db5.3-util
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libdb5.3
+    │    ├─ lsb-base (>= 3.0-6)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ adduser
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    └─ passwd
+    ├─ debconf
+    │    └─ perl-base (>= 5.20.1-3~)
+    ├─ perl-base
+    │    ├─ dpkg (>= 1.17.17)
+    │    └─ libc6 (>= 2.23)
+    ├─ dpkg
+    │    ├─ tar (>= 1.28-1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ liblzma5 (>= 5.2.2)
+    │    ├─ libselinux1 (>= 2.3)
+    │    └─ zlib1g (>= 1:1.1.4)
+    ├─ tar
+    │    ├─ libacl1 (>= 2.2.51-8)
+    │    ├─ libc6 (>= 2.17)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libacl1
+    │    ├─ libattr1 (>= 1:2.4.46-8)
+    │    └─ libc6 (>= 2.14)
+    ├─ libattr1
+    │    └─ libc6 (>= 2.4)
+    ├─ libc6
+    │    └─ libgcc1
+    ├─ libgcc1
+    │    ├─ gcc-6-base (= 6.3.0-18+deb9u1)
+    │    └─ libc6 (>= 2.14)
+    ├─ gcc-6-base
+    ├─ libselinux1
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libpcre3
+    ├─ libpcre3
+    │    ├─ libc6 (>= 2.14)
+    │    └─ multiarch-support
+    ├─ multiarch-support
+    │    └─ libc6 (>= 2.3.6-2)
+    ├─ libbz2-1.0
+    │    └─ libc6 (>= 2.4)
+    ├─ liblzma5
+    │    └─ libc6 (>= 2.17)
+    ├─ zlib1g
+    │    └─ libc6 (>= 2.14)
+    ├─ debconf-2.0
+    ├─ passwd
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam-modules
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    ├─ libselinux1 (>= 1.32)
+    │    └─ libsemanage1 (>= 2.0.3)
+    ├─ libaudit1
+    │    ├─ libaudit-common (>= 1:2.6.7-2)
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libcap-ng0
+    ├─ libaudit-common
+    ├─ libcap-ng0
+    │    └─ libc6 (>= 2.8)
+    ├─ libpam-modules
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.15)
+    │    ├─ libdb5.3
+    │    ├─ libpam-modules-bin (= 1.1.8-3.6)
+    │    ├─ libpam0g (>= 1.1.3-2)
+    │    └─ libselinux1 (>= 2.1.9)
+    ├─ libdb5.3
+    │    └─ libc6 (>= 2.17)
+    ├─ libpam-modules-bin
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libpam0g (>= 0.99.7.1)
+    │    └─ libselinux1 (>= 1.32)
+    ├─ libpam0g
+    │    ├─ debconf (>= 0.5)
+    │    ├─ debconf-2.0
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    └─ libc6 (>= 2.14)
+    ├─ libsemanage1
+    │    ├─ libaudit1 (>= 1:2.2.1)
+    │    ├─ libbz2-1.0
+    │    ├─ libc6 (>= 2.14)
+    │    ├─ libselinux1 (>= 2.6)
+    │    ├─ libsemanage-common (= 2.6-2)
+    │    ├─ libsepol1 (>= 2.6)
+    │    └─ libustr-1.0-1 (>= 1.0.4)
+    ├─ libsemanage-common
+    ├─ libsepol1
+    │    └─ libc6 (>= 2.14)
+    ├─ libustr-1.0-1
+    │    └─ libc6 (>= 2.14)
+    ├─ db-util
+    │    └─ db5.3-util
+    ├─ db5.3-util
+    │    ├─ libc6 (>= 2.14)
+    │    └─ libdb5.3 (= 5.3.28-12+deb9u1)
+    └─ lsb-base
+
+Pgpkeyserver-lite: Şartname maddesi 5.4.1.4'te istenen php-proxy-keyserver yerine karşılıklı mutabakat neticesinde kurulmuştur.
+Description: OpenPGP Keyserver Lite Web Application
+  Paket bağımlılığı tanımlanmamıştır.
