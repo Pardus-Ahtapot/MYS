@@ -1,0 +1,42 @@
+- name: freshclam-mirror | installing apache2
+  sudo: yes
+  apt:
+    name: apache2
+
+- name: freshclam-mirror | installing libnet-dns-perl
+  sudo: yes
+  apt:
+    name: libnet-dns-perl
+
+- name: freshclam-mirror | copying clamdownloader.pl
+  sudo: yes
+  template:
+    src: "clamdownloader.pl.j2"
+    dest: "/usr/sbin/clamdownloader.pl"
+    owner: "root"
+    group: "root"
+    mode: 0755
+
+- name: freshclam-mirror | copying sync_clam_mirror.sh
+  sudo: yes
+  template:
+    src: "sync_clam_mirror.sh.j2"
+    dest: "/usr/sbin/sync_clam_mirror.sh"
+    owner: "root"
+    group: "root"
+    mode: 0755
+
+- name: freshclam-mirror | copying sync_clam_mirror.cron
+  sudo: yes
+  template:
+    src: "sync_clam_mirror.cron.j2"
+    dest: "/etc/cron.d/sync_clam_mirror"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: freshclam-mirror | run sync_clam_mirror.sh
+  sudo: yes
+  shell: >
+    /usr/sbin/sync_clam_mirror.sh
+

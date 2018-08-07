@@ -8,6 +8,7 @@ antispam_domain: ahtapot
 antispam_inet_protocols: ipv4 #ipv4, ipv6, all
 antispam_nameserver: 8.8.8.8
 antispam_block_encrypted_archive: "true"
+antispam_create_ssl: False
 antispam_ssl_country: "TR"
 antispam_ssl_state: "Ankara"
 antispam_ssl_locality: "Ankara"

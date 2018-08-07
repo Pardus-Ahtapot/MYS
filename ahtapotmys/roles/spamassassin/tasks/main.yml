@@ -59,7 +59,7 @@
     openssl rsa -in /etc/postfix/ssl/smtpd.key -out /etc/postfix/ssl/smtpd.key.unencrypted
     mv -f smtpd.key.unencrypted smtpd.key
     openssl req -new -key /etc/postfix/ssl/smtpd.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{antispam_ssl_country}}/ST={{antispam_ssl_state}}/L={{antispam_ssl_locality}}/O={{antispam_ssl_organization}}/OU={{antispam_ssl_organizationalunit}}/CN={{antispam_ssl_commonname}}"
-  when: ssl_exists.stat.exists == False
+  when: (ssl_exists.stat.exists == False) and (antispam_create_ssl == True)
 
 - name: antispam | configuring postfix
   sudo: yes

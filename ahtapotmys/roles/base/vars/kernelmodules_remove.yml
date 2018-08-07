@@ -30,6 +30,18 @@ to_be_removed_modules:
     module06:
         name: "drm"
         state: "absent"
+    module07:
+        name: "dccp"
+        state: "absent"
+    module08:
+        name: "sctp"
+        state: "absent"
+    module09:
+        name: "rds"
+        state: "absent"
+    module10:
+        name: "tipc"
+        state: "absent"
 #    moduleXX:
 #        name:
 #        state:
