@@ -20,6 +20,11 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/spamassassin/vars/main.yml
+  - /etc/ansible/roles/spamassassin/vars/clamd.conf.yml
+  - /etc/ansible/roles/spamassassin/vars/freshclam.conf.yml
+  - /etc/ansible/roles/spamassassin/vars/local.cf.yml
+  - /etc/ansible/roles/spamassassin/vars/main.cf.yml
+  - /etc/ansible/roles/spamassassin/vars/master.cf.yml
 
   roles:
     - role: base
