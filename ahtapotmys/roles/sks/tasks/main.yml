@@ -8,11 +8,18 @@
     - sks
     - pgpkeyserver-lite
 
+- name: Check if sks db exists
+  sudo: yes
+  stat:
+    path: /var/lib/sks/
+  register: sks_exists
+
 - name: sks | creating sks database
   sudo: yes
   shell: >
     su - debian-sks -c "sks build"
   notify: restart sks
+  when: (sks_exists.stat.exists == False) 
 
 - name: pgpkeyserver-lite | configuring pgpkeyserver-lite nginx conf
   sudo: yes
@@ -27,6 +34,6 @@
 - name: pgpkeyserver-lite | activating pgpkeyserver-lite nginx conf
   sudo: yes
   shell: >
-    ln -s /etc/nginx/sites-available/pgpkeyserver-lite.conf /etc/nginx/sites-enabled/
+    ln -sf /etc/nginx/sites-available/pgpkeyserver-lite.conf /etc/nginx/sites-enabled/
   notify: restart nginx
 
