@@ -1,1 +1,4 @@
-{{antispam_domain}} smtp:[{{antispam_mail_hostname}}.{{antispam_domain}}]
+{{antispam_domain}} smtp:[{{antispam_mail_hostname}}]
+{% if antispam_default_relay_server %}
+* smtp:[{{antispam_default_relay_server}}]
+{% endif %}

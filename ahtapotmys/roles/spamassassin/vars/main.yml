@@ -2,7 +2,6 @@
 antispam_smtpd_tls_cert_file: /etc/postfix/ssl/smtpd.crt
 antispam_smtpd_tls_key_file: /etc/postfix/ssl/smtpd.key
 antispam_smtpd_tls_CAfile: /etc/postfix/ssl/cacert.pem
-antispam_avas_hostname: avas
 antispam_mail_hostname: mail
 antispam_domain: ahtapot
 antispam_inet_protocols: ipv4 #ipv4, ipv6, all
@@ -15,7 +14,8 @@ antispam_ssl_locality: "Ankara"
 antispam_ssl_organization: "organizasyon_adi"
 antispam_ssl_organizationalunit: "organizasyon_birimi"
 antispam_ssl_commonname: "alan_adi"
-
+antispam_default_relay_server: "IP"
+antispam_allowed_senders: "IP"
 clamav_check_freq: 24
 clamav_mirrors:
   - db.local.clamav.net
