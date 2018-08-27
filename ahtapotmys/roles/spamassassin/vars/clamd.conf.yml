@@ -10,7 +10,7 @@ clamd_conf: |
   ScanMail true
   ScanArchive true
   ArchiveBlockEncrypted {{antispam_block_encrypted_archive}}
-  MaxDirectoryRecursion 15
+  MaxDirectoryRecursion {{antispam_MaxDirectoryRecursion}}
   FollowDirectorySymlinks false
   FollowFileSymlinks false
   ReadTimeout 180
@@ -56,16 +56,16 @@ clamd_conf: |
   SendBufTimeout 200
   MaxQueue 100
   ExtendedDetectionInfo true
-  OLE2BlockMacros false
+  OLE2BlockMacros {{antispam_OLE2BlockMacros}}
   ScanOnAccess false
   AllowAllMatchScan true
   ForceToDisk false
   DisableCertCheck false
   DisableCache false
-  MaxScanSize 100M
-  MaxFileSize 25M
-  MaxRecursion 16
-  MaxFiles 10000
+  MaxScanSize {{antispam_MaxScanSize}}
+  MaxFileSize {{antispam_MaxFileSize}}
+  MaxRecursion {{antispam_MaxRecursion}}
+  MaxFiles {{antispam_MaxFiles}}
   MaxPartitions 50
   MaxIconsPE 100
   PCREMatchLimit 10000
@@ -78,7 +78,7 @@ clamd_conf: |
   StatsPEDisabled true
   StatsHostID auto
   StatsTimeout 10
-  StreamMaxLength 25M
+  StreamMaxLength {{antispam_StreamMaxLength}}
   LogFile /var/log/clamav/clamav.log
   LogTime true
   LogFileUnlock false

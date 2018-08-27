@@ -8,7 +8,7 @@ main_cf: |
   # is /etc/mailname.
   #myorigin = /etc/mailname
   
-  smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+  smtpd_banner = {{ansible_hostname}}.{{antispam_domain}}
   biff = no
   
   # appending .domain is the MUAs job.
@@ -35,8 +35,8 @@ main_cf: |
   
   smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
   myhostname = {{ansible_hostname}}.{{antispam_domain}}
-  alias_maps = hash:/etc/aliases
-  alias_database = hash:/etc/aliases
+  #alias_maps = hash:/etc/aliases
+  #alias_database = hash:/etc/aliases
   myorigin = $myhostname
   mydestination = $myhostname, localhost.localdomain, localhost, localhost.localdomain, localhost
   relayhost = 
@@ -53,9 +53,20 @@ main_cf: |
   local_recipient_maps =
   smtpd_helo_required = yes
   disable_vrfy_command = yes
+  header_checks = regexp:/etc/postfix/header_checks
+  mime_header_checks = regexp:/etc/postfix/header_checks
+  smtpd_sender_restrictions = check_client_access hash:/etc/postfix/senderaccess, check_recipient_access hash:/etc/postfix/receiveraccess
   smtpd_recipient_restrictions = reject_invalid_hostname,reject_non_fqdn_hostname,reject_non_fqdn_sender,reject_non_fqdn_recipient,reject_unknown_sender_domain,reject_unauth_pipelining,permit_mynetworks,reject_unauth_destination, check_policy_service unix:private/spfcheck, check_policy_service inet:127.0.0.1:5525
   spfcheck_time_limit = 3600
   content_filter = smtp-amavis:[127.0.0.1]:10024
   relay_domains = {{antispam_domain}}
   transport_maps =  hash:/etc/postfix/transport
-  
+  smtpd_recipient_limit = {{antispam_smtpd_recipient_limit}}
+  smtp_tls_ciphers = {{antispam_smtp_tls_ciphers}}
+  parent_domain_matches_subdomains = {{antispam_parent_domain_matches_subdomains}}
+  smtp_tls_security_level = {{antispam_smtp_tls_security_level}}
+  smtpd_use_tls = {{antispam_smtpd_use_tls}}
+  smtp_tls_note_starttls_offer = {{antispam_smtp_tls_note_starttls_offer}}
+  smtpd_tls_received_header = {{antispam_smtpd_tls_received_header}}
+  smtpd_tls_session_cache_timeout = {{antispam_smtpd_tls_session_cache_timeout}}
+  message_size_limit = {{antispam_message_size_limit}}  

@@ -1,0 +1,64 @@
+use strict;
+
+#
+# Place your configuration directives here.  They will override those in
+# earlier files.
+#
+# See /usr/share/doc/amavisd-new/ for documentation and examples of
+# the directives you can use in this file
+#
+
+
+#_-_-_-_-Whitelist_-_-_-_-
+@whitelist_sender_acl = qw(
+{% if antispam_whitelist_address_domain %}
+{% for address in antispam_whitelist_address_domain %}
+{{address}}
+{% endfor %}
+{% endif %}
+);
+
+#_-_-_-_-Blacklist_-_-_-_-
+@blacklist_sender_acl = qw(
+{% if antispam_blacklist_address_domain %}
+{% for address in antispam_blacklist_address_domain %}
+{{address}}
+{% endfor %}
+{% endif %}
+);
+@local_domains_maps  = ( [".{{antispam_domain}}"] );
+$sa_spam_modifies_subj = {{antispam_spam_modifies_subj}};
+$sa_spam_subject_tag = '{{antispam_spam_subject_tag}}';
+$sa_tag_level_deflt  = {{antispam_tag_level_deflt}};  # add spam info headers if at, or above that level
+$sa_tag2_level_deflt = {{antispam_tag2_level_deflt}}; # add 'spam detected' headers at that level
+$sa_kill_level_deflt = {{antispam_kill_level_deflt}}; # triggers spam evasive actions
+
+
+$banned_filename_re = new_RE(
+# qr'^UNDECIPHERABLE$',  # is or contains any undecipherable components
+
+{% if antispam_block_mimetypes %}
+{% for mime in antispam_block_mimetypes %}
+  qr'^{{mime}}$'i,
+{% endfor %}
+{% endif %}
+
+{% if antispam_block_filetypes %}
+{% for file in antispam_block_filetypes %}
+  qr'^\.({{file}})$',
+{% endfor %}
+{% endif %}
+
+{% if antispam_block_fileextensions %}
+{% for ext in antispam_block_fileextensions %}
+  qr'.\.({{ext}})$'i,
+{% endfor %}
+{% endif %}
+
+);
+
+
+#------------ Do not modify anything below this line -------------
+1;  # ensure a defined return
+
+
