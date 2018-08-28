@@ -38,6 +38,7 @@
     - unzip
     - zip
     - postfix-policyd-spf-python
+    - postfwd
 
 - name: Check if ssl certificate exists
   sudo: yes
@@ -91,6 +92,21 @@
   sudo: yes
   shell: >
     sed -i '/^mydestination/ s/$myhostname/$myhostname\, $mydomain/' /etc/postfix/main.cf
+
+- name: antispam | enabling postfwd service
+  sudo: yes
+  shell: >
+    sed -i 's/^STARTUP=0/STARTUP=1/' /etc/default/postfwd
+
+- name: antispam | copying postfwd.cf
+  sudo: yes
+  template:
+    src: "postfwd.cf.j2"
+    dest: "/etc/postfix/postfwd.cf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfwd
 
 - name: antispam | modifying master.cf
   sudo: yes

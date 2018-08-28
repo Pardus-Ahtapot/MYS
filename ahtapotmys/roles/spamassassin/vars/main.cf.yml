@@ -8,7 +8,7 @@ main_cf: |
   # is /etc/mailname.
   #myorigin = /etc/mailname
   
-  smtpd_banner = {{ansible_hostname}}.{{antispam_domain}}
+  smtpd_banner = {{antispam_smtpd_banner[ansible_hostname]}}
   biff = no
   
   # appending .domain is the MUAs job.
@@ -56,7 +56,8 @@ main_cf: |
   header_checks = regexp:/etc/postfix/header_checks
   mime_header_checks = regexp:/etc/postfix/header_checks
   smtpd_sender_restrictions = check_client_access hash:/etc/postfix/senderaccess, check_recipient_access hash:/etc/postfix/receiveraccess
-  smtpd_recipient_restrictions = reject_invalid_hostname,reject_non_fqdn_hostname,reject_non_fqdn_sender,reject_non_fqdn_recipient,reject_unknown_sender_domain,reject_unauth_pipelining,permit_mynetworks,reject_unauth_destination, check_policy_service unix:private/spfcheck, check_policy_service inet:127.0.0.1:5525
+  smtpd_recipient_restrictions = reject_invalid_hostname,reject_non_fqdn_hostname,reject_non_fqdn_sender,reject_non_fqdn_recipient,reject_unknown_sender_domain,reject_unauth_pipelining,permit_mynetworks,reject_unauth_destination, check_policy_service unix:private/spfcheck, check_policy_service inet:127.0.0.1:5525, check_policy_service inet:127.0.0.1:10040
+  smtpd_end_of_data_restrictions = check_policy_service inet:127.0.0.1:10040
   spfcheck_time_limit = 3600
   content_filter = smtp-amavis:[127.0.0.1]:10024
   relay_domains = {{antispam_domain}}
