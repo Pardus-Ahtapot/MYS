@@ -31,10 +31,12 @@
   - /etc/ansible/roles/ips/vars/fileblacklist.md5.yml
   - /etc/ansible/roles/ips/vars/local.rules.yml
   - /etc/ansible/roles/ips/vars/content.yml
+  - /etc/ansible/roles/ips/vars/enablesid.yml
+  - /etc/ansible/roles/ips/vars/disablesid.yml
+  - /etc/ansible/roles/ips/vars/dropsid.yml
+  - /etc/ansible/roles/ips/vars/modifysid.yml
   roles:
     - role: base
-    - role: mysql
-    - role: snorby
     - role: ips
     - role: barnyard2
     - role: pulledpork
