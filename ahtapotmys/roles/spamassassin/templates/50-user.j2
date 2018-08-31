@@ -33,6 +33,10 @@ $sa_tag_level_deflt  = {{antispam_tag_level_deflt}};  # add spam info headers if
 $sa_tag2_level_deflt = {{antispam_tag2_level_deflt}}; # add 'spam detected' headers at that level
 $sa_kill_level_deflt = {{antispam_kill_level_deflt}}; # triggers spam evasive actions
 
+$final_virus_destiny = D_DISCARD;
+$final_banned_destiny = D_DISCARD;
+$final_spam_destiny = D_DISCARD;
+$final_bad_header_destiny = D_DISCARD;
 
 $banned_filename_re = new_RE(
 # qr'^UNDECIPHERABLE$',  # is or contains any undecipherable components

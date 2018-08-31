@@ -26,6 +26,7 @@ rsyslog:
    QueueFileNameANS: "srvfrwd_ans"
    QueueFileNameIPT: "srvfrwd_iptables"
    QueueFileNameSYS: "srvfrwd_syslog"
+   QueueFileNameSURICATA: "srvfrwd_suricata"
    QueueSaveOnShutdown: "on"
    QueueMaxFileSize: "100m"
    QueueSize: "250000"

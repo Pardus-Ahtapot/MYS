@@ -175,6 +175,48 @@
   shell: >
     /usr/share/oinkmaster/create-sidmap.pl /etc/suricata/rules/ | tee /etc/suricata/rules/sid-msg.map
 
+- name: configure_suricata | copying enablesid
+  sudo: yes
+  template:
+    src: "enablesid.conf.j2"
+    dest: "/etc/pulledpork/enablesid.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: configure_suricata | copying disablesid
+  sudo: yes
+  template:
+    src: "disablesid.conf.j2"
+    dest: "/etc/pulledpork/disablesid.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: configure_suricata | copying modifysid
+  sudo: yes
+  template:
+    src: "modifysid.conf.j2"
+    dest: "/etc/pulledpork/modifysid.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: configure_suricata | copying dropsid
+  sudo: yes
+  template:
+    src: "dropsid.conf.j2"
+    dest: "/etc/pulledpork/dropsid.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: configure_suricata | running pulledpork
+  sudo: yes
+  command: /usr/local/sbin/pulledpork.pl -k -S suricata-3.0 -P -n -c /etc/pulledpork/pulledpork.conf -i /etc/pulledpork/disablesid.conf -e /etc/pulledpork/enablesid.conf -b /etc/pulledpork/dropsid.conf -M /etc/pulledpork/modifysid.conf -m /etc/suricata/rules/sid-msg.map -h /var/log/sid_changes.log
+  notify: restart suricata
+
+
 #- name: configure_suricata | configuring oinkmaster cron job
 #  cron:
 #    name: "oinkmaster rules update"

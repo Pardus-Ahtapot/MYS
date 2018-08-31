@@ -49,6 +49,43 @@ input(type="imfile"
    tag=""
    ruleset="AnsibleLogs")
 
+{% if ansible_fqdn in groups['suricata_ips'] or ansible_fqdn in groups['suricata_ids'] %}
+#####################
+### Suricata Logs ###
+#####################
+
+ruleset(name="SuricataLogs") {
+   action(name="Suricata-Log-Gonderme"
+      type="omrelp"
+{% for key, value in ossimciks.iteritems() %}
+{% if ansible_fqdn in value.clients %}
+      target="{{ value.fqdn }}"
+      port="{{ value.port }}"
+{% endif %}
+{% endfor %}
+      tls="{{ rsyslog['tls']['state'] }}"
+      tls.caCert="{{ rsyslog['tls']['cacert'] }}"
+      tls.myCert="{{ rsyslog['tls']['mycert'] }}"
+      tls.myPrivKey="{{ rsyslog['tls']['mykey'] }}"
+      tls.authmode="{{ rsyslog['tls']['authmode'] }}"
+      tls.permittedpeer=["{{ rsyslog['tls']['permittedpeer'] }}"]
+      queue.Type="{{ rsyslog['QueueType'] }}"
+      queue.FileName="{{ rsyslog['QueueFileNameSURICATA'] }}"
+      queue.SaveOnShutdown="{{ rsyslog['QueueSaveOnShutdown'] }}"
+      queue.MaxFileSize="{{ rsyslog['QueueMaxFileSize'] }}"
+      action.resumeRetryCount="{{ rsyslog['ActionResumeRetryCount'] }}"
+   )
+   stop
+}
+
+input(type="imfile"
+   file="/var/log/suricata/fast.log"
+   tag=""
+   ruleset="SuricataLogs")
+{% endif %}
+
+
+
 #####################
 ### IPtables Logs ###
 #####################

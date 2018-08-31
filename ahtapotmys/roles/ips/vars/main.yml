@@ -152,7 +152,7 @@ suricata_outputs:
     filename: fast.log
     append: "yes"
   - name: eve-log
-    enabled: "yes"
+    enabled: "no"
     type: file  #file|syslog|unix_dgram|unix_stream
     filename: eve.json
     types:
@@ -184,7 +184,7 @@ suricata_outputs:
       - var: header
         val: X-Forwarded-For
   - name: http-log
-    enabled: "yes"
+    enabled: "no"
     filename: http.log
     append: "yes"
   - name: tls-log
@@ -215,7 +215,7 @@ suricata_outputs:
     log_packet_content: "no"
     log_packet_header: "yes"
   - name: stats
-    enabled: "yes"
+    enabled: "no"
     filename: stats.log
     interval: 8
   - name: syslog

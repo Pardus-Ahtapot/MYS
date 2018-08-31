@@ -37,6 +37,9 @@ antispam_MaxFileSize: "25M"
 antispam_MaxRecursion: "16"
 antispam_MaxFiles: "10000"
 antispam_StreamMaxLength: "25M"
+antispam_spoof_sender: "example.net"
+antispam_spoof_recipient: "example.net"
+antispam_smtpd_banner: { xxx: xxx1, yyy: yyy1 }
 clamav_check_freq: 24
 clamav_mirrors:
   - db.local.clamav.net
