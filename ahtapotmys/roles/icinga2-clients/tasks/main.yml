@@ -18,6 +18,15 @@
     group: root
     mode: 0755
 
+- name: Copy check_service
+  sudo: yes
+  template:
+    src: check_service.j2
+    dest: "/usr/lib/nagios/plugins/check_service"
+    owner: root
+    group: root
+    mode: 0755 
+
 - name: Copy check_eth
   sudo: yes
   template:

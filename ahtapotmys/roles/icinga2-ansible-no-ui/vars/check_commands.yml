@@ -1,0 +1,10 @@
+check_commands: {
+  check_disk: { -H: "\"$address$\"", -c: "\"check_disk\", \"-a\", \"30%\", \"10%\", \"/\"" },
+  check_load: { -H: "\"$address$\"", -c: "\"check_load\", \"-a\", \"5,5,5\", \"10,10,10\"" },
+  check_mem: { -H: "\"$address$\"", -c: "\"check_mem\", \"-a\", \"10\", \"5\"" },
+  check_eth: { -H: "\"$address$\"", -c: "\"check_eth\", \"-a\", \"eth0\", \"1024K Bps\", \"2048K Bps\"" },
+  check_website: { -H: "\"$address$\"", -c: "\"check_website\", \"-a\", \"www.labrisnetworks.com\"" },
+  check_eth_ens18: { -H: "\"$address$\"", -c: "\"check_eth\", \"-a\", \"ens18\", \"1024K Bps\", \"2048K Bps\"" },
+  check_service_suricata: { -H: "\"$address$\"", -c: "\"check_service\", \"-a\", \"linux\", \"suricata\"" } 
+}
+
