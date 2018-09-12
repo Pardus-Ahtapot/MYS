@@ -39,6 +39,12 @@ antispam_MaxFiles: "10000"
 antispam_StreamMaxLength: "25M"
 antispam_spoof_sender: "example.net"
 antispam_spoof_recipient: "example.net"
+antispam_relay_domains: "{{antispam_domain}},example.org"
+antispam_transport_domains: { transport.example.org: 10.10.10.10 } 
+use_quarantine: "True"
+quarantine_db_host: "10.10.10.10"
+quarantine_db_user: "ahtapot"
+quarantine_db_pass: "ahtapot"
 antispam_smtpd_banner: { xxx: xxx1, yyy: yyy1 }
 clamav_check_freq: 24
 clamav_mirrors:
