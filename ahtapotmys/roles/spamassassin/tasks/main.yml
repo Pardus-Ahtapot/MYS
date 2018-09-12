@@ -39,6 +39,7 @@
     - zip
     - postfix-policyd-spf-python
     - postfwd
+    - libclass-dbi-mysql-perl
 
 - name: Check if ssl certificate exists
   sudo: yes
