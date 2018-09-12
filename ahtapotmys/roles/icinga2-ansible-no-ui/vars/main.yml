@@ -35,6 +35,13 @@ icinga2:
     owner: "root"
     group: "root"
     mode: "0644"
+  groups_conf:
+    src: "groups.conf.j2"
+    dest: "/etc/icinga2/conf.d/groups.conf"
+    backup: "yes"
+    owner: "root"
+    group: "root"
+    mode: "0644"
   create_hosts:
     src: "hosts.j2"
     dest: "/etc/icinga2/conf.d/hosts/"
