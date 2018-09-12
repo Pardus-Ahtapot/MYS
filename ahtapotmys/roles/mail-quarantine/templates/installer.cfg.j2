@@ -1,0 +1,111 @@
+[general]
+hostname = {{quarantine_subdomain_name}}.%(domain)s
+
+[certificate]
+generate = true
+type = self-signed
+
+[letsencrypt]
+email = admin@example.com
+
+[database]
+engine = mysql
+host = 127.0.0.1
+install = true
+
+[postgres]
+user = postgres
+password =
+
+[mysql]
+user = {{quarantine_db_root_user}}
+password = {{quarantine_db_root_pass}}
+charset = utf8
+collation = utf8_general_ci
+
+[modoboa]
+user = modoboa
+home_dir = /srv/modoboa
+venv_path = %(home_dir)s/env
+instance_path = %(home_dir)s/instance
+timezone = Europe/Istanbul
+dbname = modoboa
+dbuser = {{quarantine_db_user}}
+dbpassword = {{quarantine_db_pass}}
+extensions = modoboa-amavis
+devmode = false
+
+[automx]
+enabled = false
+user = automx
+config_dir = /etc
+home_dir = /srv/automx
+venv_path = %(home_dir)s/env
+instance_path = %(home_dir)s/instance
+
+[amavis]
+enabled = true
+user = amavis
+max_servers = 1
+dbname = amavis
+dbuser = {{quarantine_db_user}}
+dbpassword = {{quarantine_db_pass}}
+
+[clamav]
+enabled = false
+user = clamav
+
+[dovecot]
+enabled = false
+config_dir = /etc/dovecot
+user = vmail
+home_dir = /srv/vmail
+mailboxes_owner = vmail
+extra_protocols =
+postmaster_address = postmaster@%(domain)s
+radicale_auth_socket_path = /var/run/dovecot/auth-radicale
+
+[nginx]
+enabled = true
+config_dir = /etc/nginx
+
+[razor]
+enabled = false
+config_dir = /etc/razor
+
+[postfix]
+enabled = false
+config_dir = /etc/postfix
+message_size_limit = 11534336
+
+[postwhite]
+enabled = false
+config_dir = /etc
+
+[spamassassin]
+enabled = true
+config_dir = /etc/spamassassin
+dbname = spamassassin
+dbuser = {{quarantine_db_user}}
+dbpassword = {{quarantine_db_pass}}
+
+[uwsgi]
+enabled = true
+config_dir = /etc/uwsgi
+nb_processes = 2
+
+[radicale]
+enabled = false
+user = radicale
+config_dir = /etc/radicale
+home_dir = /srv/radicale
+venv_path = %(home_dir)s/env
+
+[opendkim]
+enabled = false
+user = opendkim
+config_dir = /etc
+port = 12345
+keys_storage_dir = /var/lib/dkim
+dbuser = opendkim
+dbpassword = ahtapot

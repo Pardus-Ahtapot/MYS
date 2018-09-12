@@ -21,6 +21,17 @@
   notify:
    - restart icinga2
 
+- name: Copy groups.conf
+  sudo: yes
+  template: src="{{ icinga2['groups_conf']['src'] }}"
+            dest="{{ icinga2['groups_conf']['dest'] }}"
+            backup="{{ icinga2['groups_conf']['backup'] }}"
+            owner="{{ icinga2['groups_conf']['owner'] }}"
+            group="{{ icinga2['groups_conf']['group'] }}"
+            mode="{{ icinga2['groups_conf']['mode'] }}"
+  notify:
+   - restart icinga2
+
 - name: Create hosts directory
   sudo: yes
   file: path="{{ icinga2['create_hosts']['dest'] }}"
