@@ -1,0 +1,7 @@
+quarantine_mail_domain: "mail.test.org"
+quarantine_subdomain_name: "karantina"
+quarantine_db_host: "127.0.0.1"
+quarantine_db_user: "ahtapot"
+quarantine_db_pass: "ahtapot"
+quarantine_db_root_user: "root"
+quarantine_db_root_pass: "root"

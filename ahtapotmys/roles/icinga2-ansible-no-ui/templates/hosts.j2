@@ -3,6 +3,7 @@
 object Host "{{item.hostname}}" {
   import "generic-host"
   address = "{{item.ip}}"
+  vars.os = "{{item.os}}"
   check_command = "hostalive"
 {% if item.snmp_check == "true" %}
   vars.snmp_address = "{{item.ip}}"

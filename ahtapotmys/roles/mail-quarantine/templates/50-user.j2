@@ -1,0 +1,29 @@
+$mydomain = '{{quarantine_mail_domain}}';
+$myhostname = '{{ansible_fqdn}}';
+$inet_socket_port = [9998, 10024, 10026];
+$max_servers = 1;
+
+@lookup_sql_dsn = ( [ 'DBI:mysql:database=amavis;host={{quarantine_db_host}}', '{{quarantine_db_user}}', '{{quarantine_db_pass}}' ] );
+@storage_sql_dsn = @lookup_sql_dsn;
+$sql_allow_8bit_address = 1;
+
+$virus_quarantine_method = 'sql:';
+$spam_quarantine_method = 'sql:';
+$banned_files_quarantine_method = 'sql:';
+$bad_header_quarantine_method = 'sql:';
+
+$interface_policy{'9998'} = 'AM.PDP-INET';
+
+$policy_bank{'AM.PDP-INET'} = {
+  protocol => 'AM.PDP',
+  inet_acl => [qw(127.0.0.1)],
+};
+
+$interface_policy{'10026'} = 'ORIGINATING';
+
+$policy_bank{'ORIGINATING'} = {
+  originating => 1,
+  smtpd_discard_ehlo_keywords => ['8BITMIME'],
+};
+
+
