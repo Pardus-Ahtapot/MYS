@@ -9,11 +9,11 @@ icinga2_classic_ui_pkg:
  - python-passlib
 
 icinga_ssl_country: "TR"
-icinga_ssl_state: "Ankara"
-icinga_ssl_locality: "Ankara"
-icinga_ssl_organization: "DzKK"
-icinga_ssl_organizationalunit: "Siber"
-icinga_ssl_commonname: "dzkk.tsk.mil.tr"
+icinga_ssl_state: "sehir"
+icinga_ssl_locality: "lokal"
+icinga_ssl_organization: "kurum"
+icinga_ssl_organizationalunit: "birim"
+icinga_ssl_commonname: "kurum.test"
 
 authorized_for_system_information: "*"
 authorized_for_configuration_information: "*"
