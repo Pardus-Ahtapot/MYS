@@ -2,7 +2,7 @@ icinga_server_ip: "127.0.0.1"
 
 nrpe_deps:
   - nagios-nrpe-server
-  - nagios-plugins
+  - nagios-nrpe-plugin
 
 icinga2_clients:
   install:
