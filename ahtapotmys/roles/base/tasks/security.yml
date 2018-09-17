@@ -1,0 +1,1036 @@
+#bu playbook cis standartlarını uygular. https://www.cisecurity.org/benchmark/debian_linux/
+---
+- name: Butun paketler son surume guncelleniyor
+  apt: upgrade=yes
+  sudo: yes
+  tags: security
+
+- name: tmp.mount system dosyasi olusturuluyor
+  template:
+        src: "{{ tmpmount['conf']['source'] }}"
+        dest: "{{ tmpmount['conf']['destination'] }}"
+        owner: "{{ tmpmount['conf']['owner'] }}"
+        group: "{{ tmpmount['conf']['group'] }}"
+        mode: "{{ tmpmount['conf']['mode'] }}"
+  sudo: yes
+  tags: security
+
+
+- name: tmp.mount aktif ediliyor ve ayaga kaldiriliyor
+  service:
+        name: "{{ tmpmount['service']['name'] }}"
+        state: "{{ tmpmount['service']['state'] }}"
+        enabled: "{{ tmpmount['service']['enabled'] }}"
+  sudo: yes
+  tags: security
+
+- name: /tmp ve /var/tmp klasorleri bind ediliyor
+  shell: grep -q -e "^/tmp.*/var/tmp.*bind.*" {{ fstab['conffile'] }} || mount --bind /tmp /var/tmp
+  args:
+        executable: /bin/bash
+  sudo: yes
+  tags: security
+
+- name: /tmp /tmp/var bind yapilandirmasi /etc/fstab icine yaziliyor
+  lineinfile:
+        dest: "{{ fstab['conffile'] }}"
+        regexp: '^/tmp.*/var/tmp.*bind.*'
+        line: '/tmp /var/tmp none bind 0 0'
+        backup: yes
+  sudo: yes
+  tags: security
+
+#/dev/sr ile basliyan satırların 4. sutununu "user,noauto,nodev,noexec,nosuid" yapar
+- name: Media suruculeri icin guvelink yapilandirmasi
+  lineinfile:
+        dest: "{{ fstab['conffile'] }}"
+        backrefs: yes
+        regexp: '^(\/dev\/sr[^\s]+)[\s]+([^\s]+)[\s]+([^\s]+)[\s]+([^\s]+)[\s]+([^\s]+)[\s]+([^\s]+)$'
+        line: '\1 \2 \3 user,noauto,nodev,noexec,nosuid \5 \6'
+        backup: yes
+  sudo: yes
+  tags: security
+
+- name: /home dizinine nodev parametresi ekleniyor
+  shell: |
+    if mount | grep -q home; then
+      if ! mount | grep home | grep -q nodev; then
+        mount -o remount,nodev /home
+        echo -n changed;
+        exit 0
+      fi;
+    fi
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result == "changed"
+  sudo: yes
+  tags: security
+
+- name: /dev/shm yapilandirmasi /etc/fstab a yaziliyor
+  lineinfile:
+        dest: "{{ fstab['conffile'] }}"
+        regexp: '^tmpfs /dev/shm.*'
+        line: 'tmpfs /dev/shm tmpfs nodev,nosuid,rw,noexec 0 0'
+        backup: yes
+  sudo: yes
+  tags: security
+
+- name: Dunyaca yazilabilir dizinlerin yapiskan bitleri duzenleniyor
+  shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+x"
+  args:
+        executable: /bin/bash
+  sudo: yes
+  tags: security
+
+- name: Root sifresinin varligi kontrol ediliyor
+  shell: if grep -q "^root:[*\!]:" /etc/shadow ;then echo -n fail; else echo -n ok; fi
+  args:
+        executable: /bin/bash
+  register: result
+  sudo: yes
+  tags: security
+  changed_when: result.stdout == "fail"
+  notify: root password warning
+
+- name: sysctl ayarlari aktariliyor
+  template:
+        src: "{{ sysctl['source'] }}"
+        dest: "{{ sysctl['destination'] }}"
+        owner: "{{ sysctl['owner'] }}"
+        group: "{{ sysctl['group'] }}"
+        mode: "{{ sysctl['mode'] }}"
+  notify: reload sysctl
+  sudo: yes
+  tags: security
+
+- name: limit yapilindarmasi aktariliyor
+  template:
+        src: "{{ limit['source'] }}"
+        dest: "{{ limit['destination'] }}"
+        owner: "{{ limit['owner'] }}"
+        group: "{{ limit['group'] }}"
+        mode: "{{ limit['mode'] }}"
+  sudo: yes
+  tags: security
+
+- name: Grub konfigure ediliyor
+  lineinfile:
+        dest: "{{ grub['defaultfile'] }}"
+        regexp: '^GRUB_CMDLINE_LINUX=.*'
+        line: 'GRUB_CMDLINE_LINUX="initrd=/install/gtk/initrd.gz apparmor=1 security=apparmor audit=1"'
+        backup: yes
+  notify: grub yeniden yapilandiriliyor
+  sudo: yes
+  tags: security
+
+  #apparmor aktif degil ise cihazın yeniden baslatilmasi gerekmektedir.
+- name: apparmor complain profilleri kontrol ediliyor
+  shell: if apparmor_status --enabled; then apparmor_status --complaining; else echo -n fail; fi
+  args:
+        executable: /bin/bash
+  register: result_comp
+  sudo: yes
+  tags: security
+  changed_when: result_comp.stdout == "fail"
+  notify: reboot required
+
+- name: enforce apparmor profiles if there is a complaining profile
+  shell: aa-enforce /etc/apparmor.d/*
+  args:
+        executable: /bin/bash
+  when: result_comp.stdout != "fail" and result_comp.stdout != "0"
+  sudo: yes
+  tags: security
+
+- name: inetd.conf yapilandiriliyor
+  lineinfile:
+        dest: "{{ inetd['conffile'] }}"
+        regexp: "{{item.value}}"
+        state: absent
+        backup: yes
+  with_dict: "{{inetd.remove_lines}}"
+  sudo: yes
+  tags: security
+
+- name: xinetd deaktive ediliyor
+  shell: if ls /etc/rc*.d | grep xinetd ; then update-rc.d xinetd disable; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: xinetdresult
+  changed_when: xinetdresult.stdout == "changed"
+  sudo: yes
+  tags: security
+
+- name: Gereksiz servisler deaktif ediliyor
+  shell: if systemctl is-enabled {{item.value}}; then systemctl disable {{item.value}}; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: serviceresult
+  changed_when: serviceresult.stdout == "changed"
+  with_dict: "{{services}}"
+  sudo: yes
+  tags: security
+
+- name: DHCP server  deaktif ediliyor
+  shell: if /etc/rc*.d | grep "S.*isc-dhcp-server" ; then update-rc.d isc-dhcp-server disable; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: dhcpresult
+  changed_when: dhcpresult.stdout == "changed"
+  when: |
+    (groups['dhcp'] is not defined or inventory_hostname not in groups['dhcp']) and
+    (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
+    (groups['proxy-dhcp'] is not defined or inventory_hostname not in groups['proxy-dhcp'])
+  sudo: yes
+  tags: security
+
+- name: LDAP server siliniyor
+  apt:
+        name: slapd
+        state: absent
+        force: "yes"
+        purge: "yes"
+  when: groups['openvpn'] is not defined or inventory_hostname not in groups['openvpn']
+  sudo: yes
+  tags: install
+
+- name: RPC deaktive ediliyor
+  shell: if ls /etc/rc*.d | grep "S.*rpcbind" ; then update-rc.d rpcbind disable; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: rpcresult
+  changed_when: rpcresult.stdout == "changed"
+  sudo: yes
+  tags: security
+
+- name: NFS deaktive ediliyor
+  shell: if ls /etc/rc*.d | grep "S.*nfs-kernel-server" ; then update-rc.d nfs-kernel-server disable; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: rpcresult
+  changed_when: rpcresult.stdout == "changed"
+  sudo: yes
+  tags: security
+
+- name: DNS server deaktif ediliyor
+  shell: if systemctl is-enabled bind9; then systemctl disable bind9; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: dnsresult
+  changed_when: dnsresult.stdout == "changed"
+  when: groups['dns'] is not defined or inventory_hostname not in groups['dns']
+  sudo: yes
+  tags: security
+
+- name: FTP server deaktif ediliyor
+  shell: if systemctl is-enabled vsftpd; then systemctl disable vsftpd; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: dnsresult
+  changed_when: dnsresult.stdout == "changed"
+  when: groups['ftp'] is not defined or inventory_hostname not in groups['ftp']
+  sudo: yes
+  tags: security
+
+- name: Apache deaktive ediliyor
+  shell: if ls /etc/rc*.d | grep "S.*apache2" ; then update-rc.d apache2 disable; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: apacheresult
+  changed_when: apacheresult.stdout == "changed"
+  when: |
+    (groups['zabbix'] is not defined or inventory_hostname not in groups['zabbix']) and
+    (groups['icinga'] is not defined or inventory_hostname not in groups['icinga']) and
+    (groups['icinga2-clients'] is not defined or inventory_hostname not in groups['icinga2-clients']) and
+    (groups['ossimcik'] is not defined or inventory_hostname not in groups['ossimcik']) and
+    (groups['waf'] is not defined or inventory_hostname not in groups['waf']) and
+    (groups['freshclam-mirror'] is not defined or inventory_hostname not in groups['freshclam-mirror'])
+  sudo: yes
+  tags: security
+
+- name: Samba deaktive ediliyor
+  shell: if ls /etc/rc*.d | grep "S.*smbd" ; then update-rc.d smbd disable; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: smbdresult
+  changed_when: smbdresult.stdout == "changed"
+  sudo: yes
+  tags: security
+
+- name: Squid deaktive ediliyor
+  shell: if ls /etc/rc*.d | grep "S.*squid3" ; then update-rc.d squid3 disable; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: squidresult
+  changed_when: squidresult.stdout == "changed"
+  when: |
+    (groups['proxy'] is not defined or inventory_hostname not in groups['proxy']) and
+    (groups['proxy-dhcp'] is not defined or inventory_hostname not in groups['proxy-dhcp']) and
+    (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
+    (groups['pwlm'] is not defined or inventory_hostname not in groups['pwlm'])
+  sudo: yes
+  tags: security
+
+- name: SNMP deaktive ediliyor
+  shell: if ls /etc/rc*.d | grep "S.*snmpd" ; then update-rc.d snmpd disable; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: snmpdresult
+  changed_when: snmpdresult.stdout == "changed"
+  sudo: yes
+  tags: security
+
+- name: MTA (Mail Transfer Agent) sadece local baglantilari kabul edecek sekilde yapilandiriliyor
+  lineinfile:
+        dest: /etc/exim4/update-exim4.conf.conf
+        regexp: '^dc_local_interfaces.*'
+        line: "dc_local_interfaces='127.0.0.1 ; ::1'"
+        backup: yes
+  notify: reload exim4
+  when: |
+    (groups['icinga'] is not defined or inventory_hostname not in groups['icinga']) and
+    (groups['icinga2-clients'] is not defined or inventory_hostname not in groups['icinga2-clients']) and
+    (groups['antispam'] is not defined or inventory_hostname not in groups['antispam'])
+  sudo: yes
+  tags: security
+
+- name: RSYNC siliniyor
+  apt:
+        name: rsync
+        state: absent
+        force: "yes"
+        purge: "yes"
+  when: |
+    (groups['ansible'] is not defined or inventory_hostname not in groups['ansible']) and
+    (groups['rsyslog'] is not defined or inventory_hostname not in groups['rsyslog']) and
+    (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and
+    (groups['firewall-builder'] is not defined or inventory_hostname not in groups['firewall-builder']) and
+    (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['testfirewall'] is not defined or inventory_hostname not in groups['testfirewall'])
+  sudo: yes
+  tags: install
+
+- name: IP yonlendirme kapatılıyor
+  lineinfile:
+        dest: /etc/sysctl.conf
+        regexp: '^net.ipv4.ip_forward.*'
+        line: "net.ipv4.ip_forward = 0"
+        backup: yes
+  notify: reload sysctl
+  when: |
+    (groups['openvpn'] is not defined or inventory_hostname not in groups['openvpn']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and
+    (groups['firewall-builder'] is not defined or inventory_hostname not in groups['firewall-builder']) and
+    (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['testfirewall'] is not defined or inventory_hostname not in groups['testfirewall']) and
+    (groups['proxy'] is not defined or inventory_hostname not in groups['proxy']) and
+    (groups['suricata_ids'] is not defined or inventory_hostname not in groups['suricata_ids']) and
+    (groups['suricata_ips'] is not defined or inventory_hostname not in groups['suricata_ips'])
+  sudo: yes
+  tags: security
+
+
+- name: ICMP Redirect kapatiliyor
+  lineinfile:
+        dest: /etc/sysctl.conf
+        regexp: '^{{item}}'
+        line: "{{item}} = 0"
+        backup: yes
+  when: |
+    (groups['openvpn'] is not defined or inventory_hostname not in groups['openvpn']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and
+    (groups['firewall-builder'] is not defined or inventory_hostname not in groups['firewall-builder']) and
+    (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['testfirewall'] is not defined or inventory_hostname not in groups['testfirewall']) and
+    (groups['proxy'] is not defined or inventory_hostname not in groups['proxy']) and
+    (groups['suricata_ids'] is not defined or inventory_hostname not in groups['suricata_ids']) and
+    (groups['suricata_ips'] is not defined or inventory_hostname not in groups['suricata_ips'])
+  notify: reload sysctl
+  with_items:
+    - net.ipv4.conf.all.send_redirects
+    - net.ipv4.conf.default.send_redirects
+  sudo: yes
+  tags: security
+
+- name: Source Routed Packet Acceptance kapatiliyor
+  lineinfile:
+        dest: /etc/sysctl.conf
+        regexp: '^{{item}}'
+        line: "{{item}} = 0"
+        backup: yes
+  when: |
+    (groups['openvpn'] is not defined or inventory_hostname not in groups['openvpn']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and
+    (groups['firewall-builder'] is not defined or inventory_hostname not in groups['firewall-builder']) and
+    (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['testfirewall'] is not defined or inventory_hostname not in groups['testfirewall']) and
+    (groups['proxy'] is not defined or inventory_hostname not in groups['proxy']) and
+    (groups['suricata_ids'] is not defined or inventory_hostname not in groups['suricata_ids']) and
+    (groups['suricata_ips'] is not defined or inventory_hostname not in groups['suricata_ips'])
+  notify: reload sysctl
+  with_items:
+    - net.ipv4.conf.all.accept_source_route
+    - net.ipv4.conf.default.accept_source_route
+  sudo: yes
+  tags: security
+
+
+- name: Secure ICMP Redirect Acceptance kapatiliyor
+  lineinfile:
+        dest: /etc/sysctl.conf
+        regexp: '^{{item}}'
+        line: "{{item}} = 0"
+        backup: yes
+  when: |
+    (groups['openvpn'] is not defined or inventory_hostname not in groups['openvpn']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and
+    (groups['firewall-builder'] is not defined or inventory_hostname not in groups['firewall-builder']) and
+    (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['testfirewall'] is not defined or inventory_hostname not in groups['testfirewall']) and
+    (groups['proxy'] is not defined or inventory_hostname not in groups['proxy']) and
+    (groups['suricata_ids'] is not defined or inventory_hostname not in groups['suricata_ids']) and
+    (groups['suricata_ips'] is not defined or inventory_hostname not in groups['suricata_ips'])
+  notify: reload sysctl
+  with_items:
+    - net.ipv4.conf.all.secure_redirects
+    - net.ipv4.conf.default.secure_redirects
+  sudo: yes
+  tags: security
+
+- name: RP Filter aktiflestiriliyor
+  lineinfile:
+        dest: /etc/sysctl.conf
+        regexp: '^{{item}}'
+        line: "{{item}} = 1"
+        backup: yes
+  when: |
+    (groups['openvpn'] is not defined or inventory_hostname not in groups['openvpn']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and
+    (groups['firewall-builder'] is not defined or inventory_hostname not in groups['firewall-builder']) and
+    (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['testfirewall'] is not defined or inventory_hostname not in groups['testfirewall']) and
+    (groups['proxy'] is not defined or inventory_hostname not in groups['proxy']) and
+    (groups['suricata_ids'] is not defined or inventory_hostname not in groups['suricata_ids']) and
+    (groups['suricata_ips'] is not defined or inventory_hostname not in groups['suricata_ips'])
+  notify: reload sysctl
+  with_items:
+    - net.ipv4.conf.all.rp_filter
+    - net.ipv4.conf.default.rp_filter
+  sudo: yes
+  tags: security
+
+- name: IPv6 deaktif ediliyor
+  lineinfile:
+        dest: /etc/sysctl.conf
+        regexp: '^{{item}}'
+        line: "{{item}} = 1"
+        backup: yes
+  when: ipv6_hosts is not defined or inventory_hostname not in ipv6_hosts
+  notify: reload sysctl
+  with_items:
+    - net.ipv6.conf.all.disable_ipv6
+    - net.ipv6.conf.default.disable_ipv6
+    - net.ipv6.conf.lo.disable_ipv6
+  sudo: yes
+  tags: security
+
+
+- name: IPv6 secilen hostlarda aktif ediliyor
+  lineinfile:
+        dest: /etc/sysctl.conf
+        regexp: '^{{item}}'
+        line: "{{item}} = 0"
+        backup: yes
+  when: ipv6_hosts is defined and inventory_hostname in ipv6_hosts
+  notify: reload sysctl
+  with_items:
+    - net.ipv6.conf.all.disable_ipv6
+    - net.ipv6.conf.default.disable_ipv6
+    - net.ipv6.conf.lo.disable_ipv6
+  sudo: yes
+  tags: security
+
+- name: hosts.allow yapilandiriliyor
+  template:
+        src: "{{ host_access['allow_source'] }}"
+        dest: "{{ host_access['allow_file'] }}"
+        owner: "{{ host_access['owner'] }}"
+        group: "{{ host_access['group'] }}"
+        mode: "{{ host_access['mode'] }}"
+  sudo: yes
+  tags: security
+
+- name: hosts.deny yapilandiriliyor
+  template:
+        src: "{{ host_access['deny_source'] }}"
+        dest: "{{ host_access['deny_file'] }}"
+        owner: "{{ host_access['owner'] }}"
+        group: "{{ host_access['group'] }}"
+        mode: "{{ host_access['mode'] }}"
+  sudo: yes
+  tags: security
+
+- name: Netfiter persistent aktif ediliyor
+  shell: if ! ls /etc/rc*.d | grep "S.*netfilter-persistent" ; then update-rc.d netfilter-persistent enable; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: npresult
+  changed_when: npresult.stdout == "changed"
+  sudo: yes
+  tags: security
+
+- name: Aktif degil ise audit servisini aktiflestir
+  shell: if ! systemctl is-enabled auditd; then systemctl enable auditd; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: auditresult
+  changed_when: auditresult.stdout == "changed"
+  sudo: yes
+  tags: security
+
+- name: Aktif degil ise rsyslog servisini aktiflestir
+  shell: if ! systemctl is-enabled rsyslog; then systemctl enable rsyslog; echo -n changed; fi
+  args:
+        executable: /bin/bash
+  register: rsysresult
+  changed_when: rsysresult.stdout == "changed"
+  sudo: yes
+  tags: security
+
+- name: Log dosyalarinin izinleri ayarlaniyor
+  shell: grep "/var/log.*$" /etc/rsyslog.conf  | sed -e 's/\(.*\)\(\/var\/log.*$\)/\2/g' | xargs -I '{}' bash -c "chown root:root '{}' && chmod og-rwx '{}'"
+  args:
+        executable: /bin/bash
+  register: shresult
+  failed_when: shresult.rc > 123
+  sudo: yes
+  tags: security
+
+- name: AIDE initialize adiliyor
+  shell: if [[ ! -f /var/lib/aide/aide.db ]]; then aideinit; cp /var/lib/aide/aide.db.new /var/lib/aide/aide.db;  else echo -n ok; fi
+  args:
+        executable: /bin/bash
+  register: aideresult
+  changed_when: aideresult.stdout != "ok"
+  sudo: yes
+  tags: security
+
+- name: AIDE (Advanced Intrusion Detection Environment) cron ayarlari aktariliyor
+  template:
+        src: "{{ aide['source'] }}"
+        dest: "{{ aide['destination'] }}"
+        owner: "{{ aide['owner'] }}"
+        group: "{{ aide['group'] }}"
+        mode: "{{ aide['mode'] }}"
+  sudo: yes
+  tags: security
+
+
+- name: Cron dosya izinleri duzenleniyor
+  file:
+        dest: "{{item.value.file}}"
+        owner: "{{item.value.owner}}"
+        group: "{{item.value.group}}"
+        state: "{{item.value.state}}"
+        mode: "{{item.value.mode}}"
+  with_dict: "{{cron_configuration.files}}"
+  sudo: yes
+  tags: security
+
+- name: Cron kullanici izinleri ekleniyor
+  lineinfile:
+        dest: "{{cron_configuration.allow_file}}"
+        line: "{{item}}"
+  with_items: "{{cron_configuration.allowed_users}}"
+  sudo: yes
+  tags: security
+
+- name: PAM password yapilandirmasi aktariliyor
+  lineinfile:
+        dest: "{{pam.password_file}}"
+        regexp: '^password.*pam_cracklib.so'
+        line: "{{pam.password_setting}}"
+        backup: yes
+  sudo: yes
+  tags: security
+
+- name: PAM login yapilandirmasi aktariliyor
+  lineinfile:
+        dest: "{{pam.login_file}}"
+        regexp: '^auth.*pam_tally2.so'
+        line: "{{pam.login_setting}}"
+        backup: yes
+  sudo: yes
+  tags: security
+
+- name: PAM sifre hatirlama politikasi aktariliyor
+  lineinfile:
+        dest: "{{pam.password_file}}"
+        regexp: '^password.*pam_unix.so'
+        line: "{{pam.password_reuse_policy}}"
+        backup: yes
+  sudo: yes
+  tags: security
+
+- name: su komut yapilandirmasi aktariliyor
+  lineinfile:
+        dest: "{{pam.su_file}}"
+        regexp: '^auth.*pam_wheel.so'
+        line: "{{pam.su_setting}}"
+        backup: yes
+  sudo: yes
+  tags: security
+
+- name: Kullanici hesap yapilandirmasi aktariliyor
+  template:
+        src: "{{ login_definitions['source'] }}"
+        dest: "{{ login_definitions['destination'] }}"
+        owner: "{{ login_definitions['owner'] }}"
+        group: "{{ login_definitions['group'] }}"
+        mode: "{{ login_definitions['mode'] }}"
+  sudo: yes
+  tags: security
+
+- name: Kullanici giris izinleri kontrol ediliyor
+  shell: |
+    for user in `awk -F: '($3 < 1000) {print $1 }' /etc/passwd`; do
+      if [ $user != "root" ];then
+        /usr/sbin/usermod -L $user;
+        if [ $user != "sync" ] && [ $user != "shutdown" ] && [ $user != "halt" ];then
+          /usr/sbin/usermod -s /usr/sbin/nologin $user;
+        fi;
+      fi;
+    done
+  args:
+        executable: /bin/bash
+  sudo: yes
+  tags: security
+
+- name: Root kullanici grubu duzenleniyor
+  shell: usermod -g 0 root
+  args:
+        executable: /bin/bash
+  register: rootresult
+  changed_when: rootresult.stderr == ""
+  sudo: yes
+  tags: security
+
+- name: umask set ediliyor
+  lineinfile:
+        dest: "/etc/bash.bashrc"
+        regexp: '^umask'
+        line: 'umask 077'
+        backup: yes
+  sudo: yes
+  tags: security
+
+- name: Kullanici inaktif kilit suresi set ediliyor
+  shell: useradd -D -f {{login_definitions.lock_inactive_user_account}}
+  args:
+        executable: /bin/bash
+  sudo: yes
+  tags: security
+
+- name: Onemli dosya izinleri ayarlaniyor
+  file:
+        dest: "{{item.value.file}}"
+        owner: "{{item.value.owner}}"
+        group: "{{item.value.group}}"
+        mode: "{{item.value.mode}}"
+  with_dict: "{{file_permissions}}"
+  sudo: yes
+  tags: security
+
+- name: Dunyaca yazilabilen dosyalarin izinleri ayarlaniyor
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002 -print |  xargs -I '{}' chmod o-w '{}'
+  args:
+        executable: /bin/bash
+  sudo: yes
+  tags: security
+
+- name: Sahipsiz dosyalar bulunuyor
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser | xargs -I '{}' chown root '{}'
+  args:
+        executable: /bin/bash
+  sudo: yes
+  tags: security
+
+- name: Grupsuz dosyalar bulunuyor
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup | xargs -I '{}' chown :root '{}'
+  args:
+        executable: /bin/bash
+  sudo: yes
+  tags: security
+
+- name: Sifresiz kullanici varligi kontrol ediliyor
+  shell: "/bin/cat /etc/shadow | /usr/bin/awk -F: '($2 == \"\" ) { print $1 \" does not have a password \"}'"
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  notify: sifresiz kullanici mevcut
+  sudo: yes
+  tags: security
+
+- name: Sifre dosyalarindan legacy girdiler siliniyor
+  shell: sed -i '/^+:/d' {{item}}
+  args:
+        executable: /bin/bash
+  with_items:
+    - /etc/passwd
+    - /etc/shadow
+    - /etc/group
+  sudo: yes
+  tags: security
+
+- name: Root disinda 0 UID sine sahip kullanici varligi kontrol ediliyor
+  shell: |
+    for user in `/bin/cat /etc/passwd | /usr/bin/awk -F: '($3 == 0 && $1 != "root") { print $1 }'`; do
+      sed -i '/^$user/d' /etc/passwd ;
+      echo changed
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  sudo: yes
+  tags: security
+
+- name: PATH integrity duzenleniyor
+  shell: |
+    if [ "`echo $PATH | grep :: `" != "" ]; then
+      echo "Empty Directory in PATH (::)";
+      exit 1
+    fi;
+    if [ "`echo $PATH | bin/grep :$`" != "" ]; then
+      echo "Trailing : in PATH";
+      exit 1
+    fi;
+    p=`echo $PATH | sed -e 's/::/:/' -e 's/:$//' -e 's/:/ /g'`;
+    set -- $p;
+    while [ "$1" != "" ]; do
+      if [ "$1" = "." ]; then
+        echo "PATH contains .";
+        shift;
+        continue;
+      fi;
+      if [ -d $1 ]; then
+        dirperm=`ls -ldH $1 | cut -f1 -d" "`;
+        if [ `echo $dirperm | cut -c6 ` != "-" ]; then
+          echo "Group Write permission set on directory $1";
+          chmod g-w $1;
+        fi;
+        if [ `echo $dirperm | cut -c9 ` != "-" ]; then
+          echo "Other Write permission set on directory $1";
+          chmod o-w $1;
+        fi;
+        dirown=`ls -ldH $1 | awk '{print $3}'`;
+        if [ "$dirown" != "root" ] ; then
+          echo $1 is not owned by root;
+          chown root $1;
+        fi;
+      else
+        echo $1 is not a directory;
+      fi;
+      shift;
+    done;
+    exit 0;
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  sudo: yes
+  tags: security
+
+- name: /home dizinlerinin izinleri duzenleniyor
+  shell: |
+    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
+      if [ -d $dir ]; then
+        dirperm=`/bin/ls -ld $dir | /usr/bin/cut -f1 -d" "`;
+        if [ `echo $dirperm | /usr/bin/cut -c6 ` != "-" ]; then
+          echo "Group Write permission set on directory $dir";
+          chmod g-w $dir;
+        fi;
+        if [ `echo $dirperm | /usr/bin/cut -c8 ` != "-" ]; then
+          echo "Other Read permission set on directory $dir";
+          chmod o-r $dir;
+        fi;
+        if [ `echo $dirperm | /usr/bin/cut -c9 ` != "-" ]; then
+          echo "Other Write permission set on directory $dir";
+          chmod o-w $dir;
+        fi;
+        if [ `echo $dirperm | /usr/bin/cut -c10 ` != "-" ]; then
+          echo "Other Execute permission set on directory $dir";
+          chmod o-x $dir;
+        fi;
+      fi;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  sudo: yes
+  tags: security
+
+- name: Gizli dosyalarin izinleri duzenleniyor
+  shell: |
+    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
+      for file in $dir/.[A-Za-z0-9]*; do
+        if [ ! -h "$file" -a -f "$file" ]; then
+          fileperm=`/bin/ls -ld $file | /usr/bin/cut -f1 -d" "`;
+          if [ `echo $fileperm | /usr/bin/cut -c6 ` != "-" ]; then
+            echo "Group Write permission set on file $file";
+            chmod g-w $file;
+          fi;
+          if [ `echo $fileperm | /usr/bin/cut -c9 ` != "-" ]; then
+            echo "Other Write permission set on file $file";
+            chmod o-w $file;
+          fi;
+        fi;
+      done;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  sudo: yes
+  tags: security
+
+- name: .netrc dosyalarinin izinleri duzenleniyor
+  shell: |
+    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
+      for file in $dir/.netrc; do
+        if [ ! -h "$file" -a -f "$file" ]; then
+          fileperm=`/bin/ls -ld $file | /usr/bin/cut -f1 -d" "`;
+          if [ `echo $fileperm | /usr/bin/cut -c5 ` != "-" ]; then
+            echo "Group Read set on $file";
+            chmod g-r $file;
+          fi;
+          if [ `echo $fileperm | /usr/bin/cut -c6 ` != "-" ]; then
+            echo "Group Write set on $file";
+            chmod g-w $file;
+          fi;
+          if [ `echo $fileperm | /usr/bin/cut -c7 ` != "-" ]; then
+            echo "Group Execute set on $file";
+            chmod g-x $file;
+          fi;
+          if [ `echo $fileperm | /usr/bin/cut -c8 ` != "-" ]; then
+            echo "Other Read set on $file";
+            chmod o-r $file;
+          fi;
+          if [ `echo $fileperm | /usr/bin/cut -c9 ` != "-" ]; then
+            echo "Other Write set on $file";
+            chmod o-w $file;
+          fi;
+          if [ `echo $fileperm | /usr/bin/cut -c10 ` != "-" ]; then
+            echo "Other Execute set on $file";
+            chmod o-x $file;
+          fi;
+        fi;
+      done;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  sudo: yes
+  tags: security
+
+- name: .rhosts dosyalari siliniyor
+  shell: |
+    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
+      for file in $dir/.rhosts; do
+        if [ ! -h "$file" -a -f "$file" ]; then
+          echo ".rhosts file in $dir";
+          rm -f $file;
+        fi;
+      done;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  sudo: yes
+  tags: security
+
+- name: /etc/passwd kullanici gruplari kontrol ediliyor
+  shell: |
+    for i in $(cut -s -d: -f4 /etc/passwd | sort -u ); do
+      grep -q -P "^.*?:[^:]*:$i:" /etc/group;
+      if [ $? -ne 0 ]; then
+        echo "Group $i is referenced by /etc/passwd but does not exist in /etc/group";
+      fi;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  notify: kullanici grup uyarisi
+  sudo: yes
+  tags: security
+
+- name: home klasorlerinin varligi kontrol ediliyor
+  shell: |
+    cat /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir; do
+      if [ $uid -ge 500 -a ! -d "$dir" -a $user != "nfsnobody" -a $user != "nobody" ]; then
+        echo "The home directory ($dir) of user $user does not exist.";
+        mkdir -p $dir;
+      fi;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  sudo: yes
+  tags: security
+
+- name: home klasorlerinin sahipleri duzenleniyor
+  shell: |
+    cat /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir; do
+      if [ $uid -ge 500 -a -d "$dir" -a $user != "nfsnobody" ]; then
+        owner=$(stat -L -c "%U" "$dir");
+        if [ "$owner" != "$user" ]; then
+          echo "The home directory ($dir) of user $user is owned by $owner.";
+          chown $user $dir;
+        fi;
+      fi;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  sudo: yes
+  tags: security
+
+- name: Tekrarlayan UID varligi kontrol ediliyor
+  shell: |
+    /bin/cat /etc/passwd | /usr/bin/cut -f3 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do
+      [ -z "${x}" ] && break;
+      set - $x;
+      if [ $1 -gt 1 ]; then
+        users=`/usr/bin/awk -F: '($3 == n) { print $1 }' n=$2 /etc/passwd | /usr/bin/xargs`;
+        echo "Duplicate UID ($2): ${users}";
+      fi;
+    done;
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  notify: tekrarlayan uid
+  sudo: yes
+  tags: security
+
+- name: Tekrarlayan GID varligi kontrol ediliyor
+  shell: |
+    /bin/cat /etc/group | /usr/bin/cut -f3 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do
+      [ -z "${x}" ] && break;
+      set - $x;
+      if [ $1 -gt 1 ]; then
+        grps=`/usr/bin/awk -F: '($3 == n) { print $1 }' n=$2 /etc/group | xargs`;
+        echo "Duplicate GID ($2): ${grps}";
+      fi;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  notify: tekrarlayan gid
+  sudo: yes
+  tags: security
+
+- name: Tekrarlayan kullanici isimleri kontrol ediliyor
+  shell: |
+    cat /etc/passwd | /usr/bin/cut -f1 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do
+      [ -z "${x}" ] && break;
+      set - $x;
+      if [ $1 -gt 1 ]; then
+        uids=`/usr/bin/awk -F: '($1 == n) { print $3 }' n=$2 /etc/passwd | xargs`;
+        echo "Duplicate User Name ($2): ${uids}";
+      fi;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  notify: tekrarlayan kullanici adi
+  sudo: yes
+  tags: security
+
+- name: Tekrarlayan grup isimleri kontrol ediliyor
+  shell: |
+    cat /etc/group | /usr/bin/cut -f1 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do
+      [ -z "${x}" ] && break;
+      set - $x;
+      if [ $1 -gt 1 ]; then
+        gids=`/usr/bin/awk -F: '($1 == n) { print $3 }' n=$2 /etc/group | xargs`;
+        echo "Duplicate Group Name ($2): ${gids}";
+      fi;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  notify: tekrarlayan grup adi
+  sudo: yes
+  tags: security
+
+- name: .netrc dosyalarinin varligi kontrol ediliyor
+  shell: |
+    for dir in `/bin/cat /etc/passwd | /usr/bin/awk -F: '{ print $6 }'`; do
+      if [ ! -h "$dir/.netrc" -a -f "$dir/.netrc" ]; then
+        echo ".netrc file $dir/.netrc exists";
+      fi;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  notify: netrc uyarisi
+  sudo: yes
+  tags: security
+
+- name: .forward dosyalarinin varligi kontrol ediliyor
+  shell: |
+    for dir in `/bin/cat /etc/passwd | /usr/bin/awk -F: '{ print $6 }'`; do
+      if [ ! -h "$dir/.forward" -a -f "$dir/.forward" ]; then
+        echo ".forward file $dir/.forward exists";
+      fi;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  notify: forward uyarisi
+  sudo: yes
+  tags: security
+
+- name: shadow grubuna ait kullanicilar siliniyor
+  shell: |
+    shadow_users=`grep ^shadow /etc/group | cut -d: -f4`;
+    for user in ${shadow_users//,/ }; do
+      echo "$user is belong to shadow group";
+      gpasswd -d $user shadow;
+    done
+  args:
+        executable: /bin/bash
+  register: result
+  changed_when: result.stdout != ""
+  sudo: yes
+  tags: security
+
+#- debug:
+#    var: groups
+#- debug:
+#    var: inventory_hostname
