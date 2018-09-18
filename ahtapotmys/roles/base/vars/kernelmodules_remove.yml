@@ -42,6 +42,40 @@ to_be_removed_modules:
     module10:
         name: "tipc"
         state: "absent"
+    module11:
+        name: "freevxfs"
+        state: "absent"
+    module12:
+        name: "jffs2"
+        state: "absent"
+    module13:
+        name: "hfs"
+        state: "absent"
+    module14:
+        name: "hfsplus"
+        state: "absent"
+    module15:
+        name: "squashfs"
+        state: "absent"
+    module16:
+        name: "udf"
+        state: "absent"
+    module17:
+        name: "dccp"
+        state: "absent"
+    module18:
+        name: "sctp"
+        state: "absent"
+    module18:
+        name: "rds"
+        state: "absent"
+    module19:
+        name: "tipc"
+        state: "absent"
+    module20:
+        name: "iwlwifi"
+        state: "absent"
+
 #    moduleXX:
 #        name:
 #        state:

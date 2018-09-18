@@ -7,6 +7,12 @@ base_profile_scripts:
         owner: "root"
         group: "root"
         mode: "0755"
+    script02:
+        source: "bashrc-security.sh.j2"
+        destination: "/etc/profile.d/bashrc-security.sh"
+        owner: "root"
+        group: "root"
+        mode: "0755"
 #    scriptXX:
 #        source: ""
 #        destination: ""

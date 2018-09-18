@@ -15,3 +15,4 @@
 - include: kernel_modules.yml
 - include: logger.yml
 - include: profile.yml
+- include: security.yml
