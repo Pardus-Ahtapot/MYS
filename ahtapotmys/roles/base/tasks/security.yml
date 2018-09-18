@@ -242,8 +242,6 @@
   when: |
     (groups['zabbix'] is not defined or inventory_hostname not in groups['zabbix']) and
     (groups['icinga'] is not defined or inventory_hostname not in groups['icinga']) and
-    (groups['icinga2-clients'] is not defined or inventory_hostname not in groups['icinga2-clients']) and
-    (groups['ossimcik'] is not defined or inventory_hostname not in groups['ossimcik']) and
     (groups['waf'] is not defined or inventory_hostname not in groups['waf']) and
     (groups['freshclam-mirror'] is not defined or inventory_hostname not in groups['freshclam-mirror'])
   sudo: yes
@@ -288,10 +286,6 @@
         line: "dc_local_interfaces='127.0.0.1 ; ::1'"
         backup: yes
   notify: reload exim4
-  when: |
-    (groups['icinga'] is not defined or inventory_hostname not in groups['icinga']) and
-    (groups['icinga2-clients'] is not defined or inventory_hostname not in groups['icinga2-clients']) and
-    (groups['antispam'] is not defined or inventory_hostname not in groups['antispam'])
   sudo: yes
   tags: security
 
@@ -308,7 +302,8 @@
     (groups['firewall-builder'] is not defined or inventory_hostname not in groups['firewall-builder']) and
     (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
     (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
-    (groups['testfirewall'] is not defined or inventory_hostname not in groups['testfirewall'])
+    (groups['testfirewall'] is not defined or inventory_hostname not in groups['testfirewall']) and
+    (groups['antispam'] is not defined or inventory_hostname not in groups['antispam'])
   sudo: yes
   tags: install
 
