@@ -32,6 +32,25 @@ IgnoreUserKnownHosts {{ ssh['IgnoreUserKnownHosts'] }}
 
 PermitEmptyPasswords {{ ssh['PermitEmptyPasswords'] }}
 
+MaxAuthTries {{ ssh['MaxAuthTries'] }}
+PermitUserEnvironment {{ ssh['PermitUserEnvironment'] }}
+Ciphers {{ ssh['Ciphers'] }}
+ClientAliveInterval {{ ssh['ClientAliveInterval'] }}
+ClientAliveCountMax {{ ssh['ClientAliveCountMax'] }}
+
+{% if ssh['AllowUsers'] != "" %}
+AllowUsers {{ ssh['AllowUsers'] }}
+{% endif %}
+{% if ssh['AllowGroups'] != "" %}
+AllowGroups {{ ssh['AllowGroups'] }}
+{% endif %}
+{% if ssh['DenyUsers'] != "" %}
+DenyUsers {{ ssh['DenyUsers'] }}
+{% endif %}
+{% if ssh['DenyGroups'] != "" %}
+DenyGroups {{ ssh['DenyGroups'] }}
+{% endif %}
+
 ChallengeResponseAuthentication {{ ssh['ChallengeResponseAuthentication'] }}
 
 PasswordAuthentication {{ ssh['PasswordAuthentication'] }}

@@ -1,4 +1,5 @@
 ---
 - name: grub yeniden yapilandiriliyor 
-  shell: /usr/sbin/update-grub2 -o {{ grub['confile'] }} 
+  shell: /usr/sbin/update-grub2 -o {{ grub['conffile'] }}
+  notify: reboot required
   sudo: yes

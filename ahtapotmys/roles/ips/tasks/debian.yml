@@ -20,8 +20,6 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - iptables-persistent
-    - netfilter-persistent
     - bridge-utils
   when: (fwbuilder_exists == "false") and (suricata_mode == "ips")
 

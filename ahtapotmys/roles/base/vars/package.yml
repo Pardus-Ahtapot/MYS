@@ -44,6 +44,61 @@ base_packages:
     package11:
         name: "rsyslog-relp" 
         state: "present"
+    package12:
+        name: "aptitude"
+        state: "present"
+    package13:
+        name: "apparmor"
+        state: "present"
+    package14:
+        name: "apparmor-utils"
+        state: "present"
+    package15:
+        name: "apparmor-profiles"
+        state: "present"
+    package16:
+        name: "prelink"
+        state: "absent"
+    package17:
+        name: "nis"
+        state: "absent"
+    package18:
+        name: "rsh-server"
+        state: "absent"
+    package19:
+        name: "rsh-client"
+        state: "absent"
+    package20:
+        name: "rsh-redone-client"
+        state: "absent"
+    package21:
+        name: "talk"
+        state: "absent"
+    package22:
+        name: "xserver-xorg-core"
+        state: "absent"
+    package23:
+        name: "tcpd"
+        state: "present"
+    package24:
+        name: "iptables"
+        state: "present"
+    package25:
+        name: "iptables-persistent"
+        state: "present"
+    package26:
+        name: "netfilter-persistent"
+        state: "present"
+    package27:
+        name: "aide"
+        state: "present"
+    package28:
+        name: "libpam-cracklib"
+        state: "present"
+
+
+
 #    packageXX:
 #        name: 
-#        state:  
+#        state:
+
