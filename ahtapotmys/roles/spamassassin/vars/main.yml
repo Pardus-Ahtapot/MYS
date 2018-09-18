@@ -71,7 +71,7 @@ antispam_block_fileextensions:
   - cmd
   - com
   - cpl
-+antispam_whitelist_address_domain:
+antispam_whitelist_address_domain:
   - example.com
 antispam_blacklist_address_domain:
   #-
