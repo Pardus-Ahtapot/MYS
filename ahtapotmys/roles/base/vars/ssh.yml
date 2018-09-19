@@ -6,7 +6,7 @@ ssh:
         destination: "/etc/ssh/sshd_config"
         owner: "root"
         group: "root"
-        mode: "0644"
+        mode: "0600"
     service:
         name: "ssh"
         state: "started"
@@ -35,6 +35,13 @@ ssh:
         owner: "root"
         group: "root"
         mode: "0644"
+
+    #guvenlik seviyesini arttirmak icin izinli kullanici ve gruplari tanimlayiniz
+    AllowUsers: ""
+    AllowGroups: ""
+    DenyUsers: ""
+    DenyGroups: ""
+
     Port: "22"
     Protocol: "2"
     ListenAddressv4: "0.0.0.0"
@@ -43,7 +50,7 @@ ssh:
     KeyRegenerationInterval: "3600"
     ServerKeyBits: "1024"
     SyslogFacility: "AUTH"
-    LogLevel: "DEBUG"
+    LogLevel: "INFO"
     LoginGraceTime: "90"
     PermitRootLogin: "no"
     StrictModes: "yes"
@@ -68,3 +75,8 @@ ssh:
     TCPKeepAlive: "yes"
     UsePAM: "no"
     UseLogin: "no"
+    MaxAuthTries: "4"
+    PermitUserEnvironment: "no"
+    Ciphers: "aes128-ctr,aes192-ctr,aes256-ctr"
+    ClientAliveInterval: "300"
+    ClientAliveCountMax: "0"

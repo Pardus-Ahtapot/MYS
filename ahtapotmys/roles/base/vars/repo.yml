@@ -7,7 +7,7 @@ base_repositories:
         updatecache: yes
         state: present
     repo02:
-        url: 'deb [trusted=yes] http://193.140.98.199/pardus-yenikusak yenikusak main non-free contrib'
+        url: 'deb [trusted=yes] http://depo.pardus.org.tr/pardus-yenikusak yenikusak main non-free contrib'
         updatecache: yes
         state: present
 #    repoXX:

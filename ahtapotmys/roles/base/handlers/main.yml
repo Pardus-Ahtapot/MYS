@@ -7,3 +7,4 @@
 - include: grub.yml
 - include: profile.yml
 - include: fusioninventory.yml
+- include: security.yml
