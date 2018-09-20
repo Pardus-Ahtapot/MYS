@@ -1,10 +1,13 @@
 #bu playbook cis standartlarını uygular. https://www.cisecurity.org/benchmark/debian_linux/
+#Dokumandaki basliklar tasklarin ustunde belirtilmistir
 ---
+# Install Updates, Patches and Additional Security Software
 - name: Butun paketler son surume guncelleniyor
   apt: upgrade=yes
   sudo: yes
   tags: security
 
+# Create Separate Partition for /tmp
 - name: tmp.mount system dosyasi olusturuluyor
   template:
         src: "{{ tmpmount['conf']['source'] }}"
@@ -15,7 +18,6 @@
   sudo: yes
   tags: security
 
-
 - name: tmp.mount aktif ediliyor ve ayaga kaldiriliyor
   service:
         name: "{{ tmpmount['service']['name'] }}"
@@ -24,6 +26,7 @@
   sudo: yes
   tags: security
 
+# Bind Mount the /var/tmp directory to /tmp
 - name: /tmp ve /var/tmp klasorleri bind ediliyor
   shell: grep -q -e "^/tmp.*/var/tmp.*bind.*" {{ fstab['conffile'] }} || mount --bind /tmp /var/tmp
   args:
@@ -40,6 +43,7 @@
   sudo: yes
   tags: security
 
+# Add nodev, noexec, nosuid Option to Removable Media Partitions
 #/dev/sr ile basliyan satırların 4. sutununu "user,noauto,nodev,noexec,nosuid" yapar
 - name: Media suruculeri icin guvelink yapilandirmasi
   lineinfile:
@@ -51,6 +55,7 @@
   sudo: yes
   tags: security
 
+# Add nodev Option to /home
 - name: /home dizinine nodev parametresi ekleniyor
   shell: |
     if mount | grep -q home; then
@@ -67,6 +72,8 @@
   sudo: yes
   tags: security
 
+# Add nosuid Option to /run/shm Partition
+# /run/shm pardus surumunde /dev/shm ile aynidir
 - name: /dev/shm yapilandirmasi /etc/fstab a yaziliyor
   lineinfile:
         dest: "{{ fstab['conffile'] }}"
@@ -76,6 +83,7 @@
   sudo: yes
   tags: security
 
+#  Set Sticky Bit on All World-Writable Directories
 - name: Dunyaca yazilabilir dizinlerin yapiskan bitleri duzenleniyor
   shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+x"
   args:
@@ -83,6 +91,7 @@
   sudo: yes
   tags: security
 
+#  Require Authentication for Single-User Mode
 - name: Root sifresinin varligi kontrol ediliyor
   shell: if grep -q "^root:[*\!]:" /etc/shadow ;then echo -n fail; else echo -n ok; fi
   args:
@@ -93,6 +102,7 @@
   changed_when: result.stdout == "fail"
   notify: root password warning
 
+# ortak sysctl yapilandirmalarinin hepsi bu dosyadadir.
 - name: sysctl ayarlari aktariliyor
   template:
         src: "{{ sysctl['source'] }}"
@@ -104,6 +114,7 @@
   sudo: yes
   tags: security
 
+# Restrict Core Dumps
 - name: limit yapilindarmasi aktariliyor
   template:
         src: "{{ limit['source'] }}"
@@ -114,6 +125,8 @@
   sudo: yes
   tags: security
 
+# Activate AppArmor
+# Enable Auditing for Processes That Start Prior to auditd
 - name: Grub konfigure ediliyor
   lineinfile:
         dest: "{{ grub['defaultfile'] }}"
@@ -143,6 +156,7 @@
   sudo: yes
   tags: security
 
+# Ensure Legacy Services are Not Enabled
 - name: inetd.conf yapilandiriliyor
   lineinfile:
         dest: "{{ inetd['conffile'] }}"
@@ -153,6 +167,7 @@
   sudo: yes
   tags: security
 
+# Ensure xinetd is not enabled
 - name: xinetd deaktive ediliyor
   shell: if ls /etc/rc*.d | grep xinetd ; then update-rc.d xinetd disable; echo -n changed; fi
   args:
@@ -185,6 +200,7 @@
   sudo: yes
   tags: security
 
+# Ensure LDAP is not enabled
 - name: LDAP server siliniyor
   apt:
         name: slapd
@@ -195,6 +211,7 @@
   sudo: yes
   tags: install
 
+# Ensure NFS and RPC are not enabled
 - name: RPC deaktive ediliyor
   shell: if ls /etc/rc*.d | grep "S.*rpcbind" ; then update-rc.d rpcbind disable; echo -n changed; fi
   args:
@@ -213,6 +230,7 @@
   sudo: yes
   tags: security
 
+# Ensure DNS Server is not enabled
 - name: DNS server deaktif ediliyor
   shell: if systemctl is-enabled bind9; then systemctl disable bind9; echo -n changed; fi
   args:
@@ -223,6 +241,7 @@
   sudo: yes
   tags: security
 
+# Ensure FTP Server is not enabled
 - name: FTP server deaktif ediliyor
   shell: if systemctl is-enabled vsftpd; then systemctl disable vsftpd; echo -n changed; fi
   args:
@@ -233,6 +252,7 @@
   sudo: yes
   tags: security
 
+# Ensure HTTP Server is not enabled
 - name: Apache deaktive ediliyor
   shell: if ls /etc/rc*.d | grep "S.*apache2" ; then update-rc.d apache2 disable; echo -n changed; fi
   args:
@@ -247,6 +267,7 @@
   sudo: yes
   tags: security
 
+# Ensure Samba is not enabled
 - name: Samba deaktive ediliyor
   shell: if ls /etc/rc*.d | grep "S.*smbd" ; then update-rc.d smbd disable; echo -n changed; fi
   args:
@@ -256,6 +277,7 @@
   sudo: yes
   tags: security
 
+# Ensure HTTP Proxy Server is not enabled (
 - name: Squid deaktive ediliyor
   shell: if ls /etc/rc*.d | grep "S.*squid3" ; then update-rc.d squid3 disable; echo -n changed; fi
   args:
@@ -270,6 +292,7 @@
   sudo: yes
   tags: security
 
+# Ensure SNMP Server is not enabled
 - name: SNMP deaktive ediliyor
   shell: if ls /etc/rc*.d | grep "S.*snmpd" ; then update-rc.d snmpd disable; echo -n changed; fi
   args:
@@ -279,6 +302,7 @@
   sudo: yes
   tags: security
 
+# Configure Mail Transfer Agent for Local-Only Mode
 - name: MTA (Mail Transfer Agent) sadece local baglantilari kabul edecek sekilde yapilandiriliyor
   lineinfile:
         dest: /etc/exim4/update-exim4.conf.conf
@@ -289,6 +313,7 @@
   sudo: yes
   tags: security
 
+# Ensure rsync service is not enabled
 - name: RSYNC siliniyor
   apt:
         name: rsync
@@ -307,6 +332,7 @@
   sudo: yes
   tags: install
 
+# Disable IP Forwarding
 - name: IP yonlendirme kapatılıyor
   lineinfile:
         dest: /etc/sysctl.conf
@@ -328,7 +354,7 @@
   sudo: yes
   tags: security
 
-
+# Disable Send Packet Redirects
 - name: ICMP Redirect kapatiliyor
   lineinfile:
         dest: /etc/sysctl.conf
@@ -353,6 +379,7 @@
   sudo: yes
   tags: security
 
+# Disable Source Routed Packet Acceptance
 - name: Source Routed Packet Acceptance kapatiliyor
   lineinfile:
         dest: /etc/sysctl.conf
@@ -377,7 +404,7 @@
   sudo: yes
   tags: security
 
-
+# Disable Secure ICMP Redirect Acceptance
 - name: Secure ICMP Redirect Acceptance kapatiliyor
   lineinfile:
         dest: /etc/sysctl.conf
@@ -402,6 +429,7 @@
   sudo: yes
   tags: security
 
+# Enable RFC-recommended Source Route Validation
 - name: RP Filter aktiflestiriliyor
   lineinfile:
         dest: /etc/sysctl.conf
@@ -426,6 +454,7 @@
   sudo: yes
   tags: security
 
+# Disable IPv6
 - name: IPv6 deaktif ediliyor
   lineinfile:
         dest: /etc/sysctl.conf
@@ -457,6 +486,7 @@
   sudo: yes
   tags: security
 
+# Create /etc/hosts.allow
 - name: hosts.allow yapilandiriliyor
   template:
         src: "{{ host_access['allow_source'] }}"
@@ -467,6 +497,7 @@
   sudo: yes
   tags: security
 
+# Create /etc/hosts.deny
 - name: hosts.deny yapilandiriliyor
   template:
         src: "{{ host_access['deny_source'] }}"
@@ -477,6 +508,7 @@
   sudo: yes
   tags: security
 
+# Ensure Firewall is active
 - name: Netfiter persistent aktif ediliyor
   shell: if ! ls /etc/rc*.d | grep "S.*netfilter-persistent" ; then update-rc.d netfilter-persistent enable; echo -n changed; fi
   args:
@@ -486,6 +518,7 @@
   sudo: yes
   tags: security
 
+# Install and Enable auditd Service
 - name: Aktif degil ise audit servisini aktiflestir
   shell: if ! systemctl is-enabled auditd; then systemctl enable auditd; echo -n changed; fi
   args:
@@ -495,6 +528,7 @@
   sudo: yes
   tags: security
 
+# Ensure the rsyslog Service is activated
 - name: Aktif degil ise rsyslog servisini aktiflestir
   shell: if ! systemctl is-enabled rsyslog; then systemctl enable rsyslog; echo -n changed; fi
   args:
@@ -504,6 +538,7 @@
   sudo: yes
   tags: security
 
+# Create and Set Permissions on rsyslog Log Files
 - name: Log dosyalarinin izinleri ayarlaniyor
   shell: grep "/var/log.*$" /etc/rsyslog.conf  | sed -e 's/\(.*\)\(\/var\/log.*$\)/\2/g' | xargs -I '{}' bash -c "chown root:root '{}' && chmod og-rwx '{}'"
   args:
@@ -513,6 +548,7 @@
   sudo: yes
   tags: security
 
+# Install AIDE
 - name: AIDE initialize adiliyor
   shell: if [[ ! -f /var/lib/aide/aide.db ]]; then aideinit; cp /var/lib/aide/aide.db.new /var/lib/aide/aide.db;  else echo -n ok; fi
   args:
@@ -522,6 +558,7 @@
   sudo: yes
   tags: security
 
+# Implement Periodic Execution of File Integrity
 - name: AIDE (Advanced Intrusion Detection Environment) cron ayarlari aktariliyor
   template:
         src: "{{ aide['source'] }}"
@@ -532,7 +569,8 @@
   sudo: yes
   tags: security
 
-
+# Configure cron
+# Set User/Group Owner and Permission on cron files and directories
 - name: Cron dosya izinleri duzenleniyor
   file:
         dest: "{{item.value.file}}"
@@ -544,6 +582,7 @@
   sudo: yes
   tags: security
 
+# Restrict at/cron to Authorized Users
 - name: Cron kullanici izinleri ekleniyor
   lineinfile:
         dest: "{{cron_configuration.allow_file}}"
@@ -552,6 +591,7 @@
   sudo: yes
   tags: security
 
+# Set Password Creation Requirement Parameters Using pam_cracklib
 - name: PAM password yapilandirmasi aktariliyor
   lineinfile:
         dest: "{{pam.password_file}}"
@@ -561,6 +601,7 @@
   sudo: yes
   tags: security
 
+# Set Lockout for Failed Password Attempts
 - name: PAM login yapilandirmasi aktariliyor
   lineinfile:
         dest: "{{pam.login_file}}"
@@ -570,6 +611,7 @@
   sudo: yes
   tags: security
 
+# Limit Password Reuse
 - name: PAM sifre hatirlama politikasi aktariliyor
   lineinfile:
         dest: "{{pam.password_file}}"
@@ -579,6 +621,7 @@
   sudo: yes
   tags: security
 
+# Restrict Access to the su Command
 - name: su komut yapilandirmasi aktariliyor
   lineinfile:
         dest: "{{pam.su_file}}"
@@ -588,6 +631,9 @@
   sudo: yes
   tags: security
 
+# Set Password Expiration Days
+# Set Password Change Minimum Number of Days
+# Set Password Expiring Warning Days
 - name: Kullanici hesap yapilandirmasi aktariliyor
   template:
         src: "{{ login_definitions['source'] }}"
@@ -598,7 +644,8 @@
   sudo: yes
   tags: security
 
-- name: Kullanici giris izinleri kontrol ediliyor
+# Disable System Accounts
+- name: Sistem kullanici giris izinleri kontrol ediliyor
   shell: |
     for user in `awk -F: '($3 < 1000) {print $1 }' /etc/passwd`; do
       if [ $user != "root" ];then
@@ -613,6 +660,7 @@
   sudo: yes
   tags: security
 
+# Set Default Group for root Account
 - name: Root kullanici grubu duzenleniyor
   shell: usermod -g 0 root
   args:
@@ -622,6 +670,7 @@
   sudo: yes
   tags: security
 
+# Set Default umask for Users
 - name: umask set ediliyor
   lineinfile:
         dest: "/etc/bash.bashrc"
@@ -631,6 +680,7 @@
   sudo: yes
   tags: security
 
+# Lock Inactive User Accounts
 - name: Kullanici inaktif kilit suresi set ediliyor
   shell: useradd -D -f {{login_definitions.lock_inactive_user_account}}
   args:
@@ -638,6 +688,9 @@
   sudo: yes
   tags: security
 
+# Verify Permissions on /etc/passwd
+# Verify Permissions on /etc/shadow
+# Verify Permissions on /etc/group
 - name: Onemli dosya izinleri ayarlaniyor
   file:
         dest: "{{item.value.file}}"
@@ -648,6 +701,7 @@
   sudo: yes
   tags: security
 
+# Find World Writable Files
 - name: Dunyaca yazilabilen dosyalarin izinleri ayarlaniyor
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002 -print |  xargs -I '{}' chmod o-w '{}'
   args:
@@ -655,6 +709,7 @@
   sudo: yes
   tags: security
 
+# Find Un-owned Files and Directories
 - name: Sahipsiz dosyalar bulunuyor
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser | xargs -I '{}' chown root '{}'
   args:
@@ -662,6 +717,7 @@
   sudo: yes
   tags: security
 
+# Find Un-grouped Files and Directories
 - name: Grupsuz dosyalar bulunuyor
   shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup | xargs -I '{}' chown :root '{}'
   args:
@@ -669,6 +725,7 @@
   sudo: yes
   tags: security
 
+# Ensure Password Fields are Not Empty
 - name: Sifresiz kullanici varligi kontrol ediliyor
   shell: "/bin/cat /etc/shadow | /usr/bin/awk -F: '($2 == \"\" ) { print $1 \" does not have a password \"}'"
   args:
@@ -679,6 +736,9 @@
   sudo: yes
   tags: security
 
+# Verify No Legacy "+" Entries Exist in /etc/passwd File
+# Verify No Legacy "+" Entries Exist in /etc/shadow File
+# Verify No Legacy "+" Entries Exist in /etc/group File
 - name: Sifre dosyalarindan legacy girdiler siliniyor
   shell: sed -i '/^+:/d' {{item}}
   args:
@@ -690,6 +750,7 @@
   sudo: yes
   tags: security
 
+# Verify No UID 0 Accounts Exist Other Than root
 - name: Root disinda 0 UID sine sahip kullanici varligi kontrol ediliyor
   shell: |
     for user in `/bin/cat /etc/passwd | /usr/bin/awk -F: '($3 == 0 && $1 != "root") { print $1 }'`; do
@@ -703,6 +764,7 @@
   sudo: yes
   tags: security
 
+# Ensure root PATH Integrity
 - name: PATH integrity duzenleniyor
   shell: |
     if [ "`echo $PATH | grep :: `" != "" ]; then
@@ -749,6 +811,7 @@
   sudo: yes
   tags: security
 
+# Check Permissions on User Home Directories
 - name: /home dizinlerinin izinleri duzenleniyor
   shell: |
     for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
@@ -779,6 +842,7 @@
   sudo: yes
   tags: security
 
+# Check User Dot File Permissions
 - name: Gizli dosyalarin izinleri duzenleniyor
   shell: |
     for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
@@ -803,6 +867,7 @@
   sudo: yes
   tags: security
 
+# Check Permissions on User .netrc Files
 - name: .netrc dosyalarinin izinleri duzenleniyor
   shell: |
     for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
@@ -843,6 +908,7 @@
   sudo: yes
   tags: security
 
+# Check for Presence of User .rhosts Files
 - name: .rhosts dosyalari siliniyor
   shell: |
     for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
@@ -860,6 +926,7 @@
   sudo: yes
   tags: security
 
+# Check Groups in /etc/passwd
 - name: /etc/passwd kullanici gruplari kontrol ediliyor
   shell: |
     for i in $(cut -s -d: -f4 /etc/passwd | sort -u ); do
@@ -876,6 +943,7 @@
   sudo: yes
   tags: security
 
+# Check That Users Are Assigned Valid Home Directories
 - name: home klasorlerinin varligi kontrol ediliyor
   shell: |
     cat /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir; do
@@ -891,6 +959,7 @@
   sudo: yes
   tags: security
 
+# Check User Home Directory Ownership
 - name: home klasorlerinin sahipleri duzenleniyor
   shell: |
     cat /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir; do
@@ -909,6 +978,7 @@
   sudo: yes
   tags: security
 
+# Check for Duplicate UIDs
 - name: Tekrarlayan UID varligi kontrol ediliyor
   shell: |
     /bin/cat /etc/passwd | /usr/bin/cut -f3 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do
@@ -927,6 +997,7 @@
   sudo: yes
   tags: security
 
+# Check for Duplicate GIDs
 - name: Tekrarlayan GID varligi kontrol ediliyor
   shell: |
     /bin/cat /etc/group | /usr/bin/cut -f3 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do
@@ -945,6 +1016,7 @@
   sudo: yes
   tags: security
 
+# Check for Duplicate User Names
 - name: Tekrarlayan kullanici isimleri kontrol ediliyor
   shell: |
     cat /etc/passwd | /usr/bin/cut -f1 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do
@@ -963,6 +1035,7 @@
   sudo: yes
   tags: security
 
+# Check for Duplicate Group Names
 - name: Tekrarlayan grup isimleri kontrol ediliyor
   shell: |
     cat /etc/group | /usr/bin/cut -f1 -d":" | /usr/bin/sort -n | /usr/bin/uniq -c | while read x ; do
@@ -981,6 +1054,7 @@
   sudo: yes
   tags: security
 
+# Check for Presence of User .netrc Files
 - name: .netrc dosyalarinin varligi kontrol ediliyor
   shell: |
     for dir in `/bin/cat /etc/passwd | /usr/bin/awk -F: '{ print $6 }'`; do
@@ -996,6 +1070,7 @@
   sudo: yes
   tags: security
 
+# Check for Presence of User .forward Files
 - name: .forward dosyalarinin varligi kontrol ediliyor
   shell: |
     for dir in `/bin/cat /etc/passwd | /usr/bin/awk -F: '{ print $6 }'`; do
@@ -1011,6 +1086,7 @@
   sudo: yes
   tags: security
 
+# Ensure shadow group is empty
 - name: shadow grubuna ait kullanicilar siliniyor
   shell: |
     shadow_users=`grep ^shadow /etc/group | cut -d: -f4`;
@@ -1025,7 +1101,3 @@
   sudo: yes
   tags: security
 
-#- debug:
-#    var: groups
-#- debug:
-#    var: inventory_hostname
