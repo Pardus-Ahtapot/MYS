@@ -1,0 +1,40 @@
+---
+container_mirror: http://depo.pardus.org.tr/pardus/
+container_security_mirror: http://depo.pardus.org.tr/guvenlik/
+mhn_url: 169.254.1.9
+mhn_deploy_key: z5nDxjgX
+lxc:
+  pardus.ahtapot:
+    network_type: veth # veth|macvlan
+    network_link: br0
+    network_hwaddr: 00:16:3e:xx:xx:xx
+    netowrk_link_bridge_slave: enp0s3
+containers:
+  pardus.ahtapot:
+  - type: "cowrie"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: true
+    interfaces:
+    - name: eth0
+      type: static
+      address: 169.254.1.101
+      netmask: 255.255.255.0
+      network: 169.254.1.0
+      broadcast: 169.254.1.255
+      gateway: 169.254.1.10
+  - type: "dianoa"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: false
+    interfaces:
+    - name: eth0
+      type: static
+      address: 169.254.1.102
+      netmask: 255.255.255.0
+      network: 169.254.1.0
+      broadcast: 169.254.1.255
+      gateway: 169.254.1.10
+ 
