@@ -22,6 +22,7 @@
   - /etc/ansible/roles/honeypot/vars/main.yml
   - /etc/ansible/roles/honeypot/vars/cowrie.yml
   - /etc/ansible/roles/honeypot/vars/dionaea.yml
+  - /etc/ansible/roles/honeypot/vars/p0f.yml
   roles:
 #    - role: base
     - role: honeypot

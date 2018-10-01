@@ -72,3 +72,4 @@
 
 - include: cowrie.yml
 - include: dionaea.yml
+- include: p0f.yml
