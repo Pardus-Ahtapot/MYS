@@ -24,7 +24,7 @@ containers:
       network: 169.254.1.0
       broadcast: 169.254.1.255
       gateway: 169.254.1.10
-  - type: "dianoa"
+  - type: "dionaea"
     start_auto: 1
     start_delay: 0
     start_order: 0

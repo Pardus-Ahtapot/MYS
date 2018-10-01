@@ -21,6 +21,7 @@
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/honeypot/vars/main.yml
   - /etc/ansible/roles/honeypot/vars/cowrie.yml
+  - /etc/ansible/roles/honeypot/vars/dionaea.yml
   roles:
 #    - role: base
     - role: honeypot
