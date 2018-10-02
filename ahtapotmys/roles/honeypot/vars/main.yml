@@ -53,3 +53,16 @@ containers:
 #      broadcast: 169.254.1.255
 #      gateway: 169.254.1.9
 #
+#  - type: "glastopf"
+#    start_auto: 1
+#    start_delay: 0
+#    start_order: 0
+#    force_register: false
+#    interfaces:
+#    - name: eth0
+#      type: static
+#      address: 169.254.1.104
+#      netmask: 255.255.255.0
+#      network: 169.254.1.0
+#      broadcast: 169.254.1.255
+#      gateway: 169.254.1.9
