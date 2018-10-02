@@ -75,3 +75,4 @@
 - include: p0f.yml
 - include: glastopf.yml
 - include: shockpot.yml
+- include: wordpot.yml

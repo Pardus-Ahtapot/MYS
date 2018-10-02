@@ -25,6 +25,7 @@
   - /etc/ansible/roles/honeypot/vars/p0f.yml
   - /etc/ansible/roles/honeypot/vars/glastopf.yml
   - /etc/ansible/roles/honeypot/vars/shockpot.yml
+  - /etc/ansible/roles/honeypot/vars/wordpot.yml
   roles:
 #    - role: base
     - role: honeypot
