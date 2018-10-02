@@ -76,3 +76,4 @@
 - include: glastopf.yml
 - include: shockpot.yml
 - include: wordpot.yml
+- include: amun.yml

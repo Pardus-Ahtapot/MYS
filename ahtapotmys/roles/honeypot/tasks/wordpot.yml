@@ -2,7 +2,7 @@
 #TODO paketler repoya eklenecek
 #- name: installing wordpot honeypot
 #  sudo: yes
-#  shell: lxc-attach -n wordpot -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq install wordpot wget sudo"
+#  shell: lxc-attach -n wordpot -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install wordpot wget sudo"
 #  when: item.type == "wordpot"
 #  with_items: containers[inventory_hostname]
 
