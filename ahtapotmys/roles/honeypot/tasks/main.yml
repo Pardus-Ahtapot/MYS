@@ -74,3 +74,4 @@
 - include: dionaea.yml
 - include: p0f.yml
 - include: glastopf.yml
+- include: shockpot.yml
