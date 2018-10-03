@@ -8,9 +8,11 @@
 
 - name: registering shockpot honeypot
   sudo: yes
+  # container tam olarak ayaga kalkmadan register edilirse sorun cikiyor. sleep bu yuzden konuldu
   shell: |
     lxc-attach -n shockpot -- /bin/bash -c "if [[ ! -f {{shockpot_conf.register_check_file}} ]]; then
-                                          /opt/shockpot/install_shockpot.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}};
+                                          sleep 3 &&
+                                          /opt/shockpot/install_shockpot.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}} &&
                                           touch {{shockpot_conf.register_check_file}};
                                        fi"
   when: item.type == "shockpot"

@@ -6,21 +6,6 @@
 ##  when: item.type == "amun"
 ##  with_items: containers[inventory_hostname]
 #
-- name: registering amun honeypot
-  sudo: yes
-  shell: |
-    lxc-attach -n amun -- /bin/bash -c "if [[ ! -f {{amun_conf.register_check_file}} ]]; then
-                                          /opt/amun/register_amun_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}};
-                                          touch {{amun_conf.register_check_file}};
-                                        fi"
-  when: item.type == "amun"
-  with_items: containers[inventory_hostname]
-
-- name: registering amun honeypot with force
-  sudo: yes
-  shell: lxc-attach -n amun -- /bin/bash -x -c "/opt/amun/register_amun_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}}"
-  when: item.type == "amun" and item.force_register == true
-  with_items: containers[inventory_hostname]
 
 - name: copy amun conf
   sudo: yes
@@ -35,8 +20,26 @@
 
 - name: set system configuration for amun
   sudo: yes
-  shell: lxc-attach -n amun -- bash -c "echo 104854 > /proc/sys/fs/file-max; ulimit -Hn 104854; ulimit -n 104854"
+  # echo 104854 > /proc/sys/fs/file-max ;  readonly file system oldugu icin bunu container icinde yapamadik
+  shell: lxc-attach -n amun -- /bin/bash -c "ulimit -Hn 104854 ; ulimit -n 104854"
   when: item.type == "amun"
+  with_items: containers[inventory_hostname]
+
+
+- name: registering amun honeypot
+  sudo: yes
+  shell: |
+    lxc-attach -n amun -- /bin/bash -e -c "if [[ ! -f {{amun_conf.register_check_file}} ]]; then
+                                          bash -e /opt/amun/register_amun_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} &&
+                                          touch {{amun_conf.register_check_file}};
+                                        fi"
+  when: item.type == "amun"
+  with_items: containers[inventory_hostname]
+
+- name: registering amun honeypot with force
+  sudo: yes
+  shell: lxc-attach -n amun -- /bin/bash -x -c "/opt/amun/register_amun_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}}"
+  when: item.type == "amun" and item.force_register == true
   with_items: containers[inventory_hostname]
 
 - name: restarting amun honeypot

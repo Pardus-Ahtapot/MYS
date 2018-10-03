@@ -10,7 +10,7 @@
   sudo: yes
   shell: |
     lxc-attach -n wordpot -- /bin/bash -c "if [[ ! -f {{wordpot_conf.register_check_file}} ]]; then
-                                            /opt/wordpot/register_wordpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{wordpot_conf.listen_ip}} {{wordpot_conf.listen_port}};
+                                            /opt/wordpot/register_wordpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{wordpot_conf.listen_ip}} {{wordpot_conf.listen_port}} &&
                                             touch {{wordpot_conf.register_check_file}};
                                            fi"
   when: item.type == "wordpot"

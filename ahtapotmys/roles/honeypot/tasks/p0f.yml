@@ -21,7 +21,7 @@
   sudo: yes
   shell: |
     lxc-attach -n p0f -- /bin/bash -c "if [[ ! -f {{p0f_conf.register_check_file}} ]]; then
-                                          /opt/p0f/install.sh {{mhn_url}} {{mhn_deploy_key}};
+                                          /opt/p0f/install.sh {{mhn_url}} {{mhn_deploy_key}} &&
                                           touch {{p0f_conf.register_check_file}};
                                        fi"
   when: item.type == "p0f"

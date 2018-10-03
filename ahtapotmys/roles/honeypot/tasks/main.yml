@@ -77,3 +77,4 @@
 - include: shockpot.yml
 - include: wordpot.yml
 - include: amun.yml
+- include: suricata.yml
