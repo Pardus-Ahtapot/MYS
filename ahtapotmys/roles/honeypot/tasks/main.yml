@@ -73,8 +73,12 @@
 - include: cowrie.yml
 - include: dionaea.yml
 - include: p0f.yml
+- include: smtp.yml
 - include: glastopf.yml
+- include: ftp.yml
+- include: pop3.yml
 - include: shockpot.yml
 - include: wordpot.yml
 - include: amun.yml
 - include: suricata.yml
+- include: elastichoney.yml

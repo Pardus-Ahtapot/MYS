@@ -1,0 +1,11 @@
+---
+elastichoney_logfile: "/var/log/elastichoney/elastichoney.log"
+elastichoney_use_remote: "false"
+elastichoney_remote_url: "http://example.com"
+elastichoney_remote_url_use_auth: "false"
+elastichoney_remote_url_username: "user"
+elastichoney_remote_url_password: "pass"
+elastichoney_anonymous: "true"
+elastichoney_spoofed_version: "1.4.1"
+elastichoney_public_ip_url: "http://ip1.dynupdate.no-ip.com/"
+elastichoney_register_check_file: "/etc/elastichoney_registered"

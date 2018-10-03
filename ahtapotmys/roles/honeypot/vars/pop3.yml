@@ -1,0 +1,16 @@
+---
+honeypot_pop3_hostname: pop3
+honeypot_pop3_domain: example.com
+honeypot_pop3_maildir: /var/depo/mail/
+honeypot_pop3_sslcertprivate: /etc/honeypot-pop3/keys/pop3d.key
+honeypot_pop3_sslcertpublic: /etc/honeypot-pop3/keys/pop3d.crt
+honeypot_pop3_filename: /var/log/honeypot_pop3.log
+honeypot_pop3_sslport: 465
+honeypot_pop3_port: 25
+honeypot_pop3_create_ssl: True
+honeypot_pop3_ssl_country: "TR"
+honeypot_pop3_ssl_state: "Ankara"
+honeypot_pop3_ssl_locality: "Ankara"
+honeypot_pop3_ssl_organization: "organizasyon_adi"
+honeypot_pop3_ssl_organizationalunit: "organizasyon_birimi"
+honeypot_pop3_ssl_commonname: "alan_adi"
