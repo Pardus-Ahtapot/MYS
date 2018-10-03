@@ -1,10 +1,10 @@
 ---
-#- name: installing mhn packages
-#  sudo: yes
-#  apt:
-#    name: "{{ item }}"
-#  with_items:
-#    - ahtapot-mhn
+- name: installing mhn packages
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - ahtapot-mhn
 
 - name: Configuring mhn
   sudo: yes

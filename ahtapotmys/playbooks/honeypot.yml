@@ -23,13 +23,16 @@
   - /etc/ansible/roles/honeypot/vars/cowrie.yml
   - /etc/ansible/roles/honeypot/vars/dionaea.yml
   - /etc/ansible/roles/honeypot/vars/p0f.yml
+  - /etc/ansible/roles/honeypot/vars/smtp.yml
   - /etc/ansible/roles/honeypot/vars/glastopf.yml
+  - /etc/ansible/roles/honeypot/vars/pop3.yml
+  - /etc/ansible/roles/honeypot/vars/ftp.yml
   - /etc/ansible/roles/honeypot/vars/shockpot.yml
   - /etc/ansible/roles/honeypot/vars/wordpot.yml
   - /etc/ansible/roles/honeypot/vars/amun.yml
   - /etc/ansible/roles/honeypot/vars/suricata.yml
-
+  - /etc/ansible/roles/honeypot/vars/elastichoney.yml
   roles:
-#    - role: base
+    - role: base
     - role: honeypot
 

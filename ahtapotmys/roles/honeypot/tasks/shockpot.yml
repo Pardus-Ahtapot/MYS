@@ -1,10 +1,9 @@
 ---
-#TODO paketler repoya eklenecek
-#- name: installing shockpot honeypot
-#  sudo: yes
-#  shell: lxc-attach -n shockpot -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install shockpot wget sudo"
-#  when: item.type == "shockpot"
-#  with_items: containers[inventory_hostname]
+- name: installing shockpot honeypot
+  sudo: yes
+  shell: lxc-attach -n shockpot -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install shockpot wget sudo"
+  when: item.type == "shockpot"
+  with_items: containers[inventory_hostname]
 
 - name: registering shockpot honeypot
   sudo: yes

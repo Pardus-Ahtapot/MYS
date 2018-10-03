@@ -1,9 +1,9 @@
 ---
-#- name: installing cowrie honeypot
-#  sudo: yes
-#  shell: lxc-attach -n cowrie -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install cowrie wget sudo"
-#  when: item.type == "cowrie"
-#  with_items: containers[inventory_hostname]
+- name: installing cowrie honeypot
+  sudo: yes
+  shell: lxc-attach -n cowrie -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install cowrie wget sudo"
+  when: item.type == "cowrie"
+  with_items: containers[inventory_hostname]
 
 - name: copy deploy cowrie script
   sudo: yes

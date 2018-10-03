@@ -22,6 +22,6 @@
   - /etc/ansible/roles/mhn/vars/main.yml
 
   roles:
-#    - role: base
+    - role: base
     - role: mhn
 

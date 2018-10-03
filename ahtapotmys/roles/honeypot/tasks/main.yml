@@ -1,13 +1,13 @@
 ---
-#- name: installing lxc packages
-#  sudo: yes
-#  apt:
-#    name: "{{ item }}"
-#  with_items:
-#    - python3-lxc
-#    - lxc
-#    - liblxc1
-#    - wget
+- name: installing lxc packages
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - python3-lxc
+    - lxc
+    - liblxc1
+    - wget
 
 - name: copying bridge script
   sudo: yes
