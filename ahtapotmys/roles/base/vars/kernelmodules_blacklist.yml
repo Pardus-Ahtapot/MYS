@@ -17,21 +17,12 @@ to_be_blacklisted_modules:
         name: "uhci_hcd"
         state: "absent"
     module02:
-        name: "ehci_pci"
-        state: "absent"
-    module03:
-        name: "ochi_pci"
-        state: "absent"
-    module04:
-        name: "ochi_hcd"
-        state: "absent"
-    module05:
         name: "ehci_hcd"
         state: "absent"
-    module06:
+    module03:
         name: "usbhid"
         state: "absent"
-    module07:
+    module04:
         name: "usbcore"
         state: "absent"
 #    moduleXX:
