@@ -1,0 +1,31 @@
+---
+- name: installing mhn packages
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - ahtapot-mhn
+
+- name: Check if mhn is already configured
+  sudo: yes
+  stat:
+    path: /opt/mhn/server/config.py
+  register: mhn_exists
+
+- name: Configuring mhn
+  sudo: yes
+  shell: |
+    cd /opt/mhn/server
+    python generateconfig.py unattended --email {{mhn_email}} --password {{mhn_password}} --base_url {{mhn_base_url}} --honeymap_url {{mhn_honeymap_url}} --mail_server {{mhn_mail_server}} --mail_port {{mhn_mail_port}} --mail_user {{mhn_mail_user}} --mail_pass {{mhn_mail_pass}} --mail_sender {{mhn_mail_sender}} --log_file_path {{mhn_log_file_path}}
+
+- name: Installing mhn
+  sudo: yes
+  shell: |
+    cd /opt/mhn/server
+    bash /opt/mhn/install.sh
+  when: mhn_exists.stat.exists == False
+
+- name: restart mhn services
+  sudo: yes
+  shell: supervisorctl restart all
+

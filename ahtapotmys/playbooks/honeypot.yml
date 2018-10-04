@@ -1,0 +1,38 @@
+- hosts: honeypot
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/base/vars/group.yml
+  - /etc/ansible/roles/base/vars/user.yml
+  - /etc/ansible/roles/base/vars/repo.yml
+  - /etc/ansible/roles/base/vars/rsyslog.yml
+  - /etc/ansible/roles/base/vars/ntp.yml
+  - /etc/ansible/roles/base/vars/package.yml
+  - /etc/ansible/roles/base/vars/kernelmodules_remove.yml
+  - /etc/ansible/roles/base/vars/kernelmodules_blacklist.yml
+  - /etc/ansible/roles/base/vars/host.yml
+  - /etc/ansible/roles/base/vars/audit.yml
+  - /etc/ansible/roles/base/vars/sudo.yml
+  - /etc/ansible/roles/base/vars/ssh.yml
+  - /etc/ansible/roles/base/vars/grub.yml
+  - /etc/ansible/roles/base/vars/logger.yml
+  - /etc/ansible/roles/base/vars/logrotate.yml
+  - /etc/ansible/roles/base/vars/directory.yml
+  - /etc/ansible/roles/base/vars/profile.yml
+  - /etc/ansible/roles/base/vars/fusioninventory.yml
+  - /etc/ansible/roles/honeypot/vars/main.yml
+  - /etc/ansible/roles/honeypot/vars/cowrie.yml
+  - /etc/ansible/roles/honeypot/vars/dionaea.yml
+  - /etc/ansible/roles/honeypot/vars/p0f.yml
+  - /etc/ansible/roles/honeypot/vars/smtp.yml
+  - /etc/ansible/roles/honeypot/vars/glastopf.yml
+  - /etc/ansible/roles/honeypot/vars/pop3.yml
+  - /etc/ansible/roles/honeypot/vars/ftp.yml
+  - /etc/ansible/roles/honeypot/vars/shockpot.yml
+  - /etc/ansible/roles/honeypot/vars/wordpot.yml
+  - /etc/ansible/roles/honeypot/vars/amun.yml
+  - /etc/ansible/roles/honeypot/vars/suricata.yml
+  - /etc/ansible/roles/honeypot/vars/elastichoney.yml
+  roles:
+    - role: base
+    - role: honeypot
+
