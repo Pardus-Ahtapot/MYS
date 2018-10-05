@@ -1,11 +1,12 @@
 #bu playbook cis standartlarını uygular. https://www.cisecurity.org/benchmark/debian_linux/
 #Dokumandaki basliklar tasklarin ustunde belirtilmistir
 ---
+#TODO: bu task icinga paketini 2.6 ya upgrade ettigi icin kapatildi
 # Install Updates, Patches and Additional Security Software
-- name: Butun paketler son surume guncelleniyor
-  apt: upgrade=yes
-  sudo: yes
-  tags: security
+#- name: Butun paketler son surume guncelleniyor
+#  apt: upgrade=yes
+#  sudo: yes
+#  tags: security
 
 # Create Separate Partition for /tmp
 - name: tmp.mount system dosyasi olusturuluyor
