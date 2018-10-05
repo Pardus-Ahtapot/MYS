@@ -8,9 +8,11 @@
   with_items: "{{ icinga2_classic_ui_pkg }}"
 
 - name: Enable apache cgi module
+  sudo: yes
   shell: /usr/sbin/a2enmod cgi
 
 - name: Enable apache ldap module
+  sudo: yes
   shell: /usr/sbin/a2enmod authnz_ldap
 
 - name: Enable apache ssl module
