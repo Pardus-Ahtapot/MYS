@@ -19,6 +19,7 @@
   - /etc/ansible/roles/base/vars/directory.yml
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
+  - /etc/ansible/roles/base/vars/security.yml
   - /etc/ansible/roles/honeypot/vars/main.yml
   - /etc/ansible/roles/honeypot/vars/cowrie.yml
   - /etc/ansible/roles/honeypot/vars/dionaea.yml

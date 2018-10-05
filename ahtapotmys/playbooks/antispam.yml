@@ -19,6 +19,7 @@
   - /etc/ansible/roles/base/vars/directory.yml
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
+  - /etc/ansible/roles/base/vars/security.yml
   - /etc/ansible/roles/spamassassin/vars/main.yml
   - /etc/ansible/roles/spamassassin/vars/clamd.conf.yml
   - /etc/ansible/roles/spamassassin/vars/freshclam.conf.yml
