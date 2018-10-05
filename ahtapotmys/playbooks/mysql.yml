@@ -1,4 +1,4 @@
-- hosts: zabbix
+- hosts: mysql
   sudo: yes
   vars_files:
   - /etc/ansible/roles/base/vars/group.yml
