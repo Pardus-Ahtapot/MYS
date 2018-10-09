@@ -38,7 +38,7 @@
   - /etc/ansible/roles/ids/vars/modifysid.yml
   roles:
     - role: base
+    - role: pulledpork
     - role: ids
     - role: barnyard2
-    - role: pulledpork
 
