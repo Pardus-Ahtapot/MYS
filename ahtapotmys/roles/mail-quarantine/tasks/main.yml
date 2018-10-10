@@ -48,4 +48,11 @@
     mode: 0644
   notify: restart spamassassin
 
+# bu task, guvenlik sıklastirma sonucu dosya izinleriyle ilgili sorunu gidermek amaciyla konulmustur.
+- name: quarantine | set file permissions of modoboa root
+  sudo: yes
+  shell: /bin/chmod -R og+rx /srv/modoboa/instance/
+  args:
+    executable: /bin/bash
+
 
