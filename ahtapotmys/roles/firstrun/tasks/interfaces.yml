@@ -1,0 +1,10 @@
+---
+- name: Interface dosyasi yapilandiriliyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "{{ item.value.path }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+  with_dict: "interface_directories"
+  sudo: yes

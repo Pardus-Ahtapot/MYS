@@ -1,0 +1,21 @@
+{% if ansible_fqdn in "pardus.gdys.local" %}
+
+#volkan This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug ens18
+iface ens18 inet static
+	address 10.20.40.201/24
+	gateway 10.20.40.25
+	# dns-* options are implemented by the resolvconf package, if installed
+	dns-nameservers 193.140.83.251 
+	dns-search gdys.local
+
+{% endif %}

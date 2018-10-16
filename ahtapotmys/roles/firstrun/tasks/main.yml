@@ -1,0 +1,10 @@
+---
+# Base rolunun gorevlerini iceren dosyadir
+- include: group.yml
+- include: user.yml
+- include: package_remove.yml
+- include: directory.yml
+- include: ssh.yml
+- include: interfaces.yml
+- include: user_list.yml
+- include: sudo.yml

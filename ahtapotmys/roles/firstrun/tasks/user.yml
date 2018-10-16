@@ -1,0 +1,10 @@
+---
+- name: Kullanicilar kontrol ediliyor.
+  user:
+        name: "{{ item.value.name }}"
+        group: "{{ item.value.group }}"
+        shell: "{{ item.value.shell }}"
+        state: "{{ item.value.state }}" 
+  with_dict: "base_users" 
+  sudo: yes 
+  tags: user 
