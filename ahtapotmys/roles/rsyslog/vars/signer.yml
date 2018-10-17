@@ -29,6 +29,7 @@ signer:
     invalidlogs: "/data/log/5651/invaledlogs"
     signedlogsarchive: "/data/log/5651/signedlogsarchive"  # exist only for local signing
     invalidlogsarchive: "/data/log/5651/invaledlogsarchive" # exist only for local signing 
+    signedname:  "signed_logs" 
     serverfiles: "ossimcik0*"
     command: "/opt/ZamaneConsole-2.0.5/ZamaneConsole-2.0.5.jar"
     logs: "/data/log"

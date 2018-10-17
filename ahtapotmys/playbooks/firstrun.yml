@@ -1,0 +1,15 @@
+---
+# Yeni Kurulmus Pardus-Sunucu-onyedi sunucusu uzerinde calisacak playbook dosyasidir.
+- hosts: all
+  remote_user: ahtapotops
+  vars_files:
+  - /etc/ansible/roles/base/vars/group.yml
+  - /etc/ansible/roles/base/vars/user.yml
+  - /etc/ansible/roles/base/vars/sudo.yml
+  - /etc/ansible/roles/base/vars/ssh.yml
+  - /etc/ansible/roles/base/vars/directory.yml
+  - /etc/ansible/roles/firstrun/vars/interfaces.yml
+  - /etc/ansible/roles/firstrun/vars/user_list.yml
+  - /etc/ansible/roles/firstrun/vars/package_list.yml
+  roles:
+  - { role: firstrun }

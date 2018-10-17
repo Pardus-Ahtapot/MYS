@@ -45,46 +45,51 @@ command={{ signer['command'] }}
 
 cd  $logs
 serverlist=($(ls -d $serverfiles))
+
+
+# Create Daily Log Directory If Does not Exist
+    
+if [ ! -d $signingdirectory/$date ]
+then
+    mkdir -p $signingdirectory/$date
+fi
+
+SignedName={{ signer['signedname'] }}
+logpackage=$SignedName.$date.tgz
+tsfile=$SignedName.$date.tgz.zd
+signedlogpackage=$SignedName.$date.logs.tar
+
 for server in "${serverlist[@]}"
-do
-    # Create Daily Log Directory If Does not Exist
-    if [ ! -d $signingdirectory/$date ]
-    then
-        mkdir -p $signingdirectory/$date
-    fi
-
+do    
     logdirectory=$logs/$server
-    logpackage=$server.$date.tgz
-    tsfile=$server.$date.tgz.zd
-    signedlogpackage=$server.$date.logs.tar
-
     # Copy Application Log to Signing Directory
     rsync -a $logdirectory/$logfile $signingdirectory/$date
-
-    ## Compress The Log Directory
-    cd $signingdirectory; env GZIP=-9 tar cvfz $logpackage $date
-    sleep 3
-
-    # Sign The Compressed Logs
-    cd $signingdirectory; $java -jar $command -z $logpackage http://zd.kamusm.gov.tr 80 $username $password $proxyIp $proxyPort $proxyUser $proxyPassword sha-256
-    cd $signingdirectory; $java -jar $command -z $logpackage  http://zd.kamusm.gov.tr 80 $username $password sha-256
-    sleep 3
-
-    # Check The Signature Validity
-    check=`$java -jar $command -c $logpackage $tsfile`
-
-    # Move Log Package to Archive
-    if [ "${check}" != "Zaman Damgasi gecerli, dosya degismemis." ]
-    then
-        tar cvf $signedlogpackage $logpackage $tsfile
-            rsync -a $signingdirectory/$signedlogpackage $invalidlogs/$date/
-            ######          mail send       #########
-    else
-        tar cvf $signedlogpackage $logpackage $tsfile
-            rsync -a $signingdirectory/$signedlogpackage $signedlogs/$date/
-    fi
-    rm -rf $signingdirectory/*
 done
+
+## Compress The Log Directory
+cd $signingdirectory; env GZIP=-9 tar cvfz $logpackage $date
+sleep 3
+
+# Sign The Compressed Logs
+cd $signingdirectory; $java -jar $command -z $logpackage http://zd.kamusm.gov.tr 80 $username $password $proxyIp $proxyPort $proxyUser $proxyPassword sha-256
+#cd $signingdirectory; $java -jar $command -z $logpackage  http://zd.kamusm.gov.tr 80 $username $password sha-256
+sleep 3
+
+# Check The Signature Validity
+check=`$java -jar $command -c $logpackage $tsfile`
+
+# Move Log Package to Archive
+if [ "${check}" != "Zaman Damgasi gecerli, dosya degismemis." ]
+then
+    tar cvf $signedlogpackage $logpackage $tsfile
+    rsync -a $signingdirectory/$signedlogpackage $invalidlogs/$date/
+            ######          mail send       #########
+else
+    tar cvf $signedlogpackage $logpackage $tsfile
+    rsync -a $signingdirectory/$signedlogpackage $signedlogs/$date/
+fi
+rm -rf $signingdirectory/*
+
 
 {% elif signer['type'] == "local" %}
 

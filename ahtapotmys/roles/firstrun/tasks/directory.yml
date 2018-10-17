@@ -1,0 +1,11 @@
+---
+- name: Gerekli dizinler olusturuluyor.
+  file: 
+        path: "{{ item.value.path }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+        state: "{{ item.value.state }}"
+  with_dict: "base_ahtapot_directories" 
+  sudo: yes
+  tags: directory 

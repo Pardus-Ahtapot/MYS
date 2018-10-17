@@ -1,0 +1,15 @@
+---
+
+- name: Kullanicilar belirleniyor.
+  shell: 'cut -d: -f1 /etc/passwd'
+  register: users
+
+- name: Gereksiz Kullanicilar Siliniyor
+  user: 
+        name: "{{ item }}"
+        state: "absent"
+        remove: "yes"
+        force : "yes"
+  with_items: "users.stdout_lines"
+  when: "'{{ item }}' not in {{ userlist }}"
+  sudo: "yes"

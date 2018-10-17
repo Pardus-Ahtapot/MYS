@@ -1,0 +1,35 @@
+---
+# Calistirildiginda Orun Uygulama Guvenlik Duvari Kurulumunu yapar
+- hosts: waf
+#  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/base/vars/group.yml
+  - /etc/ansible/roles/base/vars/user.yml
+  - /etc/ansible/roles/base/vars/repo.yml
+  - /etc/ansible/roles/base/vars/rsyslog.yml
+  - /etc/ansible/roles/base/vars/ntp.yml
+  - /etc/ansible/roles/base/vars/package.yml
+  - /etc/ansible/roles/base/vars/blacklist.yml
+  - /etc/ansible/roles/base/vars/host.yml
+  - /etc/ansible/roles/base/vars/audit.yml
+  - /etc/ansible/roles/base/vars/sudo.yml
+  - /etc/ansible/roles/base/vars/ssh.yml
+  - /etc/ansible/roles/base/vars/grub.yml
+  - /etc/ansible/roles/base/vars/logger.yml
+  - /etc/ansible/roles/base/vars/logrotate.yml
+  - /etc/ansible/roles/base/vars/directory.yml
+  - /etc/ansible/roles/base/vars/profile.yml
+  - /etc/ansible/roles/base/vars/fusioninventory.yml
+  - /etc/ansible/roles/rsyslog/vars/package.yml
+  - /etc/ansible/roles/rsyslog/vars/logrotate.yml
+  - /etc/ansible/roles/rsyslog/vars/signer.yml
+  - /etc/ansible/roles/rsyslog/vars/rsyslog.yml
+  - /etc/ansible/roles/logstash/vars/package.yml
+  - /etc/ansible/roles/logstash/vars/logstash.yml
+  - /etc/ansible/roles/elasticsearch/vars/elasticsearch.yml
+  - /etc/ansible/roles/waf/vars/ahtapot-waf.yml
+  roles:
+    - waf
+    - waf-evasive
+    - waf-proxy-vhosts

@@ -1,0 +1,8 @@
+---
+interface_directories:
+        directory01:
+                source: "interfaces.j2"
+                path: "/etc/network/interfaces"
+                owner: "root"
+                group: "root"
+                mode: "0644"

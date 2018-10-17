@@ -1,0 +1,54 @@
+---
+- name: Apache2 Kurulumu
+  apt:
+    name: apache2
+    update_cache: yes
+    state: latest
+
+- name: OWASP Kuralseti kurulumu
+  apt:
+    name: modsecurity-crs
+    update_cache: yes
+    state: latest
+
+- name: Apache mod_security2 modul kurulumu
+  apt:
+    name: libapache2-mod-security2
+    update_cache: yes
+    state: latest
+
+  
+- name: mod_security2 aktivasyonu
+  apache2_module:
+    name: security2
+    state: present
+  notify:
+   - restart apache2
+
+- name: proxy modulu aktive et
+  apache2_module:
+    name: proxy
+    state: present
+  notify:
+   - restart apache2
+
+- name: proxy_html modul aktive et
+  apache2_module:
+    name: proxy_html
+    state: present
+  notify:
+   - restart apache2
+
+- name: modsecurity.conf dosyasini uygula
+  template:
+    src: "modsecurity.conf.j2"
+    dest: "{{ apache_conf_dir }}/modsecurity.conf"
+    owner: root
+    group: root
+    mode: 0644
+    
+# a2enconf modsecurity.conf
+- name: mod_securit2 konfigurasyon dosyasini aktive et
+  command: "a2enconf modsecurity.conf"
+  notify:
+  - restart apache2

@@ -1,0 +1,46 @@
+---
+- name: mod_evasive paketlerini yukle
+  sudo: yes
+  apt:
+    pkg: "{{item}}"
+    state: installed
+    update_cache: yes
+    cache_valid_time: 36000
+  with_items: "{{mod_evasive_packages}}"
+
+- name: mod_evasive icin log dizini olustur
+  sudo: yes
+  file:
+    name: "{{mod_evasive_log_dir}}"
+    owner: "{{apache_user}}"
+    state: directory
+    mode: "0755"
+
+- name: mod_evasive konfigurasyon dosyasini kopyala
+  sudo: yes
+  template:
+    src: evasive.conf.j2
+    dest: /etc/apache2/mods-available/evasive.conf
+    mode: 0644
+  register: copy_config
+
+- name: mod_evasive bildirimleri icin mail paketine sembolik link olustur
+  sudo: yes
+  file:
+    src: /usr/bin/mail
+    dest: /bin/mail
+    state: link
+
+- name: modul aktive edilmemisse aktive et
+  sudo: yes
+  shell: "a2enmod evasive.load"
+  register: enable_mod
+  changed_when: enable_mod.stdout.find('Enabling module evasive') != -1
+
+- name: apache2 tekrar baslat
+  sudo: yes
+  service:
+    name: apache2
+    state: restarted
+    enabled: yes
+  when: enable_mod.changed or copy_config.changed

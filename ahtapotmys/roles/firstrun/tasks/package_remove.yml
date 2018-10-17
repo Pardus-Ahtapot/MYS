@@ -1,0 +1,29 @@
+---
+
+- name: Yuklu Paket Listesi Aliniyor.
+  shell: "dpkg -l |grep ii |awk '{print $2}'"
+  register: packages
+
+- name: Gereksiz Paketler Siliniyor
+  apt: 
+        name: "{{ item }}"
+        state: "absent"
+  with_items: "packages.stdout_lines"
+  when: "'{{ item }}' not in {{ packagelist }} and 'lib' not in '{{ item }}' "
+  sudo: "yes"
+
+- name: Rc Paket Listesi Aliniyor.
+  shell: "dpkg -l |grep 'rc  '"
+  register: rcpackage
+  failed_when: "rcpackage.rc == 2"
+
+- name: Konfigurasyon Dosyalari Siliniyor
+  shell: "dpkg -l | grep '^rc' |cut -d ' ' -f 3 | xargs sudo dpkg --purge"
+  sudo: "yes"
+  when: "rcpackage.rc == 0"
+
+- name: apt autoremove Calistiriliyor
+  shell: "apt autoremove -y"
+  sudo: "yes"
+ 
+
