@@ -66,13 +66,13 @@ to_be_removed_modules:
     module18:
         name: "sctp"
         state: "absent"
-    module18:
+    module19:
         name: "rds"
         state: "absent"
-    module19:
+    module20:
         name: "tipc"
         state: "absent"
-    module20:
+    module21:
         name: "iwlwifi"
         state: "absent"
 

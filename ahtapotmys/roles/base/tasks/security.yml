@@ -1,11 +1,12 @@
 #bu playbook cis standartlarını uygular. https://www.cisecurity.org/benchmark/debian_linux/
 #Dokumandaki basliklar tasklarin ustunde belirtilmistir
 ---
+#TODO: bu task icinga paketini 2.6 ya upgrade ettigi icin kapatildi
 # Install Updates, Patches and Additional Security Software
-- name: Butun paketler son surume guncelleniyor
-  apt: upgrade=yes
-  sudo: yes
-  tags: security
+#- name: Butun paketler son surume guncelleniyor
+#  apt: upgrade=yes
+#  sudo: yes
+#  tags: security
 
 # Create Separate Partition for /tmp
 - name: tmp.mount system dosyasi olusturuluyor
@@ -313,6 +314,7 @@
   sudo: yes
   tags: security
 
+# dikkat: rsync in silinmesi mysql in de silinmesine neden oluyor
 # Ensure rsync service is not enabled
 - name: RSYNC siliniyor
   apt:
@@ -321,6 +323,7 @@
         force: "yes"
         purge: "yes"
   when: |
+    (groups['mysql'] is not defined or inventory_hostname not in groups['mysql']) and
     (groups['ansible'] is not defined or inventory_hostname not in groups['ansible']) and
     (groups['rsyslog'] is not defined or inventory_hostname not in groups['rsyslog']) and
     (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and
@@ -341,6 +344,7 @@
         backup: yes
   notify: reload sysctl
   when: |
+    (groups['mhn'] is not defined or inventory_hostname not in groups['mhn']) and
     (groups['openvpn'] is not defined or inventory_hostname not in groups['openvpn']) and
     (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
     (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and

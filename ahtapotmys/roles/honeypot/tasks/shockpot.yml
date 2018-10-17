@@ -11,7 +11,7 @@
   shell: |
     lxc-attach -n shockpot -- /bin/bash -c "if [[ ! -f {{shockpot_conf.register_check_file}} ]]; then
                                           sleep 3 &&
-                                          /opt/shockpot/install_shockpot.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}} &&
+                                          /opt/shockpot/register_shockpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}} &&
                                           touch {{shockpot_conf.register_check_file}};
                                        fi"
   when: item.type == "shockpot"
@@ -19,7 +19,7 @@
 
 - name: registering shockpot honeypot with force
   sudo: yes
-  shell: lxc-attach -n shockpot -- /opt/shockpot/install_shockpot.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}}
+  shell: lxc-attach -n shockpot -- /opt/shockpot/register_shockpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}}
   when: item.type == "shockpot" and item.force_register == true
   with_items: containers[inventory_hostname]
 

@@ -30,7 +30,7 @@
 
 - name: copy GeoIP.dat
   sudo: yes
-  template:
+  copy:
     src: "GeoIP.dat"
     dest: "/opt/snorby/config/snorby-geoip.dat"
     owner: root
