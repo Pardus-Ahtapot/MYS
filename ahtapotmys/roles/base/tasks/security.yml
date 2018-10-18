@@ -315,6 +315,7 @@
   tags: security
 
 # dikkat: rsync in silinmesi mysql in de silinmesine neden oluyor
+# mhn nin eklenme nedeni lxc nin rsync kullanmasi
 # Ensure rsync service is not enabled
 - name: RSYNC siliniyor
   apt:
@@ -323,6 +324,7 @@
         force: "yes"
         purge: "yes"
   when: |
+    (groups['mhn'] is not defined or inventory_hostname not in groups['mhn']) and
     (groups['mysql'] is not defined or inventory_hostname not in groups['mysql']) and
     (groups['ansible'] is not defined or inventory_hostname not in groups['ansible']) and
     (groups['rsyslog'] is not defined or inventory_hostname not in groups['rsyslog']) and

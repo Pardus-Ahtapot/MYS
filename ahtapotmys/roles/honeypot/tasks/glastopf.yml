@@ -3,7 +3,7 @@
   sudo: yes
   shell: lxc-attach -n glastopf -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update;  apt-get -yq install python-logstash pylibinjection libtaxii hpfeeds-threatstream glastopf bfr wget sudo curl"
   when: item.type == "glastopf"
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"
 
 
 - name: registering glastopf honeypot
@@ -16,16 +16,16 @@
                                           touch {{glastopf_conf.register_check_file}};
                                        fi"
   when: item.type == "glastopf"
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"
 
 - name: registering glastopf honeypot with force
   sudo: yes
   shell: lxc-attach -n glastopf -- /usr/share/glastopf/install.sh {{mhn_url}} {{mhn_deploy_key}}
   when: item.type == "glastopf" and item.force_register == true
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"
 
 - name: restarting glastopf honeypot
   sudo: yes
   shell: lxc-attach -n glastopf -- supervisorctl restart glastopf
   when: item.type == "glastopf"
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"

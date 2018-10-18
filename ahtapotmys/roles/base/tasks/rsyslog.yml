@@ -8,8 +8,8 @@
         mode: "{{ rsyslog['conf']['mode'] }}"
   when: "ansible_fqdn == item.1"
   with_subelements:
-    - "ossimciks"
-    - "clients"
+    - "{{ossimciks}}"
+    - clients
   notify:
     - rsyslog servisini yeniden baslat
   sudo: yes
