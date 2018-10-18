@@ -1,9 +1,9 @@
 ---
-#- name: installing elastichoney honeypot
-#  sudo: yes
-#  shell: lxc-attach -n elastichoney -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install elastichoney wget sudo"
-#  when: item.type == "elastichoney"
-#  with_items: containers[inventory_hostname]
+- name: installing elastichoney honeypot
+  sudo: yes
+  shell: lxc-attach -n elastichoney -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install elastichoney wget sudo"
+  when: item.type == "elastichoney"
+  with_items: containers[inventory_hostname]
 
 - name: replacing logfile config
   sudo: yes
