@@ -9,7 +9,7 @@
   sudo: yes
   template:
     src: "amun.conf.j2"
-    dest: "/var/lib/lxc/{{item.type}}/rootfs/opt/amun/conf/amun.conf"
+    dest: "/var/lib/lxc/{{item.type}}/rootfs/usr/share/amun/conf/amun.conf"
     owner: "root"
     group: "root"
     mode: 0644
@@ -28,7 +28,7 @@
   sudo: yes
   shell: |
     lxc-attach -n amun -- /bin/bash -e -c "if [[ ! -f {{amun_conf.register_check_file}} ]]; then
-                                          bash -e /opt/amun/register_amun_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} &&
+                                          bash -e /usr/share/amun/register_amun_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} &&
                                           touch {{amun_conf.register_check_file}};
                                         fi"
   when: item.type == "amun"
@@ -36,7 +36,7 @@
 
 - name: registering amun honeypot with force
   sudo: yes
-  shell: lxc-attach -n amun -- /bin/bash -x -c "/opt/amun/register_amun_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}}"
+  shell: lxc-attach -n amun -- /bin/bash -x -c "/usr/share/amun/register_amun_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}}"
   when: item.type == "amun" and item.force_register == true
   with_items: containers[inventory_hostname]
 

@@ -9,7 +9,7 @@
   sudo: yes
   shell: |
     lxc-attach -n wordpot -- /bin/bash -c "if [[ ! -f {{wordpot_conf.register_check_file}} ]]; then
-                                            /opt/wordpot/register_wordpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{wordpot_conf.listen_ip}} {{wordpot_conf.listen_port}} &&
+                                            /usr/share/wordpot/register_wordpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{wordpot_conf.listen_ip}} {{wordpot_conf.listen_port}} &&
                                             touch {{wordpot_conf.register_check_file}};
                                            fi"
   when: item.type == "wordpot"
@@ -17,14 +17,14 @@
 
 - name: registering wordpot honeypot with force
   sudo: yes
-  shell: lxc-attach -n wordpot -- /opt/wordpot/register_wordpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{wordpot_conf.listen_ip}} {{wordpot_conf.listen_port}};
+  shell: lxc-attach -n wordpot -- /usr/share/wordpot/register_wordpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{wordpot_conf.listen_ip}} {{wordpot_conf.listen_port}};
   when: item.type == "wordpot" and item.force_register == true
   with_items: containers[inventory_hostname]
 
 - name: set up wordpot host
   sudo: yes
   lineinfile:
-    dest: "/var/lib/lxc/{{item.type}}/rootfs/opt/wordpot/wordpot.conf"
+    dest: "/var/lib/lxc/{{item.type}}/rootfs/usr/share/wordpot/wordpot.conf"
     regexp: '^HOST.*'
     line: "HOST = {{wordpot_conf.listen_ip}}"
     backup: yes
@@ -34,7 +34,7 @@
 - name: set up wordpot port
   sudo: yes
   lineinfile:
-    dest: "/var/lib/lxc/{{item.type}}/rootfs/opt/wordpot/wordpot.conf"
+    dest: "/var/lib/lxc/{{item.type}}/rootfs/usr/share/wordpot/wordpot.conf"
     regexp: '^PORT.*'
     line: "PORT = {{wordpot_conf.listen_port}}"
     backup: yes

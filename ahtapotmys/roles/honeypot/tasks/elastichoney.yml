@@ -8,7 +8,7 @@
 - name: replacing logfile config
   sudo: yes
   replace:
-    dest: /var/lib/lxc/elastichoney/rootfs/opt/elastichoney/config.json
+    dest: /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
     regexp: '(.*"logfile" : )(\S*)(,?.*)'
     replace: '\1"{{elastichoney_logfile}}",'
   when: item.type == "elastichoney"
@@ -17,7 +17,7 @@
 - name: replacing use_remote config
   sudo: yes
   replace:
-    dest: /var/lib/lxc/elastichoney/rootfs/opt/elastichoney/config.json
+    dest: /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
     regexp: '(.*"use_remote" : )(\S*)(,?.*)'
     replace: '\1{{elastichoney_use_remote}},'
   when: item.type == "elastichoney"
@@ -26,7 +26,7 @@
 - name: replacing remote_url config
   sudo: yes
   replace:
-    dest: /var/lib/lxc/elastichoney/rootfs/opt/elastichoney/config.json
+    dest: /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
     regexp: '(.*"remote_url" : )(\S*)(,?.*)'
     replace: '\1"{{elastichoney_remote_url}}",'
   when: item.type == "elastichoney"
@@ -35,7 +35,7 @@
 - name: replacing remote_url_use_auth config
   sudo: yes
   replace:
-    dest: /var/lib/lxc/elastichoney/rootfs/opt/elastichoney/config.json
+    dest: /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
     regexp: '(.*"remote_url_use_auth" : )(\S*)(,?.*)'
     replace: '\1{{elastichoney_remote_url_use_auth}},'
   when: item.type == "elastichoney"
@@ -44,7 +44,7 @@
 - name: replacing remote_url_username config
   sudo: yes
   replace:
-    dest: /var/lib/lxc/elastichoney/rootfs/opt/elastichoney/config.json
+    dest: /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
     regexp: '(.*"remote_url_username" : )(\S*)(,?.*)'
     replace: '\1"{{elastichoney_remote_url_username}}",'
   when: item.type == "elastichoney"
@@ -53,7 +53,7 @@
 - name: replacing remote_url_password config
   sudo: yes
   replace:
-    dest: /var/lib/lxc/elastichoney/rootfs/opt/elastichoney/config.json
+    dest: /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
     regexp: '(.*"remote_url_password" : )(\S*)(,?.*)'
     replace: '\1"{{elastichoney_remote_url_password}}",'
   when: item.type == "elastichoney"
@@ -62,7 +62,7 @@
 - name: replacing anonymous config
   sudo: yes
   replace:
-    dest: /var/lib/lxc/elastichoney/rootfs/opt/elastichoney/config.json
+    dest: /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
     regexp: '(.*"anonymous" : )(\S*)(,?.*)'
     replace: '\1{{elastichoney_anonymous}},'
   when: item.type == "elastichoney"
@@ -71,7 +71,7 @@
 - name: replacing spoofed_version config
   sudo: yes
   replace:
-    dest: /var/lib/lxc/elastichoney/rootfs/opt/elastichoney/config.json
+    dest: /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
     regexp: '(.*"spoofed_version" : )(\S*)(,?.*)'
     replace: '\1"{{elastichoney_spoofed_version}}",'
   when: item.type == "elastichoney"
@@ -80,7 +80,7 @@
 - name: replacing public_ip_url config
   sudo: yes
   replace:
-    dest: /var/lib/lxc/elastichoney/rootfs/opt/elastichoney/config.json
+    dest: /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
     regexp: '(.*"public_ip_url" : )(\S*)(,?.*)'
     replace: '\1"{{elastichoney_public_ip_url}}",'
   when: item.type == "elastichoney"
@@ -88,13 +88,13 @@
 
 - name: registering elastichoney honeypot
   sudo: yes
-  shell: lxc-attach -n elastichoney -- /bin/bash -c "if [ ! -e {{elastichoney_register_check_file}} ]; then /opt/elastichoney/register_elastichoney_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}}; if [ $? -eq 0 ]; then touch {{elastichoney_register_check_file}}; fi fi"
+  shell: lxc-attach -n elastichoney -- /bin/bash -c "if [ ! -e {{elastichoney_register_check_file}} ]; then /usr/share/elastichoney/register_elastichoney_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}}; if [ $? -eq 0 ]; then touch {{elastichoney_register_check_file}}; fi fi"
   when: item.type == "elastichoney"
   with_items: containers[inventory_hostname]
 
 - name: registering elastichoney honeypot with force
   sudo: yes
-  shell: lxc-attach -n elastichoney -- /opt/elastichoney/register_elastichoney_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}}
+  shell: lxc-attach -n elastichoney -- /usr/share/elastichoney/register_elastichoney_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}}
   when: item.type == "elastichoney" and item.force_register == true
   with_items: containers[inventory_hostname]
 
