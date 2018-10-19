@@ -60,18 +60,4 @@ rm -f /usr/share/dionaea/etc/dionaea/services-enabled/*
 ln -s ../services-available/http.yaml /usr/share/dionaea/etc/dionaea/services-enabled/http.yaml
 
 
-#update supervisor
-cat > /etc/supervisor/conf.d/dionaea.conf <<EOF
-[program:dionaea]
-command=/usr/share/dionaea/bin/dionaea -w /usr/share/dionaea -u dionaea -g dionaea
-directory=/usr/share/dionaea
-stdout_logfile=/var/log/dionaea.out
-stderr_logfile=/var/log/dionaea.err
-autostart=true
-autorestart=true
-redirect_stderr=true
-stopsignal=QUIT
-
-EOF
-
 supervisorctl update

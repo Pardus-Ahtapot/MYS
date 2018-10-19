@@ -9,8 +9,6 @@
 - name: Editing mhn config
   sudo: yes
   shell: |
-    sed -i -r "s|(SUPERUSER_EMAIL =)(.*)|\1 '{{mhn_email|quote}}'|g" /opt/mhn/server/config.py
-    sed -i -r "s|(SUPERUSER_PASSWORD =)(.*)|\1 '{{mhn_password|quote}}'|g" /opt/mhn/server/config.py
     sed -i -r "s|(SERVER_BASE_URL =)(.*)|\1 '{{mhn_base_url|quote}}'|g" /opt/mhn/server/config.py
     sed -i -r "s|(HONEYMAP_URL =)(.*)|\1 '{{mhn_honeymap_url|quote}}'|g" /opt/mhn/server/config.py
     sed -i -r "s|(MAIL_SERVER =)(.*)|\1 '{{mhn_mail_server|quote}}'|g" /opt/mhn/server/config.py
