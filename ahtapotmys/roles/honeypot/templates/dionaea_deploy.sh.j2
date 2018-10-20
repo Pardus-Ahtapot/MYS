@@ -13,7 +13,7 @@ fi
 server_url=$1
 deploy_key=$2
 
-cd /opt/dionaea
+cd /usr/share/dionaea
 
 if [[ ! -e registration.sh ]]; then
     wget ${server_url}/static/registration.txt -O registration.sh
@@ -26,7 +26,7 @@ if [[ ! -f {{dionaea_conf.register_check_file}} ]] || [[ "{{item.force_register}
     . ./registration.sh ${server_url} ${deploy_key} "dionaea"
 
     # Set up hpfeeds
-    cat > /opt/dionaea/etc/dionaea/ihandlers-available/hpfeeds.yaml <<EOF
+    cat > /usr/share/dionaea/etc/dionaea/ihandlers-available/hpfeeds.yaml <<EOF
 - name: hpfeeds
   config:
     server: $HPF_HOST
@@ -38,13 +38,13 @@ if [[ ! -f {{dionaea_conf.register_check_file}} ]] || [[ "{{item.force_register}
 EOF
 
     #enable only hpfeed handler
-    rm -f /opt/dionaea/etc/dionaea/ihandlers-enabled/*
-    ln -s ../ihandlers-available/hpfeeds.yaml /opt/dionaea/etc/dionaea/ihandlers-enabled/hpfeeds.yaml
+    rm -f /usr/share/dionaea/etc/dionaea/ihandlers-enabled/*
+    ln -s ../ihandlers-available/hpfeeds.yaml /usr/share/dionaea/etc/dionaea/ihandlers-enabled/hpfeeds.yaml
 
     touch {{dionaea_conf.register_check_file}}
 fi
 #setup http service
-cat > /opt/dionaea/etc/dionaea/services-available/http.yaml <<EOF
+cat > /usr/share/dionaea/etc/dionaea/services-available/http.yaml <<EOF
 - name: http
   config:
     root: {{dionaea_conf.root_path}}
@@ -56,22 +56,8 @@ cat > /opt/dionaea/etc/dionaea/services-available/http.yaml <<EOF
 EOF
 
 #enable only http handler
-rm -f /opt/dionaea/etc/dionaea/services-enabled/*
-ln -s ../services-available/http.yaml /opt/dionaea/etc/dionaea/services-enabled/http.yaml
+rm -f /usr/share/dionaea/etc/dionaea/services-enabled/*
+ln -s ../services-available/http.yaml /usr/share/dionaea/etc/dionaea/services-enabled/http.yaml
 
-
-#update supervisor
-cat > /etc/supervisor/conf.d/dionaea.conf <<EOF
-[program:dionaea]
-command=/opt/dionaea/bin/dionaea -w /opt/dionaea -u dionaea -g dionaea
-directory=/opt/dionaea
-stdout_logfile=/var/log/dionaea.out
-stderr_logfile=/var/log/dionaea.err
-autostart=true
-autorestart=true
-redirect_stderr=true
-stopsignal=QUIT
-
-EOF
 
 supervisorctl update

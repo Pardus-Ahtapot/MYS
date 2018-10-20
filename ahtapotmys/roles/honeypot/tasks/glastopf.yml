@@ -12,7 +12,7 @@
   shell: |
     lxc-attach -n glastopf -- /bin/bash -c "if [[ ! -f {{glastopf_conf.register_check_file}} ]]; then
                                           sleep 3 &&
-                                          /opt/glastopf/install.sh {{mhn_url}} {{mhn_deploy_key}} &&
+                                          /usr/share/glastopf/install.sh {{mhn_url}} {{mhn_deploy_key}} &&
                                           touch {{glastopf_conf.register_check_file}};
                                        fi"
   when: item.type == "glastopf"
@@ -20,7 +20,7 @@
 
 - name: registering glastopf honeypot with force
   sudo: yes
-  shell: lxc-attach -n glastopf -- /opt/glastopf/install.sh {{mhn_url}} {{mhn_deploy_key}}
+  shell: lxc-attach -n glastopf -- /usr/share/glastopf/install.sh {{mhn_url}} {{mhn_deploy_key}}
   when: item.type == "glastopf" and item.force_register == true
   with_items: containers[inventory_hostname]
 

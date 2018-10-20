@@ -1,9 +1,9 @@
 ---
-#- name: installing smtp honeypot
-#  sudo: yes
-#  shell: lxc-attach -n smtp -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install honeypot-smtp python-honeypot-lib"
-#  when: item.type == "smtp"
-#  with_items: containers[inventory_hostname]
+- name: installing smtp honeypot
+  sudo: yes
+  shell: lxc-attach -n smtp -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install honeypot-smtp python-honeypot-lib"
+  when: item.type == "smtp"
+  with_items: containers[inventory_hostname]
 
 - name: Check if ssl certificate for smtp exists
   sudo: yes

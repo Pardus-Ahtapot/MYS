@@ -11,7 +11,7 @@
   shell: |
     lxc-attach -n shockpot -- /bin/bash -c "if [[ ! -f {{shockpot_conf.register_check_file}} ]]; then
                                           sleep 3 &&
-                                          /opt/shockpot/register_shockpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}} &&
+                                          /usr/share/shockpot/register_shockpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}} &&
                                           touch {{shockpot_conf.register_check_file}};
                                        fi"
   when: item.type == "shockpot"
@@ -19,15 +19,15 @@
 
 - name: registering shockpot honeypot with force
   sudo: yes
-  shell: lxc-attach -n shockpot -- /opt/shockpot/register_shockpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}}
+  shell: lxc-attach -n shockpot -- /usr/share/shockpot/register_shockpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}}
   when: item.type == "shockpot" and item.force_register == true
   with_items: containers[inventory_hostname]
 
 - name: set up shockpot conf
   sudo: yes
   shell: |
-    lxc-attach -n shockpot -- /bin/bash -c "sed -i -e '/^\[server\]$/,/^\[/ s/^host.*$/host = {{shockpot_conf.listen_ip}}/' /opt/shockpot/shockpot.conf;
-                                            sed -i -e '/^\[server\]$/,/^\[/ s/^port.*$/port = {{shockpot_conf.listen_port}}/' /opt/shockpot/shockpot.conf;"
+    lxc-attach -n shockpot -- /bin/bash -c "sed -i -e '/^\[server\]$/,/^\[/ s/^host.*$/host = {{shockpot_conf.listen_ip}}/' /usr/share/shockpot/shockpot.conf;
+                                            sed -i -e '/^\[server\]$/,/^\[/ s/^port.*$/port = {{shockpot_conf.listen_port}}/' /usr/share/shockpot/shockpot.conf;"
   when: item.type == "shockpot" and item.force_register != true
   with_items: containers[inventory_hostname]
 

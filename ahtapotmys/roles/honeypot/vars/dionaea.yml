@@ -2,6 +2,6 @@
 dionaea_conf:
   http_port: 80
   https_port: 443
-  root_path: /opt/dionaea/var/dionaea/roots/www
+  root_path: /usr/share/dionaea/var/dionaea/roots/www
   max_request_size: 32768
   register_check_file: /etc/dionaea_registered

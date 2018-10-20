@@ -18,7 +18,7 @@ deploy_key=$2
 sed -i -r 's/[#]?Port 22\s*$/Port {{cowrie_real_ssh_port}}/g' /etc/ssh/sshd_config
 service ssh restart
 
-cd /opt/cowrie
+cd /usr/share/cowrie
 source cowrie-env/bin/activate
 
 wget $server_url/static/registration.txt -O registration.sh
@@ -36,7 +36,7 @@ sed -i "s/#secret = secret/secret = $HPF_SECRET/g" cowrie.cfg
 sed -i 's/#debug=false/debug=false/' cowrie.cfg
 cd ..
 
-chown -R cowrie:users /opt/cowrie/
+chown -R cowrie:users /usr/share/cowrie/
 {% if cowrie_enable_ssh == true %}
 touch /etc/authbind/byport/{{cowrie_ssh_port}}
 chown cowrie /etc/authbind/byport/{{cowrie_ssh_port}}
