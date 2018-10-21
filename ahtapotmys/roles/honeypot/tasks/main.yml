@@ -9,30 +9,30 @@
     - liblxc1
     - wget
 
-- name: copying bridge script
-  sudo: yes
-  template:
-    src: "br0.j2"
-    dest: "/etc/network/interfaces.d/{{lxc[inventory_hostname]['network_link']}}"
-    owner: "root"
-    group: "root"
-    mode: 0755
-  when: lxc[inventory_hostname].network_type == "veth"
+#- name: copying bridge script
+#  sudo: yes
+#  template:
+#    src: "br0.j2"
+#    dest: "/etc/network/interfaces.d/{{lxc[inventory_hostname]['network_link']}}"
+#    owner: "root"
+#    group: "root"
+#    mode: 0755
+#  when: lxc[inventory_hostname].network_type == "veth"
 
-- name: ifup bridge
-  sudo: yes
-  command: /sbin/ifup {{lxc[inventory_hostname]['network_link']}}
-  when: lxc[inventory_hostname].network_type == "veth"
+#- name: ifup bridge
+#  sudo: yes
+#  command: /sbin/ifup {{lxc[inventory_hostname]['network_link']}}
+#  when: lxc[inventory_hostname].network_type == "veth"
 
-- name: modifying default.conf
-  sudo: yes
-  template:
-    src: "default.conf.j2"
-    dest: "/etc/lxc/default.conf"
-    owner: "root"
-    group: "root"
-    mode: 0644
-  notify: restart lxc-net
+#- name: modifying default.conf
+#  sudo: yes
+#  template:
+#    src: "default.conf.j2"
+#    dest: "/etc/lxc/default.conf"
+#    owner: "root"
+#    group: "root"
+#    mode: 0644
+#  notify: restart lxc-net
 
 - name: creating honeypot containers
   sudo: yes
