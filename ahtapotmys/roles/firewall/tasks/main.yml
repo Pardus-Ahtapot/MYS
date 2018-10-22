@@ -4,6 +4,7 @@
 - include: user.yml
 - include: install.yml
 - include: directory.yml
+- include: lkk.yml
 - include: profile.yml
 - include: modprobe.yml
 - include: contrackd.yml
