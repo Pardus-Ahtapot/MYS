@@ -55,6 +55,16 @@
     sed "s/^lxc.start.order.*/lxc.start.order = {{item.start_order}}/g" /var/lib/lxc/{{item.type}}/config
   with_items: "{{ containers[inventory_hostname] }}"
 
+- name: configuring honeypot repositories
+  sudo: yes
+  template:
+    src: "ahtapot.list.j2"
+    dest: "/var/lib/lxc/{{item.type}}/rootfs/etc/apt/sources.list.d/ahtapot.list"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  with_items: containers[inventory_hostname]
+
 - name: configuring honeypot interfaces
   sudo: yes
   template:
