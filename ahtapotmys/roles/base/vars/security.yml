@@ -152,7 +152,7 @@ tmpmount:
 
 #yeni sysctl yapılandırmaları buraya eklenir
 #Onemli not: Eger burdaki bir parametre baska bir host grubunda farklı olması gerekiyorsa, o parametre icin ayri bir task yaziniz.
-sysctl:
+sysctl_security:
     source: "sysctl-ahtapotbase.conf.j2"
     destination: "/etc/sysctl.d/ahtapotbase.conf"
     owner: "root"
