@@ -752,7 +752,7 @@ def menu():
                 if pos == 1:
                     curses.endwin()
                     logger.send_log("info","IpTraf secenegi Secildi.")
-                    execute_cmd("sudo iptraf")
+                    execute_cmd("sudo iptraf-ng")
                 elif pos == 2:
                     curses.endwin()
                     logger.send_log("info"," Log Filtreleme Secildi.")
