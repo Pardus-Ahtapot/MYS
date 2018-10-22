@@ -1,6 +1,6 @@
 ---
-# Calistirildiginda Firewall, Web Proxy ve DHCPD Kurulumu Yapilir
-- hosts: firewall-proxy-dhcp 
+# Calistirildiginda Firewall ve OpenVPN Kurulumu Yapilir
+- hosts: firewall-openvpn
   remote_user: ahtapotops
   vars_files:
   - /etc/ansible/roles/base/vars/group.yml
