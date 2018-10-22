@@ -6,6 +6,6 @@
         state: "{{ item.value.state}}"
         sysctl_set: "yes"
         reload: "yes"
-  with_dict: "openvpn_sysctl"
+  with_dict: "{{openvpn_sysctl}}"
   sudo: yes
   tags: openvpn
