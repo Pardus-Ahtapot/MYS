@@ -6,7 +6,7 @@
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
         state: "{{ item.value.state }}"
-  with_dict: "hook_directories"
+  with_dict: "{{hook_directories}}"
   when: ansible_fqdn != "{{ gitlab['backup']['Server'] }}"
   sudo: yes
   tags: hook 
@@ -18,7 +18,7 @@
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
-  with_dict: "hook_scripts"
+  with_dict: "{{hook_scripts}}"
   when: ansible_fqdn != "{{ gitlab['backup']['Server'] }}"
   sudo: yes
   tags: hook 
