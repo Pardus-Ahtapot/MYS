@@ -1,6 +1,6 @@
 ---
 - name: reload sysctl
-  shell: /sbin/sysctl -p {{ sysctl['destination']}} -p /etc/sysctl.conf
+  shell: /sbin/sysctl -p {{ sysctl_security['destination']}} -p /etc/sysctl.conf
   sudo: yes
 
 - name: root password warning

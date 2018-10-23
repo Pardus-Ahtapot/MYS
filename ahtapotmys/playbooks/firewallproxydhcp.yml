@@ -39,6 +39,7 @@
   - /etc/ansible/roles/squid/vars/sarg.yml
   - /etc/ansible/roles/squid/vars/nginx.yml
   - /etc/ansible/roles/dhcpd/vars/package.yml
+  - /etc/ansible/roles/dhcpd/vars/dhcpd.yml
   sudo: yes
   roles:
   - { role: base }
