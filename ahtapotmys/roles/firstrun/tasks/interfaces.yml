@@ -6,5 +6,5 @@
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
-  with_dict: "interface_directories"
+  with_dict: "{{interface_directories}}"
   sudo: yes

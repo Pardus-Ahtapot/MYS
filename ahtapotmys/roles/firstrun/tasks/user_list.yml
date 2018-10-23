@@ -5,11 +5,11 @@
   register: users
 
 - name: Gereksiz Kullanicilar Siliniyor
-  user: 
+  user:
         name: "{{ item }}"
         state: "absent"
         remove: "yes"
         force : "yes"
-  with_items: "users.stdout_lines"
-  when: "'{{ item }}' not in {{ userlist }}"
+  when: "{{item not in userlist}}"
+  with_items: "{{ users.stdout_lines|list }}"
   sudo: "yes"
