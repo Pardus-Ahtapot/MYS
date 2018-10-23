@@ -1,0 +1,32 @@
+---
+- name: installing conpot honeypot
+  sudo: yes
+  shell: lxc-attach -n conpot -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install conpot wget sudo"
+  when: item.type == "conpot"
+  with_items: containers[inventory_hostname]
+
+
+- name: registering conpot honeypot
+  sudo: yes
+  # container tam olarak ayaga kalkmadan register edilirse sorun cikiyor. sleep bu yuzden konuldu
+  shell: |
+    lxc-attach -n conpot -- /bin/bash -c "if [[ ! -f {{conpot_conf.register_check_file}} ]]; then
+                                          sleep 3 &&
+                                          /usr/share/conpot/register_conpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} &&
+                                          touch {{conpot_conf.register_check_file}};
+                                       fi"
+  when: item.type == "conpot"
+  with_items: containers[inventory_hostname]
+
+- name: registering conpot honeypot with force
+  sudo: yes
+  shell: lxc-attach -n conpot -- /usr/share/conpot/register_conpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}}
+  when: item.type == "conpot" and item.force_register == true
+  with_items: containers[inventory_hostname]
+
+
+- name: restarting conpot honeypot
+  sudo: yes
+  shell: lxc-attach -n conpot -- systemctl restart conpot
+  when: item.type == "conpot"
+  with_items: containers[inventory_hostname]

@@ -1,0 +1,3 @@
+---
+conpot_conf:
+  register_check_file: /etc/conpot_registered
