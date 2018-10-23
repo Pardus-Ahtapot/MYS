@@ -40,7 +40,7 @@
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
-  with_dict: "dansguardian_whitelists"
+  with_dict: "{{dansguardian_whitelists}}"
   notify:
     - dansguardian konfigurasyonunu yeniden yukle
   sudo: yes
@@ -53,7 +53,7 @@
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
-  with_dict: "dansguardian_blacklists"
+  with_dict: "{{dansguardian_blacklists}}"
   notify:
     - dansguardian konfigurasyonunu yeniden yukle
   sudo: yes
@@ -63,7 +63,7 @@
   shell: /usr/bin/touch "{{ item.value.path }}" 
   args:
       creates: "{{ item.value.path }}"
-  with_dict: "dansguardian_locallists"
+  with_dict: "{{dansguardian_locallists}}"
   notify:
     - dansguardian konfigurasyonunu yeniden yukle
   sudo: yes
