@@ -106,11 +106,11 @@
 # ortak sysctl yapilandirmalarinin hepsi bu dosyadadir.
 - name: sysctl ayarlari aktariliyor
   template:
-        src: "{{ sysctl['source'] }}"
-        dest: "{{ sysctl['destination'] }}"
-        owner: "{{ sysctl['owner'] }}"
-        group: "{{ sysctl['group'] }}"
-        mode: "{{ sysctl['mode'] }}"
+        src: "{{ sysctl_security['source'] }}"
+        dest: "{{ sysctl_security['destination'] }}"
+        owner: "{{ sysctl_security['owner'] }}"
+        group: "{{ sysctl_security['group'] }}"
+        mode: "{{ sysctl_security['mode'] }}"
   notify: reload sysctl
   sudo: yes
   tags: security
