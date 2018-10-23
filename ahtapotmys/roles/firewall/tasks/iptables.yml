@@ -9,8 +9,22 @@
   sudo: yes
   tags: deploy
 
+# Cis sıklastirmasindan dolayi, script modulu tmp klasorunde executable calistiramadigi icin bu task copy ve shell modulleri ile yapilmistir.
+#- name: Yeni Guvenlik Duvari Kurallari uygulaniyor.
+#  script: "{{ iptables['deploy']['repopath'] }}/{{ ansible_fqdn }}.fw"
+#  sudo: yes
+#  tags: deploy
+
+- name: Yeni Guvenlik Duvari Kurallari gönderiliyor.
+  copy:
+    src: "{{ iptables['deploy']['repopath'] }}/{{ ansible_fqdn }}.fw"
+    dest: "/tmp/{{ ansible_fqdn }}.fw"
+    mode: "0755"
+  sudo: yes
+  tags: deploy
+
 - name: Yeni Guvenlik Duvari Kurallari uygulaniyor.
-  script: "{{ iptables['deploy']['repopath'] }}/{{ ansible_fqdn }}.fw"
+  shell: "/bin/bash /tmp/{{ ansible_fqdn }}.fw"
   sudo: yes
   tags: deploy
 
