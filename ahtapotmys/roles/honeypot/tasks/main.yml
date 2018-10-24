@@ -63,7 +63,7 @@
     owner: "root"
     group: "root"
     mode: 0644
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"
 
 - name: configuring honeypot interfaces
   sudo: yes
