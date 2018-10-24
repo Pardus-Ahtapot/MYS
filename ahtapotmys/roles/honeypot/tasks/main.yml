@@ -92,3 +92,4 @@
 - include: amun.yml
 - include: suricata.yml
 - include: elastichoney.yml
+- include: conpot.yml

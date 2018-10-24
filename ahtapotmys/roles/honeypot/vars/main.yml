@@ -10,7 +10,7 @@ lxc:
     network_hwaddr: 00:16:3e:xx:xx:xx
     network_link_bridge_slave: enp0s3
 containers:
-# amun dionaea ftp pop3 smtp wordpot cowrie elastichoney glastopf p0f shockpot suricata
+# amun dionaea ftp pop3 smtp wordpot cowrie elastichoney conpot glastopf p0f shockpot suricata
   pardus.ahtapot:
   - type: "cowrie"
     start_auto: 1

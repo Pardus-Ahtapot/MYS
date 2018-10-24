@@ -17,7 +17,11 @@ squid_packages:
     package04:
         #name: "sarg=2.3.6-1+b1" 
         name: "sarg" 
-        state: "present" 
+        state: "present"
+    package05:
+        #name: "mutt=1.7.2-1+deb9u1"
+        name: "mutt"
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  

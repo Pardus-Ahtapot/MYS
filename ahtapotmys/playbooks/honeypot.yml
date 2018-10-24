@@ -33,6 +33,7 @@
   - /etc/ansible/roles/honeypot/vars/amun.yml
   - /etc/ansible/roles/honeypot/vars/suricata.yml
   - /etc/ansible/roles/honeypot/vars/elastichoney.yml
+  - /etc/ansible/roles/honeypot/vars/conpot.yml
   roles:
     - role: base
     - role: honeypot
