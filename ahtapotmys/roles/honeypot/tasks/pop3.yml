@@ -28,7 +28,7 @@
     mv -f pop3d.key.unencrypted pop3d.key
     openssl req -new -key /var/lib/lxc/pop3/rootfs/etc/honeypot-pop3/keys/pop3d.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{honeypot_pop3_ssl_country}}/ST={{honeypot_pop3_ssl_state}}/L={{honeypot_pop3_ssl_locality}}/O={{honeypot_pop3_ssl_organization}}/OU={{honeypot_pop3_ssl_organizationalunit}}/CN={{honeypot_pop3_ssl_commonname}}"
   when: item.stat is defined and item.stat.exists == False and honeypot_pop3_create_ssl == True
-  with_items: honeypot_pop3_ssl_exists.results
+  with_items: "{{honeypot_pop3_ssl_exists.results}}"
 
 - name: copy pop3 config.xml
   sudo: yes

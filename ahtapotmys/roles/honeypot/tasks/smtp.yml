@@ -28,7 +28,7 @@
     mv -f smtpd.key.unencrypted smtpd.key
     openssl req -new -key /var/lib/lxc/smtp/rootfs/etc/honeypot-smtp/keys/smtpd.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{honeypot_smtp_ssl_country}}/ST={{honeypot_smtp_ssl_state}}/L={{honeypot_smtp_ssl_locality}}/O={{honeypot_smtp_ssl_organization}}/OU={{honeypot_smtp_ssl_organizationalunit}}/CN={{honeypot_smtp_ssl_commonname}}"
   when: item.stat is defined and item.stat.exists == False and honeypot_smtp_create_ssl == True
-  with_items: honeypot_smtp_ssl_exists.results
+  with_items: "{{honeypot_smtp_ssl_exists.results}}"
 
 - name: copy smtp config.xml
   sudo: yes
