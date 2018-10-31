@@ -27,6 +27,8 @@ chmod 755 registration.sh
 . ./registration.sh $server_url $deploy_key "cowrie"
 
 cd etc
+cp cowrie.cfg.dist cowrie.cfg
+
 sed -i 's/#\[output_hpfeeds\]/[output_hpfeeds]/g' cowrie.cfg
 sed -i '/\[output_hpfeeds\]/!b;n;cenabled = true' cowrie.cfg
 sed -i "s/#server = hpfeeds.mysite.org/server = $HPF_HOST/g" cowrie.cfg
