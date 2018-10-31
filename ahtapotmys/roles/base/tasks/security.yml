@@ -346,7 +346,7 @@
         backup: yes
   notify: reload sysctl
   when: |
-    (groups['mhn'] is not defined or inventory_hostname not in groups['mhn']) and
+    (groups['honeypot'] is not defined or inventory_hostname not in groups['honeypot']) and
     (groups['openvpn'] is not defined or inventory_hostname not in groups['openvpn']) and
     (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
     (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and

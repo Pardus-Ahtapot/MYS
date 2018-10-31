@@ -16,17 +16,6 @@
   when: item.type == "cowrie"
   with_items: containers[inventory_hostname]
 
-- name: copy cowrie.cfg
-  sudo: yes
-  template:
-    src: "cowrie.cfg.j2"
-    dest: "/var/lib/lxc/{{item.type}}/rootfs/usr/share/cowrie/etc/cowrie.cfg"
-    owner: "root"
-    group: "root"
-    mode: 0644
-  when: item.type == "cowrie"
-  with_items: containers[inventory_hostname]
-
 - name: registering cowrie honeypot
   sudo: yes
   shell: lxc-attach -n cowrie -- /bin/bash -c "if [ ! -e {{cowrie_register_check_file}} ]; then /usr/sbin/cowrie_deploy.sh {{mhn_url}} {{mhn_deploy_key}}; fi"
@@ -38,6 +27,22 @@
   shell: lxc-attach -n cowrie -- /usr/sbin/cowrie_deploy.sh {{mhn_url}} {{mhn_deploy_key}}
   when: item.type == "cowrie" and item.force_register == true
   with_items: containers[inventory_hostname]
+
+- name: set up cowrie conf
+  sudo: yes
+  shell: |
+    lxc-attach -n cowrie -- /bin/bash -c "sed -i -r 's/[#]?Port 22\s*$/Port {{cowrie_real_ssh_port}}/g' /etc/ssh/sshd_config; service ssh restart;
+                                          sed -i -e '/^\[ssh\]$/,/^\[/ s/^enabled.*$/enabled = {{cowrie_enable_ssh}}/' /usr/share/cowrie/etc/cowrie.cfg;
+                                          sed -i -e '/^\[ssh\]$/,/^\[/ s/^version.*$/version = {{cowrie_ssh_version}}/' /usr/share/cowrie/etc/cowrie.cfg;
+                                          sed -i -e '/^\[ssh\]$/,/^\[/ s/^listen_endpoints.*$/listen_endpoints = tcp:{{cowrie_ssh_port}}:interface=0.0.0.0/' /usr/share/cowrie/etc/cowrie.cfg;
+                                          sed -i -e '/^\[telnet\]$/,/^\[/ s/^enabled.*$/enabled = {{cowrie_enable_telnet}}/' /usr/share/cowrie/etc/cowrie.cfg;
+                                          sed -i -e '/^\[telnet\]$/,/^\[/ s/^listen_endpoints.*$/listen_endpoints = tcp:{{cowrie_telnet_port}}:interface=0.0.0.0/' /usr/share/cowrie/etc/cowrie.cfg;
+                                          touch /etc/authbind/byport/{{cowrie_ssh_port}} /etc/authbind/byport/{{cowrie_telnet_port}}
+                                          chown cowrie /etc/authbind/byport/{{cowrie_ssh_port}} /etc/authbind/byport/{{cowrie_telnet_port}}
+                                          chmod 770 /etc/authbind/byport/{{cowrie_ssh_port}} /etc/authbind/byport/{{cowrie_telnet_port}}"
+  when: item.type == "cowrie"
+  with_items: containers[inventory_hostname]
+
 
 - name: restarting cowrie honeypot
   sudo: yes
