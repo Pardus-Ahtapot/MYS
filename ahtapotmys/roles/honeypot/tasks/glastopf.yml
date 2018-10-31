@@ -24,6 +24,20 @@
   when: item.type == "glastopf" and item.force_register == true
   with_items: "{{ containers[inventory_hostname] }}"
 
+- name: set up glastopf conf
+  sudo: yes
+  shell: |
+    lxc-attach -n glastopf -- /bin/bash -c "sed -i -e '/^\[webserver\]$/,/^\[/ s/^host.*$/host = {{glastopf_conf.listen_ip}}/' /usr/share/glastopf/glastopf.cfg;
+                                            sed -i -e '/^\[webserver\]$/,/^\[/ s/^port.*$/port = {{glastopf_conf.listen_port}}/' /usr/share/glastopf/glastopf.cfg;"
+  when: item.type == "glastopf"
+  with_items: "{{ containers[inventory_hostname] }}"
+
+- name: stop and disable apache
+  sudo: yes
+  shell: lxc-attach -n glastopf -- /bin/bash -c "systemctl stop apache2 ; systemctl disable apache2"
+  when: item.type == "glastopf"
+  with_items: "{{ containers[inventory_hostname] }}"
+
 - name: restarting glastopf honeypot
   sudo: yes
   shell: lxc-attach -n glastopf -- supervisorctl restart glastopf
