@@ -3,7 +3,7 @@
   sudo: yes
   shell: lxc-attach -n suricata -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install curl suricata-mhn suricata-oinkmaster-mhn libhpfeeds libhtp2 wget sudo"
   when: item.type == "suricata"
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"
 
 - name: copy suricata mhn update conf
   sudo: yes
@@ -14,14 +14,14 @@
     group: "root"
     mode: 0644
   when: item.type == "suricata"
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"
 
 - name: set up suricata conf
   sudo: yes
   shell: |
     lxc-attach -n suricata -- /bin/bash -c "sed -i -e '/^vars:/,/default_rule_path:/ s@    HOME_NET:.*@    HOME_NET: \"{{suricata_conf.home_net}}\"@' /etc/suricata/suricata.yaml"
   when: item.type == "suricata" and item.force_register != true
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"
 
 - name: registering suricata honeypot
   sudo: yes
@@ -32,7 +32,7 @@
                                        fi"
   register: result
   when: item.type == "suricata"
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"
 
 
 
@@ -40,7 +40,7 @@
   sudo: yes
   shell: lxc-attach -n suricata -- /etc/suricata/register_suricata_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}}
   when: item.type == "suricata" and item.force_register == true
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"
 
 - name: restarting suricata honeypot
   sudo: yes
@@ -50,4 +50,4 @@
                                             systemctl restart suricata-rup.service;
                                             systemctl restart suricata-rup.timer;"
   when: item.type == "suricata"
-  with_items: containers[inventory_hostname]
+  with_items: "{{ containers[inventory_hostname] }}"

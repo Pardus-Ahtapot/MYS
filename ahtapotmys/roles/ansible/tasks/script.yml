@@ -6,6 +6,6 @@
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
-  with_dict: "scripts" 
+  with_dict: "{{scripts}}"
   sudo: yes
   tags: scripts 

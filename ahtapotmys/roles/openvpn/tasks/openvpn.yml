@@ -73,7 +73,7 @@
         owner: "{{ openvpn['ldapconf']['owner'] }}"
         group: "{{ openvpn['ldapconf']['group'] }}"
         mode: "{{ openvpn['ldapconf']['mode'] }}"
-  with_dict: "openvpn_servers"
+  with_dict: "{{openvpn_servers}}"
   when: 'item.value.fqdn == {{ "ansible_fqdn" }} and item.value.auth != "noldap"'
   notify:
     - openvpn servisini yeniden baslat
