@@ -1,0 +1,47 @@
+---
+
+- name: Install ansible
+  apt:
+    name: ansible
+    state: present
+  when: inventory_hostname == item.value.host_fqdn
+  with_dict: "{{standalone.hosts}}"
+  sudo: yes
+  tags: standalone
+
+- name: Deploy standalone script
+  template:
+    src: "ahtapot_standalone.sh.j2"
+    dest: "/usr/sbin/ahtapot_standalone_{{item.value.role_dir}}.sh"
+    owner: "root"
+    mode: "755"
+  when: inventory_hostname == item.value.host_fqdn
+  with_dict: "{{standalone.hosts}}"
+  sudo: yes
+  tags: standalone
+
+- name: Set cron configuration
+  cron:
+    name: "ansible pull script for role {{item.value.role_dir}}"
+    cron_file: "{{standalone.cron_file}}"
+    minute: "{{standalone.cron_minute}}"
+    hour: "{{standalone.cron_hour}}"
+    day: "{{standalone.cron_day}}"
+    job: "/usr/sbin/ahtapot_standalone_{{item.value.role_dir}}.sh"
+    state: present
+    user: root
+  when: inventory_hostname == item.value.host_fqdn
+  with_dict: "{{standalone.hosts}}"
+  sudo: yes
+  tags: standalone
+
+- name: Reload cron
+  service:
+    name: cron
+    state: restarted
+  when: inventory_hostname == item.value.host_fqdn
+  with_dict: "{{standalone.hosts}}"
+  sudo: yes
+  tags: standalone
+
+
