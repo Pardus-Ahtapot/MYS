@@ -715,9 +715,10 @@
   sudo: yes
   tags: security
 
+#lxc path ignored because it corrupts containers. 
 # Find Un-owned Files and Directories
 - name: Sahipsiz dosyalar bulunuyor
-  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser | xargs -I '{}' chown root '{}'
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser -not -path "/var/lib/lxc" | xargs -I '{}' chown root '{}'
   args:
         executable: /bin/bash
   sudo: yes
@@ -725,7 +726,7 @@
 
 # Find Un-grouped Files and Directories
 - name: Grupsuz dosyalar bulunuyor
-  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup | xargs -I '{}' chown :root '{}'
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup -not -path "/var/lib/lxc" | xargs -I '{}' chown :root '{}'
   args:
         executable: /bin/bash
   sudo: yes
