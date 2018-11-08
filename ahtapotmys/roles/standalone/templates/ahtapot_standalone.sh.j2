@@ -41,7 +41,7 @@ if [[ "$last_hash" == "$new_hash" ]]; then
 else
     #here we need to check if there is difference with this role
     cd $DIR
-    if git diff --name-only $last_hash $new_hash | egrep -q -e "roles/($a|base)"; then
+    if git diff --name-only $last_hash $new_hash | egrep -q -e "roles/($ROLE_DIR|base)"; then
         #there is difference in this role. we need to run playbook
         ansible-pull -U $GIT_REPO -C $BRANCH --accept-host-key --full -d $DIR $PLAYBOOK
 
