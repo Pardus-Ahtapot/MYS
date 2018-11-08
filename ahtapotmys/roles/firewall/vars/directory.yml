@@ -19,6 +19,18 @@ firewall_directories:
         owner: "ahtapotops"
         mode: "750"
         state: "directory"
+    directory04:
+        path: "/var/opt/ahtapot-lkk"
+        group: "root"
+        owner: "root"
+        mode: "755"
+        state: "directory"
+    directory05:
+        path: "/var/log/ahtapot/ahtapot-lkk.log"
+        group: "lkk"
+        owner: "lkk"
+        mode: "644"
+        state: "touch"
 #    directoryXX:
 #        path: ""
 #        group: ""
