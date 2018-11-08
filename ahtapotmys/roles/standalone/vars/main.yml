@@ -10,7 +10,7 @@ standalone:
 
   hosts:
 #   hostX:
-#     fqdn: myhost
+#     host_fqdn: myhost
 #     role_dir: ntp
 #     playbook: ntp.yml
 
