@@ -1,0 +1,52 @@
+#!/bin/bash
+
+#This script gets ahtapot from given git repo on ansible host and if it detect any change. It will run playbook on local
+#Ibrahim Ercan
+
+set -e
+set -x
+
+GIT_REPO="{{standalone.ansible_git_url}}"
+BRANCH="{{standalone.branch}}"
+DIR="{{standalone.directory}}" # we will assume this path will created by this script. We removes it in standalone playbook
+ROLE_DIR="{{item.value.role_dir}}"
+PLAYBOOK="playbooks/{{item.value.playbook}}"
+
+
+if [[ ! -d $DIR/.git ]]; then
+    #if it is not a git repository, clean it.
+    rm -rf $DIR
+fi
+
+last_hash=""
+if [[ -d $DIR ]]; then
+    #if directory exist it means we pulled it before. we will compare hashes
+    cd $DIR
+    last_hash=`git rev-parse HEAD`
+    git checkout $BRANCH
+    git pull origin $BRANCH
+    new_hash=`git rev-parse HEAD`
+fi
+
+
+if [[ -z $last_hash ]]; then
+    ##first pull and run
+    ansible-pull -U $GIT_REPO -C $BRANCH --accept-host-key --full -d $DIR $PLAYBOOK
+    exit 0
+fi
+
+if [[ "$last_hash" == "$new_hash" ]]; then
+    #there is no new commit. exit
+    exit 0
+else
+    #here we need to check if there is difference with this role
+    cd $DIR
+    if git diff --name-only $last_hash $new_hash | egrep -q -e "roles/($ROLE_DIR|base)"; then
+        #there is difference in this role. we need to run playbook
+        ansible-pull -U $GIT_REPO -C $BRANCH --accept-host-key --full -d $DIR $PLAYBOOK
+
+    fi
+fi
+
+
+

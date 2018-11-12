@@ -1,0 +1,19 @@
+---
+standalone:
+  ansible_git_url: "ahtapotops@10.0.0.200:/srv/git/ansible.git"
+  branch: "master"
+  directory: "/etc/ansible"
+  cron_file: "/etc/cron.d/ahtapot-standalone"
+  cron_minute: "0"
+  cron_hour: "*/4"
+  cron_day: "*"
+
+  hosts:
+#   hostX:
+#     host_fqdn: myhost
+#     role_dir: ntp
+#     playbook: ntp.yml
+
+
+
+

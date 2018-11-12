@@ -1,0 +1,7 @@
+- hosts: standalone
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/standalone/vars/main.yml
+  roles:
+    - role: standalone
+
