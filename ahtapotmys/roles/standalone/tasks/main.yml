@@ -2,10 +2,11 @@
 
 - name: Install ansible
   apt:
-    name: ansible
+    name: "{{item}}"
     state: present
-  when: inventory_hostname == item.value.host_fqdn
-  with_dict: "{{standalone.hosts}}"
+  with_items:
+    - ansible
+    - git
   sudo: yes
   tags: standalone
 
@@ -39,6 +40,13 @@
   service:
     name: cron
     state: restarted
+  when: inventory_hostname == item.value.host_fqdn
+  with_dict: "{{standalone.hosts}}"
+  sudo: yes
+  tags: standalone
+
+- name: Run standalone script
+  shell: "/bin/bash /usr/sbin/ahtapot_standalone_{{item.value.role_dir}}.sh"
   when: inventory_hostname == item.value.host_fqdn
   with_dict: "{{standalone.hosts}}"
   sudo: yes
