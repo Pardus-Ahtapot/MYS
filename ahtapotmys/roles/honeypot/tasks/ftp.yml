@@ -3,7 +3,7 @@
   sudo: yes
   shell: lxc-attach -n ftp -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install honeypot-ftp python-honeypot-lib"
   when: item.type == "ftp"
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: Check if ssl certificate for ftp exists
   sudo: yes
@@ -11,7 +11,7 @@
     path: /var/lib/lxc/ftp/rootfs/etc/honeypot-ftp/keys/ftpd.crt
   register: honeypot_ftp_ssl_exists
   when: item.type == "ftp"
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: Create ssl certificate
   sudo: yes
@@ -39,10 +39,10 @@
     group: "root"
     mode: 0644
   when: item.type == "ftp"
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: restarting ftp honeypot
   sudo: yes
   shell: lxc-attach -n ftp -- systemctl restart honeypot-ftp
   when: item.type == "ftp"
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]

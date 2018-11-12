@@ -9,20 +9,20 @@
     - liblxc1
     - wget
 
-- name: copying bridge script
-  sudo: yes
-  template:
-    src: "br0.j2"
-    dest: "/etc/network/interfaces.d/{{lxc[inventory_hostname]['network_link']}}"
-    owner: "root"
-    group: "root"
-    mode: 0755
-  when: lxc[inventory_hostname].network_type == "veth"
-
-- name: ifup bridge
-  sudo: yes
-  command: /sbin/ifup {{lxc[inventory_hostname]['network_link']}}
-  when: lxc[inventory_hostname].network_type == "veth"
+#- name: copying bridge script
+#  sudo: yes
+#  template:
+#    src: "br0.j2"
+#    dest: "/etc/network/interfaces.d/{{lxc[inventory_hostname]['network_link']}}"
+#    owner: "root"
+#    group: "root"
+#    mode: 0755
+#  when: lxc[inventory_hostname].network_type == "veth"
+#
+#- name: ifup bridge
+#  sudo: yes
+#  command: /sbin/ifup {{lxc[inventory_hostname]['network_link']}}
+#  when: lxc[inventory_hostname].network_type == "veth"
 
 - name: modifying default.conf
   sudo: yes
@@ -34,15 +34,36 @@
     mode: 0644
   notify: restart lxc-net
 
+- name: modifying default.conf
+  sudo: yes
+  template:
+    src: "default.conf.j2"
+    dest: "/etc/lxc/default.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart lxc-net
+
+- name: modifying rsyslog
+  sudo: yes
+  template:
+    src: "honeypot_rsyslog.conf.j2"
+    dest: "/etc/rsyslog.d/honeypot.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: rsyslog servisini yeniden baslat
+
+
 - name: creating honeypot containers
   sudo: yes
   shell: if [ ! -e /var/lib/lxc/{{item.type}} ]; then lxc-create --name={{item.type}} --template=pardus -- --arch=amd64 --release=onyedi --enable-non-free --mirror={{container_mirror}} --security-mirror={{container_security_mirror}}; fi
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: stopping containers
   sudo: yes
   shell: lxc-stop -n {{item.type}} || true
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: configuring honeypot config
   sudo: yes
@@ -53,7 +74,7 @@
     sed "s/^lxc.start.delay.*/lxc.start.delay = {{item.start_delay}}/g" /var/lib/lxc/{{item.type}}/config
     egrep -q '^lxc.start.order' /var/lib/lxc/{{item.type}}/config || echo 'lxc.start.order = {{item.start_order}}' >> /var/lib/lxc/{{item.type}}/config
     sed "s/^lxc.start.order.*/lxc.start.order = {{item.start_order}}/g" /var/lib/lxc/{{item.type}}/config
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: configuring honeypot repositories
   sudo: yes
@@ -63,7 +84,7 @@
     owner: "root"
     group: "root"
     mode: 0644
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: configuring honeypot interfaces
   sudo: yes
@@ -73,12 +94,31 @@
     owner: "root"
     group: "root"
     mode: 0644
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: starting containers
   sudo: yes
   shell: lxc-start -n {{item.type}}
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
+
+- name: Configuring cronjob to upgrade lxc host
+  cron:
+    name: "lxc_host_upgrade"
+    minute: "{{lxc_upgrade_minute}}"
+    hour: "{{lxc_upgrade_hour}}"
+    job: "apt -yq update; apt -yq upgrade"
+  sudo: yes
+
+- name: Configuring cronjob to upgrade honeypot
+  cron:
+    name: "{{item.type}}_upgrade"
+    minute: "{{lxc_upgrade_minute}}"
+    hour: "{{lxc_upgrade_hour}}"
+    job: |
+      lxc-attach -n {{item.type}} -- /bin/bash -c "apt -yq update; apt -yq upgrade"
+  with_items: containers[inventory_hostname]
+  sudo: yes
+
 
 - include: cowrie.yml
 - include: dionaea.yml
@@ -93,3 +133,10 @@
 - include: suricata.yml
 - include: elastichoney.yml
 - include: conpot.yml
+
+- name: stopping passive containers
+  sudo: yes
+  shell: lxc-stop -n {{item.type}} || true
+  when: item.start_auto == 0
+  with_items: containers[inventory_hostname]
+

@@ -3,7 +3,7 @@
   sudo: yes
   shell: lxc-attach -n shockpot -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install shockpot wget sudo"
   when: item.type == "shockpot"
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: registering shockpot honeypot
   sudo: yes
@@ -15,13 +15,13 @@
                                           touch {{shockpot_conf.register_check_file}};
                                        fi"
   when: item.type == "shockpot"
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: registering shockpot honeypot with force
   sudo: yes
   shell: lxc-attach -n shockpot -- /usr/share/shockpot/register_shockpot_to_mhn.sh {{mhn_url}} {{mhn_deploy_key}} {{shockpot_conf.listen_ip}} {{shockpot_conf.listen_port}}
   when: item.type == "shockpot" and item.force_register == true
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 - name: set up shockpot conf
   sudo: yes
@@ -29,11 +29,11 @@
     lxc-attach -n shockpot -- /bin/bash -c "sed -i -e '/^\[server\]$/,/^\[/ s/^host.*$/host = {{shockpot_conf.listen_ip}}/' /usr/share/shockpot/shockpot.conf;
                                             sed -i -e '/^\[server\]$/,/^\[/ s/^port.*$/port = {{shockpot_conf.listen_port}}/' /usr/share/shockpot/shockpot.conf;"
   when: item.type == "shockpot" and item.force_register != true
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]
 
 
 - name: restarting shockpot honeypot
   sudo: yes
   shell: lxc-attach -n shockpot -- supervisorctl restart shockpot
   when: item.type == "shockpot"
-  with_items: "{{ containers[inventory_hostname] }}"
+  with_items: containers[inventory_hostname]

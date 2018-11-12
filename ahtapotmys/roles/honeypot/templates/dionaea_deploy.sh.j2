@@ -59,8 +59,5 @@ EOF
 rm -f /usr/share/dionaea/etc/dionaea/services-enabled/*
 ln -s ../services-available/http.yaml /usr/share/dionaea/etc/dionaea/services-enabled/http.yaml
 
-#enable log incident
-rm -f /usr/share/dionaea/etc/dionaea/ihandlers-enabled/log_incident.yaml
-ln -s ../ihandlers-available/log_incident.yaml /usr/share/dionaea/etc/dionaea/ihandlers-enabled/log_incident.yaml
 
 supervisorctl update
