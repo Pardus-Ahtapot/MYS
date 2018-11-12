@@ -20,10 +20,11 @@
   tags: security
 
 - name: tmp.mount aktif ediliyor ve ayaga kaldiriliyor
-  service:
+  systemd:
         name: "{{ tmpmount['service']['name'] }}"
         state: "{{ tmpmount['service']['state'] }}"
         enabled: "{{ tmpmount['service']['enabled'] }}"
+        daemon_reload: yes
   sudo: yes
   tags: security
 
