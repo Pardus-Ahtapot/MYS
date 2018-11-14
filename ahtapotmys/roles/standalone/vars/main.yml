@@ -8,11 +8,6 @@ standalone:
   cron_hour: "*/4"
   cron_day: "*"
 
-  hosts:
-#   hostX:
-#     host_fqdn: myhost
-#     role_dir: ntp
-#     playbook: ntp.yml
 
 
 

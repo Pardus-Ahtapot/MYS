@@ -30,6 +30,7 @@
   - /etc/ansible/roles/elasticsearch/vars/elasticsearch.yml
   - /etc/ansible/roles/waf/vars/ahtapot-waf.yml
   roles:
-    - waf
-    - waf-evasive
-    - waf-proxy-vhosts
+    - { role: waf }
+    - { role: waf-evasive }
+    - { role: waf-proxy-vhosts }
+

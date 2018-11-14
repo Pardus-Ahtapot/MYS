@@ -12,27 +12,23 @@
 
 - name: Deploy standalone script
   template:
-    src: "ahtapot_standalone.sh.j2"
-    dest: "/usr/sbin/ahtapot_standalone_{{item.value.role_dir}}.sh"
+    src: "ahtapot_standalone.py.j2"
+    dest: "/usr/sbin/ahtapot_standalone.py"
     owner: "root"
     mode: "755"
-  when: inventory_hostname == item.value.host_fqdn
-  with_dict: "{{standalone.hosts}}"
   sudo: yes
   tags: standalone
 
 - name: Set cron configuration
   cron:
-    name: "ansible pull script for role {{item.value.role_dir}}"
+    name: "ansible pull script for role {{inventory_hostname}}"
     cron_file: "{{standalone.cron_file}}"
     minute: "{{standalone.cron_minute}}"
     hour: "{{standalone.cron_hour}}"
     day: "{{standalone.cron_day}}"
-    job: "/usr/sbin/ahtapot_standalone_{{item.value.role_dir}}.sh"
+    job: "/usr/sbin/ahtapot_standalone.py --pull --host {{inventory_hostname}}"
     state: present
     user: root
-  when: inventory_hostname == item.value.host_fqdn
-  with_dict: "{{standalone.hosts}}"
   sudo: yes
   tags: standalone
 
@@ -40,15 +36,21 @@
   service:
     name: cron
     state: restarted
-  when: inventory_hostname == item.value.host_fqdn
-  with_dict: "{{standalone.hosts}}"
   sudo: yes
   tags: standalone
 
 - name: Run standalone script
-  shell: "/bin/bash /usr/sbin/ahtapot_standalone_{{item.value.role_dir}}.sh"
-  when: inventory_hostname == item.value.host_fqdn
-  with_dict: "{{standalone.hosts}}"
+  shell: "/usr/sbin/ahtapot_standalone.py --pull --host {{inventory_hostname}}"
+  sudo: yes
+  tags: standalone
+
+- name: Deploy standalone script on local
+  template:
+    src: "ahtapot_standalone.py.j2"
+    dest: "/usr/sbin/ahtapot_standalone.py"
+    owner: "root"
+    mode: "755"
+  delegate_to: localhost
   sudo: yes
   tags: standalone
 
