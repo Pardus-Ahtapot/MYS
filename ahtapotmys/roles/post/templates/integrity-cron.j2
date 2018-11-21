@@ -1,0 +1,5 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+{{ integrity['cron']['min'] }} {{ integrity['cron']['hour'] }} * * * root /usr/sbin/integrity-check.sh {% if integrity['cron']['fix'] %}"--fix"{% endif %}

@@ -1,0 +1,4 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+ossec_conf_list:
+  - "{{ ossec['conf']['destination'] }}"

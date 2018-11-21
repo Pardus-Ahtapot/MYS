@@ -1,5 +1,6 @@
 ---
 # Test guvenlik duvarinin gorevlerini iceren dosyadir.
+- include: conf_integrity.yml
 - include: group.yml
 - include: user.yml
 - include: install.yml

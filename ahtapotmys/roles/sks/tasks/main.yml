@@ -1,4 +1,6 @@
 ---
+- include: conf_integrity.yml
+
 - name: sks | installing sks packages
   sudo: yes
   apt:

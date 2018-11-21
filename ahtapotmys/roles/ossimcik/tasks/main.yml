@@ -1,5 +1,6 @@
 ---
 # Ossimcik gorevlerini iceren dosyadir.
+- include: conf_integrity.yml
 - include: install.yml
 - include: ossec.yml
 - include: nxlog.yml

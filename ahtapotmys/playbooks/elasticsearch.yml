@@ -23,9 +23,13 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/elasticsearch/vars/package.yml
   - /etc/ansible/roles/elasticsearch/vars/elasticsearch.yml
   - /etc/ansible/roles/elasticsearch/vars/searchguard.yml
+  - /etc/ansible/roles/elasticsearch/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }
   - { role: elasticsearch }
+  - { role: post }

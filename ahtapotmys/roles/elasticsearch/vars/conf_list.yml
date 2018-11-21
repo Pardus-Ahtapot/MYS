@@ -1,0 +1,9 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+elasticsearch_conf_list:
+  - "{{ elasticsearch['conf']['default']['destination'] }}"
+  - "{{ elasticsearch['conf']['yml']['destination'] }}-{{ elasticsearch_servers['node01']['instance_name'] }}/elasticsearch.yml"
+  - "{{ elasticsearch['conf']['systemd']['destination'] }}-{{ elasticsearch_servers['node01']['instance_name'] }}.service"
+  - "{{ searchguard_configurations['conf01']['destination'] }}"
+  - "{{ searchguard_configurations['conf02']['destination'] }}"
+  - "{{ searchguard_configurations['conf03']['destination'] }}"

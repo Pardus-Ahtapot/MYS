@@ -20,8 +20,12 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/mail-quarantine/vars/main.yml
+  - /etc/ansible/roles/mail-quarantine/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
 
   roles:
     - role: base
     - role: mail-quarantine
+    - role: post

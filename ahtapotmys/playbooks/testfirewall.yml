@@ -23,12 +23,16 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/testfirewall/vars/group.yml
   - /etc/ansible/roles/testfirewall/vars/user.yml
   - /etc/ansible/roles/testfirewall/vars/package.yml
   - /etc/ansible/roles/testfirewall/vars/module.yml
   - /etc/ansible/roles/testfirewall/vars/sysctl.yml
   - /etc/ansible/roles/testfirewall/vars/directory.yml
+  - /etc/ansible/roles/testfirewall/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }
   - { role: testfirewall }
+  - { role: post }

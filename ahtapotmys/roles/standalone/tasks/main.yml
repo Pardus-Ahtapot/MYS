@@ -1,4 +1,5 @@
 ---
+- include: conf_integrity.yml
 
 - name: Install ansible
   apt:

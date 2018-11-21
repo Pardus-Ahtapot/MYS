@@ -1,3 +1,5 @@
+- include: conf_integrity.yml
+
 - name: install_pulledpork
   sudo: yes
   apt:

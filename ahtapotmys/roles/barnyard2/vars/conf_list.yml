@@ -1,0 +1,4 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+barnyard2_conf_list:
+  - "/etc/barnyard2.conf"

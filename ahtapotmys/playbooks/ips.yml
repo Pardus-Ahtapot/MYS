@@ -20,11 +20,16 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/ips/vars/main.yml
   - /etc/ansible/roles/pulledpork/vars/main.yml
+  - /etc/ansible/roles/pulledpork/vars/conf_list.yml
   - /etc/ansible/roles/barnyard2/vars/main.yml
+  - /etc/ansible/roles/barnyard2/vars/conf_list.yml
   - /etc/ansible/roles/snorby/vars/main.yml
+  - /etc/ansible/roles/snorby/vars/conf_list.yml
   - /etc/ansible/roles/mysql/vars/main.yml
+  - /etc/ansible/roles/mysql/vars/conf_list.yml
   - /etc/ansible/roles/ips/vars/blocked-domains.yml
   - /etc/ansible/roles/ips/vars/protocol-anomaly.rules.yml
   - /etc/ansible/roles/ips/vars/fileblacklist.sha256.yml
@@ -36,9 +41,12 @@
   - /etc/ansible/roles/ips/vars/disablesid.yml
   - /etc/ansible/roles/ips/vars/dropsid.yml
   - /etc/ansible/roles/ips/vars/modifysid.yml
+  - /etc/ansible/roles/ips/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
     - role: base
     - role: pulledpork
     - role: ips
     - role: barnyard2
+    - role: post
 

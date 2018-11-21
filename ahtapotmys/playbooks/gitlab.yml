@@ -23,8 +23,12 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/gitlab/vars/package.yml
   - /etc/ansible/roles/gitlab/vars/hook.yml
+  - /etc/ansible/roles/gitlab/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }
   - { role: gitlab }
+  - { role: post}

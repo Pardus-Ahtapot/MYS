@@ -1,0 +1,9 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+firstrun_conf_list:
+  - "{{ hosts['conf']['destination'] }}"
+  - "{{ interface_directories['directory01']['path'] }}"
+  - "{{ ssh['TrustedUserCAKeys']['destination'] }}"
+  - "{{ ssh['conf']['destination'] }}"
+  - "{{ sudo['conf']['destination'] }}"
+  -

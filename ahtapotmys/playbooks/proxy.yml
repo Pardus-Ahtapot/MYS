@@ -23,6 +23,7 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/squid/vars/package.yml
   - /etc/ansible/roles/squid/vars/squid.yml
   - /etc/ansible/roles/squid/vars/dansguardian.yml
@@ -30,6 +31,9 @@
   - /etc/ansible/roles/squid/vars/zeustracker.yml
   - /etc/ansible/roles/squid/vars/sarg.yml
   - /etc/ansible/roles/squid/vars/nginx.yml
+  - /etc/ansible/roles/squid/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }
   - { role: squid }
+  - { role : post }

@@ -23,8 +23,12 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/ossec/vars/package.yml
   - /etc/ansible/roles/ossec/vars/ossec.yml
+  - /etc/ansible/roles/ossec/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }
   - { role: ossec }
+  - { role: post }

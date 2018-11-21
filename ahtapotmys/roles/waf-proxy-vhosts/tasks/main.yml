@@ -1,4 +1,6 @@
 ---
+- include: conf_integrity.yml
+
 # On tanimli OS bagimli degismekleri ekle ve tanimla
 - name: Isletim sistemi bagimli degiskenler.
   include_vars: "Pardus.yml"

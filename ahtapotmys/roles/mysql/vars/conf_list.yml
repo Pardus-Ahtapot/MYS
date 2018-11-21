@@ -1,0 +1,6 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+mysql_conf_list:
+  - "{{ mysql_config_file }}"
+  - "{{ mysql_user_home }}/.my.cnf"
+  - "{{ mysql_root_home }}/.my.cnf"

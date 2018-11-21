@@ -1,0 +1,7 @@
+---
+- name: konfigurasyon listesi olusturuluyor
+  set_fact: conf_list="[ ]"
+  when: conf_list is not defined
+
+- name: konfigurasyon listesi birlestiriliyor
+  set_fact: conf_list="{{ conf_list }} + {{ ossimcik_conf_list }}"
