@@ -1,4 +1,6 @@
 ---
+- include: conf_integrity.yml
+
 - name: Apache2 Kurulumu
   apt:
     name: apache2

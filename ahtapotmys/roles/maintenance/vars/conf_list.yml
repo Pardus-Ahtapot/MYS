@@ -1,0 +1,4 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+maintenance_conf_list:
+  - "{{ maintenance['script']['destination'] }}"

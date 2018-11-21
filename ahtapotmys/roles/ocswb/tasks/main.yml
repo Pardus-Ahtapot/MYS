@@ -1,5 +1,6 @@
 ---
 # Ocswb gorevlerini iceren dosyadir
+- include: conf_integrity.yml
 - include: install.yml
 - include: ocswb.yml
 - include: ocswbalarm.yml

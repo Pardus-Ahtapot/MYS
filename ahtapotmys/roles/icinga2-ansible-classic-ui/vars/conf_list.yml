@@ -1,0 +1,8 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+icinga2-ansible-classic-ui_conf_list:
+  - "/etc/icinga2/classicui/apache2.conf"
+  - "/etc/icinga2/classicui/cgi.cfg"
+  - "/etc/apache2/sites-enabled/default-ssl.conf"
+  - "/etc/apache2/sites-enabled/000-default.conf"
+  -

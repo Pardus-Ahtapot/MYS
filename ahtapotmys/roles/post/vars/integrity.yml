@@ -1,0 +1,25 @@
+---
+# Integrity yapilandirmasini belirtmektedir.
+integrity:
+  cron:
+    source: "integrity-cron.j2"
+    destination: "/etc/cron.d/integrity"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+    min: "0"
+    hour: "*/1"
+    fix: false
+  script:
+    source: "integrity-check.j2"
+    destination: "/usr/sbin/integrity-check.sh"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+    path: "/usr/share/integrity"
+    mod: "0750"
+  files:
+    path: "/usr/share/integrity"
+    owner: "root"
+    group: "root"
+    mode: "0750"

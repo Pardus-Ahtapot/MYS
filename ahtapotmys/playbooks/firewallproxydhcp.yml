@@ -22,6 +22,7 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/firewall/vars/group.yml
   - /etc/ansible/roles/firewall/vars/user.yml
   - /etc/ansible/roles/firewall/vars/package.yml
@@ -31,6 +32,7 @@
   - /etc/ansible/roles/firewall/vars/contrackd.yml
   - /etc/ansible/roles/firewall/vars/profile.yml
   - /etc/ansible/roles/firewall/vars/directory.yml
+  - /etc/ansible/roles/firewall/vars/conf_list.yml
   - /etc/ansible/roles/squid/vars/package.yml
   - /etc/ansible/roles/squid/vars/squid.yml
   - /etc/ansible/roles/squid/vars/dansguardian.yml
@@ -38,11 +40,15 @@
   - /etc/ansible/roles/squid/vars/zeustracker.yml
   - /etc/ansible/roles/squid/vars/sarg.yml
   - /etc/ansible/roles/squid/vars/nginx.yml
+  - /etc/ansible/roles/squid/vars/conf_list.yml
   - /etc/ansible/roles/dhcpd/vars/package.yml
   - /etc/ansible/roles/dhcpd/vars/dhcpd.yml
+  - /etc/ansible/roles/dhcpd/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   sudo: yes
   roles:
   - { role: base }
   - { role: firewall }
   - { role: squid }
   - { role: dhcpd }
+  - { role: post }

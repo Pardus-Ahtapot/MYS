@@ -1,4 +1,6 @@
 ---
+include: conf_integrity.yml
+
 - name: installing lxc packages
   sudo: yes
   apt:

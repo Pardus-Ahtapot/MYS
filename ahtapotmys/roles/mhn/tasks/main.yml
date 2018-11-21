@@ -1,4 +1,6 @@
 ---
+- include: conf_integrity.yml
+
 - name: installing mhn packages
   sudo: yes
   apt:

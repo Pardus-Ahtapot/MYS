@@ -1,5 +1,6 @@
 ---
 # Ansible gorevlerini iceren dosyadir
+- include: conf_integrity.yml
 - include: install.yml
 - include: directory.yml
 - include: git.yml

@@ -1,0 +1,9 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+gkts_conf_list:
+  - "{{ gkts['hook']['conf']['destination'] }}"
+  - "{{ nginx['conf']['destination'] }}"
+  - "{{ nginx['certificate']['destination'] }}"
+  - "{{ nginx['key']['destination'] }}"
+  - "{{ uwsgi_services['service01']['destination'] }}"
+  - "{{ uwsgi_services['service01']['destination'] }}"

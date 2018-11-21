@@ -1,0 +1,7 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+mail-quarantine_conf_list:
+  - "/opt/modoboa-ahtapot-installer/installer.cfg"
+  - "/etc/amavis/conf.d/50-user"
+  - "/etc/spamassassin/local.cf"
+  -

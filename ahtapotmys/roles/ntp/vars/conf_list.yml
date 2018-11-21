@@ -1,0 +1,4 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+ntp_conf_list:
+  - "{{ ntp['conf']['destination'] }}"

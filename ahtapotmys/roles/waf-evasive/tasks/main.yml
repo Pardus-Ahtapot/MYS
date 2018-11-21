@@ -1,4 +1,6 @@
 ---
+- include: conf_integrity.yml
+
 - name: mod_evasive paketlerini yukle
   sudo: yes
   apt:

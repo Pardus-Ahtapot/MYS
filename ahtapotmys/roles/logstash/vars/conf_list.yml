@@ -1,0 +1,7 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+logstash_conf_list:
+  - "{{ logstash_configs['conf01']['destination'] }}"
+  - "{{ logstash_configs['conf02']['destination'] }}"
+  - "{{ logstash_configs['conf03']['destination'] }}"
+  - "{{ logstash['conf']['default']['destination'] }}"

@@ -1,0 +1,71 @@
+#!/bin/bash
+
+PACKAGES_FILE="{{ integrity['files']['path'] }}/packages"
+TEMP_PACKAGES_FILE="{{ integrity['files']['path'] }}/packages.temp"
+USERS_FILE="{{ integrity['files']['path'] }}/users"
+TEMP_USERS_FILE="{{ integrity['files']['path'] }}/users.temp"
+GROUPS_FILE="{{ integrity['files']['path'] }}/groups"
+TEMP_GROUPS_FILE="{{ integrity['files']['path'] }}/groups.temp"
+CONFS_FILE="{{ integrity['files']['path'] }}/confs"
+
+DPKG_QUERY="/usr/bin/dpkg-query"
+CAT="/bin/cat"
+AWK="/usr/bin/awk"
+SORT="/usr/bin/sort"
+DIFF="/usr/bin/diff"
+APT="/usr/bin/apt"
+DELUSER="/usr/sbin/deluser"
+DELGROUP="/usr/sbin/delgroup"
+MD5SUM="/usr/bin/md5sum"
+CUT="/usr/bin/cut"
+
+$DPKG_QUERY -f '${binary:Package}\n' -W > $TEMP_PACKAGES_FILE
+$CAT /etc/passwd | $AWK -F: '{print $1}' | $SORT > $TEMP_USERS_FILE
+$CAT /etc/group | $AWK -F: '{print $1}' | $SORT > $TEMP_GROUPS_FILE
+
+PACKAGES_DIFF=$($DIFF --changed-group-format='%>' --unchanged-group-format='' $PACKAGES_FILE $TEMP_PACKAGES_FILE)
+USERS_DIFF=$($DIFF --changed-group-format='%>' --unchanged-group-format='' $USERS_FILE $TEMP_USERS_FILE)
+GROUPS_DIFF=$($DIFF --changed-group-format='%>' --unchanged-group-format='' $GROUPS_FILE $TEMP_GROUPS_FILE)
+
+function send_log {
+    logger -t "integrity-check" "$1|$2"
+}
+
+if [[ ! -z "$PACKAGES_DIFF" ]]; then
+    for package in $PACKAGES_DIFF; do
+        send_log "PACKAGE" "$package"
+        if [[ "$1" == "--fix" ]]; then
+            $APT purge $package -y &> /dev/null
+        fi
+    done
+    if [[ "$1" == "--fix" ]]; then
+        $APT autoremove -y &> /dev/null
+    fi
+fi
+
+if [[ ! -z "$USERS_DIFF" ]]; then
+    for user in $USERS_DIFF; do
+        send_log "USER" "$user"
+        if [[ "$1" == "--fix" ]]; then
+            $DELUSER -q $user &> /dev/null
+        fi
+    done
+fi
+
+if [[ ! -z "$GROUPS_DIFF" ]]; then
+    for group in $GROUPS_DIFF; do
+        send_log "GROUP" "$group"
+        if [[ "$1" == "--fix" ]]; then
+            $DELGROUP -q $group &> /dev/null
+        fi
+    done
+fi
+
+while IFS= read -r var; do
+    old_checksum=$(echo $var | $CUT -f1 -d " ")
+    path=$(echo $var | $CUT -f2 -d " ")
+    new_checksum=$($MD5SUM $path | $CUT -f1 -d " ")
+    if [[ "$new_checksum" != "$old_checksum" ]]; then
+        send_log "CONF" "$path"
+    fi
+done < "$CONFS_FILE"

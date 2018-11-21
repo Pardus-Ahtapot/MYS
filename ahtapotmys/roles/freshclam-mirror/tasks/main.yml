@@ -1,3 +1,5 @@
+- include: conf_integrity.yml
+
 - name: freshclam-mirror | installing apache2
   sudo: yes
   apt:
@@ -39,4 +41,3 @@
   sudo: yes
   shell: >
     /usr/sbin/sync_clam_mirror.sh
-

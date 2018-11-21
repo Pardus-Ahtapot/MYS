@@ -1,0 +1,5 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+firewallbuilder_conf_list:
+  - "{{ firewallbuilder['fix']['destination'] }}"
+  - "{{ firewallbuilder['bash']['conf']['destination'] }}"

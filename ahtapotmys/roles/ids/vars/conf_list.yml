@@ -1,0 +1,23 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+ids_conf_list:
+  - "{{ scripts_dir }}/disable_interface_offloads.sh"
+  - "/etc/default/suricata"
+  - "/lib/systemd/system/suricata.service"
+  - "{{ suricata_config_file }}"
+  - "/etc/suricata/threshold.config"
+  - "/etc/suricata/rules/dns_query.rules"
+  - "/etc/suricata/rules/protocol-anomaly.rules"
+  - "/etc/suricata/rules/fileblacklist.md5"
+  - "/etc/suricata/rules/fileblacklist.sha1"
+  - "/etc/suricata/rules/fileblacklist.sha256"
+  - "/etc/suricata/rules/blacklist.rules"
+  - "/etc/suricata/rules/local.rules"
+  - "/etc/suricata/rules/content.rules"
+  - "/usr/sbin/natmode-ips.sh"
+  - "/usr/sbin/bridgemode-ips.sh"
+  - "/etc/network/interfaces.d/br0"
+  - "/etc/pulledpork/enablesid.conf"
+  - "/etc/pulledpork/disablesid.conf"
+  - "/etc/pulledpork/modifysid.conf"
+  - "/etc/pulledpork/dropsid.conf"

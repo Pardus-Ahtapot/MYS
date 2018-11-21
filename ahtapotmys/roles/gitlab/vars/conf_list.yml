@@ -1,0 +1,8 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+gitlab_conf_list:
+  - "{{ gitlab['conf']['destination'] }}"
+  - "{{ gitlab['ssl-key']['destination'] }}"
+  - "{{ gitlab['ssl-crt']['destination'] }}"
+  - "{{ hook_scripts['script01']['destination'] }}"
+  - "{{ hook_scripts['script02']['destination'] }}"

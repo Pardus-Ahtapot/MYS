@@ -1,0 +1,5 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+waf-proxy-vhosts_conf_list:
+  - "{{ apache_server_root }}/ports.conf"
+  - "{{ apache_conf_path }}/sites-available/{{ apache_vhosts_filename }}"

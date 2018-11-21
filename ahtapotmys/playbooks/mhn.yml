@@ -20,9 +20,13 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/mhn/vars/main.yml
+  - /etc/ansible/roles/mhn/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
 
   roles:
     - role: base
     - role: mhn
+    - role: post
 

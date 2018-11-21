@@ -23,12 +23,16 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/ossimcik/vars/repo.yml
   - /etc/ansible/roles/ossimcik/vars/package.yml
   - /etc/ansible/roles/ossimcik/vars/ossec.yml
   - /etc/ansible/roles/ossimcik/vars/nxlog.yml
   - /etc/ansible/roles/ossimcik/vars/rsyslog.yml
   - /etc/ansible/roles/ossimcik/vars/logrotate.yml
+  - /etc/ansible/roles/ossimcik/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }
   - { role: ossimcik }
+  - { role: post }

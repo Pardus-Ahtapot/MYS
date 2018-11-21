@@ -23,11 +23,15 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/ocswb/vars/package.yml
   - /etc/ansible/roles/ocswb/vars/uwsgi.yml
   - /etc/ansible/roles/ocswb/vars/ocswb.yml
   - /etc/ansible/roles/ocswb/vars/ocswbalarm.yml
   - /etc/ansible/roles/ocswb/vars/nginx.yml
+  - /etc/ansible/roles/ocswb/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }
   - { role: ocswb }
+  - { role: post }

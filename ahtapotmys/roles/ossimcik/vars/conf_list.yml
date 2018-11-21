@@ -1,0 +1,9 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+ossimcik_conf_list:
+  - "{{ nxlog['conf']['destination'] }}"
+  - "{{ ossec['conf']['destination'] }}"
+  - "{{ ossec['localdecoder']['destination'] }}"
+  - "{{ ossec['localrules']['destination'] }}"
+  - "{{ ossimcik_rsyslog['conf']['destination'] }}"
+  - "{{ logrotate['conf']['destination'] }}"
