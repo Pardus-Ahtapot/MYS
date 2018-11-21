@@ -37,6 +37,7 @@
   - /etc/ansible/roles/waf-evasive/vars/conf_list.yml
   - /etc/ansible/roles/waf-proxy-vhosts/vars/conf_list.yml
   roles:
-    - waf
-    - waf-evasive
-    - waf-proxy-vhosts
+    - { role: waf }
+    - { role: waf-evasive }
+    - { role: waf-proxy-vhosts }
+
