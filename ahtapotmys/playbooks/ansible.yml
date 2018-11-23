@@ -28,6 +28,7 @@
   - /etc/ansible/roles/ansible/vars/directory.yml
   - /etc/ansible/roles/ansible/vars/git.yml
   - /etc/ansible/roles/ansible/vars/gkts.yml
+  - /etc/ansible/roles/ansible/vars/awx.yml
   - /etc/ansible/roles/ansible/vars/conf_list.yml
   - /etc/ansible/roles/post/vars/integrity.yml
   roles:

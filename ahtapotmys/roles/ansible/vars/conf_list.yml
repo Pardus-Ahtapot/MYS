@@ -6,3 +6,5 @@ ansible_conf_list:
   - "{{ scripts['script03']['destination'] }}"
   - "{{ scripts['script04']['destination'] }}"
   - "{{ scripts['script05']['destination'] }}"
+  - /etc/nginx/sites-available/default
+  - /usr/share/awx/installer/inventory
