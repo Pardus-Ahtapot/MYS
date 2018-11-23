@@ -22,11 +22,15 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/ansible/vars/package.yml
   - /etc/ansible/roles/ansible/vars/ansible.yml
   - /etc/ansible/roles/ansible/vars/directory.yml
   - /etc/ansible/roles/ansible/vars/git.yml
   - /etc/ansible/roles/ansible/vars/gkts.yml
+  - /etc/ansible/roles/ansible/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }
   - { role: ansible }
+  - { role: post }

@@ -3,7 +3,7 @@
   sudo: yes
   shell: lxc-attach -n ftp -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install honeypot-ftp python-honeypot-lib"
   when: item.type == "ftp"
-  with_items: containers[inventory_hostname]
+  with_items: "{{containers[inventory_hostname]}}"
 
 - name: Check if ssl certificate for ftp exists
   sudo: yes
@@ -11,7 +11,7 @@
     path: /var/lib/lxc/ftp/rootfs/etc/honeypot-ftp/keys/ftpd.crt
   register: honeypot_ftp_ssl_exists
   when: item.type == "ftp"
-  with_items: containers[inventory_hostname]
+  with_items: "{{containers[inventory_hostname]}}"
 
 - name: Create ssl certificate
   sudo: yes
@@ -28,7 +28,7 @@
     mv -f ftpd.key.unencrypted ftpd.key
     openssl req -new -key /var/lib/lxc/ftp/rootfs/etc/honeypot-ftp/keys/ftpd.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{honeypot_ftp_ssl_country}}/ST={{honeypot_ftp_ssl_state}}/L={{honeypot_ftp_ssl_locality}}/O={{honeypot_ftp_ssl_organization}}/OU={{honeypot_ftp_ssl_organizationalunit}}/CN={{honeypot_ftp_ssl_commonname}}"
   when: item.stat is defined and item.stat.exists == False and honeypot_ftp_create_ssl == True
-  with_items: honeypot_ftp_ssl_exists.results
+  with_items: "{{honeypot_ftp_ssl_exists.results}}"
 
 - name: copy ftp config.xml
   sudo: yes
@@ -39,10 +39,10 @@
     group: "root"
     mode: 0644
   when: item.type == "ftp"
-  with_items: containers[inventory_hostname]
+  with_items: "{{containers[inventory_hostname]}}"
 
 - name: restarting ftp honeypot
   sudo: yes
   shell: lxc-attach -n ftp -- systemctl restart honeypot-ftp
   when: item.type == "ftp"
-  with_items: containers[inventory_hostname]
+  with_items: "{{containers[inventory_hostname]}}"

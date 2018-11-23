@@ -63,6 +63,7 @@
   - /etc/ansible/roles/rsyslog/vars/rsyslog.yml
   - /etc/ansible/roles/logstash/vars/package.yml
   - /etc/ansible/roles/logstash/vars/logstash.yml
+  - /etc/ansible/roles/logstash/vars/conf_list.yml
   - /etc/ansible/roles/elasticsearch/vars/elasticsearch.yml
   roles:
   - { role: rsyslog }

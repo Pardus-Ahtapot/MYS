@@ -1,5 +1,6 @@
 ---
 # tasks file for ansible-suricata
+- include: conf_integrity.yml
 - include: debian.yml
 
 - include: configure_suricata.yml

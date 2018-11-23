@@ -13,7 +13,7 @@
   shell: /usr/bin/touch "{{ item.value.path }}"
   args:
       creates: "{{ item.value.path }}"
-  with_dict: "zeustracker_lists"
+  with_dict: "{{zeustracker_lists}}"
   notify:
     - dansguardian konfigurasyonunu yeniden yukle
   sudo: yes

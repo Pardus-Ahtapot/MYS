@@ -20,6 +20,7 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/hosts.yml
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/users.yml
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/notifications.yml
@@ -27,10 +28,14 @@
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/commands.yml
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/groups.yml
   - /etc/ansible/roles/icinga2-ansible-no-ui/vars/check_commands.yml
+  - /etc/ansible/roles/icinga2-ansible-no-ui/vars/conf_list.yml
   - /etc/ansible/roles/icinga2-ansible-classic-ui/vars/main.yml
+  - /etc/ansible/roles/icinga2-ansible-classic-ui/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }
   - { role: icinga2-ansible-no-ui,
       tags: icinga2-no-ui }
   - { role: icinga2-ansible-classic-ui,
       tags: icinga2-classic-ui }
+  - { role: post }

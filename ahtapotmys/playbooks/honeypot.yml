@@ -20,6 +20,7 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/honeypot/vars/main.yml
   - /etc/ansible/roles/honeypot/vars/cowrie.yml
   - /etc/ansible/roles/honeypot/vars/dionaea.yml
@@ -34,7 +35,10 @@
   - /etc/ansible/roles/honeypot/vars/suricata.yml
   - /etc/ansible/roles/honeypot/vars/elastichoney.yml
   - /etc/ansible/roles/honeypot/vars/conpot.yml
+  - /etc/ansible/roles/honeypot/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
     - role: base
     - role: honeypot
+    - role: post
 

@@ -3,6 +3,8 @@
 - name: Include variables.
   include_vars: "main.yml"
 
+- include: "conf_integrity.yml"
+
 - name: Define apache_packages.
   set_fact:
     apache_packages: "{{ __apache_packages | list }}"

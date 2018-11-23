@@ -1,0 +1,58 @@
+---
+- include: conf_integrity.yml
+
+- name: Install ansible
+  apt:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - ansible
+    - git
+  sudo: yes
+  tags: standalone
+
+- name: Deploy standalone script
+  template:
+    src: "ahtapot_standalone.py.j2"
+    dest: "/usr/sbin/ahtapot_standalone.py"
+    owner: "root"
+    mode: "755"
+  sudo: yes
+  tags: standalone
+
+- name: Set cron configuration
+  cron:
+    name: "ansible pull script for role {{inventory_hostname}}"
+    cron_file: "{{standalone.cron_file}}"
+    minute: "{{standalone.cron_minute}}"
+    hour: "{{standalone.cron_hour}}"
+    day: "{{standalone.cron_day}}"
+    job: "/usr/sbin/ahtapot_standalone.py --pull --host {{inventory_hostname}}"
+    state: present
+    user: root
+  sudo: yes
+  tags: standalone
+
+- name: Reload cron
+  service:
+    name: cron
+    state: restarted
+  sudo: yes
+  tags: standalone
+
+- name: Run standalone script
+  shell: "/usr/sbin/ahtapot_standalone.py --pull --host {{inventory_hostname}}"
+  sudo: yes
+  tags: standalone
+
+- name: Deploy standalone script on local
+  template:
+    src: "ahtapot_standalone.py.j2"
+    dest: "/usr/sbin/ahtapot_standalone.py"
+    owner: "root"
+    mode: "755"
+  delegate_to: localhost
+  sudo: yes
+  tags: standalone
+
+

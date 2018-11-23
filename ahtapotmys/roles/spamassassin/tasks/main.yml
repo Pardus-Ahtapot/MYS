@@ -1,4 +1,6 @@
 ---
+- include: conf_integrity.yml
+
 - name: antispam | modify /etc/hosts
   sudo: yes
   shell: >

@@ -5,11 +5,11 @@
   register: packages
 
 - name: Gereksiz Paketler Siliniyor
-  apt: 
+  apt:
         name: "{{ item }}"
         state: "absent"
-  with_items: "packages.stdout_lines"
-  when: "'{{ item }}' not in {{ packagelist }} and 'lib' not in '{{ item }}' "
+  when: "{{item not in packagelist and 'lib' not in item}}"
+  with_items: "{{ packages.stdout_lines|list }}"
   sudo: "yes"
 
 - name: RC Paket Listesi Aliniyor.

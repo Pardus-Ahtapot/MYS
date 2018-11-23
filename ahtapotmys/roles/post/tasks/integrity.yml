@@ -1,0 +1,70 @@
+---
+
+- name: integrity scripti olusturuluyor
+  template:
+        src: "{{ integrity['script']['source'] }}"
+        dest: "{{ integrity['script']['destination'] }}"
+        owner: "{{ integrity['script']['owner'] }}"
+        group: "{{ integrity['script']['group'] }}"
+        mode: "{{ integrity['script']['mode'] }}"
+  sudo: yes
+  tags: integrity
+
+- name: Dizin olusturuluyor
+  sudo: yes
+  file:
+    path: "{{ integrity['files']['path'] }}"
+    mode: "{{ integrity['files']['mode'] }}"
+    state: directory
+
+- name: konfigurasyon dosyası siliniyor
+  sudo: yes
+  file:
+    path: "{{ integrity['files']['path'] }}/confs"
+    state: absent
+
+- name: konfigurasyon dosyası olusturuluyor
+  sudo: yes
+  file:
+    path: "{{ integrity['files']['path'] }}/confs"
+    state: touch
+
+- name: kullanıcı listesi kaydediliyor
+  sudo: yes
+  shell: "cat /etc/passwd | awk -F: '{print $1}' | sort > {{ integrity['files']['path'] }}/users"
+
+- name: grup listesi kaydediliyor
+  sudo: yes
+  shell: "cat /etc/group | awk -F: '{print $1}' | sort > {{ integrity['files']['path'] }}/groups"
+
+- name: kullanıcı listesi kaydediliyor
+  sudo: yes
+  shell: "dpkg-query -f '${binary:Package}\n' -W > {{ integrity['files']['path'] }}/packages"
+
+- name: Konfigurasyon listesi duzenleniyor
+  set_fact:
+    conf_list: "{{conf_list | unique}}"
+
+- name : Konfigurasyon bilgilerini aliniyor
+  stat:
+    path: "{{item}}"
+  register: stat_results
+  with_items: "{{conf_list}}"
+
+- name: Konfigurasyon bilgileri kaydediliyor
+  lineinfile:
+    dest: "{{ integrity['files']['path'] }}/confs"
+    regexp: "^[a-f0-9]* {{item.stat.path}}"
+    line: "{{item.stat.md5}} {{item.stat.path}}"
+  when: item.stat.md5 is defined
+  with_items: "{{stat_results.results}}"
+
+- name: Cron ayarlaniyor.
+  template:
+        src: "{{ integrity['cron']['source'] }}"
+        dest: "{{ integrity['cron']['destination'] }}"
+        owner: "{{ integrity['cron']['owner'] }}"
+        group: "{{ integrity['cron']['group'] }}"
+        mode: "{{ integrity['cron']['mode'] }}"
+  sudo: yes
+  tags: integrity

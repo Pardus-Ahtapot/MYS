@@ -1,6 +1,6 @@
 ---
 - name: sysctl yi dosyadan yeniden yapilandir
-  shell: /sbin/sysctl -p {{ sysctl['conf']['destination'] }} 2> /dev/null
+  shell: /sbin/sysctl -p {{ sysctl['conf']['destination'] }} 2> /dev/null || true
   sudo: yes
 
 - name: yonlendirme tablosunu sifirla 

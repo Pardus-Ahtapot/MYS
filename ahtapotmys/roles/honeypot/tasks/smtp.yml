@@ -3,7 +3,7 @@
   sudo: yes
   shell: lxc-attach -n smtp -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install honeypot-smtp python-honeypot-lib"
   when: item.type == "smtp"
-  with_items: containers[inventory_hostname]
+  with_items: "{{containers[inventory_hostname]}}"
 
 - name: Check if ssl certificate for smtp exists
   sudo: yes
@@ -11,7 +11,7 @@
     path: /var/lib/lxc/smtp/rootfs/etc/honeypot-smtp/keys/smtpd.crt
   register: honeypot_smtp_ssl_exists
   when: item.type == "smtp"
-  with_items: containers[inventory_hostname]
+  with_items: "{{containers[inventory_hostname]}}"
 
 - name: Create ssl certificate
   sudo: yes
@@ -28,7 +28,7 @@
     mv -f smtpd.key.unencrypted smtpd.key
     openssl req -new -key /var/lib/lxc/smtp/rootfs/etc/honeypot-smtp/keys/smtpd.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{honeypot_smtp_ssl_country}}/ST={{honeypot_smtp_ssl_state}}/L={{honeypot_smtp_ssl_locality}}/O={{honeypot_smtp_ssl_organization}}/OU={{honeypot_smtp_ssl_organizationalunit}}/CN={{honeypot_smtp_ssl_commonname}}"
   when: item.stat is defined and item.stat.exists == False and honeypot_smtp_create_ssl == True
-  with_items: honeypot_smtp_ssl_exists.results
+  with_items: "{{honeypot_smtp_ssl_exists.results}}"
 
 - name: copy smtp config.xml
   sudo: yes
@@ -39,10 +39,10 @@
     group: "root"
     mode: 0644
   when: item.type == "smtp"
-  with_items: containers[inventory_hostname]
+  with_items: "{{containers[inventory_hostname]}}"
 
 - name: restarting smtp honeypot
   sudo: yes
   shell: lxc-attach -n smtp -- systemctl restart honeypot-smtp
   when: item.type == "smtp"
-  with_items: containers[inventory_hostname]
+  with_items: "{{containers[inventory_hostname]}}"

@@ -1,5 +1,6 @@
 ---
 # Base rolunun gorevlerini iceren dosyadir
+- include: conf_integrity.yml
 - include: group.yml
 - include: user.yml
 - include: package_remove.yml

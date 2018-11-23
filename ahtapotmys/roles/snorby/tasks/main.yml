@@ -5,6 +5,7 @@
 #    state: present
 #  with_items:
 #    - snorby
+- include: conf_integrity.yml
 
 - name: Ensure Snorby MySQL database is present.
   sudo: yes

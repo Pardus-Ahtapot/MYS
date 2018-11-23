@@ -474,6 +474,268 @@ def log_screen(mainscreen, subscreen, statusscreen):
     except Exception as e:
         menu()
 
+
+def vnstat_screen(mainscreen, subscreen, statusscreen, iface):
+    try:
+        x = -1
+        pos = 1
+        while x!= 7:
+            subscreen.clear()
+            subscreen.border(0)
+            if pos == 1:
+                subscreen.addstr(1,1, "1 - Canli Bilgileri Goruntule",str_chose)
+            else:
+                subscreen.addstr(1,1, "1 - Canli Bilgileri Goruntule",str_default)
+            if pos == 2:
+                subscreen.addstr(2,1, "2 - En Yuksek 10 Gunu Goruntule",str_chose)
+            else:
+                subscreen.addstr(2,1, "2 - En Yuksek 10 Gunu Goruntule",str_default)
+            if pos == 3:
+                subscreen.addstr(3,1, "3 - Saatlik Verileri Goruntule",str_chose)
+            else:
+                subscreen.addstr(3,1, "3 - Saatlik Verileri Goruntule",str_default)
+            if pos == 4:
+                subscreen.addstr(4,1, "4 - Gunluk Verileri Goruntule",str_chose)
+            else:
+                subscreen.addstr(4,1, "4 - Gunluk Verileri Goruntule",str_default)
+            if pos == 5:
+                subscreen.addstr(5,1, "5 - Haftalik Verileri Goruntule",str_chose)
+            else:
+                subscreen.addstr(5,1, "5 - Haftalik Verileri Goruntule",str_default)
+            if pos == 6:
+                subscreen.addstr(6,1, "6 - Aylik Verileri Goruntule",str_chose)
+            else:
+                subscreen.addstr(6,1, "6 - Aylik Verileri Goruntule",str_default)
+            if pos == 7:
+                subscreen.addstr(7,1, "7 - Ana Menu",str_chose)
+            else:
+                subscreen.addstr(7,1, "7 - Ana Menu",str_default)
+
+            mainscreen.refresh()
+            subscreen.refresh()
+            statusscreen.clear()
+            statusscreen.border(0)
+            if pos == 1:
+                statusscreen.addstr(1,1, " Secili arabirimin ("+iface+") canli olarak verileri gosterir.",str_default)
+            elif pos == 2:
+                statusscreen.addstr(1,1, " Secili arabirimin ("+iface+") en yuksek kullanimi olan 10 gunu gosterir.",str_default)
+            elif pos == 3:
+                statusscreen.addstr(1,1, " Secili arabirimin ("+iface+") verilerini saatlik bazda gosterir.",str_default)
+            elif pos == 4:
+                statusscreen.addstr(1,1, " Secili arabirimin ("+iface+") verilerini gunluk bazda gosterir.",str_default)
+            elif pos == 5:
+                statusscreen.addstr(1,1, " Secili arabirimin ("+iface+") verilerini haftalik bazda gosterir.",str_default)
+            elif pos == 6:
+                statusscreen.addstr(1,1, " Secili arabirimin ("+iface+") verilerini aylik bazda gosterir.",str_default)
+            elif pos == 7:
+                statusscreen.addstr(1,1, " Ana menuye doner.",str_default)
+            statusscreen.refresh()
+            try:
+                x = subscreen.getch()
+            except KeyboardInterrupt:
+                logger.send_log('error', 'Keyboard Interrupt While wating for Choice')
+                menu()
+            except EOFError:
+                logger.send_log("error", "EOFError While Reloading Main Screen")
+                menu()
+            except Exception as e:
+                logger.send_log('error', 'An error Occured while waiting for Choice : {} ::: line :�| {}'.format(str(e),str(sys.exc_info()[2].tb_lineno)))
+                menu()
+            if x == ord('1'):
+                pos = 1
+            elif x == ord('2'):
+                pos = 2
+            elif x == ord('3'):
+                pos = 3
+            elif x == ord('4'):
+                pos = 4
+            elif x == ord('5'):
+                pos = 5
+            elif x == ord('6'):
+                pos = 6
+            elif x == ord('7'):
+                pos = 7
+
+            elif x == 258:
+                if pos < 7:
+                    pos += 1
+                else:
+                    pos = 1
+            elif x == 259:
+                if pos > 1:
+                    pos += -1
+                else:
+                    pos = 7
+            if x == ord('\n'):
+                if pos == 1:
+                    curses.endwin()
+                    system("clear")
+                    screen.clear()
+                    try:
+                        execute_cmd("vnstat --live -i "+iface)
+                    except KeyboardInterrupt:
+                        logger.send_log("error", "Keyboard Interrupt While Reloading Main Screen")
+                        menu()
+                    except EOFError:
+                        logger.send_log("error", "EOFError While Reloading Main Screen")
+                        menu()
+                    except Exception as e:
+                        logger.send_log("error", "An Error Occured While Reloading Main Screen : {} ::: line : {}".format(str(e), sys.exc_info()[2].tb_lineno))
+                    finally:
+                        menu()
+                elif pos == 2:
+                    curses.endwin()
+                    system("clear")
+                    screen.clear()
+                    try:
+                        execute_cmd("vnstat --top10 -i "+iface)
+                    except KeyboardInterrupt:
+                        logger.send_log("error", "Keyboard Interrupt While Reloading Main Screen")
+                        menu()
+                    except EOFError:
+                        logger.send_log("error", "EOFError While Reloading Main Screen")
+                        menu()
+                    except Exception as e:
+                        logger.send_log("error", "An Error Occured While Reloading Main Screen : {} ::: line : {}".format(str(e), sys.exc_info()[2].tb_lineno))
+                    finally:
+                        menu()
+                elif pos == 3:
+                    curses.endwin()
+                    system("clear")
+                    screen.clear()
+                    try:
+                        execute_cmd("vnstat --hours -i "+iface)
+                    except KeyboardInterrupt:
+                        logger.send_log("error", "Keyboard Interrupt While Reloading Main Screen")
+                        menu()
+                    except EOFError:
+                        logger.send_log("error", "EOFError While Reloading Main Screen")
+                        menu()
+                    except Exception as e:
+                        logger.send_log("error", "An Error Occured While Reloading Main Screen : {} ::: line : {}".format(str(e), sys.exc_info()[2].tb_lineno))
+                    finally:
+                        menu()
+                elif pos == 4:
+                    curses.endwin()
+                    system("clear")
+                    screen.clear()
+                    try:
+                        execute_cmd("vnstat --days -i "+iface)
+                    except KeyboardInterrupt:
+                        logger.send_log("error", "Keyboard Interrupt While Reloading Main Screen")
+                        menu()
+                    except EOFError:
+                        logger.send_log("error", "EOFError While Reloading Main Screen")
+                        menu()
+                    except Exception as e:
+                        logger.send_log("error", "An Error Occured While Reloading Main Screen : {} ::: line : {}".format(str(e), sys.exc_info()[2].tb_lineno))
+                    finally:
+                        menu()
+                elif pos == 5:
+                    curses.endwin()
+                    system("clear")
+                    screen.clear()
+                    try:
+                        execute_cmd("vnstat --weeks -i "+iface)
+                    except KeyboardInterrupt:
+                        logger.send_log("error", "Keyboard Interrupt While Reloading Main Screen")
+                        menu()
+                    except EOFError:
+                        logger.send_log("error", "EOFError While Reloading Main Screen")
+                        menu()
+                    except Exception as e:
+                        logger.send_log("error", "An Error Occured While Reloading Main Screen : {} ::: line : {}".format(str(e), sys.exc_info()[2].tb_lineno))
+                    finally:
+                        menu()
+                elif pos == 6:
+                    curses.endwin()
+                    system("clear")
+                    screen.clear()
+                    try:
+                        execute_cmd("vnstat --months -i "+iface)
+                    except KeyboardInterrupt:
+                        logger.send_log("error", "Keyboard Interrupt While Reloading Main Screen")
+                        menu()
+                    except EOFError:
+                        logger.send_log("error", "EOFError While Reloading Main Screen")
+                        menu()
+                    except Exception as e:
+                        logger.send_log("error", "An Error Occured While Reloading Main Screen : {} ::: line : {}".format(str(e), sys.exc_info()[2].tb_lineno))
+                    finally:
+                        menu()
+                if pos == 7:
+                    logger.send_log("info"," Ana Menuye Gecis Yapildi.")
+                    menu()
+    except Exception as e:
+        menu()
+
+
+def vnstat_interface_screen(mainscreen, subscreen, statusscreen):
+    proc_ifaces = subprocess.check_output(['cat', '/proc/net/dev'])
+    proc_ifaces = proc_ifaces.strip().split("\n")
+    logger.send_log('error', proc_ifaces)
+    iface_count = 0
+    ifaces = []
+    for line in proc_ifaces[2:]:
+        ifaces.append(line.split(":")[0].strip())
+        iface_count = iface_count+1
+    choice_count = iface_count + 1
+    try:
+        logger.send_log('error', str(iface_count) + "interface var")
+        x = -1
+        pos = 1
+        i = 0
+        while x!= choice_count:
+            subscreen.clear()
+            subscreen.border(0)
+            statusscreen.clear()
+            statusscreen.border(0)
+            for i in range (0,iface_count):
+                if (pos == i+1):
+                    statusscreen.addstr(1,1, " Secili arabirim "+ ifaces[i] +" ile ilgili istatistikleri verir",str_default)
+                    subscreen.addstr(i+1,1, str(i+1) + " - " + ifaces[i],str_chose)
+                else:
+                    subscreen.addstr(i+1,1, str(i+1) + " - "+ ifaces[i],str_default)
+            if pos == choice_count:
+                subscreen.addstr(choice_count,1, str(choice_count) + " - Ana Menu",str_chose)
+                statusscreen.addstr(1,1, " Ana menuye doner.",str_default)
+            else:
+                subscreen.addstr(choice_count,1, str(choice_count) + " - Ana Menu",str_default)
+
+            mainscreen.refresh()
+            subscreen.refresh()
+            statusscreen.refresh()
+
+            try:
+                x = subscreen.getch()
+            except KeyboardInterrupt:
+                logger.send_log('error', 'Keyboard Interrupt While wating for Choice')
+                menu()
+            except EOFError:
+                logger.send_log("error", "EOFError While Reloading Main Screen")
+                menu()
+            except Exception as e:
+                logger.send_log('error', 'An error Occured while waiting for Choice : {} ::: line : {}'.format(str(e),str(sys.exc_info()[2].tb_lineno)))
+                menu()
+            if x == 258:
+                if pos < choice_count:
+                    pos += 1
+                else:
+                    pos = 1
+            elif x == 259:
+                if pos > 1:
+                    pos += -1
+                else:
+                    pos = choice_count
+            else:
+                if x != ord('\n'):
+                    pos = x
+            if x == ord('\n'):
+                logger.send_log("info",ifaces[pos-1]+ " secildi")
+                vnstat_screen(mainscreen, subscreen, statusscreen, ifaces[pos-1])
+    except Exception as e:
+        menu()
+
 def system_screen(mainscreen, subscreen, statusscreen):
 
     try:
@@ -665,7 +927,7 @@ def menu():
     try:
         x = -1
         pos = 1
-        while x!=5:
+        while x!=6:
             screen.clear()
             screen.border(0)
             subscreen.border(0)
@@ -701,9 +963,13 @@ def menu():
             else:
                 subscreen.addstr(4,1, "4 - Bant Genisligi Izleme",str_default)
             if pos == 5:
-                subscreen.addstr(5,1, "5 - Cikis",str_chose)
+                subscreen.addstr(5,1, "5 - Ag Arabirimi Izleme",str_chose)
             else:
-                subscreen.addstr(5,1, "5 - Cikis",str_default)
+                subscreen.addstr(5,1, "5 - Ag Arabirimi Izleme",str_default)
+            if pos == 6:
+                subscreen.addstr(6,1, "6 - Cikis",str_chose)
+            else:
+                subscreen.addstr(6,1, "6 - Cikis",str_default)
             screen.refresh()
             subscreen.refresh()
             if pos == 1:
@@ -715,6 +981,8 @@ def menu():
             elif pos == 4:
                 statusscreen.addstr(1,1, " Bant Genisligi ile ilgili istatistikler.",str_default)
             elif pos == 5:
+                statusscreen.addstr(1,1, " Ag Arabirimi Trafik Degerlerini Goruntuler",str_default)
+            elif pos == 6:
                 statusscreen.addstr(1,1, " Uygulama ve Oturum Kapatilir.",str_default)
             statusscreen.refresh()
             try:
@@ -738,8 +1006,10 @@ def menu():
                 pos = 4
             elif x == ord('5'):
                 pos = 5
+            elif x == ord('6'):
+                pos = 6
             elif x == 258:
-                if pos < 5:
+                if pos < 6:
                     pos += 1
                 else:
                     pos = 1
@@ -747,12 +1017,12 @@ def menu():
                 if pos > 1:
                     pos += -1
                 else:
-                    pos = 5
+                    pos = 6
             if x == ord('\n'):
                 if pos == 1:
                     curses.endwin()
                     logger.send_log("info","IpTraf secenegi Secildi.")
-                    execute_cmd("sudo iptraf-ng")
+                    execute_cmd("sudo iptraf")
                 elif pos == 2:
                     curses.endwin()
                     logger.send_log("info"," Log Filtreleme Secildi.")
@@ -766,8 +1036,14 @@ def menu():
                     logger.send_log("info"," Bmon Calistirildi.")
                     execute_cmd("bmon")
                 elif pos == 5:
+                    curses.endwin()
+                    logger.send_log("info"," Vnstat Calistirildi.")
+                    vnstat_interface_screen(screen, subscreen, statusscreen)
+#                    execute_cmd("bmon")
+                elif pos == 6:
                     logger.send_log("info"," Cikis Yapildi.")
-                    kill(getppid(),9)
+                    curses.endwin()
+                    os._exit(0) 
         curses.endwin()
     except Exception as e:
         logger.send_log("error","An Error Occured ::: {} ::: line : ".format(str(e),str(sys.exc_info()[2].tb_lineno)))
@@ -779,4 +1055,4 @@ if __name__ == "__main__":
     except Exception as e:
         logger.send_log("error","An Error Occured ::: {} ::: line : ".format(str(e),str(sys.exc_info()[2].tb_lineno)))
         menu()
-
+    logger.send_log("info","exit")

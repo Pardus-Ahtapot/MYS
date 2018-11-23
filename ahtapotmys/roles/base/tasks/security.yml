@@ -20,10 +20,11 @@
   tags: security
 
 - name: tmp.mount aktif ediliyor ve ayaga kaldiriliyor
-  service:
+  systemd:
         name: "{{ tmpmount['service']['name'] }}"
         state: "{{ tmpmount['service']['state'] }}"
         enabled: "{{ tmpmount['service']['enabled'] }}"
+        daemon_reload: yes
   sudo: yes
   tags: security
 
@@ -715,9 +716,10 @@
   sudo: yes
   tags: security
 
+#lxc path ignored because it corrupts containers.
 # Find Un-owned Files and Directories
 - name: Sahipsiz dosyalar bulunuyor
-  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser | xargs -I '{}' chown root '{}'
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser | grep -v "^/var/lib/lxc" | xargs -I '{}' chown root '{}'
   args:
         executable: /bin/bash
   sudo: yes
@@ -725,7 +727,7 @@
 
 # Find Un-grouped Files and Directories
 - name: Grupsuz dosyalar bulunuyor
-  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup | xargs -I '{}' chown :root '{}'
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup | grep -v "^/var/lib/lxc" | xargs -I '{}' chown :root '{}'
   args:
         executable: /bin/bash
   sudo: yes

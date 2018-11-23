@@ -34,3 +34,4 @@
     enabled: yes
     state: restarted
 
+- include: conf_integrity.yml

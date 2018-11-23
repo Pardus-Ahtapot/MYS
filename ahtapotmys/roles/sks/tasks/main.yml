@@ -1,4 +1,6 @@
 ---
+- include: conf_integrity.yml
+
 - name: sks | installing sks packages
   sudo: yes
   apt:
@@ -9,9 +11,10 @@
     - pgpkeyserver-lite
 
 - name: sks | creating sks database
-  sudo: yes
-  shell: >
-    su - debian-sks -c "sks build"
+  shell: sks build
+  args:
+    executable: /bin/bash
+  become_user: debian-sks
   register: result
   notify: restart sks
   changed_when: result.rc == 0

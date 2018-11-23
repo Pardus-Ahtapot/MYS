@@ -1,6 +1,8 @@
 - name: "include variables"
   include_vars: "main.yml"
 
+- include: conf_integrity.yml
+
 - name: Install nrpe agents on Pardus
   sudo: yes
   apt: pkg={{ item }}

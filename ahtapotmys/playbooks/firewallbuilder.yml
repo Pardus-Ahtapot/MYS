@@ -23,10 +23,14 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/firewallbuilder/vars/package.yml
   - /etc/ansible/roles/firewallbuilder/vars/fwbuilder.yml
   - /etc/ansible/roles/firewallbuilder/vars/directory.yml
   - /etc/ansible/roles/firewallbuilder/vars/git.yml
+  - /etc/ansible/roles/firewallbuilder/vars/conf_list.yml
+  - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }
   - { role: firewallbuilder }
+  - { role: post }

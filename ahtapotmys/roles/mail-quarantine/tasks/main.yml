@@ -1,4 +1,6 @@
 ---
+- include: conf_integrity.yml
+
 - name: quarantine | installing quarantine packages
   sudo: yes
   apt:

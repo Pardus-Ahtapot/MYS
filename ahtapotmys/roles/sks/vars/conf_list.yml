@@ -1,0 +1,4 @@
+---
+# Konfigurasyon dosyalarinin listesini iceren dosyadir
+sks_conf_list:
+  - "/etc/nginx/sites-available/pgpkeyserver-lite.conf"
