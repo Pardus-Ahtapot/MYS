@@ -45,7 +45,7 @@ use_quarantine: "True"
 quarantine_db_host: "10.10.10.10"
 quarantine_db_user: "ahtapot"
 quarantine_db_pass: "ahtapot"
-antispam_smtpd_banner: { xxx: xxx1, yyy: yyy1 }
+antispam_smtpd_banner: { ANSIBLE_FQDN: MAIL_HOSTNAME_TO_BE_SHOWED  }
 clamav_check_freq: 24
 clamav_mirrors:
   - db.local.clamav.net
