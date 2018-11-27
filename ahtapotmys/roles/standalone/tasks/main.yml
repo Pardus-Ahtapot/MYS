@@ -29,7 +29,7 @@
     day: "{{standalone.cron_day}}"
     job: "/usr/sbin/ahtapot_standalone.py --pull --host {{inventory_hostname}}"
     state: present
-    user: root
+    user: ahtapotops
   sudo: yes
   tags: standalone
 
@@ -42,7 +42,6 @@
 
 - name: Run standalone script
   shell: "/usr/sbin/ahtapot_standalone.py --pull --host {{inventory_hostname}}"
-  sudo: yes
   tags: standalone
 
 - name: Deploy standalone script on local

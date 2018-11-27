@@ -15,6 +15,7 @@ PLAYBOOK_DIR = "{0}/playbooks".format(ANSIBLE_DIR)
 ANSIBLE_HOST_FILE = "{0}/hosts".format(ANSIBLE_DIR)
 BRANCH = "{{standalone.branch}}"
 GIT_REPO = "{{standalone.ansible_git_url}}"
+USER="ahtapotops"
 
 def initialize_argparser():
     parser = argparse.ArgumentParser()
@@ -51,10 +52,21 @@ if __name__ == "__main__":
     if not os.path.isdir('{0}/.git'.format(ANSIBLE_DIR)) or not os.path.isdir(ANSIBLE_DIR):
         # ansible dir is not a git repo. we need to clone git repo
         if os.path.isdir(ANSIBLE_DIR):
-            shutil.move(ANSIBLE_DIR, ANSIBLE_DIR + ".bak.{0}".format(str(datetime.datetime.now().strftime("%Y%m%d%H%M"))))
-        cmd = "/usr/bin/git clone -b {0} {1} {2}".format(BRANCH, GIT_REPO, ANSIBLE_DIR)
+            cmd = "/usr/bin/sudo /bin/mv {0} {1}".format(ANSIBLE_DIR, ANSIBLE_DIR + ".bak." + str(datetime.datetime.now().strftime("%Y%m%d%H%M")))
+            subprocess.check_call(cmd, shell=True)
+        cmd = "/usr/bin/sudo /usr/bin/git clone -b {0} {1} {2}".format(BRANCH, GIT_REPO, ANSIBLE_DIR)
         new_clone = True  # we will use it for pull process
         subprocess.check_call(cmd, shell=True)
+
+    # fix ansible dir permissions
+    try:
+        cmd = "/usr/bin/sudo /bin/chown -R {0}:{0} {1}".format(USER, ANSIBLE_DIR)
+        subprocess.check_call(cmd, shell=True)
+
+        cmd = "/usr/bin/sudo /bin/chown -R {0}:{0} /var/log/ahtapot".format(USER)
+        subprocess.check_call(cmd, shell=True)
+    except:
+        pass
 
     loader = DataLoader()
     variable_manager = VariableManager()
