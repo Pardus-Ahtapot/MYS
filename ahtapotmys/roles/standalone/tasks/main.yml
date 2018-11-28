@@ -54,4 +54,18 @@
   sudo: yes
   tags: standalone
 
+- name: Set cron configuration on local
+  cron:
+    name: "ansible push script"
+    cron_file: "{{standalone.cron_file}}"
+    minute: "{{standalone.cron_minute}}"
+    hour: "{{standalone.cron_hour}}"
+    day: "{{standalone.cron_day}}"
+    job: "/usr/sbin/ahtapot_standalone.py --push"
+    state: present
+    user: ahtapotops
+  delegate_to: localhost
+  sudo: yes
+  tags: standalone
+
 
