@@ -35,6 +35,9 @@ firewall_packages:
     package11:
         name: "bmon"
         state: "present" 
+    package12:
+        name: "vnstat"
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  
