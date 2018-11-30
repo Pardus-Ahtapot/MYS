@@ -1,6 +1,14 @@
 # active directory yapilandirmalarini yapar
 ---
 
+- name: AD | Set locale
+  locale_gen:
+    name: "en_US.UTF-8"
+    state: present
+  when: ad.enabled == "yes"
+  sudo: yes
+  tags: ad
+
 - name: AD | stoping services
   shell: systemctl stop smbd.service nmbd.service winbind.service
   args:
