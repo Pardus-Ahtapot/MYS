@@ -26,3 +26,7 @@ squid_conf_list:
   - "{{ updshalla['cron']['destination'] }}"
   - "{{ zeustracker['app']['destination'] }}"
   - "{{ zeustracker['cron']['destination'] }}"
+  - "/etc/resolv.conf"
+  - "/etc/krb5.conf"
+  - "/etc/samba/smb.conf"
+  - "/etc/nsswitch.conf"

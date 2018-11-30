@@ -133,6 +133,13 @@ if __name__ == "__main__":
                         pass  # there is no difference. do nothing
     elif args.push:
         print "Standalone push is processing"
+        if not os.path.isfile("/home/{0}/.last_commit_hash".format(USER)):
+            cmd = "cd {0} && /usr/bin/git rev-parse HEAD~1 > /home/{1}/.last_commit_hash".format(ANSIBLE_DIR, USER)
+            subprocess.check_call(cmd, shell=True)
+        else:
+            cmd = "cd {0} && /usr/bin/git pull origin {1}".format(ANSIBLE_DIR, BRANCH)
+            subprocess.check_call(cmd, shell=True)
+
         for pb_name, playbook_yaml in playbooks.iteritems():
             if playbook_yaml['hosts'] == 'all':
                 continue
@@ -140,9 +147,11 @@ if __name__ == "__main__":
                 roles = [x['role'] for x in playbook_yaml['roles']]
             except TypeError:
                 roles = [x for x in playbook_yaml['roles']]
-            cmd = "cd {0} && /usr/bin/git diff --name-only HEAD~1 HEAD | egrep -q -e \"roles/({1})\"".format(ANSIBLE_DIR, "|".join(roles))
+            cmd = "cd {0} && /usr/bin/git diff --name-only `cat /home/{1}/.last_commit_hash` HEAD | egrep -q -e \"roles/({2})\"".format(ANSIBLE_DIR, USER, "|".join(roles))
             try:
                 subprocess.check_call(cmd, shell=True)
                 run_ansible_playbook(pb_name)
+                cmd = "cd {0} && /usr/bin/git rev-parse HEAD > /home/{1}/.last_commit_hash".format(ANSIBLE_DIR, USER)
+                subprocess.check_call(cmd, shell=True)
             except subprocess.CalledProcessError:
                 pass  # there is no difference. do nothing

@@ -6,3 +6,4 @@
 - include: dansguardian.yml
 - include: sarg.yml
 - include: nginx.yml
+- include: ad.yml

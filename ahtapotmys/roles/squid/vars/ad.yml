@@ -1,0 +1,12 @@
+---
+#active directory parametreleri
+ad:
+  # ad aktif edilirse squid ayarlarindan ldapi kapatiniz.
+  enabled: "no"
+  domain: "ahtapot.org.tr"
+  fqdn: "ad.ahtapot.org.tr"
+  server_ip: "192.168.0.89"
+  workgroup: "AHTAPOT"
+  user: "Administrator"
+  password: "ahtapot123!"
+
