@@ -32,6 +32,7 @@
   - /etc/ansible/roles/squid/vars/sarg.yml
   - /etc/ansible/roles/squid/vars/nginx.yml
   - /etc/ansible/roles/squid/vars/conf_list.yml
+  - /etc/ansible/roles/squid/vars/ad.yml
   - /etc/ansible/roles/post/vars/integrity.yml
   roles:
   - { role: base }

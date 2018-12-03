@@ -22,6 +22,21 @@ squid_packages:
         #name: "mutt=1.7.2-1+deb9u1"
         name: "mutt"
         state: "present"
+    package06:
+        name: "krb5-user"
+        state: "present"
+    package07:
+        name: "samba"
+        state: "present"
+    package08:
+        name: "winbind"
+        state: "present"
+    package09:
+        name: "samba-common"
+        state: "present"
+    package10:
+        name: "libnss-winbind"
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  
