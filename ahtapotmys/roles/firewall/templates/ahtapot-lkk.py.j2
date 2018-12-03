@@ -1042,8 +1042,9 @@ def menu():
 #                    execute_cmd("bmon")
                 elif pos == 6:
                     logger.send_log("info"," Cikis Yapildi.")
-                    curses.endwin()
-                    os._exit(0) 
+                    kill(getppid(),9)
+                    #curses.endwin()
+                    #os._exit(0) 
         curses.endwin()
     except Exception as e:
         logger.send_log("error","An Error Occured ::: {} ::: line : ".format(str(e),str(sys.exc_info()[2].tb_lineno)))
