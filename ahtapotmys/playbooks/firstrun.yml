@@ -3,16 +3,16 @@
 - hosts: all
   remote_user: ahtapotops
   vars_files:
-  - /etc/ansible/roles/base/vars/group.yml
-  - /etc/ansible/roles/base/vars/user.yml
-  - /etc/ansible/roles/base/vars/sudo.yml
-  - /etc/ansible/roles/base/vars/ssh.yml
-  - /etc/ansible/roles/base/vars/directory.yml
-  - /etc/ansible/roles/firstrun/vars/interfaces.yml
-  - /etc/ansible/roles/firstrun/vars/user_list.yml
-  - /etc/ansible/roles/firstrun/vars/package_list.yml
-  - /etc/ansible/roles/firstrun/vars/conf_list.yml
-  - /etc/ansible/roles/post/vars/integrity.yml
+  - ../roles/base/vars/group.yml
+  - ../roles/base/vars/user.yml
+  - ../roles/base/vars/sudo.yml
+  - ../roles/base/vars/ssh.yml
+  - ../roles/base/vars/directory.yml
+  - ../roles/firstrun/vars/interfaces.yml
+  - ../roles/firstrun/vars/user_list.yml
+  - ../roles/firstrun/vars/package_list.yml
+  - ../roles/firstrun/vars/conf_list.yml
+  - ../roles/post/vars/integrity.yml
   roles:
   - { role: firstrun }
   - { role: post }

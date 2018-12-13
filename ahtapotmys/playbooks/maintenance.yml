@@ -4,6 +4,6 @@
   remote_user: ahtapotops 
   sudo: yes
   vars_files:
-    - /etc/ansible/roles/maintenance/vars/conf_list.yml
+    - ../roles/maintenance/vars/conf_list.yml
   roles:
   - { role: maintenance }
