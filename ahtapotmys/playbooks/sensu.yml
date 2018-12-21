@@ -3,26 +3,26 @@
 - hosts: sensu
   sudo: yes
   vars_files:
-  - /etc/ansible/roles/base/vars/group.yml
-  - /etc/ansible/roles/base/vars/user.yml
-  - /etc/ansible/roles/base/vars/repo.yml
-  - /etc/ansible/roles/base/vars/rsyslog.yml
-  - /etc/ansible/roles/base/vars/ntp.yml
-  - /etc/ansible/roles/base/vars/package.yml
-  - /etc/ansible/roles/base/vars/kernelmodules_remove.yml
-  - /etc/ansible/roles/base/vars/kernelmodules_blacklist.yml
-  - /etc/ansible/roles/base/vars/host.yml
-  - /etc/ansible/roles/base/vars/audit.yml
-  - /etc/ansible/roles/base/vars/sudo.yml
-  - /etc/ansible/roles/base/vars/ssh.yml
-  - /etc/ansible/roles/base/vars/grub.yml
-  - /etc/ansible/roles/base/vars/logger.yml
-  - /etc/ansible/roles/base/vars/logrotate.yml
-  - /etc/ansible/roles/base/vars/directory.yml
-  - /etc/ansible/roles/base/vars/profile.yml
-  - /etc/ansible/roles/base/vars/fusioninventory.yml
-  - /etc/ansible/roles/base/vars/security.yml
-  - /etc/ansible/roles/sensu/vars/main.yml
+  - ../roles/base/vars/group.yml
+  - ../roles/base/vars/user.yml
+  - ../roles/base/vars/repo.yml
+  - ../roles/base/vars/rsyslog.yml
+  - ../roles/base/vars/ntp.yml
+  - ../roles/base/vars/package.yml
+  - ../roles/base/vars/kernelmodules_remove.yml
+  - ../roles/base/vars/kernelmodules_blacklist.yml
+  - ../roles/base/vars/host.yml
+  - ../roles/base/vars/audit.yml
+  - ../roles/base/vars/sudo.yml
+  - ../roles/base/vars/ssh.yml
+  - ../roles/base/vars/grub.yml
+  - ../roles/base/vars/logger.yml
+  - ../roles/base/vars/logrotate.yml
+  - ../roles/base/vars/directory.yml
+  - ../roles/base/vars/profile.yml
+  - ../roles/base/vars/fusioninventory.yml
+  - ../roles/base/vars/security.yml
+  - ../roles/sensu/vars/main.yml
   roles:
   - { role: base }
   - { role: sensu }

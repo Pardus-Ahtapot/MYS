@@ -4,4 +4,4 @@
   when: conf_list is not defined
 
 - name: konfigurasyon listesi birlestiriliyor
-  set_fact: conf_list="{{ conf_list }} + {{ waf-evasive_conf_list }}"
+  set_fact: conf_list="{{ conf_list }} + {{ waf_evasive_conf_list }}"

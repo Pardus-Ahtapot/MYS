@@ -1,7 +1,7 @@
 ---
 # Variable configuration.
 - name: Include OS-specific variables.
-  include_vars: "/etc/ansible/roles/mysql/vars/main.yml"
+  include_vars: "../vars/main.yml"
 
 - name: Define mysql_packages.
   set_fact:

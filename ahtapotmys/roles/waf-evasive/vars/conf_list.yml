@@ -1,4 +1,4 @@
 ---
 # Konfigurasyon dosyalarinin listesini iceren dosyadir
-waf-evasive_conf_list:
+waf_evasive_conf_list:
   - "/etc/apache2/mods-available/evasive.conf"
