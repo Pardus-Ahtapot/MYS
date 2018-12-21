@@ -1,6 +1,6 @@
 ---
 # Konfigurasyon dosyalarinin listesini iceren dosyadir
-icinga2-ansible-no-ui_conf_list:
+icinga2_ansible_no_ui_conf_list:
   - "{{ icinga2['main_conf']['dest'] }}"
   - "{{ icinga2['check_commands_conf']['dest'] }}"
   - "{{ icinga2['groups_conf']['dest'] }}"

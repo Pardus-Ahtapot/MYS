@@ -4,4 +4,4 @@
   when: conf_list is not defined
 
 - name: konfigurasyon listesi birlestiriliyor
-  set_fact: conf_list="{{ conf_list }} + {{ icinga2-ansible-classic-ui_conf_list }}"
+  set_fact: conf_list="{{ conf_list }} + {{ icinga2_ansible_classic_ui_conf_list }}"

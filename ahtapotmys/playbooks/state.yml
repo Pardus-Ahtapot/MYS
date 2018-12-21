@@ -205,7 +205,7 @@
   roles:
   - { role: ocswb }
 
-- hosts: all 
+- hosts: all:!ossimcik 
   remote_user: ahtapotops
   vars_files:
   - ../roles/ossec/vars/package.yml
