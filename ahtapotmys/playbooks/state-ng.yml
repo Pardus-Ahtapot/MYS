@@ -1,0 +1,7 @@
+- hosts: state-ng
+  sudo: yes
+  vars_files:
+  - ../roles/state-ng/vars/main.yml
+  roles:
+    - role: state-ng
+

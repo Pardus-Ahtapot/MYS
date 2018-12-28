@@ -10,11 +10,11 @@ from ansible.inventory import Inventory
 from ansible.parsing.dataloader import DataLoader
 from ansible.vars import VariableManager
 
-ANSIBLE_DIR = "{{standalone.directory}}"
+ANSIBLE_DIR = "{{state_ng.directory}}"
 PLAYBOOK_DIR = "{0}/playbooks".format(ANSIBLE_DIR)
 ANSIBLE_HOST_FILE = "{0}/hosts".format(ANSIBLE_DIR)
-BRANCH = "{{standalone.branch}}"
-GIT_REPO = "{{standalone.ansible_git_url}}"
+BRANCH = "{{state_ng.branch}}"
+GIT_REPO = "{{state_ng.ansible_git_url}}"
 USER="ahtapotops"
 
 def initialize_argparser():
@@ -27,7 +27,7 @@ def initialize_argparser():
 def parse_playbooks():
     ret = {}
     for pb_file in os.listdir(PLAYBOOK_DIR):
-        if pb_file == 'state.yml' or pb_file == 'standalone.yml' or not pb_file.lower().endswith(".yml"):
+        if pb_file == 'state.yml' or pb_file == 'state-ng.yml' or not pb_file.lower().endswith(".yml"):
             continue
         with open("{0}/{1}".format(PLAYBOOK_DIR, pb_file)) as f:
             content = yaml.load(f)[0]
@@ -105,7 +105,7 @@ if __name__ == "__main__":
                     host_list[fqdn]['playbooks'][pb_name]['roles'] = [x for x in playbook_yaml['roles']]
 
     if args.pull:
-        print "Standalone pull is processing"
+        print "State-ng pull is processing"
         if args.host not in host_list.keys():
             print "Please provide valid host"
             sys.exit(1)
@@ -132,7 +132,7 @@ if __name__ == "__main__":
                     except subprocess.CalledProcessError:
                         pass  # there is no difference. do nothing
     elif args.push:
-        print "Standalone push is processing"
+        print "State-ng push is processing"
         if not os.path.isfile("/home/{0}/.last_commit_hash".format(USER)):
             cmd = "cd {0} && /usr/bin/git rev-parse HEAD~1 > /home/{1}/.last_commit_hash".format(ANSIBLE_DIR, USER)
             subprocess.check_call(cmd, shell=True)

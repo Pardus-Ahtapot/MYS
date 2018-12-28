@@ -78,7 +78,7 @@
 
 [faraday-server]
 
-[standalone]
+[state-ng]
 
 [all:vars]
 ansible_shell_type=sh
