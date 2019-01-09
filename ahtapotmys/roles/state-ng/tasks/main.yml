@@ -1,6 +1,4 @@
 ---
-- include: conf_integrity.yml
-
 - name: Install ansible
   apt:
     name: "{{item}}"
@@ -9,7 +7,10 @@
     - ansible
     - git
   sudo: yes
-  tags: state-ng
+  tags: state-ng,osman
+  #async: 1
+  #poll: 0
+
 
 - name: Deploy state-ng script
   template:
@@ -24,12 +25,27 @@
   cron:
     name: "ansible pull script for role {{inventory_hostname}}"
     cron_file: "{{state_ng.host.cron_file}}"
-    minute: "{{state_ng.host.cron_minute}}"
+    minute: "{{60 | random}}"
     hour: "{{state_ng.host.cron_hour}}"
     day: "{{state_ng.host.cron_day}}"
-    job: "/usr/sbin/ahtapot_stateng.py --pull --host {{inventory_hostname}}"
+    job: "/usr/sbin/ahtapot_stateng.py --smart-pull --host {{inventory_hostname}}"
     state: present
     user: ahtapotops
+  when: inventory_hostname in state_ng.cron_hosts
+  sudo: yes
+  tags: state-ng
+
+- name: Remove cron configuration
+  cron:
+    name: "ansible pull script for role {{inventory_hostname}}"
+    cron_file: "{{state_ng.host.cron_file}}"
+    minute: "{{60 | random}}"
+    hour: "{{state_ng.host.cron_hour}}"
+    day: "{{state_ng.host.cron_day}}"
+    job: "/usr/sbin/ahtapot_stateng.py --smart-pull --host {{inventory_hostname}}"
+    state: absent
+    user: ahtapotops
+  when: inventory_hostname not in state_ng.cron_hosts
   sudo: yes
   tags: state-ng
 
@@ -38,10 +54,6 @@
     name: cron
     state: restarted
   sudo: yes
-  tags: state-ng
-
-- name: Run state-ng script
-  shell: "/usr/sbin/ahtapot_stateng.py --pull --host {{inventory_hostname}}"
   tags: state-ng
 
 - name: Deploy state-ng script on local
@@ -61,11 +73,27 @@
     minute: "{{state_ng.mys.cron_minute}}"
     hour: "{{state_ng.mys.cron_hour}}"
     day: "{{state_ng.mys.cron_day}}"
-    job: "/usr/sbin/ahtapot_stateng.py --push"
+    job: "/usr/sbin/ahtapot_stateng.py --smart-push"
     state: present
     user: ahtapotops
   delegate_to: localhost
   sudo: yes
   tags: state-ng
+
+- name: Trigger task kontrol degiskeni ayarlaniyor
+  shell: /bin/true
+  register: skip_trigger
+  delegate_to: localhost
+
+- name: Run state-ng trigger
+  shell: "/usr/sbin/ahtapot_stateng.py --pull --host {{inventory_hostname}}"
+  when: skip_trigger is not defined
+  tags: state-ng,trigger
+
+- name: Run state-ng smart trigger
+  shell: "/usr/sbin/ahtapot_stateng.py --smart-pull --host {{inventory_hostname}}"
+  when: skip_trigger is not defined
+  tags: state-ng,smarttrigger
+
 
 

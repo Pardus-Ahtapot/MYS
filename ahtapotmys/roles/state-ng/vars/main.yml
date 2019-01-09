@@ -1,8 +1,10 @@
 ---
 state_ng:
   ansible_git_url: "ahtapotops@10.0.0.200:/srv/git/ansible.git"
+  gdys_git_url: "ahtapotops@10.0.0.200:/srv/git/gdys.git"
   branch: "master"
-  directory: "/etc/ansible"
+  ansible_directory: "/etc/ansible"
+  gdys_directory: "/home/ahtapotops/gdys"
   mys:
     cron_file: "/etc/cron.d/ahtapot-stateng"
     cron_minute: "0"
@@ -14,6 +16,10 @@ state_ng:
     cron_hour: "*/4"
     cron_day: "*"
 
+  cron_hosts:
+    - host1
+    - host2
+    - host3
 
 
 

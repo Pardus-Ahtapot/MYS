@@ -10,7 +10,8 @@ from ansible.inventory import Inventory
 from ansible.parsing.dataloader import DataLoader
 from ansible.vars import VariableManager
 
-ANSIBLE_DIR = "{{state_ng.directory}}"
+GDYS_DIR = "{{state_ng.gdys_directory}}"
+ANSIBLE_DIR = "{{state_ng.ansible_directory}}"
 PLAYBOOK_DIR = "{0}/playbooks".format(ANSIBLE_DIR)
 ANSIBLE_HOST_FILE = "{0}/hosts".format(ANSIBLE_DIR)
 BRANCH = "{{state_ng.branch}}"
@@ -20,8 +21,12 @@ USER="ahtapotops"
 def initialize_argparser():
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", help="fqdn of host that playbook will run on. Needed when pull is used", default="not a valid hostname")
-    parser.add_argument("--pull", action="store_true", help="pull playbooks and run if needed. It should be run on remote device")
-    parser.add_argument("--push", action="store_true", help="push changed playbooks. It should be used on post-commit hook")
+    parser.add_argument("--smart-pull", action="store_true", help="Pull playbooks and run if needed. It should be run on remote device")
+    parser.add_argument("--pull", action="store_true", help="Pull playbooks and run regardless it changes or not")
+    parser.add_argument("--smart-push", action="store_true", help="Push changed playbooks. It should be used on post-commit hook")
+    parser.add_argument("--push", action="store_true", help="Push all playbooks")
+    parser.add_argument("--smart-trigger", action="store_true", help="Trigger host to run smart pull")
+    parser.add_argument("--trigger", action="store_true", help="Trigger host to run pull")
     return parser.parse_args()
 
 def parse_playbooks():
@@ -34,8 +39,8 @@ def parse_playbooks():
             ret[pb_file] = content
     return ret
 
-def run_ansible_playbook(playbook):
-    cmdd = "/usr/bin/ansible-playbook {0}/{1}".format(PLAYBOOK_DIR, playbook)
+def run_ansible_playbook(playbook, args=""):
+    cmdd = "/usr/bin/ansible-playbook {0}/{1} {2}".format(PLAYBOOK_DIR, playbook, args)
     print cmdd
     subprocess.check_call(cmdd, shell=True)
 
@@ -104,7 +109,7 @@ if __name__ == "__main__":
                 except TypeError:
                     host_list[fqdn]['playbooks'][pb_name]['roles'] = [x for x in playbook_yaml['roles']]
 
-    if args.pull:
+    if args.smart_pull or args.pull:
         print "State-ng pull is processing"
         if args.host not in host_list.keys():
             print "Please provide valid host"
@@ -131,8 +136,10 @@ if __name__ == "__main__":
                         run_ansible_pull(pb_name)
                     except subprocess.CalledProcessError:
                         pass  # there is no difference. do nothing
-    elif args.push:
-        print "State-ng push is processing"
+            elif args.pull:
+                run_ansible_pull(pb_name) #  if this is not smart pull. run playbook anyway
+    elif args.smart_push:
+        print "State-ng smart push is processing"
         if not os.path.isfile("/home/{0}/.last_commit_hash".format(USER)):
             cmd = "cd {0} && /usr/bin/git rev-parse HEAD~1 > /home/{1}/.last_commit_hash".format(ANSIBLE_DIR, USER)
             subprocess.check_call(cmd, shell=True)
@@ -155,3 +162,12 @@ if __name__ == "__main__":
                 subprocess.check_call(cmd, shell=True)
             except subprocess.CalledProcessError:
                 pass  # there is no difference. do nothing
+    elif args.push:
+        print "State-ng push is processing"
+        run_ansible_playbook("state.yml")
+    elif args.trigger:
+        print "State-ng trigger is processing"
+        run_ansible_playbook("state-ng.yml", " --tags trigger")
+    elif args.smart_trigger:
+        print "State-ng smart trigger is processing"
+        run_ansible_playbook("state-ng.yml", " --tags smarttrigger")
