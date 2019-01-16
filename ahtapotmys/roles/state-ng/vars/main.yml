@@ -12,14 +12,13 @@ state_ng:
     cron_day: "*"
   host:
     cron_file: "/etc/cron.d/ahtapot-stateng"
-    cron_minute: "0"
     cron_hour: "*/4"
     cron_day: "*"
 
-  cron_hosts:
-    - host1
-    - host2
-    - host3
+  #pull_hosts:
+    #- host1
+    #- host2
+    #- host3
 
 
 
