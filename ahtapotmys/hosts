@@ -78,6 +78,8 @@
 
 [faraday-server]
 
+[faraday-client]
+
 [state-ng]
 
 [all:vars]

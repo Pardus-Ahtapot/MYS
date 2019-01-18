@@ -38,6 +38,9 @@ firewall_packages:
     package12:
         name: "vnstat"
         state: "present"
+    package13:
+        name: "fastnetmon"
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  
