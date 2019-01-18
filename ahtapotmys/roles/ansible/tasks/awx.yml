@@ -40,3 +40,14 @@
     group: "root"
     mode: 0644
   notify: install awx
+
+- name: Deploy awx inventory script on local
+  template:
+    src: "awx_inventory.sh.j2"
+    dest: "/usr/sbin/awx_inventory.sh"
+    owner: "root"
+    mode: "755"
+  delegate_to: localhost
+  run_once: true
+  sudo: yes
+  tags: state-ng

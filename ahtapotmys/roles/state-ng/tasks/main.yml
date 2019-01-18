@@ -53,6 +53,7 @@
     owner: "root"
     mode: "755"
   delegate_to: localhost
+  run_once: true
   sudo: yes
   tags: state-ng
 
@@ -67,6 +68,7 @@
     state: present
     user: ahtapotops
   delegate_to: localhost
+  run_once: true
   sudo: yes
   tags: state-ng
 
@@ -74,6 +76,7 @@
   shell: /bin/true
   register: skip_trigger
   delegate_to: localhost
+  tags: state-ng
 
 - name: Run state-ng trigger
   shell: "((/usr/sbin/ahtapot_stateng.py --pull --host {{inventory_hostname}} 1>/dev/null 2>&1 ) & )"
