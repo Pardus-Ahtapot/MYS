@@ -11,3 +11,4 @@
 - include: contrackd.yml
 - include: sysctl.yml
 - include: iptables.yml
+- include: fastnetmon.yml

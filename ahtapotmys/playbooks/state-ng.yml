@@ -1,0 +1,9 @@
+- hosts: state-ng
+  remote_user: ahtapotops
+  sudo: yes
+  gather_facts: no
+  vars_files:
+  - ../roles/state-ng/vars/main.yml
+  roles:
+    - role: state-ng
+

@@ -1,0 +1,92 @@
+---
+- name: Install ansible
+  apt:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - ansible
+    - git
+  sudo: yes
+  tags: state-ng
+
+
+- name: Deploy state-ng script
+  template:
+    src: "ahtapot_stateng.py.j2"
+    dest: "/usr/sbin/ahtapot_stateng.py"
+    owner: "root"
+    mode: "755"
+  sudo: yes
+  tags: state-ng
+
+- name: Set cron configuration
+  cron:
+    name: "ansible pull script for role {{inventory_hostname}}"
+    cron_file: "{{state_ng.host.cron_file}}"
+    minute: "{{60 | random}}"
+    hour: "{{state_ng.host.cron_hour}}"
+    day: "{{state_ng.host.cron_day}}"
+    job: "/usr/sbin/ahtapot_stateng.py --smart-pull --host {{inventory_hostname}}"
+    state: present
+    user: ahtapotops
+  when: state_ng.pull_hosts is defined and inventory_hostname in state_ng.pull_hosts
+  notify: reload cron
+  sudo: yes
+  tags: state-ng
+
+- name: Remove cron configuration
+  cron:
+    name: "ansible pull script for role {{inventory_hostname}}"
+    cron_file: "{{state_ng.host.cron_file}}"
+    job: "/usr/sbin/ahtapot_stateng.py --smart-pull --host {{inventory_hostname}}"
+    state: absent
+    user: ahtapotops
+  when: state_ng.pull_hosts is defined and inventory_hostname not in state_ng.pull_hosts or state_ng.pull_hosts is not defined
+  notify: reload cron
+  sudo: yes
+  tags: state-ng
+
+- name: Deploy state-ng script on local
+  template:
+    src: "ahtapot_stateng.py.j2"
+    dest: "/usr/sbin/ahtapot_stateng.py"
+    owner: "root"
+    mode: "755"
+  delegate_to: localhost
+  run_once: true
+  sudo: yes
+  tags: state-ng
+
+- name: Set cron configuration on local
+  cron:
+    name: "ansible push script"
+    cron_file: "{{state_ng.mys.cron_file}}"
+    minute: "{{state_ng.mys.cron_minute}}"
+    hour: "{{state_ng.mys.cron_hour}}"
+    day: "{{state_ng.mys.cron_day}}"
+    job: "/usr/sbin/ahtapot_stateng.py --smart-push "
+    state: present
+    user: ahtapotops
+  delegate_to: localhost
+  run_once: true
+  sudo: yes
+  tags: state-ng
+
+- name: Trigger task kontrol degiskeni ayarlaniyor
+  shell: /bin/true
+  register: skip_trigger
+  delegate_to: localhost
+  tags: state-ng
+
+- name: Run state-ng trigger
+  shell: "((/usr/sbin/ahtapot_stateng.py --pull --host {{inventory_hostname}} 1>/dev/null 2>&1 ) & )"
+  when: skip_trigger is not defined
+  tags: state-ng,trigger
+
+- name: Run state-ng smart trigger
+  shell: "((/usr/sbin/ahtapot_stateng.py --smart-pull --host {{inventory_hostname}} 1>/dev/null 2>&1 ) & )"
+  when: skip_trigger is not defined
+  tags: state-ng,smarttrigger
+
+
+

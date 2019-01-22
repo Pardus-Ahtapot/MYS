@@ -14,6 +14,7 @@
   - ../roles/firewall/vars/profile.yml
   - ../roles/firewall/vars/directory.yml
   - ../roles/firewall/vars/conf_list.yml
+  - ../roles/firewall/vars/fastnetmon.yml
   - ../roles/post/vars/integrity.yml
   roles:
   - { role: firewall }
