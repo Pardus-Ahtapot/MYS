@@ -47,7 +47,7 @@ def run_ansible_playbook(playbook, args=""):
     subprocess.check_call(cmdd, shell=True)
 
 def run_ansible_pull(playbook):
-    cmdd = "/usr/bin/ansible-pull -U {0} -C {1} --accept-host-key --full -d {2} {3}/{4}".format(ANSIBLE_GIT_REPO, BRANCH, ANSIBLE_DIR, PLAYBOOK_DIR, playbook)
+    cmdd = "/usr/bin/ansible-pull -U {0} -C {1} --skip-tags pull_skip --accept-host-key --full --force --clean -d {2} {3}/{4}".format(ANSIBLE_GIT_REPO, BRANCH, ANSIBLE_DIR, PLAYBOOK_DIR, playbook)
     subprocess.check_call(cmdd, shell=True)
 
 
@@ -127,7 +127,7 @@ if __name__ == "__main__":
         if os.path.isdir(ANSIBLE_DIR):
             cmd = "/usr/bin/sudo /bin/mv {0} {1}".format(ANSIBLE_DIR, ANSIBLE_DIR + ".bak." + str(datetime.datetime.now().strftime("%Y%m%d%H%M")))
             subprocess.check_call(cmd, shell=True)
-        cmd = "/usr/bin/sudo /usr/bin/git clone -b {0} {1} {2}".format(BRANCH, ANSIBLE_GIT_REPO, ANSIBLE_DIR)
+        cmd = "/bin/rm -rf /home/{3}/ansible && /usr/bin/git clone -b {0} {1} /home/{3}/ansible && /usr/bin/sudo /bin/mv /home/{3}/ansible {2}".format(BRANCH, ANSIBLE_GIT_REPO, ANSIBLE_DIR, USER)
         new_clone = True  # we will use it for pull process
         subprocess.check_call(cmd, shell=True)
 

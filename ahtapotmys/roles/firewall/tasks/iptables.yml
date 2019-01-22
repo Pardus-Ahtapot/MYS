@@ -38,7 +38,8 @@
   sudo: yes
   tags: iptables-save 
 
+## ansible-pull sırasında çalışmaması için pull_skip tagi eklenmiştir. 
 - name: Guvenlik Duvari dosyalari siliniyor
   shell: /bin/rm -rf "{{ iptables['deploy']['filepath'] }}"
   sudo: yes
-  tags: deploy
+  tags: deploy, pull_skip
