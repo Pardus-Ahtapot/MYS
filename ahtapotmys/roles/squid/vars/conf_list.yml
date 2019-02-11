@@ -1,32 +1,30 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 squid_conf_list:
-  - "{{ dansguardian['conf']['destination'] }}"
-  - "{{ dansguardian['f1conf']['destination'] }}"
-  - "{{ dansguardian_whitelists['list01']['destination'] }}"
-  - "{{ dansguardian_whitelists['list02']['destination'] }}"
-  - "{{ dansguardian_whitelists['list03']['destination'] }}"
-  - "{{ dansguardian_whitelists['list04']['destination'] }}"
-  - "{{ dansguardian_blacklists['list01']['destination'] }}"
-  - "{{ dansguardian_blacklists['list02']['destination'] }}"
-  - "{{ dansguardian_blacklists['list03']['destination'] }}"
-  - "{{ dansguardian_blacklists['list04']['destination'] }}"
-  - "{{ dansguardian['request']['html']['destination'] }}"
-  - "{{ nginx['conf']['destination'] }}"
-  - "{{ nginx['certificate']['destination'] }}"
-  - "{{ nginx['key']['destination'] }}"
-  - "{{ nginx['htpasswd']['destination'] }}"
-  - "{{ sarg['conf']['destination'] }}"
-  - "{{ sarg['cron']['destination'] }}"
-  - "{{ squid['conf']['destination'] }}"
-  - "{{ updshalla['app']['destination'] }}"
-  - "{{ updshalla['conf']['destination'] }}"
-  - "{{ updshalla['blacklisturl']['destination'] }}"
-  - "{{ updshalla['blacklistsite']['destination'] }}"
-  - "{{ updshalla['cron']['destination'] }}"
-  - "{{ zeustracker['app']['destination'] }}"
-  - "{{ zeustracker['cron']['destination'] }}"
-  - "/etc/resolv.conf"
-  - "/etc/krb5.conf"
-  - "/etc/samba/smb.conf"
-  - "/etc/nsswitch.conf"
+- /etc/dansguardian/lists/exceptionsitelist_general
+- /etc/dansguardian/lists/exceptionurllist_general
+- /etc/dansguardian/lists/exceptionsitelist
+- /etc/dansguardian/lists/exceptionurllist
+- /etc/dansguardian/lists/bannedsitelist_general
+- /etc/dansguardian/lists/bannedurllist_general
+- /etc/dansguardian/lists/bannedsitelist
+- /etc/dansguardian/lists/bannedurllist
+- /etc/dansguardian/dansguardianf1.conf
+- /etc/dansguardian/dansguardian.conf
+- /etc/dansguardian/languages/ukenglish/template.html
+- /usr/local/bin/zeustracker.sh
+- /etc/cron.d/zeustracker
+- /etc/squid/squid.conf
+- /etc/cron.d/sarg
+- /etc/sarg/sarg.conf
+- /etc/nginx/ssl/sarg.key
+- /etc/nginx/ssl/sarg.crt
+- /etc/nginx/ssl/sarg.htpasswd
+- /etc/nginx/conf.d/sarg.conf
+- /etc/dansguardian/updshalla
+- /etc/dansguardian/lists/bannedsitelist_shalla
+- /etc/cron.d/updshalla
+- /etc/dansguardian/updshalla.conf
+- /etc/dansguardian/lists/bannedurllist_shalla
+- /etc/resolv.conf
+- /etc/krb5.conf
+- /etc/samba/smb.conf
+- /etc/nsswitch.conf

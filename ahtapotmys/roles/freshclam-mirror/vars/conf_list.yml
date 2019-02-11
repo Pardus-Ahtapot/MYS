@@ -1,6 +1,4 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 freshclam_mirror_conf_list:
-  - "/usr/sbin/clamdownloader.pl"
-  - "/usr/sbin/sync_clam_mirror.sh"
-  - "/etc/cron.d/sync_clam_mirror"
+- /usr/sbin/clamdownloader.pl
+- /usr/sbin/sync_clam_mirror.sh
+- /etc/cron.d/sync_clam_mirror

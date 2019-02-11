@@ -5,6 +5,7 @@
   - ../roles/icinga2-clients/vars/main.yml
   - ../roles/icinga2-clients/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   roles:
   - { role: icinga2-clients }
   - { role: post }

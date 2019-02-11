@@ -30,6 +30,7 @@
   - ../roles/portscanner/vars/nginx.yml
   - ../roles/portscanner/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   roles:
   - { role: base }
   - { role: portscanner }

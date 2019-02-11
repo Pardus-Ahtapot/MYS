@@ -1,18 +1,13 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 spamassassin_conf_list:
-  - "/etc/hosts"
-  - "/etc/resolv.conf"
-  - "/etc/postfix/main.cf"
-  - "/etc/postfix/transport"
-  - "/etc/default/postfwd"
-  - "/etc/postfix/postfwd.cf"
-  - "/etc/postfix/master.cf"
-  - "/etc/postfix/header_checks"
-  - "/etc/spamassassin/local.cf"
-  - "/etc/amavis/conf.d/15-content_filter_mode"
-  - "/etc/clamav/freshclam.conf"
-  - "/etc/clamav/clamd.conf"
-  - "/etc/amavis/conf.d/50-user"
-  - "/etc/postfix/senderaccess"
-  - "/etc/postfix/receiveraccess"
+- /etc/resolv.conf
+- /etc/postfix/main.cf
+- /etc/postfix/transport
+- /etc/postfix/postfwd.cf
+- /etc/postfix/master.cf
+- /etc/postfix/header_checks
+- /etc/spamassassin/local.cf
+- /etc/clamav/freshclam.conf
+- /etc/clamav/clamd.conf
+- /etc/amavis/conf.d/50-user
+- /etc/postfix/senderaccess
+- /etc/postfix/receiveraccess

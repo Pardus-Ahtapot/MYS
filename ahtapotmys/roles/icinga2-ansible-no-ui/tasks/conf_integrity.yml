@@ -5,3 +5,13 @@
 
 - name: konfigurasyon listesi birlestiriliyor
   set_fact: conf_list="{{ conf_list }} + {{ icinga2_ansible_no_ui_conf_list }}"
+
+- name: konfigurasyon kontrolu yapiliyor
+  sudo: yes
+  shell: "/usr/sbin/integrity-check.sh"
+  register: integrity_check_result
+  when: integrity_check_result is not defined
+  failed_when: integrity_check_result.rc != 0 and integrity_check_result.rc != 1
+
+- set_fact: global_integrity_check_result="{{integrity_check_result}}"
+  when: integrity_check_result.changed

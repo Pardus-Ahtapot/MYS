@@ -1,9 +1,9 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 ossimcik_conf_list:
-  - "{{ nxlog['conf']['destination'] }}"
-  - "{{ ossec['conf']['destination'] }}"
-  - "{{ ossec['localdecoder']['destination'] }}"
-  - "{{ ossec['localrules']['destination'] }}"
-  - "{{ ossimcik_rsyslog['conf']['destination'] }}"
-  - "{{ logrotate['conf']['destination'] }}"
+- /etc/logrotate.d/ossimcik
+- /etc/rsyslog.conf
+- /etc/rsyslog.conf
+- /etc/nxlog/nxlog.conf
+- /var/ossec/etc/local_decoder.xml
+- /var/ossec/etc/ossec.conf
+- /var/ossec/rules/local_rules.xml
+- /var/ossec/etc/shared/agent.conf

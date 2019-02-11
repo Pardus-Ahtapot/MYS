@@ -38,6 +38,7 @@
   - ../roles/openvpn/vars/openvpn.yml
   - ../roles/openvpn/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   sudo: yes
   roles:
   - { role: base }

@@ -1,8 +1,6 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 icinga2_clients_conf_list:
-  - "/usr/lib/nagios/plugins/check_mem"
-  - "/usr/lib/nagios/plugins/check_service"
-  - "/usr/lib/nagios/plugins/check_eth"
-  - "/usr/lib/nagios/plugins/check_website"
-  - "/etc/nagios/nrpe.cfg"
+- /usr/lib/nagios/plugins/check_mem
+- /usr/lib/nagios/plugins/check_service
+- /usr/lib/nagios/plugins/check_eth
+- /usr/lib/nagios/plugins/check_website
+- /etc/nagios/nrpe.cfg

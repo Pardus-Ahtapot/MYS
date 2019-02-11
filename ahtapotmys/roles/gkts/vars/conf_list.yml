@@ -1,9 +1,7 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 gkts_conf_list:
-  - "{{ gkts['hook']['conf']['destination'] }}"
-  - "{{ nginx['conf']['destination'] }}"
-  - "{{ nginx['certificate']['destination'] }}"
-  - "{{ nginx['key']['destination'] }}"
-  - "{{ uwsgi_services['service01']['destination'] }}"
-  - "{{ uwsgi_services['service01']['destination'] }}"
+- /etc/uwsgi/apps-enabled/gkts-admin-uwsgi.ini
+- /etc/uwsgi/apps-enabled/gkts-developer-uwsgi.ini
+- /var/opt/ahtapot-gkts/gktshook.sh
+- /etc/nginx/ssl/gkts.crt
+- /etc/nginx/ssl/gkts.key
+- /etc/nginx/conf.d/gkts.conf

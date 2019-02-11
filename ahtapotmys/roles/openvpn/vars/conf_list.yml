@@ -1,10 +1,7 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 openvpn_conf_list:
-  - "{{ openvpn['default']['destination'] }}"
-  - "{{ openvpn['cacrt']['destination'] }}"
-  - "/etc/openvpn/dh2048.pem"
-  - "{{ openvpn['cert']['destination'] }}"
-  - "{{ openvpn['key']['destination'] }}"
-  - "{{ openvpn['conf']['destination'] }}"
-  - "{{ openvpn['ldapconf']['destination'] }}"
+- /etc/openvpn/server.conf
+- /etc/default/openvpn
+- /etc/openvpn/auth-ldap.conf
+- /etc/openvpn/server.crt
+- /etc/openvpn/server.key
+- /etc/openvpn/ca.crt

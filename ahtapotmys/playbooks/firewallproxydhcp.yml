@@ -45,6 +45,7 @@
   - ../roles/dhcpd/vars/dhcpd.yml
   - ../roles/dhcpd/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   sudo: yes
   roles:
   - { role: base }

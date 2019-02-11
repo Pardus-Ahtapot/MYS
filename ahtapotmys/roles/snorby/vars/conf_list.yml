@@ -1,7 +1,5 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 snorby_conf_list:
-  - "/opt/snorby/config/snorby_config.yml"
-  - "/opt/snorby/config/snorby-geoip.dat"
-  - "/opt/snorby/config/database.yml"
-  - "/opt/snorby/db/seeds.rb"
+- /opt/snorby/config/snorby_config.yml
+- /opt/snorby/config/snorby-geoip.dat
+- /opt/snorby/config/database.yml
+- /opt/snorby/db/seeds.rb

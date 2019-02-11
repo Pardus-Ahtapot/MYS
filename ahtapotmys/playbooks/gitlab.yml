@@ -28,6 +28,7 @@
   - ../roles/gitlab/vars/hook.yml
   - ../roles/gitlab/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   roles:
   - { role: base }
   - { role: gitlab }

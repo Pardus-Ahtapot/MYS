@@ -1,13 +1,11 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 icinga2_ansible_no_ui_conf_list:
-  - "{{ icinga2['main_conf']['dest'] }}"
-  - "{{ icinga2['check_commands_conf']['dest'] }}"
-  - "{{ icinga2['groups_conf']['dest'] }}"
-  - "{{ icinga2['create_notifications']['dest'] }}"
-  - "{{ icinga2['create_users']['dest'] }}"
-  - "{{ icinga2['mail_host_notification']['dest'] }}"
-  - "{{ icinga2['mail_service_notification']['dest'] }}"
-  - "{{ icinga2['sms']['dest'] }}"
-  - "{{ icinga2['create_commands']['dest'] }}"
-  - "/etc/init.d/icinga2"
+- /etc/icinga2/conf.d/commands.conf
+- /etc/icinga2/conf.d/hosts/
+- /etc/icinga2/conf.d/check_commands.conf
+- /etc/icinga2/scripts/sms.py
+- /etc/icinga2/conf.d/notifications.conf
+- /etc/icinga2/conf.d/groups.conf
+- /etc/icinga2/conf.d/users.conf
+- /etc/icinga2/scripts/mail-service-notification.sh
+- /etc/icinga2/icinga2.conf
+- /etc/icinga2/scripts/mail-host-notification.sh

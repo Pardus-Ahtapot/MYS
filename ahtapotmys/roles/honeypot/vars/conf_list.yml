@@ -1,41 +1,13 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 honeypot_conf_list:
-  - "/var/lib/lxc/amun/rootfs/usr/share/amun/conf/amun.conf"
-  - "/var/lib/lxc/cowrie/rootfs/usr/sbin/cowrie_deploy.sh"
-  - "/var/lib/lxc/dionaea/rootfs/usr/sbin/dionaea_deploy.sh"
-  - "/var/lib/lxc/dionaea/rootfs/{{dionaea_conf.root_path}}/index.html"
-  - "/var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json"
-  - "/var/lib/lxc/ftp/rootfs/etc/honeypot-ftp/config.xml"
-  - "/etc/lxc/default.conf"
-  - "/etc/rsyslog.d/honeypot.conf"
-  - "/var/lib/lxc/cowrie/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/dionaea/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/p0f/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/smtp/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/glastopf/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/ftp/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/pop3/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/shockpot/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/wordpot/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/amun/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/suricata/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/elastichoney/rootfs/etc/apt/sources.list.d/ahtapot.list"
-  - "/var/lib/lxc/cowrie/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/dionaea/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/p0f/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/smtp/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/glastopf/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/ftp/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/pop3/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/shockpot/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/wordpot/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/amun/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/suricata/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/elastichoney/rootfs/etc/network/interfaces"
-  - "/var/lib/lxc/p0f/rootfs/usr/share/p0f/p0f.conf"
-  - "/var/lib/lxc/pop3/rootfs/etc/honeypot-pop3/config.xml"
-  - "/var/lib/lxc/smtp/rootfs/etc/honeypot-smtp/config.xml"
-  - "/var/lib/lxc/suricata/rootfs/etc/suricata/mhn_suricata_rule_update.conf"
-  - "/var/lib/lxc/wordpot/rootfs/usr/share/wordpot/wordpot.conf"
-  -
+- /etc/lxc/default.conf
+- /etc/lxc/default.conf
+- /etc/rsyslog.d/honeypot.conf
+- /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
+- /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
+- /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
+- /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
+- /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
+- /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
+- /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
+- /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json
+- /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json

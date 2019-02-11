@@ -1,0 +1,7 @@
+cyphon_conf_list:
+- /etc/environment
+- /etc/rsyslog.d/cyphon.conf
+- /etc/rabbitmq/rabbitmq-env.conf
+- /etc/logstash/conf.d/rsyslog.conf
+- /usr/src/app/cyphon/cyphon/settings/default.py
+- /usr/src/app/cyphon/cyphon/settings/conf.py
