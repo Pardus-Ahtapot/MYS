@@ -1,7 +1,7 @@
 gkts_conf_list:
 - /etc/uwsgi/apps-enabled/gkts-admin-uwsgi.ini
-- /etc/uwsgi/apps-enabled/gkts-developer-uwsgi.ini
 - /var/opt/ahtapot-gkts/gktshook.sh
+- /etc/nginx/conf.d/gkts.conf
 - /etc/nginx/ssl/gkts.crt
 - /etc/nginx/ssl/gkts.key
-- /etc/nginx/conf.d/gkts.conf
+- /etc/uwsgi/apps-enabled/gkts-developer-uwsgi.ini

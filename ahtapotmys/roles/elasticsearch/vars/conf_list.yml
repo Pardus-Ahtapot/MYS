@@ -1,7 +1,7 @@
 elasticsearch_conf_list:
-- /usr/lib/systemd/system/elasticsearch
-- /etc/default/elasticsearch
-- /etc/elasticsearch/elasticsearch.yml
-- /usr/share/elasticsearch/plugins/search-guard-2/sgconfig/sg_internal_users.yml
-- /usr/share/elasticsearch/plugins/search-guard-2/sgconfig/sg_roles_mapping.yml
 - /usr/share/elasticsearch/plugins/search-guard-2/sgconfig/sg_roles.yml
+- /etc/elasticsearch/elasticsearch.yml
+- /usr/share/elasticsearch/plugins/search-guard-2/sgconfig/sg_roles_mapping.yml
+- /etc/default/elasticsearch
+- /usr/share/elasticsearch/plugins/search-guard-2/sgconfig/sg_internal_users.yml
+- /usr/lib/systemd/system/elasticsearch

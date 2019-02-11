@@ -1,13 +1,13 @@
 spamassassin_conf_list:
-- /etc/resolv.conf
-- /etc/postfix/main.cf
+- /etc/postfix/senderaccess
 - /etc/postfix/transport
+- /etc/clamav/freshclam.conf
+- /etc/spamassassin/local.cf
 - /etc/postfix/postfwd.cf
 - /etc/postfix/master.cf
-- /etc/postfix/header_checks
-- /etc/spamassassin/local.cf
-- /etc/clamav/freshclam.conf
+- /etc/postfix/main.cf
 - /etc/clamav/clamd.conf
-- /etc/amavis/conf.d/50-user
-- /etc/postfix/senderaccess
 - /etc/postfix/receiveraccess
+- /etc/resolv.conf
+- /etc/postfix/header_checks
+- /etc/amavis/conf.d/50-user

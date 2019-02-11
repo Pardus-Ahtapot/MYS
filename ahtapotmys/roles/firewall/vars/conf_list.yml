@@ -1,9 +1,9 @@
 firewall_conf_list:
-- /etc/conntrackd/primary-backup.sh
+- /etc/fastnetmon/networks_whitelist
 - /etc/sysctl.conf
 - /etc/modules.conf
+- /etc/fastnetmon/fastnetmon.conf
 - /home/lkk/.bashrc
 - /var/opt/ahtapot-lkk/ahtapot-lkk.py
-- /etc/fastnetmon/fastnetmon.conf
 - /etc/fastnetmon/networks_list
-- /etc/fastnetmon/networks_whitelist
+- /etc/conntrackd/primary-backup.sh

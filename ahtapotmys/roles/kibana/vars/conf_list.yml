@@ -1,6 +1,6 @@
 kibana_conf_list:
-- /etc/default/kibana
-- /opt/kibana/config/kibana.yml
-- /etc/nginx/ssl/kibana.crt
-- /etc/nginx/ssl/kibana.key
 - /etc/nginx/conf.d/kibana.conf
+- /etc/nginx/ssl/kibana.crt
+- /opt/kibana/config/kibana.yml
+- /etc/nginx/ssl/kibana.key
+- /etc/default/kibana

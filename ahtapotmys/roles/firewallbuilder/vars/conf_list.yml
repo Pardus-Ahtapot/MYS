@@ -1,5 +1,5 @@
 firewallbuilder_conf_list:
-- /usr/share/fwbuilder-5.1.0.3599/configlets/linux24/reset_iptables
 - /etc/profile.d/fwbuilder-ahtapot.sh
+- /usr/share/fwbuilder-5.1.0.3599/configlets/linux24/reset_iptables
 - /etc/fw/gdys
 - /etc/fw/editable_objects
