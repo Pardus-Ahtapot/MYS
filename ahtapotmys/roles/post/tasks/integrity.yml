@@ -42,13 +42,8 @@
     - integrity-local
     - integrity-remote
 
-- name : Konfigurasyon bilgilerini aliniyor
-  stat:
-    path: "{{ item }}"
-    checksum_algorithm: sha256
-    follow: no
-    get_md5: no
-    get_checksum: yes
+- name: Konfigurasyon bilgileri aliniyor
+  shell: "/usr/bin/sha256sum {{ item }}"
   register: stat_results
   with_items: "{{ conf_list }}"
   sudo: yes
@@ -58,19 +53,32 @@
     - integrity-remote
 
 - name: Paket bilgileri aliniyor
-  shell: "ls {{ integrity['debsums']['file-pattern'] }}"
+  shell: "/usr/bin/sha256sum {{ integrity['debsums']['file-pattern'] }}"
   register: debsum_file_list
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
 
-- name: Paket bilgileri ozet degerleri aliniyor
-  stat:
-    path: "{{ item }}"
-    checksum_algorithm: sha256
-    follow: no
-    get_md5: no
-    get_checksum: yes
-  register: debsum_stat_results
-  with_items: "{{ debsum_file_list.stdout_lines }}"
-  sudo: yes
+- name: Konfigurasyon bilgileri gecici bir dosyaya yaziliyor
+  template:
+    src: "confs-temp.j2"
+    dest: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}_conf_list"
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
+
+- name: Paket bilgileri gecici bir dosyaya yaziliyor
+  template:
+    src: "packages-temp.j2"
+    dest: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}_package_list"
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
   tags:
     - integrity
     - integrity-local
@@ -109,21 +117,6 @@
     - integrity
     - integrity-local
 
-- name: Konfigurasyon bilgileri yerel cihaza kaydediliyor
-  lineinfile:
-    dest: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/confs"
-    regexp: "^[a-f0-9]* {{ item.stat.path | regex_escape() }}"
-    line: "{{ item.stat.checksum }} {{ item.stat.path }}"
-  when: item.stat.checksum is defined
-  with_items: "{{ stat_results.results }}"
-  delegate_to: localhost
-  no_log: yes
-  become: yes
-  become_user: ahtapotops
-  tags:
-    - integrity
-    - integrity-local
-
 - name: Paket bilgileri dosyasi yerel cihazda siliniyor
   file:
     path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/debsums"
@@ -147,19 +140,26 @@
     - integrity-local
 
 - name: Paket bilgileri yerel cihaza kaydediliyor
-  lineinfile:
-    dest: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/debsums"
-    regexp: "^[a-f0-9]* {{ item.stat.path | regex_escape() }}"
-    line: "{{ item.stat.checksum }} {{ item.stat.path }}"
-  when: item.stat.checksum is defined
-  with_items: "{{ debsum_stat_results.results }}"
+  shell: |
+    /bin/bash /etc/ansible/roles/post/files/test.sh {{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}_package_list {{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/debsums
   delegate_to: localhost
-  no_log: yes
   become: yes
   become_user: ahtapotops
   tags:
     - integrity
     - integrity-local
+    - integrity-remote
+
+- name: Konfigurasyon bilgileri yerel cihaza kaydediliyor
+  shell: |
+    /bin/bash /etc/ansible/roles/post/files/test.sh {{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}_conf_list {{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/confs
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
 
 - name: Kullanici bilgileri yerel cihaza kaydediliyor
   copy:
@@ -193,6 +193,22 @@
   tags:
     - integrity
     - integrity-local
+
+- name: Whitelist dosyalari temizleniyor
+  file:
+    state: absent
+    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/{{ item }}.whitelist"
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  with_items:
+    - "users"
+    - "groups"
+    - "packages"
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
 
 - name: Whitelist dosyalari olusturuluyor
   template:

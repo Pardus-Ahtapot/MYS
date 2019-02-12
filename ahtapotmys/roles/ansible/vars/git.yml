@@ -14,7 +14,7 @@ gitrepos:
     repo03:
         repo: "ssh://git@Gitlab_sunucu_fqdn:SSH_PORT/ahtapotops/sb.git"
         accept_hostkey: "yes"
-        destination: "/home/ahtapotops/sb"
+        destination: "/etc/integrity/sb"
         key_file: "/home/ahtapotops/.ssh/id_rsa"
 #    repoXX:
 #        repo: ""
