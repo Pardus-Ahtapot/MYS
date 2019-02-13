@@ -41,8 +41,8 @@ CONFS_FILE="{{ integrity['files']['remote']['path'] }}${GIT_PATH}/confs"
 DEBSUMS_FILE="{{ integrity['files']['remote']['path'] }}${GIT_PATH}/debsums"
 
 $DPKG_QUERY -f '${binary:Package}\n' -W > $TEMP_PACKAGES_FILE
-$CAT /etc/passwd | $AWK -F: '{print $1}' | $SORT > $TEMP_USERS_FILE
-$CAT /etc/group | $AWK -F: '{print $1}' | $SORT > $TEMP_GROUPS_FILE
+$CAT /etc/passwd | $AWK -F: '{print $1}' | $SORT -sf > $TEMP_USERS_FILE
+$CAT /etc/group | $AWK -F: '{print $1}' | $SORT -sf > $TEMP_GROUPS_FILE
 
 PACKAGES_DIFF=$($DIFF --changed-group-format='%>' --unchanged-group-format='' $PACKAGES_FILE $TEMP_PACKAGES_FILE)
 USERS_DIFF=$($DIFF --changed-group-format='%>' --unchanged-group-format='' $USERS_FILE $TEMP_USERS_FILE)
