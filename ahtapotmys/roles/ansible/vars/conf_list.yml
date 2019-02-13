@@ -5,7 +5,7 @@ ansible_conf_list:
 - /usr/bin/gkts.sh
 - /usr/bin/CheckFWs.py
 - /usr/share/awx/installer/inventory
-- /user/sbin/list-integrity-files.py
+- /usr/sbin/list-integrity-files.py
 - /etc/ansible/
 - /usr/sbin/awx_inventory.sh
 - /etc/fw/gdys

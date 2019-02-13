@@ -10,7 +10,7 @@
   sudo: yes
   template:
     src: "list-integrity-files.j2"
-    dest: "/user/sbin/list-integrity-files.py"
+    dest: "/usr/sbin/list-integrity-files.py"
     owner: "root"
     group: "root"
     mode: 0644
@@ -20,7 +20,7 @@
   shell: "/usr/sbin/integrity-check.sh"
   register: integrity_check_result
   when: integrity_check_result is not defined
-  failed_when: integrity_check_result.rc != 0 and integrity_check_result.rc != 1
+  ignore_errors: yes
 
 - set_fact: global_integrity_check_result="{{integrity_check_result}}"
   when: integrity_check_result.changed

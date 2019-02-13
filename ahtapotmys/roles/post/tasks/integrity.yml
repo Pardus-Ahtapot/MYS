@@ -43,7 +43,7 @@
     - integrity-remote
 
 - name: Konfigurasyon bilgileri aliniyor
-  shell: "/usr/bin/sha256sum {{ item }}"
+  shell: "if [ -f {{ item }} ]; then /usr/bin/sha256sum {{ item }}; fi"
   register: stat_results
   with_items: "{{ conf_list }}"
   sudo: yes
@@ -55,6 +55,7 @@
 - name: Paket bilgileri aliniyor
   shell: "/usr/bin/sha256sum {{ integrity['debsums']['file-pattern'] }}"
   register: debsum_file_list
+  sudo: yes
   tags:
     - integrity
     - integrity-local
