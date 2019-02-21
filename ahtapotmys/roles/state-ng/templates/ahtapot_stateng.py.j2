@@ -18,6 +18,13 @@ BRANCH = "{{state_ng.branch}}"
 ANSIBLE_GIT_REPO = "{{state_ng.ansible_git_url}}"
 GDYS_GIT_REPO = "{{state_ng.gdys_git_url}}"
 USER="ahtapotops"
+LOGFILE = "{{state_ng.log_file}}"
+
+def log_message(msg):
+    print msg
+    cmdd = '/bin/echo "{0} {1}" >> {2}'.format(str(datetime.datetime.now()), msg, LOGFILE)
+    subprocess.check_call(cmdd, shell=True)
+
 
 def initialize_argparser():
     parser = argparse.ArgumentParser()
@@ -34,7 +41,7 @@ def initialize_argparser():
 def parse_playbooks():
     ret = {}
     for pb_file in os.listdir(PLAYBOOK_DIR):
-        if pb_file == 'state.yml' or pb_file == 'state-ng.yml' or not pb_file.lower().endswith(".yml"):
+        if pb_file == 'state.yml' or pb_file == 'firewallruleonly.yml' or  pb_file == 'state-ng.yml' or not pb_file.lower().endswith(".yml"):
             continue
         with open("{0}/{1}".format(PLAYBOOK_DIR, pb_file)) as f:
             content = yaml.load(f)[0]
@@ -44,11 +51,19 @@ def parse_playbooks():
 def run_ansible_playbook(playbook, args=""):
     cmdd = "/usr/bin/ansible-playbook {0}/{1} {2}".format(PLAYBOOK_DIR, playbook, args)
     print cmdd
-    subprocess.check_call(cmdd, shell=True)
+    try:
+        subprocess.check_call(cmdd, shell=True)
+        log_message("Playbook succesfully run. cmd: {0}".format(cmdd))
+    except:
+        log_message("Playbook failed. cmd: {0}".format(cmdd))
 
 def run_ansible_pull(playbook):
-    cmdd = "/usr/bin/ansible-pull -U {0} -C {1} --skip-tags pull_skip --accept-host-key --full --force --clean -d {2} {3}/{4}".format(ANSIBLE_GIT_REPO, BRANCH, ANSIBLE_DIR, PLAYBOOK_DIR, playbook)
-    subprocess.check_call(cmdd, shell=True)
+    cmdd = "/usr/bin/ansible-pull -U {0} -C {1} --accept-host-key --force --full -d {2} {3}/{4}".format(ANSIBLE_GIT_REPO, BRANCH, ANSIBLE_DIR, PLAYBOOK_DIR, playbook)
+    try:
+        subprocess.check_call(cmdd, shell=True)
+        log_message("Playbook succesfully run. cmd: {0}".format(cmdd))
+    except:
+        log_message("Playbook failed. cmd: {0}".format(cmdd))
 
 
 def pull_and_compare_gdys_repo():
@@ -75,7 +90,6 @@ def pull_and_compare_gdys_repo():
             return filter(None, subprocess.check_output(cmd, shell=True).strip().split("\n"))
         except:
             return []
-
 
 def get_host_list():
     loader = DataLoader()
@@ -116,7 +130,6 @@ def get_host_list():
 
     return host_list
 
-
 if __name__ == "__main__":
 
     args = initialize_argparser()
@@ -127,7 +140,7 @@ if __name__ == "__main__":
         if os.path.isdir(ANSIBLE_DIR):
             cmd = "/usr/bin/sudo /bin/mv {0} {1}".format(ANSIBLE_DIR, ANSIBLE_DIR + ".bak." + str(datetime.datetime.now().strftime("%Y%m%d%H%M")))
             subprocess.check_call(cmd, shell=True)
-        cmd = "/bin/rm -rf /home/{3}/ansible && /usr/bin/git clone -b {0} {1} /home/{3}/ansible && /usr/bin/sudo /bin/mv /home/{3}/ansible {2}".format(BRANCH, ANSIBLE_GIT_REPO, ANSIBLE_DIR, USER)
+        cmd = "/usr/bin/sudo /usr/bin/git clone -b {0} {1} {2}".format(BRANCH, ANSIBLE_GIT_REPO, ANSIBLE_DIR)
         new_clone = True  # we will use it for pull process
         subprocess.check_call(cmd, shell=True)
 
@@ -144,12 +157,12 @@ if __name__ == "__main__":
     playbooks = parse_playbooks()
 
     if args.smart_pull or args.pull:
-        print "State-ng pull is processing"
+        log_message("State-ng pull is processing")
 
         host_list = get_host_list()
 
         if args.host not in host_list.keys():
-            print "Please provide valid host"
+            log_messsage("Please provide valid host")
             sys.exit(1)
 
         changed_fw_hosts = pull_and_compare_gdys_repo()
@@ -166,7 +179,6 @@ if __name__ == "__main__":
             new_hash = subprocess.check_output(cmd, shell=True).strip()
 
             host_list = get_host_list()
-
             if last_hash != new_hash:
                 # we need to check differences
                 for pb_name in host_list[args.host]['playbooks'].keys():
@@ -192,9 +204,8 @@ if __name__ == "__main__":
             else:
                 if args.host in changed_fw_hosts:
                     run_ansible_pull('firewall.yml')
-
     elif args.smart_push:
-        print "State-ng smart push is processing"
+        log_message("State-ng smart push is processing")
 
         changed_fw_hosts = pull_and_compare_gdys_repo()
 
@@ -248,18 +259,18 @@ if __name__ == "__main__":
         subprocess.check_call(cmd, shell=True)
 
     elif args.push:
-        print "State-ng push is processing"
+        log_message("State-ng push is processing")
         if args.host:
             host_args = '-l ' + args.host
         run_ansible_playbook("state.yml", host_args)
     elif args.trigger:
-        print "State-ng trigger is processing"
+        log_message("State-ng trigger is processing")
         host_args = ''
         if args.host:
             host_args = '-l ' + args.host
         run_ansible_playbook("state-ng.yml", " --tags trigger " + host_args)
     elif args.smart_trigger:
-        print "State-ng smart trigger is processing"
+        log_message("State-ng smart trigger is processing")
         host_args = ''
         if args.host:
             host_args = '-l ' + args.host
