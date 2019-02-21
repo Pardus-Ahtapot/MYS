@@ -5,6 +5,7 @@ state_ng:
   branch: "master"
   ansible_directory: "/etc/ansible"
   gdys_directory: "/home/ahtapotops/gdys"
+  log_file: "/var/log/ahtapot/state-ng.log"
   mys:
     cron_file: "/etc/cron.d/ahtapot-stateng"
     cron_minute: "0"
