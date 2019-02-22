@@ -41,7 +41,7 @@ def initialize_argparser():
 def parse_playbooks():
     ret = {}
     for pb_file in os.listdir(PLAYBOOK_DIR):
-        if pb_file == 'state.yml' or pb_file == 'firewallruleonly.yml' or  pb_file == 'state-ng.yml' or not pb_file.lower().endswith(".yml"):
+        if pb_file == 'state.yml' or pb_file == 'firewallruleonly.yml' or  pb_file == 'smartstate.yml' or not pb_file.lower().endswith(".yml"):
             continue
         with open("{0}/{1}".format(PLAYBOOK_DIR, pb_file)) as f:
             content = yaml.load(f)[0]
@@ -157,7 +157,7 @@ if __name__ == "__main__":
     playbooks = parse_playbooks()
 
     if args.smart_pull or args.pull:
-        log_message("State-ng pull is processing")
+        log_message("smartstate pull is processing")
 
         host_list = get_host_list()
 
@@ -205,7 +205,7 @@ if __name__ == "__main__":
                 if args.host in changed_fw_hosts:
                     run_ansible_pull('firewall.yml')
     elif args.smart_push:
-        log_message("State-ng smart push is processing")
+        log_message("smartstate smart push is processing")
 
         changed_fw_hosts = pull_and_compare_gdys_repo()
 
@@ -259,19 +259,19 @@ if __name__ == "__main__":
         subprocess.check_call(cmd, shell=True)
 
     elif args.push:
-        log_message("State-ng push is processing")
+        log_message("smartstate push is processing")
         if args.host:
             host_args = '-l ' + args.host
         run_ansible_playbook("state.yml", host_args)
     elif args.trigger:
-        log_message("State-ng trigger is processing")
+        log_message("smartstate trigger is processing")
         host_args = ''
         if args.host:
             host_args = '-l ' + args.host
-        run_ansible_playbook("state-ng.yml", " --tags trigger " + host_args)
+        run_ansible_playbook("smartstate.yml", " --tags trigger " + host_args)
     elif args.smart_trigger:
-        log_message("State-ng smart trigger is processing")
+        log_message("smartstate smart trigger is processing")
         host_args = ''
         if args.host:
             host_args = '-l ' + args.host
-        run_ansible_playbook("state-ng.yml", " --tags smarttrigger " + host_args)
+        run_ansible_playbook("smartstate.yml", " --tags smarttrigger " + host_args)

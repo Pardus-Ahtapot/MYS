@@ -4,4 +4,4 @@
     name: cron
     state: restarted
   sudo: yes
-  tags: state-ng
+  tags: smartstate
