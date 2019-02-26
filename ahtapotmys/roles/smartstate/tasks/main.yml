@@ -74,6 +74,19 @@
   sudo: yes
   tags: smartstate
 
+- name: Create ssh key if not exist
+  shell: |
+    [ -f {{smartstate.gitlab_ssh_private_key_file}} ] || ssh-keygen -b 2048 -t rsa -f {{smartstate.gitlab_ssh_private_key_file}} -q -N ""
+  become_user: ahtapotops
+  register: public_key
+  tags: smartstate
+
+- name: Get public key content
+  shell: "cat {{smartstate.gitlab_ssh_private_key_file}}.pub"
+  register: public_key
+  sudo: yes
+  tags: smartstate
+
 - name: Deploy ssh public key to gitlab
   uri:
     url: "{{smartstate.gitlab_api_url}}/user/keys"
@@ -82,35 +95,13 @@
     headers:
       PRIVATE-TOKEN: "{{smartstate.gitlab_access_token}}"
     body:
-      key: "{{smartstate.gitlab_ssh_public_key}}"
-      title: "{{smartstate.gitlab_ssh_key_title}}"
+      key: "{{public_key.stdout}}"
+      title: "{{inventory_hostname}}"
     status_code:
       - 201
       - 400
   register: response
   changed_when: response.status == 201
-  delegate_to: "{{smartstate.gitlab_host}}"
-  run_once: true
-  sudo: yes
-  tags: smartstate
-
-- name: Deploy ssh private key
-  template:
-    src: "gitlab_private_key.j2"
-    dest: "{{smartstate.gitlab_ssh_private_key_file}}"
-    owner: "ahtapotops"
-    mode: "600"
-  sudo: yes
-  tags: smartstate
-
-- name: Deploy ssh private key on local
-  template:
-    src: "gitlab_private_key.j2"
-    dest: "{{smartstate.gitlab_ssh_private_key_file}}"
-    owner: "ahtapotops"
-    mode: "600"
-  delegate_to: localhost
-  run_once: true
   sudo: yes
   tags: smartstate
 

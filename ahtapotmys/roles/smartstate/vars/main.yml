@@ -1,13 +1,10 @@
 ---
 smartstate:
-  ansible_git_url: "ahtapotops@10.0.0.200:/srv/git/ansible.git"
-  gdys_git_url: "ahtapotops@10.0.0.200:/srv/git/gdys.git"
-  gitlab_host: "127.0.0.1"
-  gitlab_api_url: "http://127.0.0.1/api/v3"
+  ansible_git_url: "git@10.0.0.200:labris/ansible.git"
+  gdys_git_url: "git@10.0.0.200:labris/gdys.git"
+  gitlab_api_url: "http://192.168.0.16/api/v3"
   gitlab_access_token: "szsYsEShyAx_UZL7s9X2"
-  gitlab_ssh_private_key_file: "/home/ahtapotops/gitlab.key"
-  gitlab_ssh_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBAGHZ5Geh/7rE5sIFHXcgD4ZKvOrqWZ5H49iis1qPwNOz9V+V43mts/bfUXX/sB0qYE+ptEfhqD0eimjk1PirftCLlxm/yVNKfziQVESjh8whIVK4YzytQsYPCbVcepap8YDR12mxmBV3jS+Ku4R3+BESvGHCxnwv4rqYBSuoTOrD4qeL8T+D0r4VmYp2ClA4pwAuA9QEEJJZlQpN1Ah67qBkqrtbuM65XlsA1vizGxmuNzXk9hFh4MZNGNLx0DClhGrktCHYjVZhyqIRLLaPV51mGWFpPyzMNnboLadlQEOZ8i7R9QpTbXF4z4tsdgP22TNhuvVxjv43WToMq7PL ibrahim.ercan@labristeknoloji.com"
-  gitlab_ssh_key_title: "smartstate ssh key"
+  gitlab_ssh_private_key_file: "/home/ahtapotops/.ssh/id_rsa"
   branch: "master"
   ansible_directory: "/etc/ansible"
   gdys_directory: "/home/ahtapotops/gdys"
