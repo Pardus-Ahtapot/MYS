@@ -1,25 +1,72 @@
 ---
-state_ng:
+smartstate:
   ansible_git_url: "ahtapotops@10.0.0.200:/srv/git/ansible.git"
   gdys_git_url: "ahtapotops@10.0.0.200:/srv/git/gdys.git"
+  gitlab_host: "127.0.0.1"
+  gitlab_api_url: "http://127.0.0.1/api/v3"
+  gitlab_access_token: "szsYsEShyAx_UZL7s9X2"
+  gitlab_ssh_private_key_file: "/home/ahtapotops/gitlab.key"
+  gitlab_ssh_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBAGHZ5Geh/7rE5sIFHXcgD4ZKvOrqWZ5H49iis1qPwNOz9V+V43mts/bfUXX/sB0qYE+ptEfhqD0eimjk1PirftCLlxm/yVNKfziQVESjh8whIVK4YzytQsYPCbVcepap8YDR12mxmBV3jS+Ku4R3+BESvGHCxnwv4rqYBSuoTOrD4qeL8T+D0r4VmYp2ClA4pwAuA9QEEJJZlQpN1Ah67qBkqrtbuM65XlsA1vizGxmuNzXk9hFh4MZNGNLx0DClhGrktCHYjVZhyqIRLLaPV51mGWFpPyzMNnboLadlQEOZ8i7R9QpTbXF4z4tsdgP22TNhuvVxjv43WToMq7PL ibrahim.ercan@labristeknoloji.com"
+  gitlab_ssh_key_title: "smartstate ssh key"
   branch: "master"
   ansible_directory: "/etc/ansible"
   gdys_directory: "/home/ahtapotops/gdys"
   log_file: "/var/log/ahtapot/smartstate.log"
-  mys:
-    cron_file: "/etc/cron.d/ahtapot-stateng"
+  script_file: "/opt/ahtapot/smartstate.py"
+  max_delay: "60"
+  min_delay: "0"
+  cron_file: "/etc/cron.d/smartstate"
+  mys_push:
+    cron_minute: "0"
+    cron_hour: "5"
+    cron_day: "*"
+
+  mys_trigger:
+    cron_minute: "0"
+    cron_hour: "3"
+    cron_day: "*/7"
+
+  host_pull:
+    cron_minute: "0"
+    cron_hour: "6"
+    cron_day: "*/7"
+
+  mys_smartpush:
+    cron_minute: "20"
+    cron_hour: "*/5"
+    cron_day: "*"
+
+  mys_smarttrigger:
     cron_minute: "0"
     cron_hour: "*/4"
     cron_day: "*"
-  host:
-    cron_file: "/etc/cron.d/ahtapot-stateng"
-    cron_hour: "*/4"
+
+  host_smartpull:
+    cron_minute: "15"
+    cron_hour: "*/7"
     cron_day: "*"
 
-  #pull_hosts:
+
+  #not_pull_hosts:
     #- host1
     #- host2
     #- host3
+
+  #not_trigger_hosts:
+    #- host1
+    #- host2
+    #- host3
+
+  #not_smartpull_hosts:
+    #- host1
+    #- host2
+    #- host3
+
+  #not_smarttrigger_hosts:
+    #- host1
+    #- host2
+    #- host3
+
 
 
 

@@ -5,3 +5,11 @@
     state: restarted
   sudo: yes
   tags: smartstate
+
+- name: reload local cron
+  service:
+    name: cron
+    state: restarted
+  delegate_to: localhost
+  sudo: yes
+  tags: smartstate
