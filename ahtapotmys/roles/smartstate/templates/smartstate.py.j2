@@ -215,6 +215,8 @@ if __name__ == "__main__":
 
         if new_clone or args.pull:
             for pb_name in host_list[args.host]['playbooks'].keys():
+                if pb_name == 'smartstate.yml':
+                    continue
                 run_ansible_pull(pb_name)
             sys.exit(0)
         else:

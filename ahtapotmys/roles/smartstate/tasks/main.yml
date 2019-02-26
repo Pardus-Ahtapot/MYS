@@ -234,11 +234,13 @@
 - name: Run smartstate trigger
   shell: "(({{smartstate.script_file}} --pull --host {{inventory_hostname}} 1>/dev/null 2>&1 ) & )"
   when: skip_trigger is not defined and (smartstate.not_trigger_hosts is not defined or inventory_hostname not in smartstate.not_trigger_hosts)
+  become_user: ahtapotops
   tags: smartstate,trigger
 
 - name: Run smartstate smart trigger
   shell: "(({{smartstate.script_file}} --smart-pull --host {{inventory_hostname}} 1>/dev/null 2>&1 ) & )"
   when: skip_trigger is not defined and (smartstate.not_smarttrigger_hosts is not defined or inventory_hostname not in smartstate.not_smarttrigger_hosts)
+  become_user: ahtapotops
   tags: smartstate,smarttrigger
 
 
