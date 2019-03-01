@@ -1,70 +1,277 @@
 ---
+- name: Konfigurasyon listesi olusturuluyor
+  set_fact: conf_list="[ ]"
+  when: conf_list is not defined
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
 
-- name: integrity scripti olusturuluyor
-  template:
-        src: "{{ integrity['script']['source'] }}"
-        dest: "{{ integrity['script']['destination'] }}"
-        owner: "{{ integrity['script']['owner'] }}"
-        group: "{{ integrity['script']['group'] }}"
-        mode: "{{ integrity['script']['mode'] }}"
+- name: Kullanici listesi aliniyor
   sudo: yes
-  tags: integrity
+  shell: "cat /etc/passwd | awk -F: '{print $1}' | sort -sf"
+  register: user_list
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
 
-- name: Dizin olusturuluyor
+- name: Grup listesi aliniyor
   sudo: yes
-  file:
-    path: "{{ integrity['files']['path'] }}"
-    mode: "{{ integrity['files']['mode'] }}"
-    state: directory
+  shell: "cat /etc/group | awk -F: '{print $1}' | sort -sf"
+  register: group_list
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
 
-- name: konfigurasyon dosyası siliniyor
+- name: Paket listesi aliniyor
   sudo: yes
-  file:
-    path: "{{ integrity['files']['path'] }}/confs"
-    state: absent
+  shell: "dpkg-query -f '${binary:Package}\n' -W"
+  register: package_list
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
 
-- name: konfigurasyon dosyası olusturuluyor
-  sudo: yes
-  file:
-    path: "{{ integrity['files']['path'] }}/confs"
-    state: touch
-
-- name: kullanıcı listesi kaydediliyor
-  sudo: yes
-  shell: "cat /etc/passwd | awk -F: '{print $1}' | sort > {{ integrity['files']['path'] }}/users"
-
-- name: grup listesi kaydediliyor
-  sudo: yes
-  shell: "cat /etc/group | awk -F: '{print $1}' | sort > {{ integrity['files']['path'] }}/groups"
-
-- name: kullanıcı listesi kaydediliyor
-  sudo: yes
-  shell: "dpkg-query -f '${binary:Package}\n' -W > {{ integrity['files']['path'] }}/packages"
-
-- name: Konfigurasyon listesi duzenleniyor
+- name: Konfigurasyon dosyalari listesi duzenleniyor
   set_fact:
-    conf_list: "{{conf_list | unique}}"
+    conf_list: "{{ conf_list | unique }}"
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
 
-- name : Konfigurasyon bilgilerini aliniyor
-  stat:
-    path: "{{item}}"
+- name: Konfigurasyon bilgileri aliniyor
+  shell: "if [ -f {{ item }} ]; then /usr/bin/sha256sum {{ item }}; fi"
   register: stat_results
-  with_items: "{{conf_list}}"
-
-- name: Konfigurasyon bilgileri kaydediliyor
-  lineinfile:
-    dest: "{{ integrity['files']['path'] }}/confs"
-    regexp: "^[a-f0-9]* {{item.stat.path}}"
-    line: "{{item.stat.md5}} {{item.stat.path}}"
-  when: item.stat.md5 is defined
-  with_items: "{{stat_results.results}}"
-
-- name: Cron ayarlaniyor.
-  template:
-        src: "{{ integrity['cron']['source'] }}"
-        dest: "{{ integrity['cron']['destination'] }}"
-        owner: "{{ integrity['cron']['owner'] }}"
-        group: "{{ integrity['cron']['group'] }}"
-        mode: "{{ integrity['cron']['mode'] }}"
+  with_items: "{{ conf_list }}"
   sudo: yes
-  tags: integrity
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
+
+- name: Paket bilgileri aliniyor
+  shell: "/usr/bin/sha256sum {{ integrity['debsums']['file-pattern'] }}"
+  register: debsum_file_list
+  sudo: yes
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
+
+- name: Konfigurasyon bilgileri gecici bir dosyaya yaziliyor
+  template:
+    src: "confs-temp.j2"
+    dest: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}_conf_list"
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
+
+- name: Paket bilgileri gecici bir dosyaya yaziliyor
+  template:
+    src: "packages-temp.j2"
+    dest: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}_package_list"
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
+
+- name: Gecici konfigurasyon dizini yerel cihazda olusturuluyor
+  file:
+    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}"
+    state: directory
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+
+- name: Konfigurasyon dosyasi yerel cihazda siliniyor
+  file:
+    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/confs"
+    state: absent
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+
+- name: Konfigurasyon dosyasi yerel cihazda olusturuluyor
+  file:
+    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/confs"
+    state: touch
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+
+- name: Paket bilgileri dosyasi yerel cihazda siliniyor
+  file:
+    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/debsums"
+    state: absent
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+
+- name: Paket bilgileri dosyasi yerel cihazda olusturuluyor
+  file:
+    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/debsums"
+    state: touch
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+
+- name: Paket bilgileri yerel cihaza kaydediliyor
+  shell: |
+    /bin/bash /etc/ansible/roles/post/files/test.sh {{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}_package_list {{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/debsums
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
+
+- name: Konfigurasyon bilgileri yerel cihaza kaydediliyor
+  shell: |
+    /bin/bash /etc/ansible/roles/post/files/test.sh {{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}_conf_list {{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/confs
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
+
+- name: Kullanici bilgileri yerel cihaza kaydediliyor
+  copy:
+    content: "{{ user_list.stdout }}\n"
+    dest: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/users"
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+
+- name: Grup bilgileri yerel cihaza kaydediliyor
+  copy:
+    content: "{{ group_list.stdout }}\n"
+    dest: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/groups"
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+
+- name: Paket bilgileri yerel cihaza kaydediliyor
+  copy:
+    content: "{{ package_list.stdout }}\n"
+    dest: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/packages"
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+
+- name: Whitelist dosyalari temizleniyor
+  file:
+    state: absent
+    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/{{ item }}.whitelist"
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  with_items:
+    - "users"
+    - "groups"
+    - "packages"
+  tags:
+    - integrity
+    - integrity-local
+    - integrity-remote
+
+- name: Whitelist dosyalari olusturuluyor
+  template:
+    src: "integrity-whitelist-{{ item }}.j2"
+    dest: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/{{ item }}.whitelist"
+    owner: "{{ integrity['files']['local']['owner'] }}"
+    group: "{{ integrity['files']['local']['group'] }}"
+    mode: "{{ integrity['files']['local']['mode'] }}"
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  with_items:
+    - "users"
+    - "groups"
+    - "packages"
+  when: integrity['whitelist'][inventory_hostname] is defined
+  tags:
+    - integrity
+    - integrity-local
+
+- name: Bilgiler git sunucusuna kaydediliyor
+  shell: |
+    /usr/bin/git checkout -- .
+    /usr/bin/git checkout master
+    /usr/bin/git checkout -b {{ item }} || /usr/bin/git checkout {{ item }} || true
+    /usr/bin/git reset --hard origin/{{ item }}
+    /usr/bin/git clean -fd
+    /usr/bin/git pull
+    /bin/cp {{ integrity['files']['local']['temp'] }}/{{ item }}/* .
+    /bin/chown -R ahtapotops:ahtapotops {{ integrity['files']['local']['temp'] }}/{{ item }}/*
+    /usr/bin/git add .
+    /usr/bin/git commit -m "{{ item }}"
+    /usr/bin/git push --set-upstream origin {{ item }}
+  args:
+    chdir: "{{ integrity['files']['git']['path'] }}"
+  delegate_to: localhost
+  with_items: "{{ ansible_play_hosts }}"
+  run_once: true
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+
+- name: Konfigurasyon dizini uzak cihazda olusturuluyor
+  sudo: yes
+  file:
+    path: "{{ integrity['files']['remote']['path'] }}"
+    mode: "{{ integrity['files']['remote']['mode'] }}"
+    state: directory
+  tags:
+    - integrity
+    - integrity-remote
+
+- name: Bilgiler uzak cihaza kaydediliyor
+  copy:
+    src: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/"
+    dest: "{{ integrity['files']['remote']['path'] }}/"
+    directory_mode: yes
+    owner: root
+    group: root
+  sudo: yes
+  tags:
+    - integrity
+    - integrity-remote

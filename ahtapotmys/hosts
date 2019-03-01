@@ -80,7 +80,7 @@
 
 [faraday-client]
 
-[state-ng]
+[smartstate]
 
 [all:vars]
 ansible_shell_type=sh

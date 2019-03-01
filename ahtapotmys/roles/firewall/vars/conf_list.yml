@@ -1,8 +1,9 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 firewall_conf_list:
-  - "{{ conntrackd['script']['destination'] }}"
-  - "/var/opt/ahtapot-lkk/ahtapot-lkk.py"
-  - "{{ modprobe['conf']['destination'] }}"
-  - "{{ firewall_profile_scripts['script01']['destination'] }}"
-  - "{{ sysctl['conf']['destination'] }}"
+- /etc/fastnetmon/networks_whitelist
+- /etc/sysctl.conf
+- /etc/modules.conf
+- /etc/fastnetmon/fastnetmon.conf
+- /home/lkk/.bashrc
+- /var/opt/ahtapot-lkk/ahtapot-lkk.py
+- /etc/fastnetmon/networks_list
+- /etc/conntrackd/primary-backup.sh

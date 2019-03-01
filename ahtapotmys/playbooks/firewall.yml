@@ -16,6 +16,7 @@
   - ../roles/firewall/vars/conf_list.yml
   - ../roles/firewall/vars/fastnetmon.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   roles:
   - { role: firewall }
   - { role: post }

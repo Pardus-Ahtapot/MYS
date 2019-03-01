@@ -5,3 +5,4 @@
 - include: ossec.yml
 - include: nxlog.yml
 - include: rsyslog.yml
+- include: ossec_agent.yml

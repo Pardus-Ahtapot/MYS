@@ -29,6 +29,7 @@
   - ../roles/elasticsearch/vars/searchguard.yml
   - ../roles/elasticsearch/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   roles:
   - { role: base }
   - { role: elasticsearch }

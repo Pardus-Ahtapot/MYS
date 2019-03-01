@@ -29,6 +29,7 @@
   - ../roles/spamassassin/vars/master.cf.yml
   - ../roles/spamassassin/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
 
   roles:
     - role: base

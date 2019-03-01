@@ -1,48 +1,31 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 base_conf_list:
-  - "{{ audit['rules']['destination'] }}"
-  - "{{ audit['conf']['destination'] }}"
-  - "{{ fusioninventory['conf']['destination'] }}"
-  - "{{ grub['conffile'] }}"
-  - "{{ grub_configurations['conf01']['destination'] }}"
-  - "{{ grub_configurations['conf02']['destination'] }}"
-  - "{{ hosts['conf']['destination'] }}"
-  - "{{ logger['cron']['destination'] }}"
-  - "{{ ntp['conf']['destination'] }}"
-  - "{{ base_profile_scripts['script01']['destination'] }}"
-  - "{{ base_profile_scripts['script02']['destination'] }}"
-  - "{{ rsyslog['conf']['destination'] }}"
-  - "{{ logrotate_scripts['script01']['destination'] }}"
-  - "{{ logrotate_scripts['script02']['destination'] }}"
-  - "{{ tmpmount['conf']['destination'] }}"
-  - "{{ sysctl_security['destination'] }}"
-  - "{{ limit['destination'] }}"
-  - "{{ grub['defaultfile'] }}"
-  - "{{ inetd['conffile'] }}"
-  - "/etc/exim4/update-exim4.conf.conf"
-  - "/etc/sysctl.conf"
-  - "{{ host_access['allow_file'] }}"
-  - "{{ host_access['deny_file'] }}"
-  - "{{ aide['destination'] }}"
-  - "{{ cron_configuration['files']['file1']['file'] }}"
-  - "{{ cron_configuration['files']['file7']['file'] }}"
-  - "{{ cron_configuration['files']['file8']['file'] }}"
-  - "{{ cron_configuration['files']['file9']['file'] }}"
-  - "{{ cron_configuration['files']['file10']['file'] }}"
-  - "{{ cron_configuration.allow_file }}"
-  - "{{ pam.password_file }}"
-  - "{{ pam.login_file }}"
-  - "{{ pam.su_file }}"
-  - "{{ login_definitions['destination'] }}"
-  - "/etc/passwd"
-  - "/etc/shadow"
-  - "/etc/group"
-  - "/etc/bash.bashrc"
-  - "{{ ssh['TrustedUserCAKeys']['destination'] }}"
-  - "{{ ssh['RevokedKeys']['destination'] }}"
-  - "{{ ssh['LocalBanner']['destination'] }}"
-  - "{{ ssh['RemoteBanner']['destination'] }}"
-  - "{{ ssh['conf']['destination'] }}"
-  - "{{ sudo['conf']['destination'] }}"
-  - "{{ sudo['directory']['path'] }}/{{ ansible_hostname }}"
+- /etc/profile.d/bashrc-security.sh
+- /etc/sudoers
+- /etc/cron.daily/logrotate
+- /etc/cron.d/logger.sh
+- /etc/modprobe.d/blacklist.conf
+- /etc/issue
+- /etc/logrotate.d/rsyslog
+- /etc/hosts
+- /etc/ssh/sshd_config
+- /etc/profile.d/debiannoninteractive.sh
+- /etc/ssl/certs/ocs_ossim.pem
+- /etc/rsyslog.conf
+- /etc/sysctl.conf
+- /etc/logrotate.d/ahtapot
+- /etc/exim4/update-exim4.conf.conf
+- /etc/ssh/revoked_keys
+- /etc/security/limits.conf
+- /etc/ntp.conf
+- /etc/bash.bashrc
+- /etc/login.defs
+- /etc/cron.d/aide
+- /etc/ssh/ahtapot_ca.pub
+- /etc/issue.net
+- /etc/audit/auditd.conf
+- /etc/audit/rules.d/ahtapot-audit.rules
+- /etc/grub.d/10_linux
+- /etc/sysctl.d/ahtapotbase.conf
+- /etc/grub.d/01_users
+- /etc/fusioninventory/agent.cfg
+- /etc/systemd/system/tmp.mount

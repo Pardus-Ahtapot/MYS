@@ -1,8 +1,6 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 gitlab_conf_list:
-  - "{{ gitlab['conf']['destination'] }}"
-  - "{{ gitlab['ssl-key']['destination'] }}"
-  - "{{ gitlab['ssl-crt']['destination'] }}"
-  - "{{ hook_scripts['script01']['destination'] }}"
-  - "{{ hook_scripts['script02']['destination'] }}"
+- /etc/gitlab/ssl/gitlab.gdys.local.crt
+- /etc/gitlab/gitlab.gdys.local.key
+- /var/opt/gitlab/git-data/repositories/ahtapotops/mys.git/custom_hooks/post-receive
+- /etc/gitlab/gitlab.rb
+- /var/opt/gitlab/git-data/repositories/ahtapotops/gdys.git/custom_hooks/post-receive

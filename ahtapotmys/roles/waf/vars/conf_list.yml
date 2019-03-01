@@ -1,4 +1,1 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
-waf_conf_list:
-  - "{{ apache_conf_dir }}/modsecurity.conf"
+waf_conf_list: []

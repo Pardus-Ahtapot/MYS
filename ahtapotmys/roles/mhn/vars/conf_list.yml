@@ -1,5 +1,2 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 mhn_conf_list:
-  - "/opt/mhn/server/config.py"
-  - "/etc/nginx/sites-enabled/default"
+- /etc/nginx/sites-enabled/default

@@ -34,6 +34,7 @@
   - ../roles/squid/vars/conf_list.yml
   - ../roles/squid/vars/ad.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   roles:
   - { role: base }
   - { role: squid }

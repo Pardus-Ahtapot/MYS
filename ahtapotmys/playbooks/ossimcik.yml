@@ -24,7 +24,6 @@
   - ../roles/base/vars/fusioninventory.yml
   - ../roles/base/vars/security.yml
   - ../roles/base/vars/conf_list.yml
-  - ../roles/ossimcik/vars/repo.yml
   - ../roles/ossimcik/vars/package.yml
   - ../roles/ossimcik/vars/ossec.yml
   - ../roles/ossimcik/vars/nxlog.yml
@@ -32,6 +31,49 @@
   - ../roles/ossimcik/vars/logrotate.yml
   - ../roles/ossimcik/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
+  - ../roles/snorby/vars/conf_list.yml
+  - ../roles/standalone/vars/conf_list.yml
+  - ../roles/firewallbuilder/vars/conf_list.yml
+  - ../roles/elasticsearch/vars/conf_list.yml
+  - ../roles/firewall/vars/conf_list.yml
+  - ../roles/ips/vars/conf_list.yml
+  - ../roles/squid/vars/conf_list.yml
+  - ../roles/openvpn/vars/conf_list.yml
+  - ../roles/waf/vars/conf_list.yml
+  - ../roles/ossimcik/vars/conf_list.yml
+  - ../roles/icinga2-ansible-no-ui/vars/conf_list.yml
+  - ../roles/testfirewall/vars/conf_list.yml
+  - ../roles/logstash/vars/conf_list.yml
+  - ../roles/spamassassin/vars/conf_list.yml
+  - ../roles/honeypot/vars/conf_list.yml
+  - ../roles/ansible/vars/conf_list.yml
+  - ../roles/icinga2-clients/vars/conf_list.yml
+  - ../roles/waf-evasive/vars/conf_list.yml
+  - ../roles/waf-proxy-vhosts/vars/conf_list.yml
+  - ../roles/ids/vars/conf_list.yml
+  - ../roles/gkts/vars/conf_list.yml
+  - ../roles/ntp/vars/conf_list.yml
+  - ../roles/mhn/vars/conf_list.yml
+  - ../roles/kibana/vars/conf_list.yml
+  - ../roles/gitlab/vars/conf_list.yml
+  - ../roles/pwlm/vars/conf_list.yml
+  - ../roles/dhcpd/vars/conf_list.yml
+  - ../roles/sks/vars/conf_list.yml
+  - ../roles/freshclam-mirror/vars/conf_list.yml
+  - ../roles/barnyard2/vars/conf_list.yml
+  - ../roles/apache/vars/conf_list.yml
+  - ../roles/base/vars/conf_list.yml
+  - ../roles/mail-quarantine/vars/conf_list.yml
+  - ../roles/firstrun/vars/conf_list.yml
+  - ../roles/rsyslog/vars/conf_list.yml
+  - ../roles/icinga2-ansible-classic-ui/vars/conf_list.yml
+  - ../roles/ocswb/vars/conf_list.yml
+  - ../roles/pulledpork/vars/conf_list.yml
+  - ../roles/maintenance/vars/conf_list.yml
+  - ../roles/portscanner/vars/conf_list.yml
+  - ../roles/ossec/vars/conf_list.yml
+  - ../roles/mysql/vars/conf_list.yml
   roles:
   - { role: base }
   - { role: ossimcik }

@@ -1,0 +1,12 @@
+---
+- name: Cron ayarlaniyor.
+  template:
+        src: "{{ integrity['cron']['source'] }}"
+        dest: "{{ integrity['cron']['destination'] }}"
+        owner: "{{ integrity['cron']['owner'] }}"
+        group: "{{ integrity['cron']['group'] }}"
+        mode: "{{ integrity['cron']['mode'] }}"
+  sudo: yes
+  tags:
+    - integrity
+    - integrity-remote

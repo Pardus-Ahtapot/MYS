@@ -24,6 +24,7 @@
   - ../roles/barnyard2/vars/main.yml
   - ../roles/barnyard2/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
 
   roles:
     - role: base

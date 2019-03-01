@@ -29,6 +29,7 @@
   - ../roles/kibana/vars/nginx.yml
   - ../roles/kibana/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   roles:
   - { role: base }
   - { role: kibana }

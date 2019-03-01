@@ -32,6 +32,7 @@
   - ../roles/testfirewall/vars/directory.yml
   - ../roles/testfirewall/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   roles:
   - { role: base }
   - { role: testfirewall }

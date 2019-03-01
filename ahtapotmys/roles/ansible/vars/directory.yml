@@ -7,6 +7,12 @@ directories:
         owner: "ahtapotops"
         mode: "750"
         state: "directory"
+    directory02:
+        path: "/etc/integrity/"
+        group: "ahtapotops"
+        owner: "ahtapotops"
+        mode: "750"
+        state: "directory"
 #    directoryXX:
 #        path: ""
 #        group: ""

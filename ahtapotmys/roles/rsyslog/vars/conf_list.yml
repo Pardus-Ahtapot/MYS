@@ -1,7 +1,5 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 rsyslog_conf_list:
-  - "{{ rsyslog['conf']['destination'] }}"
-  - "{{ logrotate['conf']['destination'] }}"
-  - "{{ signer['conf']['destination'] }}"
-  - "{{ signer['cron']['destination'] }}"
+- /etc/cron.d/signercron.sh
+- /etc/rsyslog.conf
+- /opt/signer.bash
+- /etc/logrotate.d/rsyslog

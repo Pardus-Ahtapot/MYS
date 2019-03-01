@@ -1,7 +1,0 @@
----
-- name: reload cron
-  service:
-    name: cron
-    state: restarted
-  sudo: yes
-  tags: state-ng

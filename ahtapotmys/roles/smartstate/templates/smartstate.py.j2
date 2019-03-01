@@ -1,23 +1,56 @@
 #!/usr/bin/python
 import argparse
 import datetime
+import fcntl
 import os
-import shutil
+import socket
 import subprocess
 import sys
+import syslog
 import yaml
+import random
+import time
 from ansible.inventory import Inventory
 from ansible.parsing.dataloader import DataLoader
 from ansible.vars import VariableManager
 
-GDYS_DIR = "{{state_ng.gdys_directory}}"
-ANSIBLE_DIR = "{{state_ng.ansible_directory}}"
+GDYS_DIR = "{{smartstate.gdys_directory}}"
+ANSIBLE_DIR = "{{smartstate.ansible_directory}}"
 PLAYBOOK_DIR = "{0}/playbooks".format(ANSIBLE_DIR)
 ANSIBLE_HOST_FILE = "{0}/hosts".format(ANSIBLE_DIR)
-BRANCH = "{{state_ng.branch}}"
-ANSIBLE_GIT_REPO = "{{state_ng.ansible_git_url}}"
-GDYS_GIT_REPO = "{{state_ng.gdys_git_url}}"
-USER="ahtapotops"
+BRANCH = "{{smartstate.branch}}"
+ANSIBLE_GIT_REPO = "{{smartstate.ansible_git_url}}"
+GDYS_GIT_REPO = "{{smartstate.gdys_git_url}}"
+USER = "ahtapotops"
+LOGFILE = "{{smartstate.log_file}}"
+MAX_DELAY = {{smartstate.max_delay}}
+MIN_DELAY = {{smartstate.min_delay}}
+
+syslog.openlog(ident="smartstate")
+
+
+def get_lock(process_name):
+    """
+    Lock function for preventing to run script more than 1 time.
+    """
+
+    lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+    try:
+        lock_socket.bind('\0' + process_name)  # Bind a socket named with process name
+        fd = lock_socket.fileno()
+        old_flags = fcntl.fcntl(fd, fcntl.F_GETFD)
+        fcntl.fcntl(fd, fcntl.F_SETFD, old_flags | fcntl.FD_CLOEXEC)
+    except socket.error:
+        log_message("{0} already running. Exiting".format(process_name))
+    return lock_socket
+
+
+def log_message(msg, loglevel=syslog.LOG_INFO):
+    print msg
+    cmdd = '/bin/echo "{0} {1}" >> {2}'.format(str(datetime.datetime.now()), msg, LOGFILE)
+    subprocess.check_call(cmdd, shell=True)
+    syslog.syslog(loglevel, msg)
+
 
 def initialize_argparser():
     parser = argparse.ArgumentParser()
@@ -29,26 +62,44 @@ def initialize_argparser():
     parser.add_argument("--smart-trigger", action="store_true", help="Trigger host to run smart pull")
     parser.add_argument("--trigger", action="store_true", help="Trigger host to run pull")
     parser.add_argument("--check-inventory", action="store_true", help="Check inventory file too on smart pull and push", default=False)
+    parser.add_argument("--delay", action="store_true", help="Delay random time before run", default=False)
     return parser.parse_args()
+
 
 def parse_playbooks():
     ret = {}
     for pb_file in os.listdir(PLAYBOOK_DIR):
-        if pb_file == 'state.yml' or pb_file == 'state-ng.yml' or not pb_file.lower().endswith(".yml"):
+        if pb_file == 'state.yml' or pb_file == 'firewallruleonly.yml' or not pb_file.lower().endswith(".yml"):
             continue
         with open("{0}/{1}".format(PLAYBOOK_DIR, pb_file)) as f:
             content = yaml.load(f)[0]
             ret[pb_file] = content
     return ret
 
-def run_ansible_playbook(playbook, args=""):
-    cmdd = "/usr/bin/ansible-playbook {0}/{1} {2}".format(PLAYBOOK_DIR, playbook, args)
+
+def run_ansible_playbook(playbook, ansible_args=""):
+    get_lock(playbook)
+    cmdd = "/usr/bin/ansible-playbook {0}/{1} {2}".format(PLAYBOOK_DIR, playbook, ansible_args)
     print cmdd
-    subprocess.check_call(cmdd, shell=True)
+    try:
+        subprocess.check_call(cmdd, shell=True)
+        log_message("Playbook succesfully run. cmd: {0}".format(cmdd))
+    except:
+        log_message("Playbook failed. cmd: {0}".format(cmdd), loglevel=syslog.LOG_ERR)
+
 
 def run_ansible_pull(playbook):
-    cmdd = "/usr/bin/ansible-pull -U {0} -C {1} --skip-tags pull_skip --accept-host-key --full --force --clean -d {2} {3}/{4}".format(ANSIBLE_GIT_REPO, BRANCH, ANSIBLE_DIR, PLAYBOOK_DIR, playbook)
-    subprocess.check_call(cmdd, shell=True)
+    get_lock(playbook)
+    cmdd = "/usr/bin/ansible-pull -U {0} -C {1} --accept-host-key --force --full -d {2} {3}/{4}".format(ANSIBLE_GIT_REPO,
+                                                                                                        BRANCH,
+                                                                                                        ANSIBLE_DIR,
+                                                                                                        PLAYBOOK_DIR,
+                                                                                                        playbook)
+    try:
+        subprocess.check_call(cmdd, shell=True)
+        log_message("Playbook succesfully run. cmd: {0}".format(cmdd))
+    except:
+        log_message("Playbook failed. cmd: {0}".format(cmdd), loglevel=syslog.LOG_ERR)
 
 
 def pull_and_compare_gdys_repo():
@@ -58,21 +109,21 @@ def pull_and_compare_gdys_repo():
     if not os.path.isdir('{0}/.git'.format(GDYS_DIR)) or not os.path.isdir(GDYS_DIR):
         # gdys dir is not a git repo. we need to clone git repo
         if os.path.isdir(GDYS_DIR):
-            cmd = "/bin/mv {0} {1}".format(GDYS_DIR, GDYS_DIR + ".bak." + str(datetime.datetime.now().strftime("%Y%m%d%H%M")))
-            subprocess.check_call(cmd, shell=True)
-        cmd = "/usr/bin/git clone -b master {0} {1}".format(GDYS_GIT_REPO, GDYS_DIR)
-        subprocess.check_call(cmd, shell=True)
+            ccmd = "/bin/mv {0} {1}".format(GDYS_DIR, GDYS_DIR + ".bak." + str(datetime.datetime.now().strftime("%Y%m%d%H%M")))
+            subprocess.check_call(ccmd, shell=True)
+        ccmd = "/usr/bin/git clone -b master {0} {1}".format(GDYS_GIT_REPO, GDYS_DIR)
+        subprocess.check_call(ccmd, shell=True)
         return []
     else:
-        cmd = "cd {0} && /usr/bin/git rev-parse HEAD".format(GDYS_DIR)
-        last_hash = subprocess.check_output(cmd, shell=True).strip()
+        ccmd = "cd {0} && /usr/bin/git rev-parse HEAD".format(GDYS_DIR)
+        l_hash = subprocess.check_output(ccmd, shell=True).strip()
         subprocess.check_call("cd {0} && /usr/bin/git checkout master".format(GDYS_DIR), shell=True)
         subprocess.check_call("cd {0} && /usr/bin/git pull origin master".format(GDYS_DIR), shell=True)
-        new_hash = subprocess.check_output(cmd, shell=True).strip()
+        n_hash = subprocess.check_output(ccmd, shell=True).strip()
 
-        cmd = 'cd {0} && /usr/bin/git diff --name-only {1} {2} | egrep -e ".fw$" | sed s/.fw$//'.format(GDYS_DIR, last_hash, new_hash)
+        ccmd = 'cd {0} && /usr/bin/git diff --name-only {1} {2} | egrep -e ".fw$" | sed s/.fw$//'.format(GDYS_DIR, l_hash, n_hash)
         try:
-            return filter(None, subprocess.check_output(cmd, shell=True).strip().split("\n"))
+            return filter(None, subprocess.check_output(ccmd, shell=True).strip().split("\n"))
         except:
             return []
 
@@ -97,7 +148,6 @@ def get_host_list():
     #       }
     # }
 
-
     for host in inventory.get_hosts():
         # print host, host.get_groups()
         host_list[str(host)] = {'groups': map(str, host.get_groups())}
@@ -121,13 +171,22 @@ if __name__ == "__main__":
 
     args = initialize_argparser()
 
+    if args.delay:
+        rand_num = random.randint(MIN_DELAY, MAX_DELAY)
+        log_message("Waiting {0} minute before processing".format(rand_num))
+        time.sleep(rand_num * 60)
+
     new_clone = False
     if not os.path.isdir('{0}/.git'.format(ANSIBLE_DIR)) or not os.path.isdir(ANSIBLE_DIR):
         # ansible dir is not a git repo. we need to clone git repo
         if os.path.isdir(ANSIBLE_DIR):
             cmd = "/usr/bin/sudo /bin/mv {0} {1}".format(ANSIBLE_DIR, ANSIBLE_DIR + ".bak." + str(datetime.datetime.now().strftime("%Y%m%d%H%M")))
             subprocess.check_call(cmd, shell=True)
-        cmd = "/bin/rm -rf /home/{3}/ansible && /usr/bin/git clone -b {0} {1} /home/{3}/ansible && /usr/bin/sudo /bin/mv /home/{3}/ansible {2}".format(BRANCH, ANSIBLE_GIT_REPO, ANSIBLE_DIR, USER)
+        tmp_ansible_dir = '/home/ahtapotops/ansible.tmp'
+        cmd = "/usr/bin/sudo /bin/rm -rf {3} && /usr/bin/git clone -b {0} {1} {3} && /usr/bin/sudo /bin/mv {3} {2}".format(BRANCH,
+                                                                                                                           ANSIBLE_GIT_REPO,
+                                                                                                                           ANSIBLE_DIR,
+                                                                                                                           tmp_ansible_dir)
         new_clone = True  # we will use it for pull process
         subprocess.check_call(cmd, shell=True)
 
@@ -144,18 +203,20 @@ if __name__ == "__main__":
     playbooks = parse_playbooks()
 
     if args.smart_pull or args.pull:
-        print "State-ng pull is processing"
+        log_message("smartstate pull is processing")
 
         host_list = get_host_list()
 
         if args.host not in host_list.keys():
-            print "Please provide valid host"
+            log_messsage("Please provide valid host")
             sys.exit(1)
 
         changed_fw_hosts = pull_and_compare_gdys_repo()
 
         if new_clone or args.pull:
             for pb_name in host_list[args.host]['playbooks'].keys():
+                if pb_name == 'smartstate.yml':
+                    continue
                 run_ansible_pull(pb_name)
             sys.exit(0)
         else:
@@ -166,12 +227,19 @@ if __name__ == "__main__":
             new_hash = subprocess.check_output(cmd, shell=True).strip()
 
             host_list = get_host_list()
-
             if last_hash != new_hash:
                 # we need to check differences
                 for pb_name in host_list[args.host]['playbooks'].keys():
-                    cmd = "cd {0} && /usr/bin/git diff --name-only {1} {2} | " \
-                          "egrep -q -e \"roles/({3})\"".format(ANSIBLE_DIR, last_hash, new_hash, "|".join(host_list[args.host]['playbooks'][pb_name]['roles']))
+                    if pb_name == 'smartstate.yml':
+                        continue
+                    try:
+                        cmd = "cd {0} && /usr/bin/git diff --name-only {1} {2} | " \
+                              "egrep -q -e \"roles/({3})\"".format(ANSIBLE_DIR,
+                                                                   last_hash,
+                                                                   new_hash,
+                                                                   "|".join(host_list[args.host]['playbooks'][pb_name]['roles']))
+                    except:
+                        log_message("{0} can not be parsed".format(pb_name))
                     try:
                         subprocess.check_call(cmd, shell=True)
                         run_ansible_pull(pb_name)
@@ -182,7 +250,11 @@ if __name__ == "__main__":
                         else:
                             if args.check_inventory:
                                 # check inventory file to check if that host's role changed
-                                cmd = 'cd {0} && /usr/bin/git diff {1} {2} -- hosts | grep  "^+[^+]" | sed "s/^+//" | grep -q "^{3}"'.format(ANSIBLE_DIR, last_hash, new_hash, args.host)
+                                cmd = 'cd {0} && /usr/bin/git diff {1} {2} -- hosts | ' \
+                                      'grep  "^+[^+]" | sed "s/^+//" | grep -q "^{3}"'.format(ANSIBLE_DIR,
+                                                                                              last_hash,
+                                                                                              new_hash,
+                                                                                              args.host)
                                 try:
                                     subprocess.check_call(cmd, shell=True)
                                     run_ansible_pull(pb_name)
@@ -192,9 +264,8 @@ if __name__ == "__main__":
             else:
                 if args.host in changed_fw_hosts:
                     run_ansible_pull('firewall.yml')
-
     elif args.smart_push:
-        print "State-ng smart push is processing"
+        log_message("smartstate smart push is processing")
 
         changed_fw_hosts = pull_and_compare_gdys_repo()
 
@@ -204,7 +275,6 @@ if __name__ == "__main__":
         else:
             cmd = "cd {0} && /usr/bin/git pull origin {1}".format(ANSIBLE_DIR, BRANCH)
             subprocess.check_call(cmd, shell=True)
-
 
         host_list = get_host_list()
 
@@ -223,7 +293,7 @@ if __name__ == "__main__":
 
             need_to_run_pbs = list(set(need_to_run_pbs))
 
-            #print need_to_run_pbs
+            # print need_to_run_pbs
 
         for pb_name, playbook_yaml in playbooks.iteritems():
             if playbook_yaml['hosts'] == 'all':
@@ -232,14 +302,18 @@ if __name__ == "__main__":
                 roles = [x['role'] for x in playbook_yaml['roles']]
             except TypeError:
                 roles = [x for x in playbook_yaml['roles']]
-            cmd = "cd {0} && /usr/bin/git diff --name-only `cat /home/{1}/.last_commit_hash` HEAD | egrep -q -e \"roles/({2})\"".format(ANSIBLE_DIR, USER, "|".join(roles))
+            try:
+                cmd = "cd {0} && /usr/bin/git diff --name-only `cat /home/{1}/.last_commit_hash` HEAD | egrep -q -e \"roles/({2})\"".format(ANSIBLE_DIR, USER,
+                                                                                                                                            "|".join(roles))
+            except:
+                log_message("{0} can not be parsed".format(pb_name))
             try:
                 subprocess.check_call(cmd, shell=True)
                 run_ansible_playbook(pb_name)
             except subprocess.CalledProcessError:
                 # check if this is a firewall and have changed rules
                 if pb_name == 'firewall.yml' and changed_fw_hosts:
-                    run_ansible_playbook(pb_name, args='-l ' + ','.join(changed_fw_hosts))
+                    run_ansible_playbook(pb_name, ansible_args='-l ' + ','.join(changed_fw_hosts))
                 elif args.check_inventory and pb_name in need_to_run_pbs:
                     # run if inventory changed
                     run_ansible_playbook(pb_name)
@@ -248,19 +322,21 @@ if __name__ == "__main__":
         subprocess.check_call(cmd, shell=True)
 
     elif args.push:
-        print "State-ng push is processing"
+        log_message("smartstate push is processing")
+        host_args = ''
         if args.host:
             host_args = '-l ' + args.host
-        run_ansible_playbook("state.yml", host_args)
+        for pb_name, playbook_yaml in playbooks.iteritems():
+            run_ansible_playbook(pb_name, host_args)
     elif args.trigger:
-        print "State-ng trigger is processing"
+        log_message("smartstate trigger is processing")
         host_args = ''
         if args.host:
             host_args = '-l ' + args.host
-        run_ansible_playbook("state-ng.yml", " --tags trigger " + host_args)
+        run_ansible_playbook("smartstate.yml", " --tags trigger " + host_args)
     elif args.smart_trigger:
-        print "State-ng smart trigger is processing"
+        log_message("smartstate smart trigger is processing")
         host_args = ''
         if args.host:
             host_args = '-l ' + args.host
-        run_ansible_playbook("state-ng.yml", " --tags smarttrigger " + host_args)
+        run_ansible_playbook("smartstate.yml", " --tags smarttrigger " + host_args)

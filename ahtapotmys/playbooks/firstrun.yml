@@ -13,6 +13,7 @@
   - ../roles/firstrun/vars/package_list.yml
   - ../roles/firstrun/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
   roles:
   - { role: firstrun }
   - { role: post }

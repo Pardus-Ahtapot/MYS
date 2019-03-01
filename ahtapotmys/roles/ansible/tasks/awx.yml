@@ -50,4 +50,3 @@
   delegate_to: localhost
   run_once: true
   sudo: yes
-  tags: state-ng

@@ -5,7 +5,7 @@
 
    <client>
       <server-hostname>{{ ossec['server'] }}</server-hostname>
-      <config-profile>genericlinux</config-profile>
+      <config-profile>{{ inventory_hostname }}</config-profile>
    </client>
 #<syscheck>
 #      <frequency>3600</frequency>
