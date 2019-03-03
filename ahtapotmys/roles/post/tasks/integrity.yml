@@ -84,6 +84,16 @@
     - integrity
     - integrity-local
     - integrity-remote
+    
+- name: Konfigurasyon Path kontrol ediliyor/olusturuluyor
+  stat: path="{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}_conf_list"
+  register: stat_result_integrity
+
+- name: Konfigurasyon dosyasi yok ise olusturuluyor
+  file:
+    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}_conf_list"
+    state: touch
+  when: stat_result_integrity.stat.exists == False
 
 - name: Gecici konfigurasyon dizini yerel cihazda olusturuluyor
   file:
