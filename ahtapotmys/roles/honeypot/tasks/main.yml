@@ -48,6 +48,16 @@
     group: "root"
     mode: 0644
   notify: restart lxc-net
+  
+- name: modify defaults
+  sudo: yes
+  template:
+    src: "defaults.lxc-net.j2"
+    dest: "/etc/default/lxc-net"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart lxc-net
 
 - name: modifying rsyslog
   sudo: yes
