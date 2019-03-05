@@ -10,7 +10,10 @@
     - lxc
     - liblxc1
     - wget
-
+    - debootstrap
+    - dbus
+    - rsync
+    - dnsmasq-base
 #- name: copying bridge script
 #  sudo: yes
 #  template:
