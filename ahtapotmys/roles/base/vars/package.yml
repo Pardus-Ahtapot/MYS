@@ -98,7 +98,9 @@ base_packages:
     package29:
         name: "aide-common"
         state: "present"
-
+    package30:
+        name: "python"
+        state: "present"
 
 #    packageXX:
 #        name: 
