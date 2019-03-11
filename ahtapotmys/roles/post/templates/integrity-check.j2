@@ -20,11 +20,11 @@ GIT_PATH="/sb"
 
 $RM -rf {{ integrity['files']['remote']['path'] }}/${GIT_PATH}
 
-$GIT clone {{ integrity['git']['repo'] }} --branch endpoint {{ integrity['files']['remote']['path'] }}${GIT_PATH} --depth 1
+runuser -l ahtapotops -c "GIT_SSL_NO_VERIFY=true $GIT clone {{ integrity['git']['repo'] }} --branch {{ inventory_hostname }} {{ integrity['files']['remote']['path'] }}${GIT_PATH} --depth 1"
 
 RETVAL=$?
 
-if [ $RETVAL -eq 0 ]; then
+if [ $RETVAL -ne 0 ]; then
     GIT_PATH=""
 fi
 

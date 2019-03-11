@@ -61,6 +61,17 @@
     - integrity-local
     - integrity-remote
 
+- name: Gecici konfigurasyon dizini yerel cihazda olusturuluyor
+  file:
+    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}"
+    state: directory
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
+
 - name: Konfigurasyon bilgileri gecici bir dosyaya yaziliyor
   template:
     src: "confs-temp.j2"
@@ -85,27 +96,16 @@
     - integrity-local
     - integrity-remote
 
-- name: Gecici konfigurasyon dizini yerel cihazda olusturuluyor
-  file:
-    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}"
-    state: directory
-  delegate_to: localhost
-  become: yes
-  become_user: ahtapotops
-  tags:
-    - integrity
-    - integrity-local
-
-- name: Konfigurasyon dosyasi yerel cihazda siliniyor
-  file:
-    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/confs"
-    state: absent
-  delegate_to: localhost
-  become: yes
-  become_user: ahtapotops
-  tags:
-    - integrity
-    - integrity-local
+#- name: Konfigurasyon dosyasi yerel cihazda siliniyor
+#  file:
+#    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/confs"
+#    state: absent
+#  delegate_to: localhost
+#  become: yes
+#  become_user: ahtapotops
+#  tags:
+#    - integrity
+#    - integrity-local
 
 - name: Konfigurasyon dosyasi yerel cihazda olusturuluyor
   file:
@@ -258,6 +258,8 @@
   sudo: yes
   file:
     path: "{{ integrity['files']['remote']['path'] }}"
+    owner: "{{ integrity['files']['remote']['owner'] }}"
+    group: "{{ integrity['files']['remote']['group'] }}"
     mode: "{{ integrity['files']['remote']['mode'] }}"
     state: directory
   tags:
