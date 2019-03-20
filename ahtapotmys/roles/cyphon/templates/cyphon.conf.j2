@@ -27,16 +27,16 @@ template(name="logstash-json-template" type="list") {
         constant(value="\"}\n")
 }
 
-#Listen 20514 with relp
+#Listen SSHPORT with relp
 input(type="imrelp"
-   port="20514"
+   port="SSHPORT"
    ruleset="LogsForCyphon"
    tls="on"
    tls.caCert="/etc/ssl/certs/rootCA.pem"
-   tls.myCert="/etc/ssl/certs/IS0600000977.dzkk.int.crt"
-   tls.myPrivKey="/etc/ssl/private/IS0600000977.dzkk.int.key"
+   tls.myCert="/etc/ssl/certs/CYPHON_FQDN.crt"
+   tls.myPrivKey="/etc/ssl/private/CYPHON_FQDN.key"
    tls.authMode="name"
-   tls.permittedpeer=["dzkk.int"]
+   tls.permittedpeer=["ahtapot.org.tr"]
 )
 
 #Output Log to Logstash with Json Template
