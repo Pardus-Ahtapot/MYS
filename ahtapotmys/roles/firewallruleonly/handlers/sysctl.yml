@@ -1,0 +1,8 @@
+---
+- name: sysctl yi dosyadan yeniden yapilandir
+  shell: /sbin/sysctl -p {{ sysctl['conf']['destination'] }} 2> /dev/null
+  sudo: yes
+
+- name: yonlendirme tablosunu sifirla 
+  shell: /bin/echo 1 > /proc/sys/net/ipv4/route/flush && /bin/echo 1 > /proc/sys/net/ipv6/route/flush
+  sudo: yes
