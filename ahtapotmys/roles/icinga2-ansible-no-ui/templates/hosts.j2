@@ -10,8 +10,8 @@ object Host "{{item.hostname}}" {
   vars.snmp_community = "{{item.snmp_community}}"
 {% endif %}
 }
-
 {% if item.snmp_check == "true" %}
+
 {% if item.snmp_load.check == "true" %}
 object Service "snmp-load" {
   host_name = "{{item.hostname}}"
@@ -57,7 +57,6 @@ object Service "snmp-int-{{iface.interface_label}}" {
 {% endfor %}
 {% endif %}
 
-
 {% endif %}
 
 {% if item.nsclient_check == "true" %}
@@ -92,14 +91,83 @@ object Service "check_memory" {
   vars.nscp_crit = "{{item.nsclient_memory.critical}}"
 }
 {% endif %}
+{% if item.nsclient_uptime.check == "true" %}
+object Service "check_uptime" {
+  check_command = "nscp"
+  host_name = "{{item.hostname}}"
+  vars.nscp_password = "{{item.nsclient_password}}"
+  vars.nscp_variable = "UPTIME"
+}
+{% endif %}
+{% if item.nsclient_services.check == "true" %}
+{% for service in item.nsclient_services.check_services %}
+object Service "check_service_{{service}}" {
+  check_command = "nscp"
+  host_name = "{{item.hostname}}"
+  vars.nscp_password = "{{item.nsclient_password}}"
+  vars.nscp_variable = "SERVICESTATE"
+  vars.nscp_params = "{{service}}"
+}
+{% endfor %}
 {% endif %}
 
-{% if item.check_commands is defined %}
-{% for elem in item.check_commands %}
-object Service "{{ elem.service }}" {
-  check_command = "{{ elem.check_command }}"
+{% if item.nsclient_interfaces.check == "true" %}
+{% for interface in item.nsclient_interfaces.check_interfaces %}
+object Service "check_interfaces" {
+  check_command = "nscp"
+  host_name = "{{item.hostname}}"
+  vars.nscp_password = "{{item.nsclient_password}}"
+  vars.nscp_variable = "COUNTER"
+  vars.nscp_params = "{{interface}}"
+  vars.nscp_warn = "{{item.nsclient_interfaces.warning}}"
+  vars.nscp_crit = "{{item.nsclient_interfaces.critical}}"
+}
+{% endfor %}
+{% endif %}
+
+{% endif %}
+
+#{% if item.check_commands is defined %}
+#{% for elem in item.check_commands %}
+#object Service "{{ elem.service }}" {
+#  check_command = "{{ elem.check_command }}"
+#  host_name =  "{{item.hostname}}"
+#}
+#{% endfor %}
+#{% endif %}
+
+{% if item.check_all is defined %}
+{% for elem in item.check_all.service %}
+object Service "{{ elem }}" {
+  check_command = "{{ elem }}"
   host_name =  "{{item.hostname}}"
 }
 {% endfor %}
 {% endif %}
 
+{% if item.check_net is defined %}
+{% for elem in item.check_net.service %}
+object Service "{{ elem }}" {
+  check_command = "{{ elem }}"
+  host_name =  "{{item.hostname}}"
+}
+{% endfor %}
+{% endif %}
+
+{% if item.check_service is defined %}
+{% for elem in item.check_service.service %}
+object Service "{{ elem }}" {
+  check_command = "{{ elem }}"
+  host_name =  "{{item.hostname}}"
+}
+{% endfor %}
+{% endif %}
+
+{% if item.check_website is defined %}
+{% for elem in item.check_website.service %}
+object Service "{{ elem }}" {
+  check_command = "{{ elem }}"
+  host_name =  "{{item.hostname}}"
+}
+{% endfor %}
+{% endif %}

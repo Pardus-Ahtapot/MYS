@@ -305,11 +305,13 @@ connection_timeout=300
 #command[check_procs]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -s $ARG3$
 
 command[check_disk]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p $ARG3$
+command[check_var]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -r $ARG3$
 command[check_load]=/usr/lib/nagios/plugins/check_load -w $ARG1$ -c $ARG2$
-command[check_mem]=/usr/lib/nagios/plugins/check_mem -f -w $ARG1$ -c $ARG2$
+command[check_mem]=/usr/lib/nagios/plugins/check_mem -f -C -w $ARG1$ -c $ARG2$
 command[check_eth]=/usr/lib/nagios/plugins/check_eth -i $ARG1$ -w $ARG2$ -c $ARG3$
 command[check_website]=/usr/lib/nagios/plugins/check_website $ARG1$ 
-command[check_service]=/usr/lib/nagios/plugins/check_service -o $ARG1$ -s $ARG2$ 
+command[check_service]=/usr/lib/nagios/plugins/check_service -o $ARG1$ -s $ARG2$
+command[check_ntp_time]=/usr/lib/nagios/plugins/check_ntp_time -H NTP_SERVER_IP -w $ARG1$ -c $ARG2$ 
 # local configuration:
 # if you'd prefer, you can instead place directives here
 
