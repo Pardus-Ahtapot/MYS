@@ -36,16 +36,6 @@
     mode: 0644
   notify: restart lxc-net
 
-- name: modifying default.conf
-  sudo: yes
-  template:
-    src: "default.conf.j2"
-    dest: "/etc/lxc/default.conf"
-    owner: "root"
-    group: "root"
-    mode: 0644
-  notify: restart lxc-net
-
 - name: modifying rsyslog
   sudo: yes
   template:
@@ -101,6 +91,11 @@
 - name: starting containers
   sudo: yes
   shell: lxc-start -n {{item.type}}
+  with_items: "{{containers[inventory_hostname]}}"
+
+- name: removing openssh-server
+  sudo: yes
+  shell: lxc-attach -n {{item.type}} -- /bin/bash -c "apt -y purge openssh-server"
   with_items: "{{containers[inventory_hostname]}}"
 
 - name: Configuring cronjob to upgrade lxc host
