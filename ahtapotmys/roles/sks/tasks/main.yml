@@ -20,6 +20,28 @@
   changed_when: result.rc == 0
   ignore_errors: yes
 
+- name: Check if ssl certificate exists
+  sudo: yes
+  stat:
+    path: /etc/ssl/private/sks.crt
+  register: ssl_exists
+
+- name: Create ssl certificate
+  sudo: yes
+  shell: |
+    mkdir /etc/postfix/ssl
+    cd /etc/ssl/private/
+    openssl genrsa -des3 -passout pass:xxxx -out /etc/ssl/private/sks.pass.key 2048
+    openssl rsa -passin pass:xxxx -in /etc/ssl/private/sks.pass.key -out /etc/ssl/private/sks.key
+    chmod 600 sks.key
+    rm /etc/ssl/private/sks.pass.key
+    openssl req -new -key /etc/ssl/private/sks.key -out /etc/ssl/private/sks.csr -subj "/C={{sks_ssl_country}}/ST={{sks_ssl_state}}/L={{sks_ssl_locality}}/O={{sks_ssl_organization}}/OU={{sks_ssl_organizationalunit}}/CN={{sks_ssl_commonname}}"
+    openssl x509 -req -days 3650 -in /etc/ssl/private/sks.csr -signkey /etc/ssl/private/sks.key -out /etc/ssl/private/sks.crt
+    openssl rsa -in /etc/ssl/private/sks.key -out /etc/ssl/private/sks.key.unencrypted
+    mv -f sks.key.unencrypted sks.key
+    openssl req -new -key /etc/ssl/private/sks.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{sks_ssl_country}}/ST={{sks_ssl_state}}/L={{sks_ssl_locality}}/O={{sks_ssl_organization}}/OU={{sks_ssl_organizationalunit}}/CN={{sks_ssl_commonname}}"
+  when: (ssl_exists.stat.exists == False) and (sks_create_ssl == True)
+
 - name: pgpkeyserver-lite | configuring pgpkeyserver-lite nginx conf
   sudo: yes
   template:
