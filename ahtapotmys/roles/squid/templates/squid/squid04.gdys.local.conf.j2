@@ -11,17 +11,13 @@ auth_param basic program /usr/lib/squid/basic_ldap_auth -R -b "{{ squid['ldap'][
 auth_param basic children 5
 auth_param basic realm Web-Proxy
 auth_param basic credentialsttl 8 hours
-acl ldap-auth proxy_auth REQUIRED
 {% endif %}
 
 # NTLM Authentication
-{% if ad.enabled == "yes" and squid['ldap']['enabled'] != "yes" %}
+{% if ad.enabled == "yes" %}
 auth_param ntlm program /usr/bin/ntlm_auth --helper-protocol=squid-2.5-ntlmssp
 auth_param ntlm children 30
 auth_param ntlm keep_alive on
-
-acl AuthenticateUser proxy_auth REQUIRED
-http_access allow AuthenticateUser
 {% endif %}
 
 # Port definitions
@@ -32,8 +28,9 @@ acl Safe_ports port 443     # https
 acl blockfile req_mime_type -i ^.*multipart/form-data.*
 http_access deny blockfile
 
-{% if squid['ldap']['enabled'] == "yes" %} 
-http_access allow ldap-auth
+{% if ad.enabled == "yes" or squid['ldap']['enabled'] == "yes" %}
+acl AuthenticateUser proxy_auth REQUIRED
+http_access allow AuthenticateUser
 {% endif %}
 http_access deny all
 http_port {{ squid['http_port'] }}

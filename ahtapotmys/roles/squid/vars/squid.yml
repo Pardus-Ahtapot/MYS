@@ -3,20 +3,20 @@ squid:
 # Squid yapilandirmasini belirtmektedir.
     conf:
         source: "squid"
-        destination: "/etc/squid/squid.conf"
+        destination: "/etc/squid3/squid.conf"
         owner: "root"
         group: "root"
         mode: "0644" 
     service:
-        name: "squid"
+        name: "squid3"
         state: "started"
         enabled: "yes"
     ldap:  
         enabled: "yes" 
-        host: "ldap01.gdys.local"
-        domain: "dc=bilgio,dc=com"
-        workgroup: "workgroup"
-        user: "user"
-        password: "pass"
-        option: "option"
+        host: "SERVER_IP"
+        domain: "OU=Kullanicilar,OU=Ahtapot,DC=ahtapot,DC=ahtapot,DC=ahtapot,DC=tr"
+        workgroup: "AHTAPOT"
+        user: "USER"
+        password: "PASSWORD"
+        option: "sAMAccountName=%s" 
     http_port: "3128"

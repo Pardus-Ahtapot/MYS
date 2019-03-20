@@ -37,6 +37,9 @@ squid_packages:
     package10:
         name: "libnss-winbind"
         state: "present"
+    package11:
+        name: "locales"
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  
