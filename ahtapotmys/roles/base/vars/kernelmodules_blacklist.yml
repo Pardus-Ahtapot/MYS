@@ -16,15 +16,15 @@ to_be_blacklisted_modules:
     module01:
         name: "uhci_hcd"
         state: "absent"
-    module02:
-        name: "ehci_hcd"
-        state: "absent"
+#    module02:
+#        name: "ehci_hcd"
+#        state: "absent"
     module03:
         name: "usbhid"
         state: "absent"
-    module04:
-        name: "usbcore"
-        state: "absent"
+#    module04:
+#        name: "usbcore"
+#        state: "absent"
 #    moduleXX:
 #        name:
 #        state:

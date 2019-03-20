@@ -95,8 +95,9 @@ base_packages:
     package28:
         name: "libpam-cracklib"
         state: "present"
-
-
+    package29:
+        name: "aide-common"
+        state: "present"
 
 #    packageXX:
 #        name: 

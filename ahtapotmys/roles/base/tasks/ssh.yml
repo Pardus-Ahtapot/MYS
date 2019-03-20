@@ -43,6 +43,14 @@
   sudo: yes
   tags: ssh
 
+- name: Ansible hostu authorized keys olarak ekleniyor
+  lineinfile:
+        line: "{{AuthorizedKey}}"
+        create: yes
+        dest: /home/ahtapotops/.ssh/authorized_keys
+  tags: ssh
+  
+
 - name: sshd yapilandiriliyor
   template:
         src: "{{ ssh['conf']['source'] }}"

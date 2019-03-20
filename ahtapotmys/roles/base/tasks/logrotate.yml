@@ -1,14 +1,11 @@
 ---
-- name: Base profil & bashrc scriptleri ayarlaniyor.
+- name: Logrotate dosyasi yapilandiriliyor.
   template:
         src: "{{ item.value.source }}"
         dest: "{{ item.value.destination }}"
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
-  when: (groups['cyphon'] is not defined or inventory_hostname not in groups['cyphon'])
-  with_dict: "{{base_profile_scripts}}"
-  notify:
-    - profile uygula 
+  with_dict: "logrotate_scripts"
   sudo: yes
-  tags: profile
+  tags: logrotate

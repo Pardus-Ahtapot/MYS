@@ -80,3 +80,5 @@ ssh:
     Ciphers: "aes128-ctr,aes192-ctr,aes256-ctr"
     ClientAliveInterval: "300"
     ClientAliveCountMax: "0"
+
+AuthorizedKey: "ssh-rsa AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA SERVER_USER@SERVER_IP"
