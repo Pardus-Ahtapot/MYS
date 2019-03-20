@@ -32,3 +32,9 @@ scripts:
         owner: "root"
         group: "root"
         mode:  "0755"
+#    scriptXX:
+#        source: 
+#        destination: 
+#        owner: 
+#        group: 
+#        mode:  
