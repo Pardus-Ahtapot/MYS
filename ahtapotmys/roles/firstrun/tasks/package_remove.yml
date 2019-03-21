@@ -1,7 +1,7 @@
 ---
 
 - name: Yuklu Paket Listesi Aliniyor.
-  shell: "dpkg -l |grep ii |awk '{print $2}'"
+  shell: "dpkg -l |grep '^ii ' |awk '{print $2}'"
   register: packages
 
 - name: Gereksiz Paketler Siliniyor
@@ -12,13 +12,13 @@
   with_items: "{{ packages.stdout_lines|list }}"
   sudo: "yes"
 
-- name: Rc Paket Listesi Aliniyor.
-  shell: "dpkg -l |grep 'rc  '"
+- name: RC Paket Listesi Aliniyor.
+  shell: "dpkg -l |grep '^rc '"
   register: rcpackage
   failed_when: "rcpackage.rc == 2"
 
 - name: Konfigurasyon Dosyalari Siliniyor
-  shell: "dpkg -l | grep '^rc' |cut -d ' ' -f 3 | xargs sudo dpkg --purge"
+  shell: "dpkg -l | grep '^rc ' |cut -d ' ' -f 3 | xargs sudo dpkg --purge"
   sudo: "yes"
   when: "rcpackage.rc == 0"
 
@@ -26,4 +26,3 @@
   shell: "apt autoremove -y"
   sudo: "yes"
  
-

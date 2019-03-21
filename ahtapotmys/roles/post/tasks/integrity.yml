@@ -95,17 +95,17 @@
     - integrity
     - integrity-local
     - integrity-remote
-
-#- name: Konfigurasyon dosyasi yerel cihazda siliniyor
-#  file:
-#    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/confs"
-#    state: absent
-#  delegate_to: localhost
-#  become: yes
-#  become_user: ahtapotops
-#  tags:
-#    - integrity
-#    - integrity-local
+   
+- name: Konfigurasyon dosyasi yerel cihazda siliniyor
+  file:
+    path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/confs"
+    state: absent
+  delegate_to: localhost
+  become: yes
+  become_user: ahtapotops
+  tags:
+    - integrity
+    - integrity-local
 
 - name: Konfigurasyon dosyasi yerel cihazda olusturuluyor
   file:
