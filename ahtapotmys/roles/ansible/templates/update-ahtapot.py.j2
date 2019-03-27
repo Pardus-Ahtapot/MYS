@@ -38,7 +38,8 @@ elif os.path.exists("/var/run/firewall"):
                 		fw_list = fw_list + l[:-3] + "," 
 
         		fw_list = fw_list[:-1]
-        		sp.call(["/usr/bin/ansible-playbook","-l", fw_list,"/etc/ansible/playbooks/firewall.yml"])
+        		#sp.call(["/usr/bin/ansible-playbook","-l", fw_list,"/etc/ansible/playbooks/firewall.yml"])
+        		sp.call(["/usr/bin/ansible-playbook","-l", fw_list,"/etc/ansible/playbooks/firewallruleonly.yml"])
 
         else:
                 os.system("logger -p local5.crit \"Ansible GDYS Repo Update Failed !!\" ")

@@ -31,7 +31,7 @@ antispam_smtpd_tls_session_cache_timeout: "3600s"
 antispam_message_size_limit: "26214400" # bytes
 antispam_block_encrypted_archive: "true"
 antispam_MaxDirectoryRecursion: "15"
-antispam_OLE2BlockMacros: "true"
+antispam_OLE2BlockMacros: "false"
 antispam_MaxScanSize: "100M"
 antispam_MaxFileSize: "25M"
 antispam_MaxRecursion: "16"

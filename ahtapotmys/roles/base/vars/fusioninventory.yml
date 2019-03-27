@@ -3,17 +3,17 @@
 fusioninventory:
     conf:
         source: "fusioninventory.conf.j2" 
-        destination: "/etc/fusioninventory/agent.cfg" 
+        destination: "/etc/fusioninventory/agent.cfg"
         owner: "root" 
         group: "root" 
-        mode: "0644" 
-    TrustedKey:
-        source: "ocs_ossim.pem.j2" 
-        destination: "/etc/ssl/certs/ocs_ossim.pem" 
-        owner: "root" 
-        group: "root" 
-        mode: "0644" 
+        mode: "0644"  
     service:
-        name: "fusioninventory-agent" 
+        name: "fusioninventory-agent"
         state: "started" 
         enabled: "yes"
+    TrustedKey:
+        source: "ocs_ossim.pem.j2"
+        destination: "/etc/ssl/certs/ocs_ossim.pem"
+        owner: "root"
+        group: "root"
+        mode: "0644"

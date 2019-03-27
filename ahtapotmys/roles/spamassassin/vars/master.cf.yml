@@ -142,6 +142,7 @@ master_cf: |
    -o smtpd_data_restrictions=reject_unauth_pipelining
    -o smtpd_end_of_data_restrictions=
    -o mynetworks=127.0.0.0/8
+   -o myhostname={{antispam_smtpd_banner[ansible_hostname]}}
    -o smtpd_error_sleep_time=0
    -o smtpd_soft_error_limit=1001
    -o smtpd_hard_error_limit=1000

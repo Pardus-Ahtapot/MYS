@@ -27,9 +27,9 @@ template(name="logstash-json-template" type="list") {
         constant(value="\"}\n")
 }
 
-#Listen 20514 with relp
+#Listen SSHPORT with relp
 input(type="imrelp"
-   port="20514"
+   port="SSHPORT"
    ruleset="LogsForCyphon"
    tls="on"
    tls.caCert="/etc/ssl/certs/rootCA.pem"

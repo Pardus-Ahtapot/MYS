@@ -1,0 +1,11 @@
+---
+# Calistirildiginda Guvenlik Duvari Kurallari Uygulanir.
+- hosts: firewall 
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - ../roles/firewallruleonly/vars/sysctl.yml
+  - ../roles/firewallruleonly/vars/iptables.yml
+  - ../roles/firewallruleonly/vars/profile.yml
+  roles:
+  - { role: firewallruleonly }

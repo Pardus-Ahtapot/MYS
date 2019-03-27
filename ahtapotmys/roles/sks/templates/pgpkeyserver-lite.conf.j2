@@ -3,16 +3,18 @@
 
 # Unsecured HTTP server
 server {
+    listen              {{sks_listen_ip}}:80;
+    listen              {{sks_listen_ip}}:443 ssl;
+    listen  {{sks_listen_ip}}:11371;
+    server_name         {{sks_server_name}};
+    ssl_certificate     /etc/ssl/private/sks.crt;
+    ssl_certificate_key /etc/ssl/private/sks.key;
 
-    # IPv4 private address (Port-forwarded from NAT firewall/router)
-    listen  {{sks_listen_ip}}:80;
-    listen  {{sks_listen_ip}}:11371; 
+    if ($server_port = "80") {
+        rewrite ^ https://$host$request_uri? permanent;
+    }
 
-    # IPv6 global address
-    # listen  [2001:db8::37]:80;
-    # listen  [2001:db8::37]:11371;
 
-    server_name {{sks_server_name}};
 
     # Public Documents Root
     root    /var/www/pgpkeyserver-lite;

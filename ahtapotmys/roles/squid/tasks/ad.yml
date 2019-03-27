@@ -71,12 +71,25 @@
   sudo: yes
   tags: ad
 
+- name: AD | adding ad-user-sync cron
+  template:
+    src: "ad_configuration/ad-user-sync.cron.j2"
+    dest: "/etc/cron.d/ad-user-sync.cron"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  when: ad.enabled == "yes"
+  sudo: yes
+  tags: ad
+
+
 - name: AD | joining active directory
   shell: |
     net ads join -U '{{ad.user}}%{{ad.password}}';
     net rpc join -U '{{ad.user}}%{{ad.password}}';
   args:
     executable: /bin/bash
+  ignore_errors: yes
   when: ad.enabled == "yes"
   sudo: yes
   tags: ad
@@ -93,6 +106,14 @@
 
 - name: AD | starting services
   shell: systemctl start smbd.service nmbd.service winbind.service
+  args:
+    executable: /bin/bash
+  when: ad.enabled == "yes"
+  sudo: yes
+  tags: ad
+
+- name: AD | restarting cron.d
+  shell: systemctl restart cron
   args:
     executable: /bin/bash
   when: ad.enabled == "yes"

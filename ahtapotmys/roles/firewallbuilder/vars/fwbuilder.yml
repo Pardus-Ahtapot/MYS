@@ -17,8 +17,9 @@ firewallbuilder:
             mode: "0755"
 
 fwb_editable_objects:
-#    FW.DOMAIN:
-#        - objects:
-#            - birinci
-#            - ikinci
-#    FW2.DOMAIN:
+    FWBUILDER_SERVER_FQDN01:
+    FWBUILDER_SERVER_FQDN02:
+    #FW.DOMAIN:
+    #    - objects:
+    #        - birinci
+    #        - ikinci

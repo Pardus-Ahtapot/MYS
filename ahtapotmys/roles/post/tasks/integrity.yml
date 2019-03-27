@@ -95,7 +95,7 @@
     - integrity
     - integrity-local
     - integrity-remote
-    
+   
 - name: Konfigurasyon dosyasi yerel cihazda siliniyor
   file:
     path: "{{ integrity['files']['local']['temp'] }}/{{ inventory_hostname }}/confs"
@@ -258,6 +258,8 @@
   sudo: yes
   file:
     path: "{{ integrity['files']['remote']['path'] }}"
+    owner: "{{ integrity['files']['remote']['owner'] }}"
+    group: "{{ integrity['files']['remote']['group'] }}"
     mode: "{{ integrity['files']['remote']['mode'] }}"
     state: directory
   tags:

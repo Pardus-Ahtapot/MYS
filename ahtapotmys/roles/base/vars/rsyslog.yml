@@ -24,8 +24,12 @@ rsyslog:
    ActionResumeRetryCount: "-1"
    QueueType: "LinkedList"
    QueueFileNameANS: "srvfrwd_ans"
+   QueueFileNameICINGA: "srvfrwd_icinga"
+   QueueFileNameNGINX: "srvfrwd_nginx"
    QueueFileNameIPT: "srvfrwd_iptables"
    QueueFileNameSYS: "srvfrwd_syslog"
+   QueueFileNameDANS: "srvfrwd_dansguardian"
+   QueueFileNameSQUID: "srvfrwd_squid"
    QueueFileNameSURICATA: "srvfrwd_suricata"
    QueueSaveOnShutdown: "on"
    QueueMaxFileSize: "100m"
@@ -35,7 +39,8 @@ rsyslog:
    Mode: "inotify"
    WorkDirectory: "/var/spool/rsyslog" 
    IncludeConfig: "/etc/rsyslog.d/*" 
-
+cyphon_server: "CYPHON_SERVER_IP"
+cyphon_port: "CYPHON_SERVER_PORT"
 ossimciks:
    server01:
       fqdn: "OSSIMCIK_FQDN"

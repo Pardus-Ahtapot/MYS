@@ -1,3 +1,4 @@
+---
 quarantine_mail_domain: "mail.test.org"
 quarantine_subdomain_name: "karantina"
 quarantine_db_host: "127.0.0.1"

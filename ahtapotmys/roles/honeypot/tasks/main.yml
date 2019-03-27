@@ -116,6 +116,11 @@
   shell: lxc-start -n {{item.type}}
   with_items: "{{containers[inventory_hostname]}}"
 
+- name: removing openssh-server
+  sudo: yes
+  shell: lxc-attach -n {{item.type}} -- /bin/bash -c "apt -y purge openssh-server"
+  with_items: "{{containers[inventory_hostname]}}"
+
 - name: Configuring cronjob to upgrade lxc host
   cron:
     name: "lxc_host_upgrade"

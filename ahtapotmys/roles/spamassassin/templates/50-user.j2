@@ -7,9 +7,8 @@ use strict;
 # See /usr/share/doc/amavisd-new/ for documentation and examples of
 # the directives you can use in this file
 #
-
 {% if use_quarantine == "True" %}
- 
+
 $mydomain = '{{antispam_domain}}';
 $myhostname = '{{antispam_smtpd_banner[ansible_hostname]}}';
 $inet_socket_bind = '0.0.0.0';
@@ -96,5 +95,4 @@ $banned_filename_re = new_RE(
 
 #------------ Do not modify anything below this line -------------
 1;  # ensure a defined return
-
 
