@@ -8,5 +8,4 @@
       accept_hostkey: "{{ item.value.accept_hostkey }}"
       key_file: "{{ item.value.key_file }}"
   with_dict: "{{gitrepos}}"
-  ignore_errors: yes
   tags: git 

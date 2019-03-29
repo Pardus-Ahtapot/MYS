@@ -7,11 +7,13 @@
 {
         rotate 7 
         daily
+        maxsize 500M
         missingok
         notifempty
         dateext
         compress
-                systemctl kill -s HUP rsyslog.service > /dev/null
+        postrotate
+                invoke-rc.d rsyslog rotate > /dev/null
         endscript
 }
 {% endif %}
@@ -20,13 +22,13 @@
 /var/log/ahtapot/fw/*.log
 {
         rotate 45 
-        daily
+        hourly
+        maxsize 500M
         missingok
         notifempty
-        dateext
         compress
         postrotate
-                systemctl kill -s HUP rsyslog.service > /dev/null
+                invoke-rc.d rsyslog rotate > /dev/null
         endscript
 }
 {% endif %}
@@ -35,13 +37,14 @@
 /var/log/client.log
 {
         rotate 7 
-        daily 
+        hourly 
+        maxsize 500M
         missingok
         notifempty
         dateext
         compress
         postrotate
-                systemctl kill -s HUP rsyslog.service > /dev/null
+                invoke-rc.d rsyslog rotate > /dev/null
         endscript
 }
 {% endif %}

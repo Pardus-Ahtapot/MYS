@@ -138,50 +138,50 @@ vuln_modules:
 
 ### define ports for vulnerability modules
 ### (can be changed while running)
-vuln-smb: {{amun_conf.vuln_smb}}
-vuln-dcom: {{amun_conf.vuln_dcom}}
-vuln-ca: {{amun_conf.vuln_ca}}
-vuln-ftpd: {{amun_conf.vuln_ftpd}}
-vuln-sasserftpd: {{amun_conf.vuln_sasserftpd}}
-vuln-wins: {{amun_conf.vuln_wins}}
-vuln-arc: {{amun_conf.vuln_arc}}
-vuln-symantec: {{amun_conf.vuln_symantec}}
-vuln-msdtc: {{amun_conf.vuln_msdtc}}
-vuln-axigen: {{amun_conf.vuln_axigen}}
-vuln-slmail: {{amun_conf.vuln_slmail}}
-vuln-mdaemon: {{amun_conf.vuln_mdaemon}}
-vuln-upnp: {{amun_conf.vuln_upnp}}
-vuln-iis: {{amun_conf.vuln_iis}}
-vuln-maxdb: {{amun_conf.vuln_maxdb}}
-vuln-tivoli: {{amun_conf.vuln_tivoli}}
-vuln-msmq: {{amun_conf.vuln_msmq}}
-vuln-sub7: {{amun_conf.vuln_sub7}}
-vuln-imail: {{amun_conf.vuln_imail}}
-vuln-mercury: {{amun_conf.vuln_mercury}}
-vuln-lotusdomino: {{amun_conf.vuln_lotusdomino}}
-vuln-arkeia: {{amun_conf.vuln_arkeia}}
-vuln-dameware: {{amun_conf.vuln_dameware}}
-vuln-veritas: {{amun_conf.vuln_veritas}}
-vuln-trend: {{amun_conf.vuln_trend}}
-vuln-bagle: {{amun_conf.vuln_bagle}}
-vuln-goodtech: {{amun_conf.vuln_goodtech}}
-vuln-helix: {{amun_conf.vuln_helix}}
-vuln-hpopenview: {{amun_conf.vuln_hpopenview}}
-vuln-http: {{amun_conf.vuln_http}}
-vuln-peercast: {{amun_conf.vuln_peercast}}
-vuln-speedport: {{amun_conf.vuln_speedport}}
+vuln-smb: 445,139
+vuln-dcom: 135
+vuln-ca: 10203
+vuln-ftpd: 21
+vuln-sasserftpd: 1023,5554
+vuln-wins: 42
+vuln-arc: 6070,41523,1900
+vuln-symantec: 2967,2968,38292
+vuln-msdtc: 3372,1025
+vuln-axigen: 110
+vuln-slmail: 110
+vuln-mdaemon: 110
+vuln-upnp: 5000,2555
+vuln-iis: 443
+vuln-maxdb: 9999
+vuln-tivoli: 8080,1111,1581
+vuln-msmq: 2101,2103,2105,2107
+vuln-sub7: 27347
+vuln-imail: 25,587
+vuln-mercury: 105
+vuln-lotusdomino: 143
+vuln-arkeia: 617
+vuln-dameware: 6129
+vuln-veritas: 6101
+vuln-trend: 5168,3268,3628
+vuln-bagle: 2745
+vuln-goodtech: 2380
+vuln-helix: 554
+vuln-hpopenview: 2954
+vuln-http: 80
+vuln-peercast: 7144
+vuln-speedport: 7547
 
 ### work in progress
-vuln-rdp: {{amun_conf.vuln_rdp}}
+vuln-rdp: 3389
 
 ### kein shellcode sondern direkt file download
-vuln-mydoom: {{amun_conf.vuln_mydoom}}
+vuln-mydoom: 3127,3128,1080
 
 ### analyze interesting ports
 #vuln-analyzer: 139
 
 ### simulate vulnerable telnet (in work)
-vuln-check: {{amun_conf.vuln_rdp}}
+vuln-check: 23
 
 ### linux shellcode not recognized
 #vuln-rsync: 873

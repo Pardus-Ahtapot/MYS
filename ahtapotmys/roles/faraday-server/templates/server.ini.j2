@@ -1,13 +1,13 @@
 [faraday_server]
-port = {{faraday_port}}
-bind_address = {{faraday_bind_addr}}
-websocket_port = {{faraday_websoc_port}}
+port = 5985
+bind_address = 0.0.0.0
+websocket_port = 9000
 secret_key = fvoSqAzPq1DZMaiF9wBz75gI4
 
 [ssl]
 port = {{faraday_ssl_port}}
-certificate = {{faraday_ssl_cert}}
-keyfile = {{faraday_ssl_key}}
+certificate = /etc/ssl/faraday.crt
+keyfile = /etc/ssl/faraday.key
 
 [couchdb]
 host = localhost
@@ -18,7 +18,7 @@ password =
 protocol = http
 
 [storage]
-path = {{faraday_storage_path}}
+path = /root/.faraday/storage
 
 [database]
 connection_string = postgresql+psycopg2://faraday_postgresql:v9JKkuzfRGBZCJaCoaphtbNZv@localhost/faraday

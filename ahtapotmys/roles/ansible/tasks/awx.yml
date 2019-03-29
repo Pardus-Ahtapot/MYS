@@ -50,10 +50,3 @@
   delegate_to: localhost
   run_once: true
   sudo: yes
-
-- name: Copy local host file to the container
-  sudo: yes
-  shell: |
-    docker cp /etc/hosts awx_task_1:/tmp;
-    docker exec -d awx_task_1 cp /tmp/hosts /etc/hosts
-  ignore_errors: true

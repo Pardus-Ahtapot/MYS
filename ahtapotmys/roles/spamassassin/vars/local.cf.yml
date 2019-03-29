@@ -94,4 +94,3 @@ local_cf: |
   score SPF_HELO_FAIL 4.0
   score SPF_HELO_SOFTFAIL 3.0
   score SPF_SOFTFAIL 3.0
-  score	NUMERIC_HTTP_ADDR	20.0	20.0	20.0	20.0

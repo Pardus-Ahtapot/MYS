@@ -5,7 +5,7 @@ notifications:
       user_groups: "[\"icingaadmins\"]",
       #users: [],
       condition : ['host.name == "pardus-client"'],
-      interval: 0
+      interval: 1800
     }
 
   - { name: "mail-icingaadmin",
@@ -13,7 +13,7 @@ notifications:
       user_groups: "[\"icingaadmins\"]",
       #users: [],
       condition : ['host.name == "pardus-client"'],
-      interval: 0
+      interval: 1800
     }
 
   - { name: "sms-icingaadmin",
