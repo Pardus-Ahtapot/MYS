@@ -13,5 +13,5 @@
   when: integrity_check_result is not defined
   ignore_errors: yes
 
-- set_fact: global_integrity_check_result="{{integrity_check_result}}"
+- set_fact: global_integrity_check_result="{{ integrity_check_result }}"
   when: integrity_check_result.changed

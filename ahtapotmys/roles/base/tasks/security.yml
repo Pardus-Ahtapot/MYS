@@ -313,6 +313,10 @@
 
 
 # Configure Mail Transfer Agent for Local-Only Mode
+- name: Exim konfigurasyon dosyasi kontrolu
+  stat: path=/etc/exim4/update-exim4.conf
+  register: stat_result_exim
+  
 - name: MTA (Mail Transfer Agent) sadece local baglantilari kabul edecek sekilde yapilandiriliyor
   lineinfile:
         dest: /etc/exim4/update-exim4.conf.conf
@@ -320,9 +324,10 @@
         line: "dc_local_interfaces='127.0.0.1 ; ::1'"
         backup: yes
   notify: reload exim4
-  when: exim4_stat.stat.exists
   sudo: yes
   tags: security
+  when: stat_result_exim.stat.exists == True
+
 # base17 paketler listesinde rsync oldugu icin bu task yoruma alindi.
 # dikkat: rsync in silinmesi mysql in de silinmesine neden oluyor
 # mhn nin eklenme nedeni lxc nin rsync kullanmasi

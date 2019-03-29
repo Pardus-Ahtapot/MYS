@@ -33,10 +33,10 @@ input(type="imrelp"
    ruleset="LogsForCyphon"
    tls="on"
    tls.caCert="/etc/ssl/certs/rootCA.pem"
-   tls.myCert="/etc/ssl/certs/CYPHON_FQDN.crt"
-   tls.myPrivKey="/etc/ssl/private/CYPHON_FQDN.key"
+   tls.myCert="/etc/ssl/certs/CERT.crt"
+   tls.myPrivKey="/etc/ssl/private/CERT.key"
    tls.authMode="name"
-   tls.permittedpeer=["ahtapot.org.tr"]
+   tls.permittedpeer=["DOMAIN.TLD"]
 )
 
 #Output Log to Logstash with Json Template

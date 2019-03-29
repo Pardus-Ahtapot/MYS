@@ -40,6 +40,9 @@ squid_packages:
     package11:
         name: "locales"
         state: "present"
+    package12:
+        name: "wget"
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  
