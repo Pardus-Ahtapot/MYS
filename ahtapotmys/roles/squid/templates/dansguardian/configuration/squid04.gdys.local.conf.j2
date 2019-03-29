@@ -140,11 +140,11 @@ contentscanexceptions = off
 #
 # If you do not use multiple filter groups, you need not specify this option.
 #
-{% if ad.enabled == "yes" %}
-authplugin = '/etc/dansguardian/authplugins/proxy-ntlm.conf'
-{% endif %}
 authplugin = '/etc/dansguardian/authplugins/proxy-basic.conf'
 #authplugin = '/etc/dansguardian/authplugins/proxy-digest.conf'
+{% if ad.enabled == "yes" and squid['ldap']['enabled'] != "yes" %}
+authplugin = '/etc/dansguardian/authplugins/proxy-ntlm.conf'
+{% endif %}
 #authplugin = '/etc/dansguardian/authplugins/proxy-ntlm.conf'
 #authplugin = '/etc/dansguardian/authplugins/ident.conf'
 #authplugin = '/etc/dansguardian/authplugins/ip.conf'

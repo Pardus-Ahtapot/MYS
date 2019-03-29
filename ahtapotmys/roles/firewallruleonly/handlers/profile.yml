@@ -1,5 +1,0 @@
----
-- name: profile uygula
-  shell: /bin/bash {{ item.value.destination }}
-  with_dict: "{{firewall_profile_scripts}}"
-  sudo: yes

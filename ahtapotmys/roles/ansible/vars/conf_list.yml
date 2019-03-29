@@ -1,5 +1,3 @@
----
-# Konfigurasyon dosyalarinin listesini iceren dosyadir
 ansible_conf_list:
 - /usr/bin/gdys.sh
 - /usr/bin/mys.sh

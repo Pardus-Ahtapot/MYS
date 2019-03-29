@@ -21,15 +21,15 @@ to_be_removed_modules:
     module03:
         name: "joydev"
         state: "absent"
-#    module04:
-#        name: "drm_kms_helper"
-#        state: "absent"
-#    module05:
-#        name: "ttm"
-#        state: "absent"
-#    module06:
-#        name: "drm"
-#        state: "absent"
+    module04:
+        name: "drm_kms_helper"
+        state: "absent"
+    module05:
+        name: "ttm"
+        state: "absent"
+    module06:
+        name: "drm"
+        state: "absent"
     module07:
         name: "dccp"
         state: "absent"
@@ -60,6 +60,12 @@ to_be_removed_modules:
     module16:
         name: "udf"
         state: "absent"
+    module17:
+        name: "dccp"
+        state: "absent"
+    module18:
+        name: "sctp"
+        state: "absent"
     module19:
         name: "rds"
         state: "absent"
@@ -69,6 +75,7 @@ to_be_removed_modules:
     module21:
         name: "iwlwifi"
         state: "absent"
+
 #    moduleXX:
 #        name:
 #        state:

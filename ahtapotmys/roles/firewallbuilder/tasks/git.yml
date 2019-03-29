@@ -7,6 +7,5 @@
       dest: "{{ item.value.destination }}"
       accept_hostkey: "{{ item.value.accept_hostkey }}"
       key_file: "{{ item.value.key_file }}"
-      force: yes
   with_dict: "{{gitrepos}}"
-  tags: git
+  tags: git 

@@ -41,29 +41,6 @@ object ServiceGroup "http" {
 object ServiceGroup "disk" {
   display_name = "Disk Checks"
 
-  assign where service.check_command == "check_disk"
+  assign where service.check_command == "disk"
 }
 
-object ServiceGroup "ntp time" {
-  display_name = "NTP Time Checks"
-
-  assign where service.check_command == "check_ntp_time"
-}
-
-object ServiceGroup "rsyslog" {
-  display_name = "Rsyslog Checks"
-
-  assign where service.check_command == "rsyslog"
-}
-
-object ServiceGroup "memory" {
-  display_name = "Memory Checks"
-
-  assign where service.check_command == "check_mem"
-}
-
-object ServiceGroup "cpu" {
-  display_name = "CPU Checks"
-
-  assign where service.check_command == "check_load"
-}

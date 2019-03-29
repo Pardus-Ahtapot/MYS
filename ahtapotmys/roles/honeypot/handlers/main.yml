@@ -5,9 +5,3 @@
     enabled: yes
     state: restarted
 
-- name: rsyslog servisini yeniden baslat
-  service:
-    name: "rsyslog"
-    state: restarted
-  sudo: yes
-

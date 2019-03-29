@@ -1,4 +1,4 @@
--- labris-webfilter
+-- icinga
 -- plugin_id: 91127
 -- Fatih USTA <fatihusta@labrisnetworks.com>
 --
@@ -15,4 +15,4 @@ INSERT IGNORE INTO plugin (id, type, name, description, product_type, vendor) VA
 -- plugin_id | sid        | class_id | reliability | priority | name                        | aro    | subcategory_id | category_id
 INSERT IGNORE INTO plugin_sid (plugin_id, sid, reliability,
                                priority, subcategory_id,
-                               category_id, name) VALUES (@pluginid, 1, 1, 1, 30, 3, 'labris-webfilter: DENIED Alert');
+                               category_id, name) VALUES (@pluginid, 1, 1, 1, 3, 30, 'labris-webfilter: DENIED Alert');

@@ -1,14 +1,6 @@
 ---
-faraday_password: ahtapot 
-faraday_user: faraday
-faraday_email: faraday@ahtapot.org.tr
-faraday_port: 5985
-faraday_bind_addr: 0.0.0.0
-faraday_websoc_port: 9000
+faraday_password: ahtapot #username=faraday
 faraday_ssl_port: 6985
-faraday_ssl_cert: "/etc/ssl/faraday.crt"
-faraday_ssl_key: "/etc/ssl/faraday.key"
-faraday_storage_path: "/root/.faraday/storage"
 faraday_ssl_country: "TR"
 faraday_ssl_state: "Ankara"
 faraday_ssl_locality: "Ankara"
