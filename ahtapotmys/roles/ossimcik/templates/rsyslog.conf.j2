@@ -71,6 +71,7 @@ ruleset(name="LogsFromClients") {
       queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
       queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
       queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
+      queue.workerthreads="{{ ossimcik_rsyslog['RsyslogQueueWorkerThreads'] }}"
       action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
    )
    stop
