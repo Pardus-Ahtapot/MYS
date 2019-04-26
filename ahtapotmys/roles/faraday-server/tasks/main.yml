@@ -1,15 +1,16 @@
 ---
-#- name: installing faraday-server
-#  sudo: yes
-#  apt:
-#    name: "{{ item }}"
-#  with_items:
-#    - faraday-server
+- name: installing faraday-server
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - faraday-server
 
 - name: Creating Faraday Database
   sudo: yes
   shell: |
     /usr/share/faraday/server/faraday-util.sh initdb
+    sleep 10
 
 - name: Creating Faraday User
   sudo: yes
