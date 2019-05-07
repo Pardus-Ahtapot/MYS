@@ -22,7 +22,7 @@ integrity:
     remote:
       path: "/usr/share/integrity"
       owner: "ahtapotops"
-      group: "ahtapots"
+      group: "ahtapotops"
       mode: "0750"
     local:
       path: "/home/ahtapotops/sb"
