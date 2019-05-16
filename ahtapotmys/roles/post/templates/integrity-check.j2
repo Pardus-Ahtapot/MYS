@@ -123,7 +123,6 @@ if ! $DEBSUM_CORRUPTED ; then
     RESULT=$($DEBSUMS -c)
     RETVAL=$?
     if [ $RETVAL -eq 2 ]; then
-        RET=1
         for line in $RESULT; do
             send_log "DEBSUMS" "$line"
         done
