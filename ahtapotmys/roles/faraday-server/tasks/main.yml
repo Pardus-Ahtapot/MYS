@@ -10,7 +10,7 @@
   sudo: yes
   shell: |
     /usr/share/faraday/server/faraday-util.sh initdb
-    sleep 10
+    sleep 20
 
 - name: Creating Faraday User
   sudo: yes
