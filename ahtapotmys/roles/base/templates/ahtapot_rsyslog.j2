@@ -11,7 +11,7 @@
 	delaycompress
 	compress
 	postrotate
-		systemctl kill -s HUP rsyslog.service > /dev/null
+		invoke-rc.d rsyslog rotate > /dev/null
 	endscript
 }
 
@@ -36,6 +36,6 @@
 	delaycompress
 	sharedscripts
 	postrotate
-		systemctl kill -s HUP rsyslog.service > /dev/null
+		invoke-rc.d rsyslog rotate > /dev/null
 	endscript
 }

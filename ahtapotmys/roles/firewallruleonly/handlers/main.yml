@@ -1,4 +1,0 @@
----
-# Guvenlik Duvarinin isleyici dosyasidir.
-- include: sysctl.yml
-- include: profile.yml

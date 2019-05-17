@@ -50,9 +50,9 @@ str_default = curses.A_NORMAL
 
 screen = curses.newwin(200,200,0,0)
 screen.keypad(1)
-subscreen = screen.derwin(18,38,14,24)
+subscreen = screen.derwin(8,38,14,24)
 subscreen.keypad(1)
-statusscreen = screen.derwin(3,50,32,19)
+statusscreen = screen.derwin(3,50,22,19)
 statusscreen.keypad(1)
 
 curses.raw()

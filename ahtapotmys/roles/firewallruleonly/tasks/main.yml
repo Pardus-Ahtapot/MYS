@@ -1,6 +1,0 @@
----
-# Guvenlik Duvarinin gorevlerini iceren dosyadir.
-#- include: conf_integrity.yml
-- include: profile.yml
-- include: sysctl.yml
-- include: iptables.yml

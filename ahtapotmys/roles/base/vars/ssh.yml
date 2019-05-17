@@ -81,4 +81,3 @@ ssh:
     ClientAliveInterval: "300"
     ClientAliveCountMax: "12"
 
-AuthorizedKey: "ssh-rsa AUTH_KEY_SSH_VALUE SERVER_USER@SERVER_IP"

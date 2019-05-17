@@ -22,6 +22,4 @@ INSERT IGNORE INTO plugin_sid (plugin_id, sid, reliability,
 INSERT IGNORE INTO plugin_sid (plugin_id, sid, reliability,
                                priority, subcategory_id,
                                category_id, name) VALUES (@pluginid, 4, 1, 1, 249, 21, 'integrity-check: Unauthorized Group');
-INSERT IGNORE INTO plugin_sid (plugin_id, sid, reliability,
-                               priority, subcategory_id,
-                               category_id, name) VALUES (@pluginid, 5, 1, 1, 249, 21, 'integrity-check: Configuration changed');
+

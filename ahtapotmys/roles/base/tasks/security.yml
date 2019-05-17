@@ -150,12 +150,10 @@
   changed_when: result_comp.stdout == "fail"
   notify: reboot required
 
-  # lxc ile ilgili sorun cikardigi icin gecici olarak error ignore edildi
 - name: enforce apparmor profiles if there is a complaining profile
   shell: aa-enforce /etc/apparmor.d/*
   args:
         executable: /bin/bash
-  ignore_errors: yes
   when: result_comp.stdout != "fail" and result_comp.stdout != "0"
   sudo: yes
   tags: security
@@ -306,12 +304,6 @@
   sudo: yes
   tags: security
 
-- name: Exim4 conf kontrol ediliyor
-  stat:
-    path: /etc/exim4/update-exim4.conf.conf
-  register: exim4_stat
-
-
 # Configure Mail Transfer Agent for Local-Only Mode
 - name: Exim konfigurasyon dosyasi kontrolu
   stat: path=/etc/exim4/update-exim4.conf
@@ -326,31 +318,30 @@
   notify: reload exim4
   sudo: yes
   tags: security
-  when: stat_result_exim.stat.exists == True
+  when: stat_result_exim.stat.exists == True  
 
-# base17 paketler listesinde rsync oldugu icin bu task yoruma alindi.
 # dikkat: rsync in silinmesi mysql in de silinmesine neden oluyor
 # mhn nin eklenme nedeni lxc nin rsync kullanmasi
 # Ensure rsync service is not enabled
-#- name: RSYNC siliniyor
-#  apt:
-#        name: rsync
-#        state: absent
-#        force: "yes"
-#        purge: "yes"
-#  when: |
-#    (groups['mhn'] is not defined or inventory_hostname not in groups['mhn']) and
-#    (groups['mysql'] is not defined or inventory_hostname not in groups['mysql']) and
-#    (groups['ansible'] is not defined or inventory_hostname not in groups['ansible']) and
-#    (groups['rsyslog'] is not defined or inventory_hostname not in groups['rsyslog']) and
-#    (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and
-#    (groups['firewall-builder'] is not defined or inventory_hostname not in groups['firewall-builder']) and
-#    (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
-#    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
-#    (groups['testfirewall'] is not defined or inventory_hostname not in groups['testfirewall']) and
-#    (groups['antispam'] is not defined or inventory_hostname not in groups['antispam'])
-#  sudo: yes
-#  tags: install
+- name: RSYNC siliniyor
+  apt:
+        name: rsync
+        state: absent
+        force: "yes"
+        purge: "yes"
+  when: |
+    (groups['mhn'] is not defined or inventory_hostname not in groups['mhn']) and
+    (groups['mysql'] is not defined or inventory_hostname not in groups['mysql']) and
+    (groups['ansible'] is not defined or inventory_hostname not in groups['ansible']) and
+    (groups['rsyslog'] is not defined or inventory_hostname not in groups['rsyslog']) and
+    (groups['firewall'] is not defined or inventory_hostname not in groups['firewall']) and
+    (groups['firewall-builder'] is not defined or inventory_hostname not in groups['firewall-builder']) and
+    (groups['firewall-proxy-dhcp'] is not defined or inventory_hostname not in groups['firewall-proxy-dhcp']) and
+    (groups['firewall-openvpn'] is not defined or inventory_hostname not in groups['firewall-openvpn']) and
+    (groups['testfirewall'] is not defined or inventory_hostname not in groups['testfirewall']) and
+    (groups['antispam'] is not defined or inventory_hostname not in groups['antispam'])
+  sudo: yes
+  tags: install
 
 # Disable IP Forwarding
 - name: IP yonlendirme kapatılıyor
@@ -698,7 +689,6 @@
         regexp: '^umask'
         line: 'umask 077'
         backup: yes
-  when: (groups['cyphon'] is not defined or inventory_hostname not in groups['cyphon'])
   sudo: yes
   tags: security
 

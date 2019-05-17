@@ -22,7 +22,7 @@ def main():
 
             yaml_dict = yaml_dict[0]
             if "roles" in yaml_dict:
-                if "state" in playbook or "state-ng" in playbook or "smartstate" in playbook:
+                if "state" in playbook:
                     continue
                 if "all" in yaml_dict["hosts"]:
                     playbook_name = playbook.split('/')[-1].replace(".yml", "")
@@ -30,14 +30,13 @@ def main():
                     playbook_name = yaml_dict["hosts"]
                 playbook_roles[playbook_name] = []
                 for role in yaml_dict["roles"]:
-                    role = role if isinstance(role, basestring) else role["role"]
-                    if os.path.isfile(CONFLIST_PATH.format(role)) and role != "post" and role != "state-ng" and role != "smartstate":
+                    if os.path.isfile(CONFLIST_PATH.format(role["role"])) and role["role"] != "post":
                         try:
-                            with open(CONFLIST_PATH.format(role), 'r') as conf_list_file:
+                            with open(CONFLIST_PATH.format(role["role"]), 'r') as conf_list_file:
                                 content = yaml.load(conf_list_file)
-                                playbook_roles[playbook_name] = playbook_roles[playbook_name] + content["{}_conf_list".format(role.replace("-", "_"))]
+                                playbook_roles[playbook_name] = playbook_roles[playbook_name] + content["{}_conf_list".format(role["role"].replace("-", "_"))]
                         except:
-                            pass
+                            raise
                 #playbook_roles[playbook_name] = ["{}_conf_list".format(x["role"].replace("-", "_")) for x in yaml_dict["roles"] if x["role"] != "post"]
 
     print json.dumps(playbook_roles, indent=2)
