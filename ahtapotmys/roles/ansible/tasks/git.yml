@@ -9,7 +9,7 @@
   shell: |
          cd /etc/ansible
          git init
-         git remote add origin {{item.value.destination}}
+         git remote add origin {{item.value.repo}}
          git add .
          git commit -m "initial commit"
          git push -u origin master
