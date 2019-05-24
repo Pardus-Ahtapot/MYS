@@ -1,0 +1,8 @@
+#!/bin/sh
+
+#Bu dosya ansible tarafindan yonetilmektedir!
+#Burada yapilan degisikliklerin uzerine yazilir!! 
+{{ ansible_managed }}
+
+test -x /usr/sbin/logrotate || exit 0
+/usr/sbin/logrotate /etc/logrotate.conf

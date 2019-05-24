@@ -1,15 +1,26 @@
 ---
-#- name: installing faraday-server
-#  sudo: yes
-#  apt:
-#    name: "{{ item }}"
-#  with_items:
-#    - faraday-server
+- name: installing faraday-server
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - faraday-server
 
 - name: Initializing faraday-server
   sudo: yes
   shell: |
-    /usr/share/faraday/server/initial_db.sh --passwd {{faraday_password}}
+    /usr/share/faraday/server/faraday-util.sh initdb
+    sleep 20
+
+- name: Creating Faraday User
+  sudo: yes
+  shell: |
+    /usr/share/faraday/server/faraday-util.sh createsuperuser --username {{faraday_user}} --email {{faraday_email}} --password {{faraday_password}}
+
+- name: Changing Faraday User Password
+  sudo: yes
+  shell: |
+    /usr/share/faraday/server/faraday-util.sh changepassword --username {{faraday_user}} --password {{faraday_password}}
 
 - name: Registering secret_key
   shell: "cat /root/.faraday/config/server.ini | grep \"secret_key\" | awk '{print $3}'"

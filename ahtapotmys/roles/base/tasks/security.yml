@@ -662,7 +662,7 @@
     for user in `awk -F: '($3 < 1000) {print $1 }' /etc/passwd`; do
       if [ $user != "root" ];then
         /usr/sbin/usermod -L $user;
-        if [ $user != "sync" ] && [ $user != "shutdown" ] && [ $user != "halt" ];then
+        if [ $user != "sync" ] && [ $user != "shutdown" ] && [ $user != "halt" ] && [ $user != "git" ] && [ $user != "gitlab-www" ] && [ $user != "gitlab-redis" ] && [ $user != "gitlab-psql" ];then
           /usr/sbin/usermod -s /usr/sbin/nologin $user;
         fi;
       fi;
@@ -827,7 +827,7 @@
 # Check Permissions on User Home Directories
 - name: /home dizinlerinin izinleri duzenleniyor
   shell: |
-    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
+    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown|postgresql|git|sks|barnyard2|redis|mongodb)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
       if [ -d $dir ]; then
         dirperm=`/bin/ls -ld $dir | /usr/bin/cut -f1 -d" "`;
         if [ `echo $dirperm | /usr/bin/cut -c6 ` != "-" ]; then
@@ -858,7 +858,7 @@
 # Check User Dot File Permissions
 - name: Gizli dosyalarin izinleri duzenleniyor
   shell: |
-    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
+    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown|postgresql|git|sks|barnyard2|redis|mongodb)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
       for file in $dir/.[A-Za-z0-9]*; do
         if [ ! -h "$file" -a -f "$file" ]; then
           fileperm=`/bin/ls -ld $file | /usr/bin/cut -f1 -d" "`;
@@ -883,7 +883,7 @@
 # Check Permissions on User .netrc Files
 - name: .netrc dosyalarinin izinleri duzenleniyor
   shell: |
-    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
+    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown|postgresql|git|sks|barnyard2|redis|mongodb)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
       for file in $dir/.netrc; do
         if [ ! -h "$file" -a -f "$file" ]; then
           fileperm=`/bin/ls -ld $file | /usr/bin/cut -f1 -d" "`;
@@ -924,7 +924,7 @@
 # Check for Presence of User .rhosts Files
 - name: .rhosts dosyalari siliniyor
   shell: |
-    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
+    for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|halt|sync|shutdown|postgresql|git|sks|barnyard2|redis|mongodb)' | /usr/bin/awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'`; do
       for file in $dir/.rhosts; do
         if [ ! -h "$file" -a -f "$file" ]; then
           echo ".rhosts file in $dir";

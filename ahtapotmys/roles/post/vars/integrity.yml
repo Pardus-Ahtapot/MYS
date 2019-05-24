@@ -21,8 +21,8 @@ integrity:
   files:
     remote:
       path: "/usr/share/integrity"
-      owner: "root"
-      group: "root"
+      owner: "ahtapotops"
+      group: "ahtapotops"
       mode: "0750"
     local:
       path: "/home/ahtapotops/sb"
@@ -35,7 +35,7 @@ integrity:
   debsums:
     file-pattern: "/var/lib/dpkg/info/*.md5sums"
   git:
-    repo: "http://git@Gitlab_sunucu_fqdn:HTTP_PORT/sb.git"
+    repo: "http://Gitlab_sunucu_fqdn:HTTP_PORT/sb.git"
   whitelist:
 #    hostXXX:
 #      users:
