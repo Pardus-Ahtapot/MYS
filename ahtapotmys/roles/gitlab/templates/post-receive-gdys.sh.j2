@@ -6,7 +6,7 @@
 
 import subprocess
 
-subprocess.Popen(["/usr/bin/ssh -ntt -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ahtapotops@{{ gitlab['ansible']['Server'] }} -p {{ gitlab['ansible']['Port']}} -i \"/var/opt/gitlab/.ssh/gdyshook\""], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+subprocess.Popen(["/usr/bin/ssh -ntt -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ahtapotops@{{ gitlab['ansible']['Server'] }} -p {{ gitlab['ansible']['Port']}} -i \"/var/opt/gitlab/.ssh/gdyshook\" 'sudo touch /var/run/firewall'"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
 subprocess.call(["/bin/rm -f /var/opt/gitlab/backups/*.tar"], shell=True)
 subprocess.call(["gitlab-rake gitlab:backup:create"], shell=True)

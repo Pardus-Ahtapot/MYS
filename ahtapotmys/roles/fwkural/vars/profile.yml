@@ -1,0 +1,15 @@
+---
+# Firewall profile & bashrc scriptleri yerlestiriliyor.
+firewall_profile_scripts:
+    script01:
+        source: "bashrc.j2"
+        destination: "/home/lkk/.bashrc"
+        owner: "lkk"
+        group: "lkk"
+        mode: "0644"
+#    scriptXX:
+#        source: ""
+#        destination: ""
+#        owner: ""
+#        group: ""
+#        mode: ""
