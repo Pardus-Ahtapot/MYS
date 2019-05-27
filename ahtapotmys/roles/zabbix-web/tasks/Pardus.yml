@@ -1,0 +1,94 @@
+---
+
+#- name: "Install gpg key"
+#  sudo: yes
+#  apt_key:
+#    id: 79EA5ED4
+#    url: http://repo.zabbix.com/zabbix-official-repo.key
+#  when: zabbix_repo == "zabbix"
+#  tags:
+#    - zabbix-web
+#    - init
+#    - config
+#
+#- name: "Installing repository {{ ansible_distribution }}"
+#  sudo: yes
+#  apt_repository:
+#    repo: "{{ item }} http://repo.zabbix.com/zabbix/{{ zabbix_version }}/{{ ansible_distribution.lower() }}/ jessie main"
+#    state: present
+#  when: zabbix_repo == "zabbix"
+#  with_items:
+#    - deb-src
+#    - deb
+#  tags:
+#    - zabbix-web
+#    - init
+#    - config
+
+- name: "Install php7.0-{{ database_type }}"
+  sudo: yes
+  apt:
+    pkg: php7.0-{{ database_type }}
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  tags:
+    - zabbix-web
+    - init
+
+- name: "Install zabbix-web"
+  sudo: yes
+  apt:
+    pkg: zabbix-frontend-php
+    state: present
+    update_cache: yes
+    cache_valid_time: 0
+  tags:
+    - zabbix-web
+    - init
+    - config
+
+- name: "Link graphfont.ttf (workaround ZBX-10467)"
+  sudo: yes
+  file:
+    src: '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf' # Part of ttf-dejavu-core package installed as dependencies
+    path: '/usr/share/zabbix/fonts/graphfont.ttf'
+    state: link
+  tags:
+    - zabbix-web
+    - init
+    - config
+
+- name: "install apache vhost"
+  sudo: yes
+  template:
+    src: apache_vhost.conf.j2
+    dest: /etc/apache2/sites-available/zabbix.conf
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+    mode: 0644
+  when: zabbix_vhost
+  notify:
+    - restart apache
+  tags:
+    - zabbix-web
+    - init
+    - config
+    - apache
+
+- name: "enable apache vhost"
+  sudo: yes
+  file:
+    src: /etc/apache2/sites-available/zabbix.conf
+    dest: /etc/apache2/sites-enabled/zabbix.conf
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+    state: link
+  when: zabbix_vhost
+  notify:
+    - restart apache
+  tags:
+    - zabbix-server
+    - init
+    - config
+    - apache

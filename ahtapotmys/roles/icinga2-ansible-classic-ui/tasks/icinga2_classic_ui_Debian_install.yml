@@ -1,0 +1,89 @@
+---
+
+- name: Install Icinga Classic UI on Debian OS family
+  sudo: yes
+  apt: pkg={{ item }}
+       update_cache=yes
+       cache_valid_time=30
+  with_items: "{{ icinga2_classic_ui_pkg }}"
+
+- name: Enable apache cgi module
+  sudo: yes
+  shell: /usr/sbin/a2enmod cgi
+
+- name: Enable apache ldap module
+  sudo: yes
+  shell: /usr/sbin/a2enmod authnz_ldap
+
+- name: Enable apache ssl module
+  sudo: yes
+  shell: /usr/sbin/a2enmod ssl
+
+- name: Enable apache rewrite module
+  sudo: yes
+  shell: /usr/sbin/a2enmod rewrite
+
+- name: Copy Check Commands Configuration
+  sudo: yes
+  template: src="icinga2-classicui.conf.j2"
+            dest="/etc/icinga2/classicui/apache2.conf"
+            owner="root"
+            group="root"
+            mode=644
+  notify:
+    - restart apache2
+
+- name: Copy cgi.cfg
+  sudo: yes
+  template: src="cgi.cfg.j2"
+            dest="/etc/icinga2/classicui/cgi.cfg"
+            owner="root"
+            group="root"
+            mode=644
+  notify:
+    - restart apache2
+
+- name: Copy default-ssl.conf
+  sudo: yes
+  template: src="default-ssl.conf"
+            dest="/etc/apache2/sites-enabled/default-ssl.conf"
+            owner="root"
+            group="root"
+            mode=644
+  notify:
+    - restart apache2
+
+- name: Copy 000-default.conf
+  sudo: yes
+  template: src="000-default.conf"
+            dest="/etc/apache2/sites-enabled/000-default.conf"
+            owner="root"
+            group="root"
+            mode=644
+  notify:
+    - restart apache2
+
+- name: Check if ssl certificate exists
+  sudo: yes
+  stat:
+    path: /etc/icinga2/pki/icinga.crt
+  register: ssl_exists
+
+- name: Create ssl certificate
+  sudo: yes
+  shell: |
+    openssl genrsa -des3 -passout pass:xxxx -out /etc/icinga2/pki/server.pass.key 2048
+    openssl rsa -passin pass:xxxx -in /etc/icinga2/pki/server.pass.key -out /etc/icinga2/pki/server.key
+    rm /etc/icinga2/pki/server.pass.key
+    openssl req -new -key /etc/icinga2/pki/server.key -out /etc/icinga2/pki/server.csr -subj "/C={{icinga_ssl_country}}/ST={{icinga_ssl_state}}/L={{icinga_ssl_locality}}/O={{icinga_ssl_organization}}/OU={{icinga_ssl_organizationalunit}}/CN={{icinga_ssl_commonname}}"
+    openssl x509 -req -days 365 -in /etc/icinga2/pki/server.csr -signkey /etc/icinga2/pki/server.key -out /etc/icinga2/pki/server.crt
+  when: ssl_exists.stat.exists == False
+
+- name: Configure a password for icingaadmin user
+  sudo: yes
+  shell: htpasswd -b  {{ htpasswd_deb }} icingaadmin {{ icinga2_classic_ui_passwd }}
+  notify:
+   - restart apache2
+
+- name: Icinga Classic UI Installation finished (Debian)
+  debug: msg="Login at http://IP/icinga2-classicui with user icingaadmin and password {{ icinga2_classic_ui_passwd }}"

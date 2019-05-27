@@ -3,7 +3,8 @@
 # Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
 dhcpd_packages:
     package01:
-        name: "udhcpd=1:1.22.0-9+deb8u1" 
+        #name: "udhcpd=1:1.22.0-9+deb8u1" 
+        name: "udhcpd" 
         state: "present" 
 #    packageXX:
 #        name: 

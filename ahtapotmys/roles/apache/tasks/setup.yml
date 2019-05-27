@@ -1,0 +1,9 @@
+---
+- name: Update apt cache.
+  sudo: yes
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Ensure Apache is installed.
+  sudo: yes
+  apt: "name={{ item }} state={{ apache_packages_state }}"
+  with_items: "{{ apache_packages }}"

@@ -1,0 +1,5 @@
+apache_listen_port: 8080
+apache_vhosts:
+  - {servername: "ulakbim.gov.tr", documentroot: "/var/www/vhosts/ulakbim.gov.tr"}
+  - {servername: "pardus.org.tr", documentroot: "/var/www/vhosts/pardus.org.tr"}
+  - {servername: "ahtapot.org.tr", documentroot: "/var/www/vhosts/ahtapot.org.tr", proxyenabled: "true", proxypass: "http://www.tubitak.gov.tr", wafenabled: "true", disablerules: []}

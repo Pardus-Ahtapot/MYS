@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+include "constants.conf"
+include "zones.conf"
+include <itl>
+include <plugins>
+include <manubulon>
+include "features-enabled/*.conf"
+include_recursive "conf.d"
+

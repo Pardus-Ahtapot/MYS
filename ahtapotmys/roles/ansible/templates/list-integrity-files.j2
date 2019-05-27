@@ -1,0 +1,55 @@
+#!/usr/bin/python
+
+import os
+import yaml
+import re
+import sys
+
+# regex to get only yml files from tasks and vars
+pattern=r"^\/etc\/ansible\/roles\/(?P<role>\S+?)\/(?:tasks|vars).*$"
+
+roles_path="/etc/ansible/roles"
+conf_list_path="/etc/ansible/roles/{}/vars/conf_list.yml"
+
+def get_files(d, role, roles_dict):
+    if isinstance(d, dict):
+        for k, v in d.iteritems():
+            if isinstance(v, dict):
+                get_files(v, role, roles_dict)
+            else:
+                if (k == "dest" or k == "destination") and "item" not in v and "{" not in v:
+                    #print "{} : {}".format(role, v)
+                    roles_dict[role].append(v)
+    elif isinstance(d, list):
+        for item in d:
+            get_files(item, role, roles_dict)
+    else:
+        return
+
+def main():
+
+    roles_dict = {}
+
+    for root, directories, filenames in os.walk(roles_path):
+        for filename in filenames:
+            full_path = os.path.join(root, filename)
+            match = re.match(pattern, full_path)
+            if match:
+                role = match.group('role')
+                if not roles_dict.get(role, False):
+                    roles_dict[role] = []
+                with open(full_path, 'r') as f:
+                    yaml_dict = yaml.load(f)
+                    get_files(yaml_dict, role, roles_dict)
+
+    for key in roles_dict:
+        if os.path.isfile(conf_list_path.format(key)):
+            roles_dict[key] = list(set(roles_dict[key]))
+            with open(conf_list_path.format(key), 'w') as f:
+                f.write(yaml.dump({"{}_conf_list".format(key).replace('-','_'): roles_dict[key]}, default_flow_style=False))
+            print "########## {} ##########\n".format(key)
+            for value in roles_dict[key]:
+                print value
+            print "\n#######################" + "#" * len(key) + "\n"
+if __name__ == "__main__":
+    main()

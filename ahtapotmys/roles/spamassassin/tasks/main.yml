@@ -1,0 +1,230 @@
+---
+- include: conf_integrity.yml
+
+- name: antispam | modify /etc/hosts
+  sudo: yes
+  shell: >
+    sed -i "/127.0.0.1/ s/127.0.0.1.*/127.0.0.1\t{{ansible_hostname}}.{{antispam_domain}}\t{{ansible_hostname}}/" /etc/hosts
+
+- name: antispam | sistem paketleri yukleniyor
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - systemd
+    - dbus
+    
+- name: antispam | setting hostname
+  sudo: yes
+  shell: >
+    hostnamectl set-hostname {{ansible_hostname}}.{{antispam_domain}}
+
+- name: antispam | modifying resolv.conf
+  sudo: yes
+  template:
+    src: "resolv.conf.j2"
+    dest: "/etc/resolv.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: antispam | installing antispam packages
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - postfix
+    - amavisd-new
+    - spamassassin
+    - clamav-daemon
+    - gross
+    - arj
+    - cabextract
+    - lhasa
+    - liblhasa0
+    - nomarch
+    - rar
+    - unrar
+    - unzip
+    - zip
+    - postfix-policyd-spf-python
+    - postfwd
+    - libclass-dbi-mysql-perl
+
+- name: Check if ssl certificate exists
+  sudo: yes
+  stat:
+    path: /etc/postfix/ssl/smtpd.crt
+  register: ssl_exists
+
+- name: Create ssl certificate
+  sudo: yes
+  shell: |
+    mkdir /etc/postfix/ssl
+    cd /etc/postfix/ssl/
+    openssl genrsa -des3 -passout pass:xxxx -out /etc/postfix/ssl/smtpd.pass.key 2048
+    openssl rsa -passin pass:xxxx -in /etc/postfix/ssl/smtpd.pass.key -out /etc/postfix/ssl/smtpd.key
+    chmod 600 smtpd.key
+    rm /etc/postfix/ssl/smtpd.pass.key
+    openssl req -new -key /etc/postfix/ssl/smtpd.key -out /etc/postfix/ssl/smtpd.csr -subj "/C={{antispam_ssl_country}}/ST={{antispam_ssl_state}}/L={{antispam_ssl_locality}}/O={{antispam_ssl_organization}}/OU={{antispam_ssl_organizationalunit}}/CN={{antispam_ssl_commonname}}"
+    openssl x509 -req -days 3650 -in /etc/postfix/ssl/smtpd.csr -signkey /etc/postfix/ssl/smtpd.key -out /etc/postfix/ssl/smtpd.crt
+    openssl rsa -in /etc/postfix/ssl/smtpd.key -out /etc/postfix/ssl/smtpd.key.unencrypted
+    mv -f smtpd.key.unencrypted smtpd.key
+    openssl req -new -key /etc/postfix/ssl/smtpd.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{antispam_ssl_country}}/ST={{antispam_ssl_state}}/L={{antispam_ssl_locality}}/O={{antispam_ssl_organization}}/OU={{antispam_ssl_organizationalunit}}/CN={{antispam_ssl_commonname}}"
+  when: (ssl_exists.stat.exists == False) and (antispam_create_ssl == True)
+
+- name: antispam | configuring postfix
+  sudo: yes
+  template:
+    src: "main.cf.j2"
+    dest: "/etc/postfix/main.cf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfix
+
+- name: antispam | creating postfix transport file
+  sudo: yes
+  template:
+    src: "transport.j2"
+    dest: "/etc/postfix/transport"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfix
+
+- name: antispam | creating postmap 
+  sudo: yes
+  shell: >
+    postmap hash:/etc/postfix/transport
+  notify: restart postfix
+
+- name: antispam | modifying hosts file
+  sudo: yes
+  shell: >
+    sed -i '/^mydestination/ s/$myhostname/$myhostname\, $mydomain/' /etc/postfix/main.cf
+
+- name: antispam | enabling postfwd service
+  sudo: yes
+  shell: >
+    sed -i 's/^STARTUP=0/STARTUP=1/' /etc/default/postfwd
+
+- name: antispam | copying postfwd.cf
+  sudo: yes
+  template:
+    src: "postfwd.cf.j2"
+    dest: "/etc/postfix/postfwd.cf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfwd
+
+- name: antispam | modifying master.cf
+  sudo: yes
+  template:
+    src: "master.cf.j2"
+    dest: "/etc/postfix/master.cf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfix
+
+- name: antispam | modifying header_checks
+  sudo: yes
+  template:
+    src: "header_checks.j2"
+    dest: "/etc/postfix/header_checks"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfix
+
+- name: antispam | modifying local.cf
+  sudo: yes
+  template:
+    src: "local.cf.j2"
+    dest: "/etc/spamassassin/local.cf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart spamassassin
+
+- name: antispam | modifying amavis content filter
+  sudo: yes
+  shell: |
+    sed -i "/^#@bypass_virus_checks_maps/,// s/#//" /etc/amavis/conf.d/15-content_filter_mode
+    sed -i "/^#@bypass_spam_checks_maps/,// s/#//" /etc/amavis/conf.d/15-content_filter_mode
+  notify: restart amavis
+
+- name: antispam | adding amavis to clamav group
+  sudo: yes
+  shell: >
+    usermod -a amavis -G clamav
+
+- name: antispam | adding clamav to amavis group
+  sudo: yes
+  shell: >
+    usermod -a clamav -G amavis
+
+- name: antispam | modifying freshclam.conf
+  sudo: yes
+  template:
+    src: "freshclam.conf.j2"
+    dest: "/etc/clamav/freshclam.conf"
+    owner: "clamav"
+    group: "adm"
+    mode: 0444
+  notify: restart clamav-freshclam
+
+- name: antispam | modifying clamd.conf
+  sudo: yes
+  template:
+    src: "clamd.conf.j2"
+    dest: "/etc/clamav/clamd.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart clamav-daemon
+
+- name: antispam | modifying 50-user in amavis
+  sudo: yes
+  template:
+    src: "50-user.j2"
+    dest: "/etc/amavis/conf.d/50-user"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart amavis
+
+- name: antispam | modifying whitelist and blacklist senders
+  sudo: yes
+  template:
+    src: "senderaccess.j2"
+    dest: "/etc/postfix/senderaccess"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfix
+
+- name: antispam | modifying whitelist and blacklist recievers
+  sudo: yes
+  template:
+    src: "receiveraccess.j2"
+    dest: "/etc/postfix/receiveraccess"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart postfix
+
+- name: antispam | creating postmap for receiveraccess
+  sudo: yes
+  shell: >
+    postmap hash:/etc/postfix/receiveraccess
+  notify: restart postfix
+
+- name: antispam | creating postmap for senderaccess
+  sudo: yes
+  shell: >
+    postmap hash:/etc/postfix/senderaccess
+  notify: restart postfix
+

@@ -1,0 +1,7 @@
+- name: restart lxc-net
+  sudo: yes
+  service:
+    name: lxc-net
+    enabled: yes
+    state: restarted
+

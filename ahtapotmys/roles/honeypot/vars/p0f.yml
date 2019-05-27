@@ -1,0 +1,4 @@
+---
+p0f_conf:
+  listen_interface: eth0
+  register_check_file: /etc/p0f_registered

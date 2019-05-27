@@ -1,10 +1,11 @@
 ---
 # Base rolunun gorevlerini iceren dosyadir
+- include: conf_integrity.yml
 - include: group.yml
 - include: user.yml
+- include: hosts.yml
 - include: repo.yml
 - include: install.yml
-- include: hosts.yml
 - include: directory.yml
 - include: ssh.yml
 - include: ntp.yml
@@ -12,8 +13,7 @@
 - include: audit.yml
 - include: sudo.yml
 - include: rsyslog.yml
-- include: usb-storage.yml
+- include: kernel_modules.yml
 - include: logger.yml
-- include: logrotate.yml
 - include: profile.yml
-- include: fusioninventory.yml
+- include: security.yml

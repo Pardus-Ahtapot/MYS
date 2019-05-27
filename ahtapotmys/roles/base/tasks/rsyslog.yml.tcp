@@ -1,0 +1,24 @@
+---
+- name: Rsyslog yapilandiriliyor.
+  template:
+        src: "{{ rsyslog['conf']['source'] }}"
+        dest: "{{ rsyslog['conf']['destination'] }}"
+        owner: "{{ rsyslog['conf']['owner'] }}"
+        group: "{{ rsyslog['conf']['group'] }}"
+        mode: "{{ rsyslog['conf']['mode'] }}"
+  when: '{{ "ansible_fqdn" }} in item.1'
+  with_subelements: 
+    - "ossimciks"
+    - "clients"
+  notify:
+    - rsyslog servisini yeniden baslat
+  sudo: yes 
+  tags: rsyslog
+
+- name: Rsyslog servisi ayakta
+  service:
+        name: "{{ rsyslog['service']['name'] }}"
+        state: "{{ rsyslog['service']['state'] }}"
+        enabled: "{{ rsyslog['service']['enabled'] }}"
+  sudo: yes 
+  tags: rsyslog

@@ -1,0 +1,38 @@
+---
+- include: conf_integrity.yml
+
+- name: sks | installing sks packages
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - nginx
+    - sks
+    - pgpkeyserver-lite
+
+- name: sks | creating sks database
+  shell: sks build
+  args:
+    executable: /bin/bash
+  become_user: debian-sks
+  register: result
+  notify: restart sks
+  changed_when: result.rc == 0
+  ignore_errors: yes
+
+- name: pgpkeyserver-lite | configuring pgpkeyserver-lite nginx conf
+  sudo: yes
+  template:
+    src: "pgpkeyserver-lite.conf.j2"
+    dest: "/etc/nginx/sites-available/pgpkeyserver-lite.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+
+- name: pgpkeyserver-lite | activating pgpkeyserver-lite nginx conf
+  sudo: yes
+  shell: >
+    ln -sf /etc/nginx/sites-available/pgpkeyserver-lite.conf /etc/nginx/sites-enabled/
+  notify: restart nginx
+

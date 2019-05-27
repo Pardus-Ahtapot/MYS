@@ -1,0 +1,53 @@
+---
+apache_user: www-data
+apache_group: www-data
+apache_log: apache2
+
+# defaults file for zabbix-web
+
+zabbix_version: 3.0
+zabbix_repo: zabbix
+zabbix_agent_package: zabbix-agent
+zabbix_agent_package_state: present # or latest
+agent_server:
+agent_serveractive:
+zabbix_selinux: False
+
+zabbix_url: zabbix.gkts.ahtapot
+zabbix_apache_servername: .
+zabbix_url_aliases: []
+zabbix_apache_vhost_port: 80
+zabbix_timezone: Europe/Amsterdam
+zabbix_vhost: True
+
+zabbix_repo_yum:
+  - name: zabbix
+    description: Zabbix Official Repository - $basearch
+    baseurl: http://repo.zabbix.com/zabbix/{{ zabbix_version }}/rhel/{{ ansible_distribution_major_version }}/$basearch/
+    gpgcheck: 0
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX
+    state: present
+  - name: zabbix-supported
+    description: Zabbix Official Repository non-supported - $basearch
+    baseurl: http://repo.zabbix.com/non-supported/rhel/{{ ansible_distribution_major_version }}/$basearch/
+    gpgcheck: 0
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX
+    state: present
+
+zabbix_web_max_execution_time: 300
+zabbix_web_memory_limit: 128M
+zabbix_web_post_max_size: 16M
+zabbix_web_upload_max_filesize: 2M
+zabbix_web_max_input_time: 300
+
+database_type: mysql
+database_type_long: mysql
+
+zabbix_server_name: "{{ inventory_hostname }}"
+zabbix_server_hostname: "{{ inventory_hostname }}"
+zabbix_server_listenport: 10051
+zabbix_server_dbhost: localhost
+zabbix_server_dbname: zabbix-server
+zabbix_server_dbuser: zabbix-server
+zabbix_server_dbpassword: zabbix-server
+zabbix_server_dbport: 3306

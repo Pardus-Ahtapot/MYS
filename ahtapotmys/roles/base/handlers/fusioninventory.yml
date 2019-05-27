@@ -1,6 +1,4 @@
 ---
 - name: fusioninventory servisini yeniden baslat
-  service:
-    name: "{{ fusioninventory['service']['name'] }}"
-    state: restarted
+  shell: "/usr/bin/fusioninventory-agent debug"
   sudo: yes

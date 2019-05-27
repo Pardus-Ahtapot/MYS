@@ -1,0 +1,2 @@
+ntp_conf_list:
+- /etc/ntp.conf

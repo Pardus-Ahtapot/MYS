@@ -1,0 +1,60 @@
+---
+- include: conf_integrity.yml
+
+- name: quarantine | installing quarantine packages
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - modoboa-ahtapot-installer
+
+- name: quarantine | modifying modoboa config
+  sudo: yes
+  template:
+    src: "installer.cfg.j2"
+    dest: "/opt/modoboa-ahtapot-installer/installer.cfg"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: quarantine | Check if modoboa is configured
+  sudo: yes
+  stat:
+    path: /opt/modoboa-ahtapot-installer/install-completed
+  register: modoboa_configured
+
+- name: quarantine | running first run script
+  sudo: yes
+  shell: |
+    /usr/bin/python /opt/modoboa-ahtapot-installer/run.py --force --config /opt/modoboa-ahtapot-installer/installer.cfg {{quarantine_mail_domain}}
+    touch /opt/modoboa-ahtapot-installer/install-completed
+  when: modoboa_configured.stat.exists == False
+
+- name: quarantine | modifying 50-user in amavis
+  sudo: yes
+  template:
+    src: "50-user.j2"
+    dest: "/etc/amavis/conf.d/50-user"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart amavis
+
+- name: quarantine | modifying local.cf
+  sudo: yes
+  template:
+    src: "local.cf.j2"
+    dest: "/etc/spamassassin/local.cf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart spamassassin
+
+# bu task, guvenlik sıklastirma sonucu dosya izinleriyle ilgili sorunu gidermek amaciyla konulmustur.
+- name: quarantine | set file permissions of modoboa root
+  sudo: yes
+  shell: /bin/chmod -R og+rx /srv/modoboa/instance/
+  args:
+    executable: /bin/bash
+
+

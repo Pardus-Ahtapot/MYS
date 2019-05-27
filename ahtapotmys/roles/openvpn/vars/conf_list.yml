@@ -1,0 +1,7 @@
+openvpn_conf_list:
+- /etc/openvpn/server.crt
+- /etc/default/openvpn
+- /etc/openvpn/ca.crt
+- /etc/openvpn/server.key
+- /etc/openvpn/server.conf
+- /etc/openvpn/auth-ldap.conf

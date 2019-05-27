@@ -1,9 +1,30 @@
 ---
+- name: /etc/ansible dizininde git klasoru kontrol ediliyor.
+  stat:
+    path: /etc/ansible/.git
+  register: ansible_git_exists
+
+
+- name: /etc/ansible dizini icin git ekleniyor.
+  shell: |
+         cd /etc/ansible
+         git init
+         git remote add origin {{item.value.repo}}
+         git add .
+         git commit -m "initial commit"
+         git push -u origin master
+         git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/master
+
+  when: item.value.destination == "/etc/ansible/" and ansible_git_exists.stat.exists == False
+  with_dict: "{{gitrepos}}"
+
 - name: Git depolari olusturuluyor.
+  environment:
+    TMPDIR: "/home/ahtapotops/"
   git:
       repo: "{{ item.value.repo }}"
       dest: "{{ item.value.destination }}"
       accept_hostkey: "{{ item.value.accept_hostkey }}"
       key_file: "{{ item.value.key_file }}"
-  with_dict: "gitrepos" 
+  with_dict: "{{gitrepos}}"
   tags: git 

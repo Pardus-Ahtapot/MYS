@@ -1,0 +1,53 @@
+- hosts: suricata_ids
+  sudo: yes
+  vars_files:
+  - ../roles/base/vars/group.yml
+  - ../roles/base/vars/user.yml
+  - ../roles/base/vars/repo.yml
+  - ../roles/base/vars/rsyslog.yml
+  - ../roles/base/vars/ntp.yml
+  - ../roles/base/vars/package.yml
+  - ../roles/base/vars/kernelmodules_remove.yml
+  - ../roles/base/vars/kernelmodules_blacklist.yml
+  - ../roles/base/vars/host.yml
+  - ../roles/base/vars/audit.yml
+  - ../roles/base/vars/sudo.yml
+  - ../roles/base/vars/ssh.yml
+  - ../roles/base/vars/grub.yml
+  - ../roles/base/vars/logger.yml
+  - ../roles/base/vars/logrotate.yml
+  - ../roles/base/vars/directory.yml
+  - ../roles/base/vars/profile.yml
+  - ../roles/base/vars/fusioninventory.yml
+  - ../roles/base/vars/security.yml
+  - ../roles/base/vars/conf_list.yml
+  - ../roles/ids/vars/main.yml
+  - ../roles/pulledpork/vars/main.yml
+  - ../roles/pulledpork/vars/conf_list.yml
+  - ../roles/barnyard2/vars/main.yml
+  - ../roles/barnyard2/vars/conf_list.yml
+  - ../roles/snorby/vars/main.yml
+  - ../roles/snorby/vars/conf_list.yml
+  - ../roles/mysql/vars/main.yml
+  - ../roles/mysql/vars/conf_list.yml
+  - ../roles/ids/vars/blocked-domains.yml
+  - ../roles/ids/vars/protocol-anomaly.rules.yml
+  - ../roles/ids/vars/fileblacklist.sha256.yml
+  - ../roles/ids/vars/fileblacklist.sha1.yml
+  - ../roles/ids/vars/fileblacklist.md5.yml
+  - ../roles/ids/vars/local.rules.yml
+  - ../roles/ids/vars/content.yml
+  - ../roles/ids/vars/enablesid.yml
+  - ../roles/ids/vars/disablesid.yml
+  - ../roles/ids/vars/dropsid.yml
+  - ../roles/ids/vars/modifysid.yml
+  - ../roles/ids/vars/conf_list.yml
+  - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
+  roles:
+    - role: base
+    - role: pulledpork
+    - role: ids
+    - role: barnyard2
+    - role: post
+

@@ -1,0 +1,50 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+Port {{ ssh['Port'] }} 
+ListenAddress {{ ssh['ListenAddressv4'] }}
+ListenAddress {{ ssh['ListenAddressv6'] }}
+Protocol {{ ssh['Protocol'] }}
+
+TrustedUserCAKeys {{ ssh['TrustedUserCAKeys']['destination'] }}
+
+UsePrivilegeSeparation {{ ssh['UsePrivilegeSeparation'] }}
+
+KeyRegenerationInterval {{ ssh['KeyRegenerationInterval'] }}
+ServerKeyBits {{ ssh['ServerKeyBits'] }} 
+
+SyslogFacility {{ ssh['SyslogFacility'] }}
+LogLevel {{ ssh['LogLevel'] }}
+
+LoginGraceTime {{ ssh['LoginGraceTime'] }}
+PermitRootLogin {{ ssh['PermitRootLogin'] }}
+StrictModes {{ ssh['StrictModes'] }}
+
+RSAAuthentication {{ ssh['RSAAuthentication'] }}
+PubkeyAuthentication {{ ssh['PubkeyAuthentication'] }}
+
+IgnoreRhosts {{ ssh['IgnoreRhosts'] }}
+RhostsRSAAuthentication {{ ssh['RhostsRSAAuthentication'] }}
+HostbasedAuthentication {{ ssh['HostbasedAuthentication'] }}
+IgnoreUserKnownHosts {{ ssh['IgnoreUserKnownHosts'] }}
+
+PermitEmptyPasswords {{ ssh['PermitEmptyPasswords'] }}
+
+ChallengeResponseAuthentication {{ ssh['ChallengeResponseAuthentication'] }}
+
+PasswordAuthentication {{ ssh['PasswordAuthentication'] }}
+
+KerberosAuthentication {{ ssh['KerberosAuthentication'] }}
+KerberosOrLocalPasswd {{ ssh['KerberosOrLocalPasswd'] }}
+KerberosTicketCleanup {{ ssh['KerberosTicketCleanup'] }}
+
+GSSAPIAuthentication {{ ssh['GSSAPIAuthentication'] }}
+GSSAPICleanupCredentials {{ ssh['GSSAPICleanupCredentials'] }}
+
+UseLogin {{ ssh['UseLogin'] }}
+UsePAM {{ ssh['UsePAM'] }}
+
+AcceptEnv LANG LC_*
+
+Subsystem sftp /usr/lib/openssh/sftp-server

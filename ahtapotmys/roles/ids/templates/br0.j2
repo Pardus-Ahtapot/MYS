@@ -1,0 +1,24 @@
+auto br0
+iface br0 inet manual
+{% if ansible_hostname == ips_master_hostname %}
+        bridge_ports {{ips_int_iface_master}} {{ips_ext_iface_master}}
+{% else %}
+	bridge_ports {{ips_int_iface_backup}} {{ips_ext_iface_backup}}
+{% endif %}
+        bridge_stp on
+        bridge_fd 5
+{% if ansible_hostname == ips_master_hostname %}
+        bridge_bridgeprio 30000
+{% endif %}
+        #Advanced Inteface Settings
+        #post-up /sbin/ethtool -K eth1 tx off rx off sg off gso off gro off 1>/dev/null
+        #post-up /sbin/ethtool -K eth2 tx off rx off sg off gso off gro off  1>/dev/null
+
+	#SYSCTL Ayarları yapılır.
+	post-up /sbin/sysctl -w net.bridge.bridge-nf-call-arptables=1 &> /dev/null
+	post-up /sbin/sysctl -w net.bridge.bridge-nf-call-ip6tables=1  &> /dev/null
+	post-up /sbin/sysctl -w net.bridge.bridge-nf-call-iptables=1  &> /dev/null
+	post-up /sbin/sysctl -w net.bridge.bridge-nf-filter-pppoe-tagged=1  &> /dev/null
+	post-up /sbin/sysctl -w net.bridge.bridge-nf-filter-vlan-tagged=1  &> /dev/null
+	post-up /sbin/sysctl -w net.bridge.bridge-nf-pass-vlan-input-dev=1  &> /dev/null
+

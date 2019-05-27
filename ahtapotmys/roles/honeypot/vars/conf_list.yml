@@ -1,0 +1,4 @@
+honeypot_conf_list:
+- /etc/lxc/default.conf
+- /etc/rsyslog.d/honeypot.conf
+- /var/lib/lxc/elastichoney/rootfs/usr/share/elastichoney/config.json

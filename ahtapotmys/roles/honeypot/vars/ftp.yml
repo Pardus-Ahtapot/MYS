@@ -1,0 +1,16 @@
+---
+honeypot_ftp_pubdir: /var/tmp/honeypot-ftp-pub/
+honeypot_ftp_passwdfile: /etc/honeypot-ftp/ftp_user_pass
+honeypot_ftp_sslcertprivate: /etc/honeypot-ftp/keys/ftpd.key
+honeypot_ftp_sslcertpublic: /etc/honeypot-ftp/keys/ftpd.crt
+honeypot_ftp_filename: /var/log/honeypot_ftp.log
+honeypot_ftp_sslport: 990
+honeypot_ftp_port: 21
+honeypot_ftp_create_ssl: True
+honeypot_ftp_ssl_country: "TR"
+honeypot_ftp_ssl_state: "Ankara"
+honeypot_ftp_ssl_locality: "Ankara"
+honeypot_ftp_ssl_organization: "organizasyon_adi"
+honeypot_ftp_ssl_organizationalunit: "organizasyon_birimi"
+honeypot_ftp_ssl_commonname: "alan_adi"
+

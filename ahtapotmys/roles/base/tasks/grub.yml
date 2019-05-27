@@ -6,8 +6,17 @@
         owner: "{{ item.value.owner }}" 
         group: "{{ item.value.group }}" 
         mode: "{{ item.value.mode }}" 
-  with_dict: "grub_configurations"
+  with_dict: "{{grub_configurations}}"
   notify:
     - grub yeniden yapilandiriliyor 
   sudo: yes
   tags: grub 
+
+- name: grub yapılandırma dosyasının izinleri düzenleniyor
+  file:
+        dest: "{{ grub['conffile']}}"
+        owner: "{{ grub['owner']}}"
+        group: "{{ grub['group']}}"
+        mode: "{{ grub['mode']}}"
+  sudo: yes
+  tags: grub security

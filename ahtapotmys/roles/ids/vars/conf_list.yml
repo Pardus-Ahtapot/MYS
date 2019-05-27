@@ -1,0 +1,19 @@
+ids_conf_list:
+- /etc/suricata/rules/blacklist.rules
+- /etc/pulledpork/disablesid.conf
+- /lib/systemd/system/suricata.service
+- /etc/pulledpork/enablesid.conf
+- /usr/sbin/natmode-ips.sh
+- /etc/suricata/rules/local.rules
+- /etc/suricata/rules/fileblacklist.sha1
+- /etc/suricata/rules/protocol-anomaly.rules
+- /etc/default/suricata
+- /etc/suricata/rules/dns_query.rules
+- /etc/suricata/rules/fileblacklist.sha256
+- /etc/suricata/rules/fileblacklist.md5
+- /etc/suricata/threshold.config
+- /etc/network/interfaces.d/br0
+- /etc/pulledpork/dropsid.conf
+- /etc/suricata/rules/content.rules
+- /usr/sbin/bridgemode-ips.sh
+- /etc/pulledpork/modifysid.conf

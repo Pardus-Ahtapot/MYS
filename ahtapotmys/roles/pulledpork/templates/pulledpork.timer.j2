@@ -1,0 +1,10 @@
+[Unit]
+Description=Pulledpork Rule Updater Scheduler Job
+
+[Timer]
+OnCalendar={{ pulledpork_update_frequency }}
+Unit=pulledpork.service
+
+[Install]
+WantedBy=timers.target
+

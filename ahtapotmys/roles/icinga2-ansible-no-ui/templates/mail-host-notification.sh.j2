@@ -1,0 +1,23 @@
+# {{ ansible_managed }}
+
+#!/usr/bin/env bash
+template=$(cat <<TEMPLATE
+Subject: $NOTIFICATIONTYPE - $HOSTDISPLAYNAME - $HOSTSTATE
+***** Icinga  *****
+
+Notification Type: $NOTIFICATIONTYPE
+
+Host: $HOSTALIAS
+Address: $HOSTADDRESS
+State: $HOSTSTATE
+
+Date/Time: $LONGDATETIME
+
+Additional Info: $HOSTOUTPUT
+
+Comment: [$NOTIFICATIONAUTHORNAME] $NOTIFICATIONCOMMENT
+TEMPLATE
+)
+/usr/bin/printf "%b" "$template" | sendmail $USEREMAIL
+#/usr/bin/printf "%b" "$template" | mail -s "$NOTIFICATIONTYPE - $HOSTDISPLAYNAME is $HOSTSTATE" $USEREMAIL
+

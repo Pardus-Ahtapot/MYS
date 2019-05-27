@@ -11,6 +11,14 @@
   sudo: yes
   tags: fusioninventory
 
+- name: Fusion Inventory servisi ayakta
+  service:
+        name: "{{ fusioninventory['service']['name'] }}"
+        state: "{{ fusioninventory['service']['state'] }}"
+        enabled: "{{ fusioninventory['service']['enabled'] }}"
+  sudo: yes
+  tags: fusioninventory
+
 - name: Fusion Inventory anahtari yerlestiriliyor.
   template:
         src: "{{ fusioninventory['TrustedKey']['source'] }}"
@@ -22,11 +30,4 @@
     - fusioninventory servisini yeniden baslat
   sudo: yes
   tags: fusioninventory
-
-- name: Fusion Inventory servisi ayakta
-  service:
-        name: "{{ fusioninventory['service']['name'] }}"
-        state: "{{ fusioninventory['service']['state'] }}"
-        enabled: "{{ fusioninventory['service']['enabled'] }}"
-  sudo: yes
-  tags: fusioninventory
+                                                                                                                                

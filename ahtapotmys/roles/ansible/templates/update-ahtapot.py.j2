@@ -1,0 +1,44 @@
+## Bu dosya ansible tarafindan yonetilmektedir!		
+## Burada yapilan degisikliklerin uzerine yazilir!!		
+	
+#!/usr/bin.env python
+# -*- coding: utf-8 -*-
+import os,sys,shlex
+import subprocess as sp
+import CheckFWs
+
+kwargs = {}
+kwargs['stdout'] = sp.PIPE
+kwargs['stderr'] = sp.PIPE
+ch_fw = []			#Changed Firewall List
+fw_list = ""
+if os.path.exists("/var/run/state"):
+	sp.call(["sudo","rm","/var/run/state"])
+	proc = sp.Popen(shlex.split("git -C /etc/ansible pull"), **kwargs)
+	(stdout_str, stderr_str) = proc.communicate()
+	return_code = proc.wait()
+
+	if return_code == 0:
+		sp.call(["/usr/bin/ansible-playbook","/etc/ansible/playbooks/state.yml"])
+	
+	else:
+		os.system("logger -p local5.crit \"Ansible MYS Repo Update Failed !!\" ")
+	
+elif os.path.exists("/var/run/firewall"):
+        sp.call(["sudo","rm","/var/run/firewall"])
+        proc = sp.Popen(shlex.split("git -C /etc/fw/gdys pull"), **kwargs)
+        (stdout_str, stderr_str) = proc.communicate()
+        return_code = proc.wait()
+        
+	if return_code == 0:
+		ch_fw = CheckFWs.CheckModifiedFWs()
+
+		if len(ch_fw) > 0:
+        		for l in ch_fw:
+                		fw_list = fw_list + l[:-3] + "," 
+
+        		fw_list = fw_list[:-1]
+        		sp.call(["/usr/bin/ansible-playbook","-l", fw_list,"/etc/ansible/playbooks/firewall.yml"])
+
+        else:
+                os.system("logger -p local5.crit \"Ansible GDYS Repo Update Failed !!\" ")

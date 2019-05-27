@@ -1,0 +1,24 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: Ibrahim ARI
+  description: Apache 2.x for Pardus.
+  company: "ULAKBIM"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.4
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Pardus
+      versions:
+        - all
+  galaxy_tags:
+    - web
+    - apache
+    - webserver
+    - html
+    - pardus
+    - waf
+allow_duplicates: yes

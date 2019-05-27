@@ -1,0 +1,11 @@
+{% if antispam_whitelist_sender_ip %}
+{% for address in antispam_whitelist_sender_ip %}
+{{address}} OK
+{% endfor %}
+{% endif %}
+{% if antispam_blacklist_sender_ip %}
+{% for address in antispam_blacklist_sender_ip %}
+{{address}} REJECT
+{% endfor %}
+{% endif %}
+

@@ -1,0 +1,7 @@
+---
+apache_conf_dir: "/etc/apache2/conf-available"
+sec_audit_log: "/var/log/apache2/apache_audit_log.log"
+sec_audit_log_parts: "ABIFHZ" # # ABCDEFGHIJKZ
+sec_server_signature: "AHTAPOT_WAF"
+sec_rule_remove_by_id: "960017,970901,960015"
+    # 981203,981184,981185,981186,981205,960015,981143,950109,960032,981220,981222,970901,960017,960010,981060

@@ -7,6 +7,6 @@
         state: "{{ item.value.state }}"
         shell: "{{ item.value.shell }}"
         password: "{{ item.value.password }}"
-  with_dict: "firewall_users" 
+  with_dict: "{{firewall_users}}"
   sudo: yes 
   tags: user 

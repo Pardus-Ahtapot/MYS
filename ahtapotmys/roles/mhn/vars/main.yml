@@ -1,0 +1,9 @@
+---
+mhn_base_url: http://169.254.1.9
+mhn_honeymap_url: http://169.254.1.9:3000
+mhn_mail_server: localhost
+mhn_mail_port: 25
+mhn_mail_user: user1@ahtapot.org
+mhn_mail_pass: labris
+mhn_mail_sender:  noreply@ahtapot.org
+mhn_log_file_path: /var/log/mhn/mhn.log

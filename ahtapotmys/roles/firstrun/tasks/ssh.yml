@@ -1,0 +1,34 @@
+---
+- name: Trusted CA Anahtarlari yapilandiriliyor
+  template:
+        src: "{{ ssh['TrustedUserCAKeys']['source'] }}"
+        dest: "{{ ssh['TrustedUserCAKeys']['destination'] }}" 
+        owner: "{{ ssh['TrustedUserCAKeys']['owner'] }}" 
+        group: "{{ ssh['TrustedUserCAKeys']['group'] }}" 
+        mode: "{{ ssh['TrustedUserCAKeys']['mode'] }}" 
+  notify:
+    - sshd servisini yeniden baslat
+  sudo: yes
+  tags: ssh
+
+
+- name: sshd yapilandiriliyor
+  template:
+        src: "{{ ssh['conf']['source'] }}"
+        dest: "{{ ssh['conf']['destination'] }}"
+        owner: "{{ ssh['conf']['owner'] }}"
+        group: "{{ ssh['conf']['group'] }}"
+        mode: "{{ ssh['conf']['mode'] }}"
+  notify:
+    - sshd servisini yeniden baslat
+  sudo: yes
+  tags: ssh
+
+- name: sshd servisi ayakta
+  service:
+        name: "{{ ssh['service']['name'] }}"
+        state: "{{ ssh['service']['state'] }}"
+        enabled: "{{ ssh['service']['enabled'] }}"
+  sudo: yes
+  tags: ssh
+

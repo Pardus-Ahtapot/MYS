@@ -1,0 +1,22 @@
+---
+# Rsyslog degiskenlerinin tutuldugu dosyadir.
+ossimcik_rsyslog:
+    service:
+        name: "rsyslog"
+        state: "started"
+        enabled: "yes"
+    conf:
+        source: "rsyslog.conf.j2"
+        destination: "/etc/rsyslog.conf"
+        owner: "root" 
+        group: "root" 
+        mode: "0644" 
+    rsyslog_server: "Rsyslog_Sunucu_FQDN"
+    ossim_server: "Ossim_Sunucu_FQDN"
+    ActionQueueMaxDiskSpace: "2g"
+    ActionQueueSaveOnShutdown: "on"
+    ActionQueueType: "LinkedList"
+    ActionQueueFileName: "srvfrwd"
+    ActionResumeRetryCount: "-1"
+    WorkDirectory: "/var/spool/rsyslog"
+    IncludeConfig: "/etc/rsyslog.d/*"

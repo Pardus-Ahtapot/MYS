@@ -3,7 +3,7 @@
 # Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
 logstash_packages:
     package01:
-        name: "logstash=2.3.3-1" 
+        name: "logstash=2.3.1-1" 
         state: "present" 
     package02:
         name: "oracle-java8-installer=8u101+8u101arm-1~webupd8~2" 

@@ -1,0 +1,5 @@
+lxc.network.type = {{lxc[inventory_hostname].network_type}}
+lxc.network.link = {{lxc[inventory_hostname].network_link}}
+lxc.network.flags = up
+lxc.network.hwaddr = {{lxc[inventory_hostname].network_hwaddr}}
+lxc.aa_profile = unconfined

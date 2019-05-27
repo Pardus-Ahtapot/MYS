@@ -34,4 +34,99 @@
 
 </group> 
 
+<group name="labris,">
+
+   <rule id="110000" level="9">
+      <decoded_as>c-icap</decoded_as>
+      <match>ALLOWED</match>
+      <description>URL'e izin verilen erisim gerceklesti.</description>
+      <group>access_allowed</group>
+   </rule>
+
+</group>
+
+<group name="service-status,">
+
+   <rule id="110100" level="9">
+      <if_sid>530</if_sid>
+      <match>ossec: output: 'Disk Durumu': /dev/</match>
+      <regex>8\d%</regex>
+      <description>Disk kullanim seviyesi yuksek (%80+).</description>
+      <group>low_diskspace</group>
+   </rule>
+
+   <rule id="110101" level="11">
+      <if_sid>530</if_sid>
+      <match>ossec: output: 'Disk Durumu': /dev/</match>
+      <regex>9\d%</regex>
+      <description>Disk kullanim seviyesi kritik (%90+).</description>
+      <group>low_diskspace</group>
+   </rule>
+
+   <rule id="110102" level="1">
+      <if_sid>530</if_sid>
+      <match>ossec: output: 'Rsyslog Servis Durumu':</match>
+      <options>no_log</options>
+      <group>rsyslog</group>
+   </rule>
+
+   <rule id="110103" level="10">
+      <if_sid>110102</if_sid>
+      <match>Active: inactive</match>
+      <description>Rsyslog servisi calismiyor (STOP).</description>
+      <group>rsyslog</group>
+   </rule>
+
+   <rule id="110104" level="10">
+      <if_sid>110102</if_sid>
+      <match>Active: failed</match>
+      <description>Rsyslog servisi calismiyor (FAILED).</description>
+      <group>rsyslog</group>
+   </rule>
+
+</group>
+
+<group name="rsyslog,">
+
+   <rule id="110201" level="0">
+      <decoded_as>rsyslog</decoded_as>
+      <match>gnutls error</match>
+      <description>Rsyslog Service Kontrol</description>
+   </rule>
+
+   <rule id="110202" level="10" frequency="2" timeframe="120">
+      <if_matched_sid>110201</if_matched_sid>
+      <match>gnutls error -53: Error in the push function</match>
+      <description>Kaynaklar, ossimcik'e log gonderemiyor. </description>
+      <description>Ossimcik uzerindeki Rsyslog servisini kontrol edin.</description>
+   </rule>
+
+   <rule id="110203" level="10">
+      <if_sid>110201</if_sid>
+      <match>gnutls error -43: Error in the certificate</match>
+      <description>Serifika Hatasi</description>
+   </rule>
+
+   <rule id="110204" level="10">
+      <if_sid>110203</if_sid>
+      <match>authentication error</match>
+      <description>Sertifika Hatasi: </description>
+      <description>Log kaynaginda/toplayicisinda PERMITTEDPEER hatasi.</description>
+   </rule>
+
+   <rule id="110205" level="10">
+      <if_sid>110201</if_sid>
+      <match>gnutls error -15: An unexpected TLS packet was received</match>
+      <description>Baglanti Hatasi: </description>
+      <description>Iki uc arasinda TLS baglantisi kurulamiyor.</description>
+   </rule>
+
+   <rule id="110206" level="10" frequency="2" timeframe="120">
+      <if_matched_sid>110205</if_matched_sid>
+      <match>gnutls error -43: Error in the certificate</match>
+      <description>Log kaynaginda/toplayicisinda PERMITTEDPEER hatasi.</description>
+   </rule>
+
+</group>
+
 <!-- EOF -->

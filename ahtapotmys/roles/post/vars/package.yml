@@ -1,0 +1,16 @@
+---
+# Paket degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
+post_packages:
+    package01:
+        name: "git"
+        state: "present" 
+    package02:
+        name: "debsums"
+        state: "present"
+#    packageXX:
+#        name: 
+#        state:  
+#    packageXX:
+#        name: 
+#        state:  
