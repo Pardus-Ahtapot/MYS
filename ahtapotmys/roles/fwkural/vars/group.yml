@@ -1,0 +1,12 @@
+---
+# Grup degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar grup eklenebilir.
+user_groups:
+    group1:
+        name: lkk 
+        gid: 1010 
+        state: present
+#    groupX:
+#        name:  
+#        gid:  
+#        state:   
