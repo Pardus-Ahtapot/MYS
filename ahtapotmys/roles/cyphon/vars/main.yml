@@ -1,0 +1,21 @@
+---
+cyphon_external_ip: X.X.X.X
+cyphon_mapbox_access_token:
+cyphon_from: webmaster@ahtapot.org.tr
+cyphon_smtp_server: localhost
+cyphon_smtp_user: webmaster@ahtapot.org.tr
+cyphon_smtp_password: PASSWORD
+cyphon_smtp_port: 25
+cyphon_use_tls: False
+cyphon_dbname: cyphon
+cyphon_dbuser: cyphon
+cyphon_dbpass: cyphon
+cyphon_ssl_country: "TR"
+cyphon_ssl_state: "Ankara"
+cyphon_ssl_locality: "Ankara"
+cyphon_ssl_organization: "ahtapot"
+cyphon_ssl_organizationalunit: "ahtapot"
+cyphon_ssl_commonname: "cyphon.ahtapot"
+cyphon_web_username: cyphon@ahtapot
+cyphon_web_password: cyphon
+postgresql_version: 9.6

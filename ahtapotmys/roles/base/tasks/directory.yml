@@ -6,6 +6,6 @@
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
         state: "{{ item.value.state }}"
-  with_dict: "base_ahtapot_directories" 
+  with_dict: "{{base_ahtapot_directories}}" 
   sudo: yes
   tags: directory 

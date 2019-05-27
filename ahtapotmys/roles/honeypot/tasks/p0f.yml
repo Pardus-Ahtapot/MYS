@@ -1,0 +1,39 @@
+---
+- name: installing p0f honeypot
+  sudo: yes
+  shell: lxc-attach -n p0f -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install p0f-ahtapot wget sudo"
+  when: item.type == "p0f"
+  with_items: "{{containers[inventory_hostname]}}"
+
+- name: send  p0f.conf
+  sudo: yes
+  template:
+    src: "p0f.conf.j2"
+    dest: "/var/lib/lxc/{{item.type}}/rootfs/usr/share/p0f/p0f.conf"
+    owner: "root"
+    group: "root"
+    mode: 0755
+  when: item.type == "p0f"
+  with_items: "{{containers[inventory_hostname]}}"
+
+- name: registering p0f honeypot
+  sudo: yes
+  shell: |
+    lxc-attach -n p0f -- /bin/bash -c "if [[ ! -f {{p0f_conf.register_check_file}} ]]; then
+                                          /usr/share/p0f/install.sh {{mhn_url}} {{mhn_deploy_key}} &&
+                                          touch {{p0f_conf.register_check_file}};
+                                       fi"
+  when: item.type == "p0f"
+  with_items: "{{containers[inventory_hostname]}}"
+
+- name: registering p0f honeypot with force
+  sudo: yes
+  shell: lxc-attach -n p0f -- /usr/share/p0f/install.sh {{mhn_url}} {{mhn_deploy_key}}
+  when: item.type == "p0f" and item.force_register == true
+  with_items: "{{containers[inventory_hostname]}}"
+
+- name: restarting p0f honeypot
+  sudo: yes
+  shell: lxc-attach -n p0f -- supervisorctl restart p0f
+  when: item.type == "p0f"
+  with_items: "{{containers[inventory_hostname]}}"

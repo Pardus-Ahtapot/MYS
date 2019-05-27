@@ -1,0 +1,5 @@
+---
+# tasks file for icinga2-ansible-classic-ui
+
+- include: conf_integrity.yml
+- include: icinga2_classic_ui_Debian_install.yml

@@ -12,13 +12,25 @@
   sudo: yes
   tags: ossec
 
+- name: Ossec Server (Ossimcik) anahtar degisimi aktive ediliyor.
+  shell: "/usr/bin/nohup /usr/bin/python /var/ossec/bin/auto-server.py > /dev/null 2>&1 & /bin/echo $! > /tmp/ossec.pid"
+  when: "inventory_hostname in groups['ossimcik']"
+  sudo: yes
+  tags: ossec
+
 - name: Ossec anahtar degisimi yapiliyor.
   shell: "/usr/bin/python /var/ossec/bin/auto-ossec.py {{ ossec['server'] }} && touch /var/ossec/key_exchange_completed"
   args: 
         creates: "/var/ossec/key_exchange_completed"
-  when: "'ossimcik' not in group_names"
+  when: "inventory_hostname not in groups['ossimcik']" 
   notify:
     - ossec servisini yeniden baslat
+  sudo: yes
+  tags: ossec
+
+- name: Ossec Server (Ossimcik) anahtar degisimi deaktive ediliyor.
+  shell: "/bin/kill $(/bin/cat /tmp/ossec.pid)"
+  when: "inventory_hostname in groups['ossimcik']"
   sudo: yes
   tags: ossec
 

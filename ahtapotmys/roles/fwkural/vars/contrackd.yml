@@ -1,0 +1,9 @@
+---
+# Contrackd yapilandirmasini iceren dosyadir.
+conntrackd:
+    script:
+        source: "primary-backup.sh.j2"
+        destination: "/etc/conntrackd/primary-backup.sh"
+        owner: "root"
+        group: "root"
+        mode: "755"

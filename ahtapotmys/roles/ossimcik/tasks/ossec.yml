@@ -11,6 +11,18 @@
   sudo: yes
   tags: ossec
 
+- name: Ossec local decoder uygulaniyor.
+  template:
+        src: "{{ ossec['localdecoder']['source'] }}"
+        dest: "{{ ossec['localdecoder']['destination'] }}"
+        owner: "{{ ossec['localdecoder']['owner'] }}"
+        group: "{{ ossec['localdecoder']['group'] }}"
+        mode: "{{ ossec['localdecoder']['mode'] }}"
+  notify:
+    - ossec servisi yeniden baslatiliyor
+  sudo: yes
+  tags: ossec
+
 - name: Ossec local rules uygulaniyor.
   template:
         src: "{{ ossec['localrules']['source'] }}"
@@ -20,6 +32,23 @@
         mode: "{{ ossec['localrules']['mode'] }}"
   notify:
     - ossec servisi yeniden baslatiliyor
+  sudo: yes
+  tags: ossec
+
+# run level eklenmeden servis enable edilemiyor. Bu yuzden bu fix eklenmiştir.
+- name: Ossec init script runlevel uygulanıyor.
+  blockinfile:
+    dest: "/etc/init.d/{{ ossec['service']['name'] }}"
+    insertafter: "^#!/bin.*"
+    block: |
+      ### BEGIN INIT INFO
+      # Provides:          {{ ossec['service']['name'] }}
+      # Required-Start:    $all
+      # Required-Stop:
+      # Default-Start:     2 3 4 5
+      # Default-Stop:
+      # Short-Description: {{ ossec['service']['name'] }}
+      ### END INIT INFO
   sudo: yes
   tags: ossec
 

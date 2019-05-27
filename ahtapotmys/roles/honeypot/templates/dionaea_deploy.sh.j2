@@ -1,0 +1,63 @@
+#!/bin/bash
+
+set -e
+set -x
+
+if [ $# -ne 2 ]
+    then
+        echo "Wrong number of arguments supplied."
+        echo "Usage: $0 <server_url> <deploy_key>."
+        exit 1
+fi
+
+server_url=$1
+deploy_key=$2
+
+cd /usr/share/dionaea
+
+if [[ ! -e registration.sh ]]; then
+    wget ${server_url}/static/registration.txt -O registration.sh
+    chmod +x registration.sh
+fi
+
+
+if [[ ! -f {{dionaea_conf.register_check_file}} ]] || [[ "{{item.force_register}}" == "true" ]]; then
+    #register and export hpfeeds options
+    . ./registration.sh ${server_url} ${deploy_key} "dionaea"
+
+    # Set up hpfeeds
+    cat > /usr/share/dionaea/etc/dionaea/ihandlers-available/hpfeeds.yaml <<EOF
+- name: hpfeeds
+  config:
+    server: $HPF_HOST
+    port: $HPF_PORT
+    ident: $HPF_IDENT
+    secret: $HPF_SECRET
+    # dynip_resolve: enable to lookup the sensor ip through a webservice
+    # dynip_resolve: "http://hpfriends.honeycloud.net/ip"
+EOF
+
+    #enable only hpfeed handler
+    rm -f /usr/share/dionaea/etc/dionaea/ihandlers-enabled/*
+    ln -s ../ihandlers-available/hpfeeds.yaml /usr/share/dionaea/etc/dionaea/ihandlers-enabled/hpfeeds.yaml
+
+    touch {{dionaea_conf.register_check_file}}
+fi
+#setup http service
+cat > /usr/share/dionaea/etc/dionaea/services-available/http.yaml <<EOF
+- name: http
+  config:
+    root: {{dionaea_conf.root_path}}
+    ports:
+      - {{dionaea_conf.http_port}}
+    ssl_ports:
+      - {{dionaea_conf.https_port}}
+    max_request_size: {{dionaea_conf.max_request_size}}
+EOF
+
+#enable only http handler
+rm -f /usr/share/dionaea/etc/dionaea/services-enabled/*
+ln -s ../services-available/http.yaml /usr/share/dionaea/etc/dionaea/services-enabled/http.yaml
+
+
+supervisorctl update

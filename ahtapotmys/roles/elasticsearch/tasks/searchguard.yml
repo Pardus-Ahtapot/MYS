@@ -6,7 +6,7 @@
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
-  with_dict: "searchguard_configurations"
+  with_dict: "{{searchguard_configurations}}"
   notify:
     - searchguard konfigurasyonu yeniden yukleniyor
   sudo: yes

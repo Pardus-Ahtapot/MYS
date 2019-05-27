@@ -6,56 +6,65 @@
 #### MODULES ####
 #################
 
-$ModLoad imuxsock
-$ModLoad imklog
-#$ModLoad immark
+module(load="imuxsock")
+module(load="imklog")
+module(load="imrelp")
+module(load="imudp" threads="{{ rsyslog['imthreads'] }}")
 
-$ModLoad imudp
-$UDPServerRun 514
+main_queue(
+   queue.size="{{ rsyslog['MainQueueSize'] }}"
+   queue.workerthreads="{{ rsyslog['MainQueueWorkerThreads'] }}"
+)
 
-$ModLoad imtcp
-$InputTCPServerRun 514
-$InputTCPServerStreamDriverMode 1
-$InputTCPServerStreamDriverAuthMode anon
+template(name="MsgFormat" type="string" string="%msg:2:10000%\n")
 
-$DefaultNetstreamDriver gtls
-$DefaultNetstreamDriverCAFile  /etc/ssl/certs/rootCA.pem
-$DefaultNetstreamDriverCertFile /etc/ssl/certs/{{ ansible_fqdn }}.crt
-$DefaultNetstreamDriverKeyFile /etc/ssl/private/{{ ansible_fqdn }}.key
+############################
+### Listening To Sources ###
+############################
 
-###############
-#### RULES ####
-###############
+input(type="imudp"
+   port="{{ rsyslog['port_udp'] }}"
+   ruleset="RawLogs"
+)
 
-$template OssimcorAlerts, "/data/log/ossimcor/ossimcoralerts.log"
-$template MsgFormat,"%msg:2:10000%\n"
-$template Ossimcor, "/data/log/ossimcor/ossimcor_raw.log"
-$template Ossim02Alerts, "/data/log/ossim02/ossim02alerts.log"
-$template MsgFormat,"%msg:2:10000%\n"
-$template Ossim02, "/data/log/ossim02/ossim02_raw.log"
-$template Ossimcik02Alerts, "/data/log/ossimcik02/ossimcik02alerts.log"
-$template MsgFormat,"%msg:2:10000%\n"
-$template Ossimcik02, "/data/log/ossimcik02/ossimcik02_raw.log"
-$template Ossimcik01Alerts, "/data/log/ossimcik01/ossimcik01alerts.log"
-$template MsgFormat,"%msg:2:10000%\n"
-$template Ossimcik01, "/data/log/ossimcik01/ossimcik01_raw.log"
+input(type="imrelp"
+   port="{{ rsyslog['port'] }}"
+   ruleset="RawLogs"
+   tls="{{ rsyslog['tls']['state'] }}"
+   tls.caCert="{{ rsyslog['tls']['cacert'] }}"
+   tls.myCert="{{ rsyslog['tls']['mycert'] }}"
+   tls.myPrivKey="{{ rsyslog['tls']['myprivkey'] }}"
+   tls.authMode="{{ rsyslog['tls']['authmode'] }}"
+   tls.permittedpeer=["{{ rsyslog['tls']['permittedpeer'] }}"]
+)
 
-if($fromhost-ip == '172.16.19.201' and $msg contains 'AV - Alert -') then -?Ossim02Alerts;MsgFormat
-if($fromhost-ip == '172.16.19.201' and $msg contains 'AV - Alert -') then ~
-if $fromhost-ip == '172.16.19.201' then -?Ossim02
-& ~
-if($fromhost-ip == '172.16.19.206' and $msg contains 'AV - Alert -') then -?Ossimcik01Alerts;MsgFormat
-if($fromhost-ip == '172.16.19.206' and $msg contains 'AV - Alert -') then ~
-if $fromhost-ip == '172.16.19.206' then -?Ossimcik01
-& ~
-if($fromhost-ip == '172.16.19.207' and $msg contains 'AV - Alert -') then -?Ossimcik02Alerts;MsgFormat
-if($fromhost-ip == '172.16.19.207' and $msg contains 'AV - Alert -') then ~
-if $fromhost-ip == '172.16.19.207' then -?Ossimcik02
-& ~
-if($fromhost-ip == '172.16.19.202' and $msg contains 'AV - Alert -') then -?OssimcorAlerts;MsgFormat
-if($fromhost-ip == '172.16.19.202' and $msg contains 'AV - Alert -') then ~
-if $fromhost-ip == '172.16.19.202' then -?Ossimcor
-& ~
+####################################
+### Rules For Coming Logs/Alerts ###
+####################################
+
+ruleset(name="RawLogs") {
+   {% for key, value in sources.iteritems() %}
+   if ($fromhost-ip == '{{ value.addr }}' and $msg contains 'AV - Alert -') then {
+      action(name="{{ value.alertname }}"
+         type="omfile"
+         file="{{ value.alertfile }}"
+         asyncWriting="{{ rsyslog['asyncWriting'] }}"
+         ioBufferSize="{{ rsyslog['ioBufferSize'] }}"
+         template="MsgFormat"
+      )
+      stop
+   } else if ($fromhost-ip == '{{ value.addr }}') then {
+      action(name="{{ value.rawname }}"
+         type="omfile"
+         file="{{ value.rawfile }}"
+         asyncWriting="{{ rsyslog['asyncWriting'] }}"
+         ioBufferSize="{{ rsyslog['ioBufferSize'] }}"
+      )
+      stop
+   }
+   {% endfor %}
+}
+
 
 auth,authpriv.*			/var/log/auth.log
 *.*;auth,authpriv.none		-/var/log/syslog
@@ -73,24 +82,6 @@ mail.err			/var/log/mail.err
 news.crit			/var/log/news/news.crit
 news.err			/var/log/news/news.err
 news.notice			-/var/log/news/news.notice
-
-###########################
-#### GLOBAL DIRECTIVES ####
-###########################
-
-$ActionSendStreamDriverMode 1
-$ActionSendStreamDriverAuthMode anon
-$ActionQueueType LinkedList
-$ActionQueueFileName srvrfwd
-$ActionResumeRetryCount -1
-$ActionQueueSaveOnShutdown on
-$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
-
-$FileOwner root
-$FileGroup adm
-$FileCreateMode 0640
-$DirCreateMode 0755
-$Umask 0022
 
 $WorkDirectory {{ rsyslog['WorkDirectory'] }}
 $IncludeConfig {{ rsyslog['IncludeConfig'] }}

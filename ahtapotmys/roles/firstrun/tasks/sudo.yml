@@ -1,0 +1,12 @@
+---
+- name: Sudoers yapilandiriliyor.
+  template:
+        src: "{{ sudo['conf']['source'] }}"
+        dest: "{{ sudo['conf']['destination'] }}" 
+        owner: "{{ sudo['conf']['owner'] }}" 
+        group: "{{ sudo['conf']['group'] }}" 
+        mode: "{{ sudo['conf']['mode'] }}" 
+        validate: "{{ sudo['conf']['validate'] }}" 
+  sudo: yes
+  tags: sudoers
+

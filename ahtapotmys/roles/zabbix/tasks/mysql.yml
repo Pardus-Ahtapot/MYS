@@ -1,0 +1,208 @@
+---
+# task file for mysql
+- name: "Set the correct delegated_dbhost (to support MySQL db deployment on a remote dbhost)"
+  set_fact:
+    delegated_dbhost: "{{ zabbix_server_dbhost if (zabbix_server_dbhost != 'localhost') else inventory_hostname}}"
+
+- name: "MySQL | Create database"
+  sudo: yes
+  mysql_db:
+    name: "{{ zabbix_server_dbname }}"
+    encoding: "{{ zabbix_server_dbencoding }}"
+    collation: "{{ zabbix_server_dbcollation }}"
+    login_host: "{{ zabbix_server_mysql_login_host | default(omit) }}"
+    login_user: "{{ zabbix_server_mysql_login_user | default(omit) }}"
+    login_password: "{{ zabbix_server_mysql_login_password | default(omit) }}"
+    state: present
+  when: zabbix_database_creation
+  register: zabbix_database_created
+  delegate_to: "{{ delegated_dbhost }}"
+  tags:
+    - zabbix-server
+    - database
+    - skip_ansible_lint
+
+- name: "MySQL | Create database user"
+  sudo: yes
+  mysql_user:
+    name: "{{ zabbix_server_dbuser }}"
+    password: "{{ zabbix_server_dbpassword }}"
+    priv: "{{ zabbix_server_dbname }}.*:ALL"
+    state: present
+  when: zabbix_database_creation
+  delegate_to: "{{ delegated_dbhost }}"
+  tags:
+    - zabbix-server
+    - database
+
+- name: "Get the file for create.sql >= 3.1"
+  shell: ls -1 {{ datafiles_path }}/create.sq*
+  changed_when: False
+  when:
+    - zabbix_version | version_compare('3.1', '>=')
+    - zabbix_database_sqlload
+  register: ls_output_create
+  tags:
+    - zabbix-server
+    - database
+
+- name: "Check if we have done files >= 3.1"
+  stat:
+    path: /etc/zabbix/create.done
+  register: done_file
+  when:
+    - zabbix_version | version_compare('3.1', '>=')
+    - zabbix_database_sqlload
+
+- name: "MySQL | Create database and import file >= 3.1"
+  sudo: yes
+  mysql_db:
+    name: "{{ zabbix_server_dbname }}"
+    encoding: "{{ zabbix_server_dbencoding }}"
+    collation: "{{ zabbix_server_dbcollation }}"
+    state: import
+    target: "{{ ls_output_create.stdout }}"
+  when:
+    - zabbix_version | version_compare('3.1', '>=')
+    - zabbix_database_sqlload
+    - not done_file.stat.exists
+  delegate_to: "{{ delegated_dbhost }}"
+  tags:
+    - zabbix-server
+    - database
+
+- name: "Check if we have sql_done files >= 3.1"
+  sudo: yes
+  file:
+    path: /etc/zabbix/create.done
+    state: touch
+  when:
+    - zabbix_version | version_compare('3.1', '>=')
+    - zabbix_database_sqlload
+    - not done_file.stat.exists
+
+- name: "Get the correct path for the SQL files < 3.1"
+  shell: ls -1 /usr/share/zabbix-server-mysql/{{ item }}.sql*
+  changed_when: False
+  register: ls_output_schema
+  with_items:
+    - schema
+    - images
+    - data
+  when:
+    - zabbix_version | version_compare('3.1', '<')
+    - zabbix_database_sqlload
+  tags:
+    - zabbix-server
+    - database
+
+- name: "Check if we have done schema files < 3.1"
+  stat:
+    path: /etc/zabbix/{{ item }}.done
+  register: done_schema_files
+  with_items:
+    - schema
+  when:
+    - zabbix_version | version_compare('3.1', '<')
+    - zabbix_database_sqlload
+  tags:
+    - zabbix-server
+    - database
+
+- name: "Check if we have done images files < 3.1"
+  stat:
+    path: /etc/zabbix/{{ item }}.done
+  register: done_images_files
+  with_items:
+    - images
+  when:
+    - zabbix_version | version_compare('3.1', '<')
+    - zabbix_database_sqlload
+  tags:
+    - zabbix-server
+    - database
+
+- name: "Check if we have done data files < 3.1"
+  stat:
+    path: /etc/zabbix/{{ item }}.done
+  register: done_data_files
+  with_items:
+    - data
+  when:
+    - zabbix_version | version_compare('3.1', '<')
+    - zabbix_database_sqlload
+  tags:
+    - zabbix-server
+    - database
+
+- name: debug
+  debug:
+    msg: "{{done_data_files}}"
+
+
+- name: "MySQL | Create database and import schema files < 3.1"
+  sudo: yes
+  mysql_db:
+    name: "{{ zabbix_server_dbname }}"
+    encoding: "{{ zabbix_server_dbencoding }}"
+    collation: "{{ zabbix_server_dbcollation }}"
+    state: import
+    target: "/usr/share/zabbix-server-mysql/schema.sql.gz"
+  when:
+    - zabbix_version | version_compare('3.1', '<')
+    - zabbix_database_sqlload
+    - not done_schema_files.results[0].stat.exists
+  delegate_to: "{{ delegated_dbhost }}"
+  tags:
+    - zabbix-server
+    - database
+
+- name: "MySQL | Create database and import images files < 3.1"
+  sudo: yes
+  mysql_db:
+    name: "{{ zabbix_server_dbname }}"
+    encoding: "{{ zabbix_server_dbencoding }}"
+    collation: "{{ zabbix_server_dbcollation }}"
+    state: import
+    target: "/usr/share/zabbix-server-mysql/images.sql.gz"
+  when:
+    - zabbix_version | version_compare('3.1', '<')
+    - zabbix_database_sqlload
+    - not done_images_files.results[0].stat.exists
+  delegate_to: "{{ delegated_dbhost }}"
+  tags:
+    - zabbix-server
+    - database
+
+- name: "MySQL | Create database and import data files < 3.1"
+  sudo: yes
+  mysql_db:
+    name: "{{ zabbix_server_dbname }}"
+    encoding: "{{ zabbix_server_dbencoding }}"
+    collation: "{{ zabbix_server_dbcollation }}"
+    state: import
+    target: "/usr/share/zabbix-server-mysql/data.sql.gz"
+  when:
+    - zabbix_version | version_compare('3.1', '<')
+    - zabbix_database_sqlload
+    - not done_data_files.results[0].stat.exists
+  delegate_to: "{{ delegated_dbhost }}"
+  tags:
+    - zabbix-server
+    - database
+
+- name: "Check if we have sql_done files < 3.1"
+  sudo: yes
+  file:
+    path: /etc/zabbix/{{ item }}.done
+    state: touch
+  with_items:
+    - schema
+    - images
+    - data
+  when:
+    - zabbix_version | version_compare('3.1', '<')
+    - zabbix_database_sqlload
+  tags:
+    - zabbix-server
+    - database

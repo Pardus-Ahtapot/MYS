@@ -15,3 +15,10 @@ firewallbuilder:
             owner: "root" 
             group: "root" 
             mode: "0755"
+
+fwb_editable_objects:
+#    FW.DOMAIN:
+#        - objects:
+#            - birinci
+#            - ikinci
+#    FW2.DOMAIN:

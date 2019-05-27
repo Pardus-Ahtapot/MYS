@@ -6,7 +6,7 @@
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
-  with_dict: "base_profile_scripts"
+  with_dict: "{{base_profile_scripts}}"
   notify:
     - profile uygula 
   sudo: yes

@@ -1,0 +1,15 @@
+{% for domain in suricata_blocked_domains %}
+{% if suricata_mode == "ids" %}
+alert dns any any -> any any (msg: "DNS Query Detection: {{domain}}"; dns_query; content:"{{domain}}"; nocase; metadata: former_category DNS;  classtype:bad-unknown; sid:{{ range(3000000, 10000000) | random }}; rev:1; )
+alert http any any -> any any (msg:"Domain Detection(http): {{domain}}";  content:"{{domain}}"; nocase; http_header; classtype:bad-unknown; sid:{{ range(3000000, 10000000) | random }}; rev:1;)
+alert tls any any -> any any (msg:"Domain Detection(tls_sni) {{domain}}"; tls_sni; content:"{{domain}}"; nocase; pcre:"/{{domain}}$/"; classtype:bad-unknown; sid:{{ range(3000000, 10000000) | random }}; rev:1;)
+alert tcp any any -> any [25,587,465] (msg:"Domain Detection(to_smtp_server) {{domain}}"; flow:to_server,established; content:"{{domain}}"; nocase; classtype:bad-unknown; sid:{{ range(3000000, 10000000) | random }}; rev:1;)
+alert tcp any [25,587,465] -> any any (msg:"Domain Detection(from_smtp_server) {{domain}}"; flow:from_server,established; content:"{{domain}}"; nocase; classtype:bad-unknown; sid:{{ range(3000000, 10000000) | random }}; rev:1;)
+{% else %}
+drop dns any any -> any any (msg: "DNS Query Detection: {{domain}}"; dns_query; content:"{{domain}}"; nocase; metadata: former_category DNS;  classtype:bad-unknown; sid:{{ range(3000000, 10000000) | random }}; rev:1; )
+drop http any any -> any any (msg:"Domain Detection(http): {{domain}}";  content:"{{domain}}"; nocase; http_header; classtype:bad-unknown; sid:{{ range(3000000, 10000000) | random }}; rev:1;)
+drop tls any any -> any any (msg:"Domain Detection(tls_sni) {{domain}}"; tls_sni; content:"{{domain}}"; nocase; pcre:"/{{domain}}$/"; classtype:bad-unknown; sid:{{ range(3000000, 10000000) | random }}; rev:1;)
+drop tcp any any -> any [25,587,465] (msg:"Domain Detection(to_smtp_server) {{domain}}"; flow:to_server,established; content:"{{domain}}"; nocase; classtype:bad-unknown; sid:{{ range(3000000, 10000000) | random }}; rev:1;)
+drop tcp any [25,587,465] -> any any (msg:"Domain Detection(from_smtp_server) {{domain}}"; flow:from_server,established; content:"{{domain}}"; nocase; classtype:bad-unknown; sid:{{ range(3000000, 10000000) | random }}; rev:1;)
+{% endif %}
+{% endfor %}

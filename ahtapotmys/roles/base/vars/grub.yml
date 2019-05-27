@@ -1,10 +1,13 @@
 ---
 # Grub yapilandirmasini belirtmektedir.
 grub:
-    confile: "/boot/grub/grub.cfg"
+    defaultfile: "/etc/default/grub"
+    conffile: "/boot/grub/grub.cfg"
     grubuser: ahtagrub
     grubpass: grub.pbkdf2.sha512.10000.2A82B914C527C90A5018614B88F1604955C46131AEF358D1CB81E604793F5DD973DC3B796A2AF691AECC835928F76774835920D11B7FBEB07F050FAAF231B754.9433A4A373F5FB7D5FC05E25E14CAC0FEAD7FDE2019BE0E5E5D3B7D98A06FA3DB018D3EC7A0557B1D7BCDB3AD091B8C44E121B057931E72A0A1592A7392214DF
-    
+    owner: "root"
+    group: "root"
+    mode: "0400"
 
 grub_configurations:
     conf01:

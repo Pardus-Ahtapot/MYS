@@ -1,0 +1,106 @@
+---
+- name: Copy Main Icinga2 Configuration
+  sudo: yes
+  template: src="{{ icinga2['main_conf']['src'] }}"
+            dest="{{ icinga2['main_conf']['dest'] }}"
+            backup="{{ icinga2['main_conf']['backup'] }}"
+            owner="{{ icinga2['main_conf']['owner'] }}"
+            group="{{ icinga2['main_conf']['group'] }}"
+            mode="{{ icinga2['main_conf']['mode'] }}"
+  notify:
+   - restart icinga2
+
+- name: Copy Check Commands Configuration
+  sudo: yes
+  template: src="{{ icinga2['check_commands_conf']['src'] }}"
+            dest="{{ icinga2['check_commands_conf']['dest'] }}"
+            backup="{{ icinga2['check_commands_conf']['backup'] }}"
+            owner="{{ icinga2['check_commands_conf']['owner'] }}"
+            group="{{ icinga2['check_commands_conf']['group'] }}"
+            mode="{{ icinga2['check_commands_conf']['mode'] }}"
+  notify:
+   - restart icinga2
+
+- name: Copy groups.conf
+  sudo: yes
+  template: src="{{ icinga2['groups_conf']['src'] }}"
+            dest="{{ icinga2['groups_conf']['dest'] }}"
+            backup="{{ icinga2['groups_conf']['backup'] }}"
+            owner="{{ icinga2['groups_conf']['owner'] }}"
+            group="{{ icinga2['groups_conf']['group'] }}"
+            mode="{{ icinga2['groups_conf']['mode'] }}"
+  notify:
+   - restart icinga2
+
+- name: Create hosts directory
+  sudo: yes
+  file: path="{{ icinga2['create_hosts']['dest'] }}"
+            state=directory
+            owner="{{ icinga2['create_hosts']['owner'] }}"
+            group="{{ icinga2['create_hosts']['group'] }}"
+            mode="{{ icinga2['create_hosts']['mode'] }}"
+
+- name: Create hosts
+  sudo: yes
+  template: src="{{ icinga2['create_hosts']['src'] }}"
+            dest="{{ icinga2['create_hosts']['dest'] }}{{item.hostname}}.conf"
+            owner="{{ icinga2['create_hosts']['owner'] }}"
+            group="{{ icinga2['create_hosts']['group'] }}"
+            mode="{{ icinga2['create_hosts']['mode'] }}"
+  with_items: "{{ icinga_clients | default([])}}"
+
+- name: Create notifications
+  sudo: yes
+  template: src="{{ icinga2['create_notifications']['src'] }}"
+            dest="{{ icinga2['create_notifications']['dest'] }}"
+            owner="{{ icinga2['create_notifications']['owner'] }}"
+            group="{{ icinga2['create_notifications']['group'] }}"
+            mode="{{ icinga2['create_notifications']['mode'] }}"
+
+- name: Create users
+  sudo: yes
+  template: src="{{ icinga2['create_users']['src'] }}"
+            dest="{{ icinga2['create_users']['dest'] }}"
+            owner="{{ icinga2['create_users']['owner'] }}"
+            group="{{ icinga2['create_users']['group'] }}"
+            mode="{{ icinga2['create_users']['mode'] }}"
+
+- name: Copy mail-host-notification.sh
+  sudo: yes
+  template: src="{{ icinga2['mail_host_notification']['src'] }}"
+            dest="{{ icinga2['mail_host_notification']['dest'] }}"
+            owner="{{ icinga2['mail_host_notification']['owner'] }}"
+            group="{{ icinga2['mail_host_notification']['group'] }}"
+            mode="{{ icinga2['mail_host_notification']['mode'] }}"
+
+- name: Copy mail-service-notification.sh
+  sudo: yes
+  template: src="{{ icinga2['mail_service_notification']['src'] }}"
+            dest="{{ icinga2['mail_service_notification']['dest'] }}"
+            owner="{{ icinga2['mail_service_notification']['owner'] }}"
+            group="{{ icinga2['mail_service_notification']['group'] }}"
+            mode="{{ icinga2['mail_service_notification']['mode'] }}"
+
+- name: Copy sms.py
+  sudo: yes
+  template: src="{{ icinga2['sms']['src'] }}"
+            dest="{{ icinga2['sms']['dest'] }}"
+            owner="{{ icinga2['sms']['owner'] }}"
+            group="{{ icinga2['sms']['group'] }}"
+            mode="{{ icinga2['sms']['mode'] }}"
+
+- name: Create commands
+  sudo: yes
+  template: src="{{ icinga2['create_commands']['src'] }}"
+            dest="{{ icinga2['create_commands']['dest'] }}"
+            owner="{{ icinga2['create_commands']['owner'] }}"
+            group="{{ icinga2['create_commands']['group'] }}"
+            mode="{{ icinga2['create_commands']['mode'] }}"
+  with_items: "{{ icinga_clients | default([])}}"
+
+- name: Restart icinga
+  sudo: yes
+  service: name=icinga2
+           state=restarted
+           enabled=yes
+

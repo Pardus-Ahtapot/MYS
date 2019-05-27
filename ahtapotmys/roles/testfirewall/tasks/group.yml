@@ -1,9 +1,9 @@
 ---
-- name: Kullanici gurublari kontrol ediliyor.
+- name: Kullanici gruplari kontrol ediliyor.
   group:
         name: "{{ item.value.name }}"
         gid: "{{ item.value.gid }}"
         state: "{{ item.value.state }}"
-  with_dict: "testfirewall_groups" 
+  with_dict: "{{testfirewall_groups}}"
   sudo: yes
   tags: group 

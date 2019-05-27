@@ -1,0 +1,73 @@
+---
+main_cf: |
+  # See /usr/share/postfix/main.cf.dist for a commented, more complete version
+  
+  
+  # Debian specific:  Specifying a file name will cause the first
+  # line of that file to be used as the name.  The Debian default
+  # is /etc/mailname.
+  #myorigin = /etc/mailname
+  
+  smtpd_banner = {{antispam_smtpd_banner[ansible_hostname]}}
+  biff = no
+  
+  # appending .domain is the MUAs job.
+  append_dot_mydomain = no
+  
+  # Uncomment the next line to generate delayed mail warnings
+  #delay_warning_time = 4h
+  
+  readme_directory = no
+  
+  # See http://www.postfix.org/COMPATIBILITY_README.html -- default to 2 on
+  # fresh installs.
+  compatibility_level = 2
+  
+  # TLS parameters
+  smtpd_tls_cert_file={{antispam_smtpd_tls_cert_file}}
+  smtpd_tls_key_file={{antispam_smtpd_tls_key_file}}
+  smtpd_use_tls=yes
+  smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+  smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+  
+  # See /usr/share/doc/postfix/TLS_README.gz in the postfix-doc package for
+  # information on enabling SSL in the smtp client.
+  
+  smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+  myhostname = {{ansible_hostname}}.{{antispam_domain}}
+  #alias_maps = hash:/etc/aliases
+  #alias_database = hash:/etc/aliases
+  myorigin = $myhostname
+  mydestination = $myhostname, localhost.localdomain, localhost, localhost.localdomain, localhost
+  relayhost = 
+  mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 {{antispam_allowed_senders}}
+  mailbox_size_limit = 0
+  recipient_delimiter = +
+  inet_interfaces = all
+  inet_protocols = {{antispam_inet_protocols}}
+  
+  smtpd_tls_CAfile = {{antispam_smtpd_tls_CAfile}}
+  mydomain = {{antispam_domain}}
+  home_mailbox = Maildir/
+  mailbox_command =
+  local_recipient_maps =
+  smtpd_helo_required = yes
+  disable_vrfy_command = yes
+  header_checks = regexp:/etc/postfix/header_checks
+  mime_header_checks = regexp:/etc/postfix/header_checks
+  smtpd_sender_restrictions = check_client_access hash:/etc/postfix/senderaccess, check_recipient_access hash:/etc/postfix/receiveraccess
+  smtpd_recipient_restrictions = reject_invalid_hostname,reject_non_fqdn_hostname,reject_non_fqdn_sender,reject_non_fqdn_recipient,reject_unknown_sender_domain,reject_unauth_pipelining,permit_mynetworks,reject_unauth_destination, check_policy_service unix:private/spfcheck, check_policy_service inet:127.0.0.1:5525, check_policy_service inet:127.0.0.1:10040, check_policy_service inet:127.0.0.1:5525
+  smtpd_end_of_data_restrictions = check_policy_service inet:127.0.0.1:10040
+  spfcheck_time_limit = 3600
+  content_filter = smtp-amavis:[127.0.0.1]:10024
+  relay_domains = {{antispam_relay_domains}} 
+  transport_maps =  hash:/etc/postfix/transport
+  smtpd_recipient_limit = {{antispam_smtpd_recipient_limit}}
+  smtp_tls_ciphers = {{antispam_smtp_tls_ciphers}}
+  parent_domain_matches_subdomains = {{antispam_parent_domain_matches_subdomains}}
+  smtp_tls_security_level = {{antispam_smtp_tls_security_level}}
+  smtpd_use_tls = {{antispam_smtpd_use_tls}}
+  smtp_tls_note_starttls_offer = {{antispam_smtp_tls_note_starttls_offer}}
+  smtpd_tls_received_header = {{antispam_smtpd_tls_received_header}}
+  smtpd_tls_session_cache_timeout = {{antispam_smtpd_tls_session_cache_timeout}}
+  message_size_limit = {{antispam_message_size_limit}}  

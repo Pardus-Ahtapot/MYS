@@ -1,0 +1,233 @@
+---
+#cis playbook ayarlarini iceren dosyadir
+
+
+#ipv6 default olarak kapalıdır. aktif etmek istediginiz hostların adını buraya yazınız
+#ipv6_hosts:
+#  - pardus
+
+#cihazlara erisebilecek hostlari belirleyiniz.
+#guvenlik duzeyini arttirmak icin allowed_hosts u ornekteki gibi tanimlayip deny_all secenegini yes yapınız
+host_access:
+    allow_source: hosts.allow.j2
+    allow_file: /etc/hosts.allow
+    deny_source: hosts.deny.j2
+    deny_file: /etc/hosts.deny
+    allowed_hosts: ""
+    #allowed_hosts: "192.168.0.0/255.255.255.0, 10.0.0.0/255.0.0.0, 172.16.0.0/255.240.0.0"
+    deny_all: "no"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+aide:
+    source: "aide.cron.j2"
+    destination: "/etc/cron.d/aide"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+
+#password ayarlari asagidaki gibidir. istenildigi gibi degistirilebilir.
+
+pam:
+    password_file: "/etc/pam.d/common-password"
+    #minlen=14 - şifre en az 14 karakter olmalı
+    #dcredit=-1 - en az bir rakam içermeli
+    #ucredit=-1 - en az 1 büyük harf içermeli
+    #ocredit=-1 - en az 1 özel karakter içermeli
+    #lcredit=-1 - en az 1 küçük harf içermeli
+    password_setting: "password required pam_cracklib.so retry=3 minlen=14 dcredit=-1 ucredit=-1 ocredit=-1 lcredit=-1"
+
+    #son 5 sifreyi kullanmayi engeller
+    password_reuse_policy: "password [success=1 default=ignore] pam_unix.so obscure sha512 remember=5"
+
+    #5 fail denemesi sonrasi 900 saniye blokla
+    login_file: "/etc/pam.d/login"
+    login_setting: "auth required pam_tally2.so onerr=fail audit silent deny=5 unlock_time=900"
+
+    # su kullanimi kisitlanir
+    su_file: "/etc/pam.d/su"
+    su_setting: "auth required pam_wheel.so use_uid"
+
+
+login_definitions:
+    destination: "/etc/login.defs"
+    source: "login.defs.j2"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+    # 90 gun boyunca aktif olmayan kullanicilar inaktif adilicektir
+    lock_inactive_user_account: "90"
+
+    # chage --list <kullanici> komutu ile bilgiler edinilebilir
+    settings:
+        PASS_MAX_DAYS: "90"
+        PASS_MIN_DAYS: "7"
+        PASS_WARN_AGE: "7"
+
+
+
+cron_configuration:
+    #cronu modifiye edebilecek kullanicilar buraya eklenir
+    allow_file: "/etc/cron.allow"
+    allowed_users:
+        - root
+        - ahtapotops
+
+    files:
+        file1:
+          file: "/etc/crontab"
+          owner: "root"
+          group: "root"
+          mode: "0600"
+          state: "file"
+        file2:
+          file: "/etc/cron.hourly"
+          owner: "root"
+          group: "root"
+          mode: "0700"
+          state: "directory"
+        file3:
+          file: "/etc/cron.daily"
+          owner: "root"
+          group: "root"
+          mode: "0700"
+          state: "directory"
+        file4:
+          file: "/etc/cron.weekly"
+          owner: "root"
+          group: "root"
+          mode: "0700"
+          state: "directory"
+        file5:
+          file: "/etc/cron.monthly"
+          owner: "root"
+          group: "root"
+          mode: "0700"
+          state: "directory"
+        file6:
+          file: "/etc/cron.d"
+          owner: "root"
+          group: "root"
+          mode: "0700"
+          state: "directory"
+        file7:
+          file: "/etc/cron.allow"
+          owner: "root"
+          group: "root"
+          mode: "0600"
+          state: "touch"
+        file8:
+          file: "/etc/at.allow"
+          owner: "root"
+          group: "root"
+          mode: "0600"
+          state: "touch"
+        file9:
+          file: "/etc/cron.deny"
+          owner: "root"
+          group: "root"
+          mode: "0600"
+          state: "absent"
+        file10:
+          file: "/etc/at.deny"
+          owner: "root"
+          group: "root"
+          mode: "0600"
+          state: "absent"
+
+tmpmount:
+    conf:
+        source: "tmp.mount.j2"
+        destination: "/etc/systemd/system/tmp.mount"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    service:
+        name: "tmp.mount"
+        state: "started"
+        enabled: "yes"
+
+#yeni sysctl yapılandırmaları buraya eklenir
+#Onemli not: Eger burdaki bir parametre baska bir host grubunda farklı olması gerekiyorsa, o parametre icin ayri bir task yaziniz.
+sysctl_security:
+    source: "sysctl-ahtapotbase.conf.j2"
+    destination: "/etc/sysctl.d/ahtapotbase.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    settings:
+        fs.suid_dumpable: 0
+        kernel.randomize_va_space: 2
+        net.ipv4.conf.all.accept_redirects: 0
+        net.ipv4.conf.default.accept_redirects: 0
+        net.ipv4.conf.all.log_martians: 1
+        net.ipv4.conf.default.log_martians: 1
+        net.ipv4.icmp_echo_ignore_broadcasts: 1
+        net.ipv4.icmp_ignore_bogus_error_responses: 1
+        net.ipv4.tcp_syncookies: 1
+        net.ipv6.conf.all.accept_ra: 0
+        net.ipv6.conf.default.accept_ra: 0
+        net.ipv6.conf.all.accept_redirects: 0
+        net.ipv6.conf.default.accept_redirects: 0
+    #   key: value
+
+#limit.conf settings
+limit:
+    source: "limits.conf.j2"
+    destination: "/etc/security/limits.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    settings:
+        core: 0
+
+fstab:
+    conffile: "/etc/fstab"
+
+
+inetd:
+    conffile: "/etc/inetd.conf"
+    #inetd.conf dan silinmesi geren satirlar regex olarak belirtilmistir
+    remove_lines:
+        line1: '^shell'
+        line2: '^login'
+        line3: '^exec'
+        line4: '^talk'
+        line5: '^ntalk'
+        line6: '^telnet'
+        line7: '^tftp'
+        line8: '^chargen'
+        line9: '^daytime'
+        line10: '^echo'
+        line11: '^discard'
+        line12: '^time'
+
+#deaktif edilecek servisler
+services:
+    service1: avahi-deamon
+    service2: cups
+    service3: dovecot
+
+
+#onemli sistem dosyalarinin izin yapilandirmalari
+file_permissions:
+    file1:
+        file: "/etc/passwd"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    file2:
+        file: "/etc/shadow"
+        owner: "root"
+        group: "shadow"
+        mode: "0640"
+    file3:
+        file: "/etc/group"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+
+

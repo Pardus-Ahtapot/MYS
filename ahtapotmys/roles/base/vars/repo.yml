@@ -3,11 +3,11 @@
 # Yorum satiri ile gosterilen sablon doldurularak istenilen kadar repo eklenebilir. 
 base_repositories:
     repo01:
-        url: 'deb http://depo.pardus.org.tr/ahtapot yenikusak main'
+        url: 'deb [trusted=yes] http://depo.pardus.org.tr/ahtapot yenikusak main'
         updatecache: yes
         state: present
     repo02:
-        url: 'deb http://193.140.98.199/pardus-yenikusak yenikusak main non-free contrib'
+        url: 'deb [trusted=yes] http://depo.pardus.org.tr/pardus-yenikusak yenikusak main non-free contrib'
         updatecache: yes
         state: present
 #    repoXX:

@@ -1,0 +1,43 @@
+---
+# Calistirildiginda Orun Uygulama Guvenlik Duvari Kurulumunu yapar
+- hosts: waf
+#  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+#  - ../roles/base/vars/group.yml
+#  - ../roles/base/vars/user.yml
+#  - ../roles/base/vars/repo.yml
+#  - ../roles/base/vars/rsyslog.yml
+#  - ../roles/base/vars/ntp.yml
+#  - ../roles/base/vars/package.yml
+#  - ../roles/base/vars/blacklist.yml
+#  - ../roles/base/vars/host.yml
+#  - ../roles/base/vars/audit.yml
+#  - ../roles/base/vars/sudo.yml
+#  - ../roles/base/vars/ssh.yml
+#  - ../roles/base/vars/grub.yml
+#  - ../roles/base/vars/logger.yml
+#  - ../roles/base/vars/logrotate.yml
+#  - ../roles/base/vars/directory.yml
+#  - ../roles/base/vars/profile.yml
+#  - ../roles/base/vars/fusioninventory.yml
+  - ../roles/rsyslog/vars/package.yml
+  - ../roles/rsyslog/vars/logrotate.yml
+  - ../roles/rsyslog/vars/signer.yml
+  - ../roles/rsyslog/vars/rsyslog.yml
+  - ../roles/rsyslog/vars/conf_list.yml
+  - ../roles/logstash/vars/package.yml
+  - ../roles/logstash/vars/logstash.yml
+  - ../roles/logstash/vars/conf_files.yml
+  - ../roles/logstash/vars/conf_list.yml
+  - ../roles/elasticsearch/vars/elasticsearch.yml
+  - ../roles/elasticsearch/vars/conf_list.yml
+  - ../roles/waf/vars/ahtapot-waf.yml
+  - ../roles/waf/vars/conf_list.yml
+  - ../roles/waf-evasive/vars/conf_list.yml
+  - ../roles/waf-proxy-vhosts/vars/conf_list.yml
+  roles:
+    - { role: waf }
+    - { role: waf-evasive }
+    - { role: waf-proxy-vhosts }
+

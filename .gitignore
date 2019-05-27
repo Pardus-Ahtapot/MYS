@@ -3,3 +3,4 @@ debian/ahtapot-mys.substvars
 debian/files
 debian/ahtapot-mys.debhelper.log
 debian/ahtapot-mys/
+.idea/

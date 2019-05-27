@@ -1,0 +1,75 @@
+#- name: installing snorby
+#  sudo: yes
+#  apt:
+#    name: "{{ item }}"
+#    state: present
+#  with_items:
+#    - snorby
+- include: conf_integrity.yml
+
+- name: Ensure Snorby MySQL database is present.
+  sudo: yes
+  mysql_db:
+    name: snorby
+
+- name: Ensure Snorby MySQL user is present.
+  sudo: yes
+  mysql_user:
+    name: "{{ snorby_mysql_user  }}"
+    host: "{{ snorby_mysql_host }}"
+    password: "{{ snorby_mysql_password }}"
+    priv: 'snorby.*:ALL,GRANT'
+
+- name: configure snorby_config.yml
+  sudo: yes
+  template:
+    src: "snorby_config.yml.j2"
+    dest: "/opt/snorby/config/snorby_config.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy GeoIP.dat
+  sudo: yes
+  copy:
+    src: "GeoIP.dat"
+    dest: "/opt/snorby/config/snorby-geoip.dat"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: configure database.yml
+  sudo: yes
+  template:
+    src: "database.yml.j2"
+    dest: "/opt/snorby/config/database.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: configure seeds.rb
+  sudo: yes
+  template:
+    src: "seeds.rb.j2"
+    dest: "/opt/snorby/db/seeds.rb"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Run snorby setup
+  sudo: yes
+  shell: RAILS_ENV=production bundle exec rake snorby:setup
+  args:
+    chdir: /opt/snorby
+
+- name: Enable snorby service
+  sudo: yes
+  shell: systemctl enable snorby
+
+- name: restart snorby
+  sudo: yes
+  service:
+    name: snorby
+    enabled: yes
+    state: restarted
+

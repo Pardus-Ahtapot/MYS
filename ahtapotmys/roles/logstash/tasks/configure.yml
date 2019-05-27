@@ -6,7 +6,7 @@
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
-  with_dict: "logstash_configs"
+  with_dict: "{{logstash_configs}}"
   notify:
     - Logstash servisi yeniden baslatiliyor
   sudo: yes

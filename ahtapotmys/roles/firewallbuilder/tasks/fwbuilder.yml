@@ -19,3 +19,15 @@
         mode: "{{ firewallbuilder['bash']['conf']['mode'] }}"
   sudo: yes
   tags: fwbuilder 
+
+- name: Fwbuilder duzenleme yetkileri ayarlaniyor
+  sudo: yes
+  tags: fwbuilder
+  template:
+    src: "editable_objects.j2"
+    dest: "/etc/fw/editable_objects"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  with_items: "{{fwb_editable_objects[inventory_hostname]}}"
+

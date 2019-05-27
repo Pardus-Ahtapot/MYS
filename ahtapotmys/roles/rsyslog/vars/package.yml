@@ -3,16 +3,20 @@
 # Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
 rsyslog_packages:
     package01:
-        name: "rsyslog=8.4.2-1+deb8u2" 
+        #name: "rsyslog=8.4.2-1+deb8u2" 
+        name: "rsyslog" 
         state: "present" 
     package02:
-        name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
+        #name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
+        name: "rsyslog-gnutls" 
         state: "present" 
     package03:
-        name: "logrotate=3.8.7-1+b1" 
+        #name: "logrotate=3.8.7-1+b1" 
+        name: "logrotate" 
         state: "present" 
     package04:
-        name: "rsync=3.1.1-3" 
+        #name: "rsync=3.1.1-3" 
+        name: "rsync" 
         state: "present" 
     package05:
         name: "oracle-java8-installer=8u101+8u101arm-1~webupd8~2" 
@@ -20,9 +24,9 @@ rsyslog_packages:
     package06:
         name: "zamaneconsole=1.0.1" 
         state: "present" 
-#    packageXX:
-#        name: 
-#        state:  
+    package07:
+        name: "rsyslog-relp" 
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  

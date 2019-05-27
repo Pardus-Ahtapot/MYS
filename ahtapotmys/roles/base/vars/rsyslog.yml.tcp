@@ -1,0 +1,41 @@
+---
+# Log sunucu ayarlarini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar log sunucusu eklenebilir.
+rsyslog:
+   conf:
+      source: "rsyslog.conf.j2" 
+      destination: "/etc/rsyslog.conf" 
+      owner: "root" 
+      group: "root" 
+      mode: "0644" 
+   service:
+      name: "rsyslog" 
+      state: "started" 
+      enabled: "yes"
+   server: "OSSIMCIK_ADRESI"
+   port: "514"
+   protocol: "tcp"
+   ActionResumeRetryCount: "-1"
+   ActionReportSuspension: "on"
+   QueueType: "LinkedList"
+   QueueFileNameANS: "srvfrwd_ans"
+   QueueFileNameIPT: "srvfrwd_iptables"
+   QueueFileNameALL: "srvfrwd_syslog"
+   QueueSaveOnShutdown: "on"
+   QueueMaxDiskSpace: "5000m"
+   StreamDriver: "gtls"
+   StreamDriverMode: "1" 
+   StreamDriverAuthMode: "anon"
+   asyncWriting: "on"
+   ioBufferSize: "64k" 
+   WorkDirectory: "/var/spool/rsyslog" 
+   IncludeConfig: "/etc/rsyslog.d/*" 
+
+ossimciks:
+   server01:
+      fqdn: "OSSIMCIK_ADRESI"
+      port: "514"
+      protocol: "tcp"
+      clients:
+        - "CLIENT LOG KAYNAGI01"
+        - "CLIENT LOG KAYNAGI02"

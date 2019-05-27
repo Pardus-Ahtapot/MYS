@@ -1,0 +1,4 @@
+freshclam_mirror_conf_list:
+- /etc/cron.d/sync_clam_mirror
+- /usr/sbin/clamdownloader.pl
+- /usr/sbin/sync_clam_mirror.sh

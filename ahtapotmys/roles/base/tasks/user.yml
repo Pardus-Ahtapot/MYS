@@ -5,6 +5,6 @@
         group: "{{ item.value.group }}"
         shell: "{{ item.value.shell }}"
         state: "{{ item.value.state }}" 
-  with_dict: "base_users" 
+  with_dict: "{{base_users}}" 
   sudo: yes 
   tags: user 

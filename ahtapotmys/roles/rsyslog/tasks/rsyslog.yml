@@ -11,10 +11,20 @@
   sudo: yes
   tags: rsyslog 
 
+- name: Ryslog icin logrotate configurasyonu yapilandiriliyor.
+  template:
+        src: "{{ logrotate['conf']['source'] }}"
+        dest: "{{ logrotate['conf']['destination'] }}"
+        owner: "{{ logrotate['conf']['owner'] }}"
+        group: "{{ logrotate['conf']['group'] }}"
+        mode: "{{ logrotate['conf']['mode'] }}"
+  sudo: yes
+  tags: rsyslog 
+
 - name: Rsyslog servisi ayakta
   service:
         name: "{{ rsyslog['service']['name'] }}"
         state: "{{ rsyslog['service']['state'] }}"
         enabled: "{{ rsyslog['service']['enabled'] }}"
   sudo: yes
-  tags: rsyslog 
+  tags: rsyslog

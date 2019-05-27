@@ -1,0 +1,9 @@
+- hosts: smartstate
+  remote_user: ahtapotops
+  sudo: yes
+  gather_facts: no
+  vars_files:
+  - ../roles/smartstate/vars/main.yml
+  roles:
+    - role: smartstate
+

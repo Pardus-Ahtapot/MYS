@@ -4,7 +4,17 @@
         name: "{{ item.value.name }}"
         state: "{{ item.value.state }}"
         force: "yes"
-  with_dict: "ossec_packages"
+  with_dict: "{{ossec_packages}}"
   when: "'ossimcik' not in group_names"
+  sudo: yes
+  tags: install
+
+- name: Ossec Server (Ossimcik) icin gerekli paketler yukleniyor.
+  apt:
+        name: "{{ item.value.name }}"
+        state: "{{ item.value.state }}"
+        force: "yes"
+  with_dict: "{{ossec_server_packages}}"
+  when: "'ossimcik' in group_names"
   sudo: yes
   tags: install

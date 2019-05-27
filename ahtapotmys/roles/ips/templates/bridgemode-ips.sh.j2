@@ -1,0 +1,33 @@
+#!/bin/bash
+{% if ansible_hostname == ips_master_hostname %}
+INTIFACE={{ips_int_iface_master}}
+EXTIFACE={{ips_ext_iface_master}}
+{% else %}
+INTIFACE={{ips_int_iface_backup}}
+EXTIFACE={{ips_ext_iface_backup}}
+{% endif %}
+/usr/sbin/netfilter-persistent flush &>/dev/null
+NPROC=$(/usr/bin/nproc)
+#NPROC=$(($NPROC -1))
+if (("$NPROC" == "0")); then
+  iptables -t mangle -I FORWARD  -m physdev --physdev-in $EXTIFACE --physdev-out $INTIFACE -j NFQUEUE --queue-num 0 --queue-bypass
+  iptables -t mangle -I FORWARD  -m physdev --physdev-in $INTIFACE --physdev-out $EXTIFACE -j NFQUEUE --queue-num 0 --queue-bypass
+else
+  iptables -t mangle -I FORWARD  -m physdev --physdev-in $EXTIFACE --physdev-out $INTIFACE -j NFQUEUE --queue-balance 1:$NPROC --queue-bypass
+  iptables -t mangle -I FORWARD  -m physdev --physdev-in $INTIFACE --physdev-out $EXTIFACE -j NFQUEUE --queue-balance 1:$NPROC --queue-bypass
+fi
+
+/usr/sbin/netfilter-persistent save &>/dev/null
+q=""
+for (( queue=1; queue<=$NPROC; queue++ ))
+do
+  echo $queue
+  q=$q"-q $queue "
+done
+sed -i "s@^ExecStart.*@ExecStart=/usr/bin/suricata -D $q -c /etc/suricata/suricata.yaml --pidfile /var/run/suricata.pid@" /lib/systemd/system/suricata.service
+systemctl daemon-reload
+systemctl enable netfilter-persistent
+systemctl restart netfilter-persistent
+systemctl enable suricata
+systemctl restart suricata
+

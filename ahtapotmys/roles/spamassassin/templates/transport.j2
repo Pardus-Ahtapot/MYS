@@ -1,0 +1,11 @@
+{{antispam_domain}} smtp:[{{antispam_mail_hostname}}]
+
+{% if antispam_transport_domains %}
+{% for key, value in antispam_transport_domains.iteritems() %}
+{{ key }} smtp:[{{ value }}]
+{% endfor %}
+{% endif %}
+ 
+{% if antispam_default_relay_server %}
+* smtp:[{{antispam_default_relay_server}}]
+{% endif %}

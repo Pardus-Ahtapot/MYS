@@ -6,6 +6,6 @@
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
         state: "{{ item.value.state }}"
-  with_dict: "testfirewall_directories" 
+  with_dict: "{{testfirewall_directories}}"
   sudo: yes
   tags: directory 

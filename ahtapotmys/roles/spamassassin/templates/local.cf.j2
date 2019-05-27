@@ -1,0 +1,16 @@
+{{local_cf}}
+
+{% if use_quarantine == "True" %}
+bayes_store_module    Mail::SpamAssassin::BayesStore::MySQL
+bayes_sql_dsn DBI:mysql:spamassassin:{{quarantine_db_host}}
+bayes_sql_username    {{quarantine_db_user}}
+bayes_sql_password    {{quarantine_db_pass}}
+{% endif %}
+
+{% if spam_regexes %}
+{% for item in spam_regexes %}
+{{ item.where }}	{{ item.name }}	{{ item.regex }}
+score	{{ item.name }}	{{ item.score }}
+describe	{{ item.name }}	{{ item.describe }}
+{% endfor %}
+{% endif %}

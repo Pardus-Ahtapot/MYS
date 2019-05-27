@@ -1,5 +1,6 @@
 ---
 # PWLM gorevlerini iceren dosyadir
+- include: conf_integrity.yml
 - include: install.yml
 - include: hook.yml
 - include: uwsgi.yml

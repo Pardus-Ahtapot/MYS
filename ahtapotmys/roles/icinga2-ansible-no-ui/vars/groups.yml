@@ -1,0 +1,13 @@
+host_groups: [
+{
+name: "switch",
+display_name: "Switch",
+os: "switch"
+},
+{
+name: "test",
+display_name: "test grubu",
+os: "testOS"
+}
+]
+

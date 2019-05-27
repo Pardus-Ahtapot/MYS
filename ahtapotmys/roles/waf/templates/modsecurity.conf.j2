@@ -1,0 +1,18 @@
+<IfModule mod_security2.c>
+    # https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#Configuration_Directives
+    SecStatusEngine On
+    
+    SecRuleEngine On
+    SecAuditEngine On
+    SecAuditLog "{{ sec_audit_log }}"
+    SecAuditLogParts "{{ sec_audit_log_parts }}"
+    SecRequestBodyAccess on
+    
+    SecDefaultAction "nolog,noauditlog,allow,phase:2"
+
+    SecRule REQUEST_METHOD "^POST$" "chain,allow,phase:2,id:1234"
+    SecRule REQUEST_URI ".*" "auditlog"
+    
+    SecServerSignature "{{ sec_server_signature }}"
+    SecRuleRemoveById  "{{ sec_rule_remove_by_id }}"
+</IfModule>

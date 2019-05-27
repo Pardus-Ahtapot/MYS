@@ -3,7 +3,7 @@
   modprobe:
         name: "{{ item.value.name }}"
         state: "{{ item.value.state }}"
-  with_dict: "firewall_modules"
+  with_dict: "{{firewall_modules}}"
   sudo: yes
   tags: modprobe
 
