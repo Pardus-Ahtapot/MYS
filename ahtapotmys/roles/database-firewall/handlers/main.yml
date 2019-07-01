@@ -1,0 +1,7 @@
+---
+- name: restart dbshield
+  sudo: yes
+  service:
+    name: dbshield
+    state: restarted
+    sleep: 5
