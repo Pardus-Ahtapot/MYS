@@ -3,7 +3,7 @@
         ServerAlias  {{item.server_alias}}
         HttpProtocolOptions {{item.http_protocol_options}}
         SecRuleEngine {{item.waf_status}}
-
+	ProxyRequests Off
 {% if item.ssl_engine == "on" %}
 	SSLEngine on
 	SSLCertificateFile      /etc/apache2/ssl/certs/{{item.waf_hostname}}.crt
