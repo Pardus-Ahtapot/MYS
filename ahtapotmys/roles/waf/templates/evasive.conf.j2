@@ -1,0 +1,13 @@
+<IfModule mod_evasive20.c>
+    DOSHashTableSize    {{ waf_ddos.waf_hash_table_size }}
+    #DOSPageCount       {{ waf_ddos.waf_page_count }}
+    #DOSSiteCount       {{ waf_ddos.waf_site_count }}
+    #DOSPageInterval    {{ waf_ddos.waf_page_interval }}
+    #DOSSiteInterval    {{ waf_ddos.waf_site_interval }}
+    #DOSBlockingPeriod  {{ waf_ddos.waf_block_period }}
+
+    #DOSEmailNotify      {{ waf_ddos.waf_email_notify }}
+    #DOSSystemCommand    {{ waf_ddos.waf_ddos_logs_dir }} #"su - someuser -c '/sbin/... %s ...'"
+    #DOSLogDir           "/var/log/ahtapot/waf/mod_evasive"
+</IfModule>
+

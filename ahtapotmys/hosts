@@ -82,6 +82,10 @@
 
 [smartstate]
 
+[waf]
+
+[dbfirewall]
+
 [all:vars]
 ansible_shell_type=sh
 
