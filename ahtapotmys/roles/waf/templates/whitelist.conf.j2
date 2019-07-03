@@ -1,0 +1,5 @@
+{% if waf_whitelist_ips|length > 0 %}
+    {% for white_ip in waf_whitelist_ips %}
+	SecRule REMOTE_ADDR "^{{white_ip}}" "id:100000011{{ loop.index }},phase:1,nolog,allow,ctl:ruleEngine=Off"
+    {% endfor %}
+{% endif %}

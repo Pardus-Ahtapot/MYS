@@ -1,0 +1,60 @@
+<VirtualHost {{ item.listen_ip }}:{{item.listen_port}}>
+        ServerName  {{item.waf_hostname}}
+        ServerAlias  {{item.server_alias}}
+        HttpProtocolOptions {{item.http_protocol_options}}
+        SecRuleEngine {{item.waf_status}}
+	ProxyRequests Off
+{% if item.ssl_engine == "on" %}
+	SSLEngine on
+	SSLCertificateFile      /etc/apache2/ssl/certs/{{item.waf_hostname}}.crt
+	SSLCertificateKeyFile   /etc/apache2/ssl/key/{{item.waf_hostname}}.key
+{% endif %}
+
+	Include /etc/wafkurallar/OWASP.conf
+	Include /etc/wafkurallar/OWASP/*.conf
+
+	SecDebugLogLevel {{item.waf_debug_level}}
+
+        DocumentRoot /var/www/html
+        ErrorDocument 403 /waf_error.html
+        ErrorDocument 500 /waf_error.html
+        ErrorDocument 503 /waf_error.html
+
+        ProxyPass /waf_error.html !
+{% if item.waf_disabled_rules|length > 0 %}
+    {% for rule_id in item.waf_disabled_rules %} 
+	SecRuleRemoveById {{rule_id}}
+    {% endfor %}
+{% endif %}
+{% if item.proxy_load_balance_pool_name|length > 0  %}
+	{% if item.proxy_load_balance_members|length > 0  %}
+	<Proxy balancer://{{item.proxy_load_balance_pool_name}}>
+		{% set loadbalancer_active = "active" %}
+		{% for proxy_member in item.proxy_load_balance_members %}
+		BalancerMember {{proxy_member}}
+		{% endfor %}
+		 {% if item.proxy_load_balance_method|length > 0  %}
+		ProxySet lbmethod={{item.proxy_load_balance_method}}
+		 {% endif %}
+	</Proxy>
+	{% endif %}
+{% endif %}
+
+	ProxyPreserveHost {{item.preserve_host}}
+	RemoteIPHeader {{item.remote_ip_header}}
+	ProxyPassReverseCookiePath {{item.reverse_cookie_path}}
+	ProxyPassReverseCookieDomain {{item.reverse_cookie_domain}}
+	SSLProxyEngine {{item.proxy_ssl}}
+	{% if loadbalancer_active is defined %}
+		ProxyPass "/" balancer://{{item.proxy_load_balance_pool_name}}/
+	{% else %}
+	        ProxyPass {{item.proxy_pass}}
+                ProxyPassReverse {{item.proxy_reverse_pass}}
+	{% endif %}
+	Include /etc/apache2/whitelist.conf
+
+
+	ErrorLog /var/log/ahtapot/waf/{{item.waf_hostname}}.error.log
+
+</VirtualHost>
+

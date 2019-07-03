@@ -14,9 +14,9 @@ fi
 server_url=$1
 deploy_key=$2
 
-
-sed -i -r 's/[#]?Port 22\s*$/Port {{cowrie_real_ssh_port}}/g' /etc/ssh/sshd_config
-service ssh restart
+#SSH Servisi silindigi icin kapatilmistir.
+#sed -i -r 's/[#]?Port 22\s*$/Port {{cowrie_real_ssh_port}}/g' /etc/ssh/sshd_config
+#service ssh restart
 
 cd /usr/share/cowrie
 source cowrie-env/bin/activate
