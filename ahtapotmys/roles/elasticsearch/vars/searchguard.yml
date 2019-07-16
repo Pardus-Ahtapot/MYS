@@ -1,5 +1,6 @@
 ---
 # Searchguard'in degiskenlerinin tutuldugu dosyadir.
+searchguard_active: true
 searchguard_configurations:
     conf01:
         source: "searchguard/sg_internal_users.yml.j2"
