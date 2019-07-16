@@ -1,4 +1,4 @@
-dbfw_conf_dir: /etc/dbshield/dbshield.yml 
+dbfw_conf_dir: /etc/dbshield
 dbfw_mode: learning
 dbfw_dbms: mysql
 dbfw_listenip: 0.0.0.0
