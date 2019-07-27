@@ -20,7 +20,6 @@
   - /etc/ansible/roles/base/vars/profile.yml
   - /etc/ansible/roles/base/vars/fusioninventory.yml
   - /etc/ansible/roles/base/vars/security.yml
-  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/database-firewall/vars/ahtapot-dbfw.yml
   roles:
     - { role: base }
