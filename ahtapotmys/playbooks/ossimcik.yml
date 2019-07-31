@@ -33,7 +33,7 @@
   - ../roles/post/vars/integrity.yml
   - ../roles/post/vars/package.yml
   - ../roles/snorby/vars/conf_list.yml
-  - ../roles/standalone/vars/conf_list.yml
+#  - ../roles/standalone/vars/conf_list.yml
   - ../roles/firewallbuilder/vars/conf_list.yml
   - ../roles/elasticsearch/vars/conf_list.yml
   - ../roles/firewall/vars/conf_list.yml
