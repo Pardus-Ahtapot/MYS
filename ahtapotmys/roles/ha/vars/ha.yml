@@ -12,7 +12,7 @@ ha_vrrp_nodes:
       virtual_router_id: "1" #uniqe id for this virtual router
       priority: "101"
       advert_int: "1"
-      ha_virtual_ips: ["172.16.103.90/32 dev ens192"]
+      ha_virtual_ips: ["172.50.50.20/32 dev ens192"]
       auth_type: "PASS"
       auth_pass: "ahtapotops"
     - node_hostname: "ha2.demo.ahtapot.org.tr"
@@ -21,7 +21,7 @@ ha_vrrp_nodes:
       virtual_router_id: "1" #uniqe id for this virtual router
       priority: "100"
       advert_int: "1"
-      ha_virtual_ips: ["172.16.103.90/32 dev ens192"]
+      ha_virtual_ips: ["172.50.50.20/32 dev ens192"]
       auth_type: "PASS"
       auth_pass: "ahtapotops"
 
