@@ -1,0 +1,38 @@
+## configuration for {{ ansible_fqdn }}
+{% if ha_script_name|length > 0 %}
+vrrp_script {{ ha_script_name }} {
+  script "{{ ha_script_path }}"
+  interval {{ ha_script_interval }}
+  fall {{ ha_script_fall }}
+  rise {{ ha_script_rise }}
+}
+{% endif %}
+
+{% if ha_vrrp_instance_name|length > 0 %}
+{% for node in ha_vrrp_nodes %}
+
+
+{% if node.node_hostname == inventory_hostname  %}
+vrrp_instance {{ ha_vrrp_instance_name }} {
+	state {{ node.state }}
+	interface {{ node.interface }}
+	virtual_router_id {{ node.virtual_router_id }}
+	priority {{ node.priority }}
+	advert_int {{ node.advert_int }}
+	virtual_ipaddress {
+	{% for vip in node.ha_virtual_ips %}
+		{{ vip }}
+	{% endfor %}
+	}
+
+{% if ha_script_name|length > 0 %}
+	track_script {
+		{{ ha_script_name }}
+	}
+{% endif %}
+
+}
+{% endif %}
+
+{% endfor %}
+{% endif %}
