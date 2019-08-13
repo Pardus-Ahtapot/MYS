@@ -561,7 +561,7 @@
   tags: security
 
 # Install AIDE
-- name: AIDE initialize adiliyor
+- name: AIDE başlatılıyor
   shell: if [[ ! -f /var/lib/aide/aide.db ]]; then aideinit; cp /var/lib/aide/aide.db.new /var/lib/aide/aide.db;  else echo -n ok; fi
   args:
         executable: /bin/bash
