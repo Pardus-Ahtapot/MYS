@@ -229,4 +229,6 @@
 - name: Sanal Sunuculari Aktive Et
   command: a2ensite {{item.waf_hostname}}.conf
   with_items: "{{waf_vhosts[inventory_hostname]}}"
+  notify:
+   - restart apache2
 
