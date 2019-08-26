@@ -15,10 +15,24 @@
 {% endif %}
 
 {% if item.ssl_engine == "on" %}
-	SSLEngine on
-	SSLCertificateFile      /etc/apache2/ssl/certs/{{item.waf_hostname}}.crt
-	SSLCertificateKeyFile   /etc/apache2/ssl/key/{{item.waf_hostname}}.key
+        SSLEngine on
+        {% if item.ssl_disable_protocols|length > 0 %}
+        SSLProtocol {{item.ssl_disable_protocols}}
+        {% endif %}
+        {% if item.ssl_honor_cipher_order|length > 0 %}
+        SSLHonorCipherOrder {{item.ssl_honor_cipher_order}}
+        {% endif %}
+        {% if item.ssl_compression|length > 0 %}
+        SSLCompression {{item.ssl_compression}}
+        {% endif %}
+        {% if item.ssl_cipher_suite|length > 0 %}
+        SSLCipherSuite '{{item.ssl_cipher_suite}}'
+        {% endif %}
+
+        SSLCertificateFile      /etc/apache2/ssl/certs/{{item.waf_hostname}}.crt
+        SSLCertificateKeyFile   /etc/apache2/ssl/key/{{item.waf_hostname}}.key
 {% endif %}
+
 
 	Include /etc/wafkurallar/OWASP.conf
 	Include /etc/wafkurallar/OWASP/*.conf
