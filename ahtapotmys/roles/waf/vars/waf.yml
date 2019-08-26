@@ -35,17 +35,19 @@ waf_ddos:
     waf_ddos_logs_dir: "/var/log/ahtapot/waf/mod_evasive.log"
     waf_ddos_sys_cmd: ""
 waf_vhosts:
-    waftest.ahtapot.org.tr:
+    waf.ahtapot.sbb.gov.tr:
         - waf_hostname: "ahtapot.org.tr"
-          server_alias: "www.ahtapot.org.tr"
+          server_aliases: ["www.ahtapot.org.tr"]
           listen_ip: "*"
           listen_port: "80"
           ssl_engine: "on"
           http_protocol_options: "UnSafe"
+          waf_force_https: "On"
           waf_status: "DetectionOnly"
           waf_debug_level: "0"
           preserve_host: "On"
           remote_ip_header: "X-Forwarded-For"
+          proxy_vhost: "on"
           reverse_cookie_path: "/ /"
           reverse_cookie_domain: "127.0.0.1 ahtapot.org.tr"
           proxy_ssl: "On"
@@ -55,16 +57,22 @@ waf_vhosts:
           proxy_load_balance_members: ["http://172.50.50.13/", "http://172.50.50.14/"]
           proxy_load_balance_method: "byrequests"
           waf_disabled_rules: ["340162", "340163"]
+          restrict_by_ip: "on"
+          restrict_by_ip_path: "/"
+          restricted_ip_list: ["10.10.10.0/24", "10.10.20.0/24"]
+          optimize_access_log: "on"
         - waf_hostname: "demo.ahtapot.org.tr"
-          server_alias: "www.demo.ahtapot.org.tr"
+          server_aliases: ["www.demo.ahtapot.org.tr"]
           listen_ip: "*"
           listen_port: "80"
           ssl_engine: "Off"
           http_protocol_options: "UnSafe"
+          waf_force_https: "Off"
           waf_status: "DetectionOnly"
           waf_debug_level: "0"
           preserve_host: "On"
           remote_ip_header: "X-Forwarded-For"
+          proxy_vhost: "on"
           reverse_cookie_path: "/ /"
           reverse_cookie_domain: "127.0.0.1 ahtapot.org.tr"
           proxy_ssl: "On"
@@ -74,3 +82,7 @@ waf_vhosts:
           proxy_load_balance_members: []
           proxy_load_banace_method: ""
           waf_disabled_rules: []
+          restrict_by_ip: "off"
+          restrict_by_ip_path: ""
+          restricted_ip_list: ""
+          optimize_access_log: "nolog"
