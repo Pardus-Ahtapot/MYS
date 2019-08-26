@@ -1,14 +1,24 @@
 <VirtualHost {{ item.listen_ip }}:{{item.listen_port}}>
         ServerName  {{item.waf_hostname}}
-        ServerAlias  {{item.server_alias}}
+{% for server_alias in item.server_aliases %}
+        ServerAlias  {{server_alias}}
+{% endfor %}
+
         HttpProtocolOptions {{item.http_protocol_options}}
         SecRuleEngine {{item.waf_status}}
 	ProxyRequests Off
+
+{% if item.waf_force_https == "on" %}
+	RewriteEngine On
+	RewriteCond %{HTTPS} !on
+	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+{% endif %}
+
 {% if item.ssl_engine == "on" %}
 	SSLEngine on
 	SSLCertificateFile      /etc/apache2/ssl/certs/{{item.waf_hostname}}.crt
 	SSLCertificateKeyFile   /etc/apache2/ssl/key/{{item.waf_hostname}}.key
-{% endif %}
+{% endif %}
 
 	Include /etc/wafkurallar/OWASP.conf
 	Include /etc/wafkurallar/OWASP/*.conf
@@ -21,24 +31,37 @@
         ErrorDocument 503 /waf_error.html
 
         ProxyPass /waf_error.html !
+
 {% if item.waf_disabled_rules|length > 0 %}
     {% for rule_id in item.waf_disabled_rules %} 
 	SecRuleRemoveById {{rule_id}}
     {% endfor %}
 {% endif %}
-{% if item.proxy_load_balance_pool_name|length > 0  %}
-	{% if item.proxy_load_balance_members|length > 0  %}
-	<Proxy balancer://{{item.proxy_load_balance_pool_name}}>
-		{% set loadbalancer_active = "active" %}
-		{% for proxy_member in item.proxy_load_balance_members %}
-		BalancerMember {{proxy_member}}
-		{% endfor %}
-		 {% if item.proxy_load_balance_method|length > 0  %}
-		ProxySet lbmethod={{item.proxy_load_balance_method}}
-		 {% endif %}
-	</Proxy>
-	{% endif %}
+
+
+{% if item.restrict_by_ip == "on" %}
+    <Location {{item.restrict_by_ip_path}}>
+    {% for ip_exception in item.restricted_ip_list %}
+      Require ip {{ip_exception }}
+    {% endfor %}
+    </Location>
 {% endif %}
+
+{% if item.proxy_vhost == "on" %}
+
+	{% if item.proxy_load_balance_pool_name|length > 0  %}
+		{% if item.proxy_load_balance_members|length > 0  %}
+		<Proxy balancer://{{item.proxy_load_balance_pool_name}}>
+			{% set loadbalancer_active = "active" %}
+			{% for proxy_member in item.proxy_load_balance_members %}
+			BalancerMember {{proxy_member}}
+			{% endfor %}
+			 {% if item.proxy_load_balance_method|length > 0  %}
+			ProxySet lbmethod={{item.proxy_load_balance_method}}
+			 {% endif %}
+		</Proxy>
+		{% endif %}
+	{% endif %}
 
 	ProxyPreserveHost {{item.preserve_host}}
 	RemoteIPHeader {{item.remote_ip_header}}
@@ -48,13 +71,26 @@
 	{% if loadbalancer_active is defined %}
 		ProxyPass "/" balancer://{{item.proxy_load_balance_pool_name}}/
 	{% else %}
-	        ProxyPass {{item.proxy_pass}}
-                ProxyPassReverse {{item.proxy_reverse_pass}}
+		ProxyPass {{item.proxy_pass}}
+		ProxyPassReverse {{item.proxy_reverse_pass}}
 	{% endif %}
+
+{% endif %}
+
 	Include /etc/apache2/whitelist.conf
 
+
+{% if item.optimize_access_log == "on" %}
+	SetEnvIf Request_URI "\.(jpg|xml|png|gif|ico|js|css|swf|js?.|css?.)$" DontLog
+	CustomLog /var/log/ahtapot/waf/{{item.waf_hostname}}.access.log combined Env=!DontLog
+{% endif %}
+
+{% if item.optimize_access_log == "log" %}
+        CustomLog /var/log/ahtapot/waf/{{item.waf_hostname}}.access.log combined
+{% endif %}
+{% if item.optimize_access_log == "nolog" %}
+{% endif %}
 
 	ErrorLog /var/log/ahtapot/waf/{{item.waf_hostname}}.error.log
 
 </VirtualHost>
-
