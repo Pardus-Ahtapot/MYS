@@ -29,7 +29,23 @@
   - ../roles/gitlab/vars/conf_list.yml
   - ../roles/post/vars/integrity.yml
   - ../roles/post/vars/package.yml
+  vars_prompt:
+    - name: run_base
+      prompt: "Base rolu calistirilsin mi? (E/h)"
+      default: "E"
+      private: no
+      confirm: yes
+    - name: run_gitlab
+      prompt: "Gitlab rolu calistirilsin mi? (E/h)"
+      default: "E"
+      private: no
+      confirm: yes
+    - name: run_post
+      prompt: "Post rolu calistirilsin mi? (E/h)"
+      default: "E"
+      private: no
+      confirm: yes
   roles:
-  - { role: base }
-  - { role: gitlab }
-  - { role: post}
+  - { role: base, when: run_base == "E" or run_base == "e" }
+  - { role: gitlab, when: run_gitlab == "E" or run_gitlab == "e" }
+  - { role: post, when: run_post == "E" or run_post == "e" }
