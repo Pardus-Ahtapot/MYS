@@ -488,7 +488,7 @@
   lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: '^ListenAddress {{item}}'
-    line: ""
+    line: "AddressFamily inet"
     backup: yes
   when: ipv6_hosts is not defined or inventory_hostname not in ipv6_hosts
   notify: reload sshd
