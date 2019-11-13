@@ -1,3 +1,4 @@
+waf_high_avaibility: "on"
 waf_listen_ip: "0.0.0.0"
 waf_listen_port: "80"
 waf_default_timeout: "200"
@@ -23,7 +24,7 @@ waf_global_response_body_access: "On"
 waf_global_response_body_limit: "10000"
 waf_global_response_body_action: "ProccessPartial"
 waf_global_audit_log_parts: "ABDEFHIJZ"
-waf_whitelist_ips: ["161.9.194.170", "161.9.194.172", "161.9.194.173"]
+waf_whitelist_ips: []
 waf_ddos:
     waf_hash_table_size: "3097"
     waf_page_count: "2"
@@ -34,63 +35,3 @@ waf_ddos:
     waf_email_notify: "ahtapot@pardus.org.tr"
     waf_ddos_logs_dir: "/var/log/ahtapot/waf/mod_evasive.log"
     waf_ddos_sys_cmd: ""
-waf_vhosts:
-    waf.ahtapot.sbb.gov.tr:
-        - waf_hostname: "ahtapot.org.tr"
-          server_aliases: ["www.ahtapot.org.tr"]
-          listen_ip: "*"
-          listen_port: "80"
-          ssl_engine: "on"
-          ssl_disable_protocols: "All -SSLv2 -SSLv3"
-          ssl_honor_cipher_order: "On"
-          ssl_compression: "off"
-          ssl_cipher_suite: "DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:DHE-RSA-CAMELLIA256-SHA:DHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA"
-          http_protocol_options: "UnSafe"
-          waf_force_https: "On"
-          waf_status: "DetectionOnly"
-          waf_debug_level: "0"
-          preserve_host: "On"
-          remote_ip_header: "X-Forwarded-For"
-          proxy_vhost: "on"
-          reverse_cookie_path: "/ /"
-          reverse_cookie_domain: "127.0.0.1 ahtapot.org.tr"
-          proxy_ssl: "On"
-          proxy_pass: '"/" "http://172.50.50.12/"'
-          proxy_reverse_pass: '"/" "http://172.50.50.12/"'
-          proxy_load_balance_pool_name: "websunucularim"
-          proxy_load_balance_members: ["http://172.50.50.13/", "http://172.50.50.14/"]
-          proxy_load_balance_method: "byrequests"
-          waf_disabled_rules: ["340162", "340163"]
-          restrict_by_ip: "on"
-          restrict_by_ip_path: "/"
-          restricted_ip_list: ["10.10.10.0/24", "10.10.20.0/24"]
-          optimize_access_log: "on"
-        - waf_hostname: "demo.ahtapot.org.tr"
-          server_aliases: ["www.demo.ahtapot.org.tr"]
-          listen_ip: "*"
-          listen_port: "80"
-          ssl_engine: "Off"
-          ssl_disable_protocols: ""
-          ssl_honor_cipher_order: ""
-          ssl_compression: ""
-          ssl_cipher_suite: ""
-          http_protocol_options: "UnSafe"
-          waf_force_https: "Off"
-          waf_status: "DetectionOnly"
-          waf_debug_level: "0"
-          preserve_host: "On"
-          remote_ip_header: "X-Forwarded-For"
-          proxy_vhost: "on"
-          reverse_cookie_path: "/ /"
-          reverse_cookie_domain: "127.0.0.1 ahtapot.org.tr"
-          proxy_ssl: "On"
-          proxy_pass: '"/" "http://172.50.50.12/"'
-          proxy_reverse_pass: '"/" "http://172.50.50.12/"'
-          proxy_load_balance_pool_name: ""
-          proxy_load_balance_members: []
-          proxy_load_banace_method: ""
-          waf_disabled_rules: []
-          restrict_by_ip: "off"
-          restrict_by_ip_path: ""
-          restricted_ip_list: ""
-          optimize_access_log: "nolog"
