@@ -3,6 +3,12 @@
   shell: /sbin/sysctl -p {{ sysctl_security['destination']}} -p /etc/sysctl.conf || true
   sudo: yes
 
+- name: reload sshd
+  service:
+    name: ssh
+    state: restarted
+  sudo: yes
+
 - name: root password warning
   debug:
     msg: "Guvenlik Uyarisi: Root sifresinin olmadigi tespit edildi. Lutfen passwd komutu ile yapilandiriniz"

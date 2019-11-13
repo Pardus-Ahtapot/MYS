@@ -483,6 +483,21 @@
   tags: security
 
 
+# Disable IPv6 for SSH, if no IPv6 hosts
+- name: IPv6 ssh icin deaktif ediliyor
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^ListenAddress {{item}}'
+    line: "AddressFamily inet"
+    backup: yes
+  when: ipv6_hosts is not defined or inventory_hostname not in ipv6_hosts
+  notify: reload sshd
+  with_items:
+    - '::'
+  sudo: yes
+  tags: security
+
+
 - name: IPv6 secilen hostlarda aktif ediliyor
   lineinfile:
         dest: /etc/sysctl.conf
@@ -561,7 +576,7 @@
   tags: security
 
 # Install AIDE
-- name: AIDE initialize adiliyor
+- name: AIDE başlatılıyor
   shell: if [[ ! -f /var/lib/aide/aide.db ]]; then aideinit; cp /var/lib/aide/aide.db.new /var/lib/aide/aide.db;  else echo -n ok; fi
   args:
         executable: /bin/bash

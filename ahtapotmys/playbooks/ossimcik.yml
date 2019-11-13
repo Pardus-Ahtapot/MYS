@@ -49,8 +49,6 @@
   - ../roles/honeypot/vars/conf_list.yml
   - ../roles/ansible/vars/conf_list.yml
   - ../roles/icinga2-clients/vars/conf_list.yml
-  - ../roles/waf-evasive/vars/conf_list.yml
-  - ../roles/waf-proxy-vhosts/vars/conf_list.yml
   - ../roles/ids/vars/conf_list.yml
   - ../roles/gkts/vars/conf_list.yml
   - ../roles/ntp/vars/conf_list.yml

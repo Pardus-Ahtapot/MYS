@@ -34,7 +34,8 @@ def main():
                         try:
                             with open(CONFLIST_PATH.format(role["role"]), 'r') as conf_list_file:
                                 content = yaml.load(conf_list_file)
-                                playbook_roles[playbook_name] = playbook_roles[playbook_name] + content["{}_conf_list".format(role["role"].replace("-", "_"))]
+                                if playbook_name != "fwkural":
+                                        playbook_roles[playbook_name] = playbook_roles[playbook_name] + content["{}_conf_list".format(role["role"].replace("-", "_"))]
                         except:
                             raise
                 #playbook_roles[playbook_name] = ["{}_conf_list".format(x["role"].replace("-", "_")) for x in yaml_dict["roles"] if x["role"] != "post"]
