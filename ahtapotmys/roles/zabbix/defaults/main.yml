@@ -1,8 +1,13 @@
 ---
+zabbix_version: 4.0
+zabbix_server_package_state: present
+zabbix_server_install_recommends: True
+zabbix_server_install_database_client: True
+
 
 # Database
-zabbix_server_database: mysql
-zabbix_server_database_long: mysql
+zabbix_server_database: pgsql
+zabbix_server_database_long: postgresql
 zabbix_database_creation: True
 zabbix_database_sqlload: True
 
@@ -10,7 +15,7 @@ zabbix_database_sqlload: True
 zabbix_server_listenport: 10051
 zabbix_server_sourceip:
 zabbix_server_logtype: file
-zabbix_server_logfile: /var/log/zabbix/zabbix_server.log
+zabbix_server_logfile: /var/log/ahtapot/zabbix/zabbix_server.log
 zabbix_server_logfilesize: 10
 zabbix_server_debuglevel: 3
 zabbix_server_pidfile: /var/run/zabbix/zabbix_server.pid
@@ -23,7 +28,7 @@ zabbix_server_dbschema:
 zabbix_server_dbuser: zabbix-server
 zabbix_server_dbpassword: zabbix-server
 zabbix_server_dbsocket:
-zabbix_server_dbport: 3306
+zabbix_server_dbport: 5432
 zabbix_server_historystorageurl:
 zabbix_server_historystoragetypes: uint,dbl,str,log,text
 zabbix_server_historystoragedateindex: 0
@@ -89,3 +94,4 @@ zabbix_server_tlskeyfile:
 zabbix_server_startescalators: 1
 zabbix_server_vmwareperffrequency: 60
 zabbix_server_vmwaretimeout: 10
+
