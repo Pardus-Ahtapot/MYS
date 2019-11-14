@@ -1,0 +1,47 @@
+---
+#- include: conf_integrity.yml
+
+- name: KeepAlived Kuruluyor
+  apt:
+    name: keepalived
+    update_cache: yes
+    state: latest
+
+- name: IPSET Kuruluyor
+  apt:
+    name: ipset
+    update_cache: yes
+    state: latest
+
+- name: Rsyslog Kuruluyor
+  apt:
+    name: rsyslog
+    update_cache: yes
+    state: latest
+
+
+- name: keepalived.conf dosyasini uygula
+  template:
+    src: "keepalived.conf.j2"
+    dest: "/etc/keepalived/keepalived.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Log yapilandirmasi uygulaniyor
+  template:
+    src: "rsyslog_keepalived.conf.j2"
+    dest: "/etc/rsyslog.d/keepalived.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Varsayilan calisma parametreleri duzenleniyor
+  template:
+    src: "defaults_keepalived.j2"
+    dest: "/etc/default/keepalived"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+   - restart keepalived

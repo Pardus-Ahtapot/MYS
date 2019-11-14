@@ -252,13 +252,9 @@
     mode: 0644
 
 - name: Sanal Sunuculari Aktive Et
-<<<<<<< HEAD
   command: a2ensite {{item.key}}.conf
   with_dict: "{{waf_vhosts}}"
-=======
-  command: a2ensite {{item.waf_hostname}}.conf
-  with_items: "{{waf_vhosts[inventory_hostname]}}"
->>>>>>> 5659b36889b77b912bfda80af77dd35e4e25cfd2
+
   notify:
    - restart apache2
 

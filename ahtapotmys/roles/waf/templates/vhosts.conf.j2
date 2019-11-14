@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% if item.value.waf_force_https == "On" %}
 <VirtualHost *:80>
    ServerName {{ item.value.waf_hostname }}
@@ -47,43 +46,6 @@
 
 
 {% endif %}
-=======
-<VirtualHost {{ item.listen_ip }}:{{item.listen_port}}>
-        ServerName  {{item.waf_hostname}}
-{% for server_alias in item.server_aliases %}
-        ServerAlias  {{server_alias}}
-{% endfor %}
-
-        HttpProtocolOptions {{item.http_protocol_options}}
-        SecRuleEngine {{item.waf_status}}
-	ProxyRequests Off
-
-{% if item.waf_force_https == "on" %}
-	RewriteEngine On
-	RewriteCond %{HTTPS} !on
-	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
-{% endif %}
-
-{% if item.ssl_engine == "on" %}
-        SSLEngine on
-        {% if item.ssl_disable_protocols|length > 0 %}
-        SSLProtocol {{item.ssl_disable_protocols}}
-        {% endif %}
-        {% if item.ssl_honor_cipher_order|length > 0 %}
-        SSLHonorCipherOrder {{item.ssl_honor_cipher_order}}
-        {% endif %}
-        {% if item.ssl_compression|length > 0 %}
-        SSLCompression {{item.ssl_compression}}
-        {% endif %}
-        {% if item.ssl_cipher_suite|length > 0 %}
-        SSLCipherSuite '{{item.ssl_cipher_suite}}'
-        {% endif %}
-
-        SSLCertificateFile      /etc/apache2/ssl/certs/{{item.waf_hostname}}.crt
-        SSLCertificateKeyFile   /etc/apache2/ssl/key/{{item.waf_hostname}}.key
-{% endif %}
-
->>>>>>> 5659b36889b77b912bfda80af77dd35e4e25cfd2
 
 	Include /etc/wafkurallar/OWASP.conf
 	Include /etc/wafkurallar/OWASP/*.conf
@@ -97,33 +59,21 @@
 
         ProxyPass /waf_error.html !
 
-<<<<<<< HEAD
 {% if item.value.waf_disabled_rules|length > 0 %}
     {% for rule_id in item.value.waf_disabled_rules %} 
-=======
-{% if item.waf_disabled_rules|length > 0 %}
-    {% for rule_id in item.waf_disabled_rules %} 
->>>>>>> 5659b36889b77b912bfda80af77dd35e4e25cfd2
 	SecRuleRemoveById {{rule_id}}
     {% endfor %}
 {% endif %}
 
 
-<<<<<<< HEAD
 {% if item.value.restrict_by_ip == "on" %}
     <Location {{item.value.restrict_by_ip_path}}>
     {% for ip_exception in item.value.restricted_ip_list %}
-=======
-{% if item.restrict_by_ip == "on" %}
-    <Location {{item.restrict_by_ip_path}}>
-    {% for ip_exception in item.restricted_ip_list %}
->>>>>>> 5659b36889b77b912bfda80af77dd35e4e25cfd2
       Require ip {{ip_exception }}
     {% endfor %}
     </Location>
 {% endif %}
 
-<<<<<<< HEAD
 {% if item.value.proxy_vhost == "on" %}
 
 	{% if item.value.proxy_load_balance_pool_name|length > 0  %}
@@ -136,47 +86,21 @@
 			{% endfor %}
 			 {% if item.value.proxy_load_balance_method|length > 0  %}
 			ProxySet lbmethod={{item.value.proxy_load_balance_method}}
-=======
-{% if item.proxy_vhost == "on" %}
-
-	{% if item.proxy_load_balance_pool_name|length > 0  %}
-		{% if item.proxy_load_balance_members|length > 0  %}
-		<Proxy balancer://{{item.proxy_load_balance_pool_name}}>
-			{% set loadbalancer_active = "active" %}
-			{% for proxy_member in item.proxy_load_balance_members %}
-			BalancerMember {{proxy_member}}
-			{% endfor %}
-			 {% if item.proxy_load_balance_method|length > 0  %}
-			ProxySet lbmethod={{item.proxy_load_balance_method}}
->>>>>>> 5659b36889b77b912bfda80af77dd35e4e25cfd2
 			 {% endif %}
 		</Proxy>
 		{% endif %}
 	{% endif %}
 
-<<<<<<< HEAD
 	ProxyPreserveHost {{item.value.preserve_host}}
 	RemoteIPHeader {{item.value.remote_ip_header}}
 	ProxyPassReverseCookiePath {{item.value.reverse_cookie_path}}
 	ProxyPassReverseCookieDomain {{item.value.reverse_cookie_domain}}
 	SSLProxyEngine {{item.value.proxy_ssl}}
-=======
-	ProxyPreserveHost {{item.preserve_host}}
-	RemoteIPHeader {{item.remote_ip_header}}
-	ProxyPassReverseCookiePath {{item.reverse_cookie_path}}
-	ProxyPassReverseCookieDomain {{item.reverse_cookie_domain}}
-	SSLProxyEngine {{item.proxy_ssl}}
->>>>>>> 5659b36889b77b912bfda80af77dd35e4e25cfd2
 	{% if loadbalancer_active is defined %}
 		ProxyPass "/" balancer://{{item.value.proxy_load_balance_pool_name}}/
 	{% else %}
-<<<<<<< HEAD
 		ProxyPass {{item.value.proxy_pass}}
 		ProxyPassReverse {{item.value.proxy_reverse_pass}}
-=======
-		ProxyPass {{item.proxy_pass}}
-		ProxyPassReverse {{item.proxy_reverse_pass}}
->>>>>>> 5659b36889b77b912bfda80af77dd35e4e25cfd2
 	{% endif %}
 
 {% endif %}
@@ -184,7 +108,6 @@
 	Include /etc/apache2/whitelist.conf
 
 
-<<<<<<< HEAD
 {% if item.value.optimize_access_log == "on" %}
 	SetEnvIf Request_URI "\.(jpg|xml|png|gif|ico|js|css|swf|js?.|css?.)$" DontLog
 	CustomLog /var/log/ahtapot/waf/{{item.value.waf_hostname}}.access.log combined Env=!DontLog
@@ -198,19 +121,4 @@
 
 	ErrorLog /var/log/ahtapot/waf/{{item.value.waf_hostname}}.error.log
 
-=======
-{% if item.optimize_access_log == "on" %}
-	SetEnvIf Request_URI "\.(jpg|xml|png|gif|ico|js|css|swf|js?.|css?.)$" DontLog
-	CustomLog /var/log/ahtapot/waf/{{item.waf_hostname}}.access.log combined Env=!DontLog
-{% endif %}
-
-{% if item.optimize_access_log == "log" %}
-        CustomLog /var/log/ahtapot/waf/{{item.waf_hostname}}.access.log combined
-{% endif %}
-{% if item.optimize_access_log == "nolog" %}
-{% endif %}
-
-	ErrorLog /var/log/ahtapot/waf/{{item.waf_hostname}}.error.log
-
->>>>>>> 5659b36889b77b912bfda80af77dd35e4e25cfd2
 </VirtualHost>
