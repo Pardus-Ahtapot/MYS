@@ -3,6 +3,7 @@
 - hosts: all 
   remote_user: ahtapotops 
   vars_files:
+  - ../roles/base/vars/conf_list.yml
   - ../roles/base/vars/group.yml
   - ../roles/base/vars/user.yml
   - ../roles/base/vars/repo.yml
