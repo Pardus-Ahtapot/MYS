@@ -29,6 +29,7 @@
 - hosts: ansible
   remote_user: ahtapotops 
   vars_files:
+  - ../roles/ansible/vars/conf_list.yml
   - ../roles/ansible/vars/package.yml
   - ../roles/ansible/vars/ansible.yml
   - ../roles/ansible/vars/directory.yml
