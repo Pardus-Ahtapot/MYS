@@ -30,6 +30,7 @@
   remote_user: ahtapotops 
   vars_files:
   - ../roles/ansible/vars/conf_list.yml
+  - ../roles/ansible/vars/awx.yml
   - ../roles/ansible/vars/package.yml
   - ../roles/ansible/vars/ansible.yml
   - ../roles/ansible/vars/directory.yml
@@ -41,6 +42,7 @@
 - hosts: gitlab
   remote_user: ahtapotops
   vars_files:
+  - ../roles/gitlab/vars/conf_list.yml
   - ../roles/gitlab/vars/package.yml
   - ../roles/gitlab/vars/hook.yml
   roles:
@@ -49,6 +51,7 @@
 - hosts: firewallbuilder
   remote_user: ahtapotops 
   vars_files:
+  - ../roles/firewallbuilder/vars/conf_list.yml
   - ../roles/firewallbuilder/vars/package.yml
   - ../roles/firewallbuilder/vars/fwbuilder.yml
   - ../roles/firewallbuilder/vars/directory.yml
