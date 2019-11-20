@@ -2,8 +2,8 @@
 dependencies: []
 
 galaxy_info:
-  author: Ibrahim ARI
-  description: Ahtapot Database Firewall
+  author: ciari
+  description: Apache mod_security2 modulu kurulum ve konfigurasyonu
   company: "ULAKBIM"
   license: "license (BSD, MIT)"
   min_ansible_version: 2.2
@@ -15,4 +15,6 @@ galaxy_info:
       versions:
       - all
   galaxy_tags:
-    - dbfw
+    - apache2
+    - web
+    - waf

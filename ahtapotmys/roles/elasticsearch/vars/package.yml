@@ -9,12 +9,16 @@ elasticsearch_packages:
         #name: "elasticsearch=2.3.3" 
         name: "elasticsearch" 
         state: "present" 
-    package03:
-        name: "search-guard-ssl=2.3.3" 
-        state: "present" 
-    package04:
-        name: "search-guard=2.3.3" 
-        state: "present" 
+#    packageXX:
+#        name: 
+#        state:  
+searchguard_packages:
+    package01:
+        name: "search-guard-ssl=2.3.3"
+        state: "present"
+    package02:
+        name: "search-guard=2.3.3"
+        state: "present"
 #    packageXX:
 #        name: 
 #        state:  

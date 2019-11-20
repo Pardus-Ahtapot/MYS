@@ -1,6 +1,5 @@
 # this is a configuration file for zabbix server process
-# to get more information about zabbix,
-# visit http://www.zabbix.com
+# to get more information about zabbix, visit http://www.zabbix.com
 
 ############ general parameters #################
 ### option: listenport
@@ -13,6 +12,18 @@ ListenPort={{ zabbix_server_listenport }}
 #
 {% if zabbix_server_sourceip is defined and zabbix_server_sourceip %}
 SourceIP={{ zabbix_server_sourceip }}
+{% endif %}
+
+{% if zabbix_version is version_compare('3.0', '>=') %}
+### Option: LogType
+#	Specifies where log messages are written to:
+#		system  - syslog
+#		file    - file specified with LogFile parameter
+#		console - standard output
+#
+# Mandatory: no
+# Default:
+LogType={{ zabbix_server_logtype }}
 {% endif %}
 
 ### option: logfile
@@ -36,6 +47,18 @@ LogFileSize={{ zabbix_server_logfilesize }}
 #	4 - for debugging (produces lots of information)
 #
 DebugLevel={{ zabbix_server_debuglevel }}
+
+### Option: SocketDir
+#	IPC socket directory.
+#       Directory to store IPC sockets used by internal Zabbix services.
+#
+# Mandatory: no
+# Default:
+# SocketDir=/tmp
+
+{% if zabbix_version is version_compare('3.4', '>=') %}
+SocketDir={{ zabbix_server_socketdir }}
+{% endif %}
 
 ### option: pidfile
 #	name of pid file.
@@ -87,6 +110,57 @@ DBSocket={{ zabbix_server_dbsocket }}
 DBPort={{ zabbix_server_dbport }}
 {% endif %}
 
+### Option: HistoryStorageURL
+#	History storage HTTP[S] URL.
+#
+# Mandatory: no
+# Default:
+{% if zabbix_server_historystorageurl is defined and zabbix_server_historystorageurl %}
+HistoryStorageURL={{ zabbix_server_historystorageurl }}
+{% endif %}
+
+{% if zabbix_version is version_compare('3.4', '>=') %}
+### Option: HistoryStorageTypes
+#	Comma separated list of value types to be sent to the history storage.
+#
+# Mandatory: no
+# Default:
+HistoryStorageTypes={{ zabbix_server_historystoragetypes }}
+{% endif %}
+
+{% if zabbix_version is version_compare('4.0', '>=') %}
+### Option: HistoryStorageDateIndex
+#	Enable preprocessing of history values in history storage to store values in different indices based on date.
+#	0 - disable
+#	1 - enable
+#
+# Mandatory: no
+# Default:
+HistoryStorageDateIndex={{ zabbix_server_historystoragedateindex }}
+{% endif %}
+
+{% if zabbix_version is version_compare('4.0', '>=') %}
+### Option: ExportDir
+#	Directory for real time export of events, history and trends in newline delimited JSON format.
+#	If set, enables real time export.
+#
+# Mandatory: no
+# Default:
+{% if zabbix_server_exportdir is defined and zabbix_server_exportdir %}
+ExportDir={{ zabbix_server_exportdir }}
+{% endif %}
+{% endif %}
+
+{% if zabbix_version is version_compare('4.0', '>=') %}
+### Option: ExportFileSize
+#	Maximum size per export file in bytes.
+#	Only used for rotation if ExportDir is set.
+#
+# Mandatory: no
+# Range: 1M-1G
+# Default:
+ExportFileSize={{ zabbix_server_exportfilesize }}
+{% endif %}
 ############ advanced parameters ################
 
 ### option: startpollers
@@ -126,8 +200,7 @@ StartDiscoverers={{ zabbix_server_startdiscoverers }}
 #
 StartHTTPPollers={{ zabbix_server_starthttppollers }}
 
-{#{% if zabbix_short_version >= '20' %}#}
-{% if zabbix_version | version_compare('2.0', '>=') %}
+{% if zabbix_version is version_compare('2.0', '>=') %}
 ### option: starttimers
 #	number of pre-forked instances of timers.
 #	timers process time-based trigger functions and maintenance periods.
@@ -136,8 +209,7 @@ StartHTTPPollers={{ zabbix_server_starthttppollers }}
 StartTimers={{ zabbix_server_starttimers }}
 {% endif %}
 
-{#{% if zabbix_short_version >= '30' %}#}
-{% if zabbix_version | version_compare('3.0', '>=') %}
+{% if zabbix_version is version_compare('3.0', '>=') %}
 ### Option: StartEscalators
 #   Number of pre-forked instances of escalators.
 #
@@ -162,9 +234,8 @@ JavaGatewayPort={{ zabbix_server_javagatewayport }}
 StartJavaPollers={{ zabbix_server_startjavapollers }}
 {% endif  %}
 
-{#{% if zabbix_short_version >= '2.2' %}#}
-{% if zabbix_version | version_compare('2.2', '>=') %}
-    ### option: startvmwarecollectors
+{% if zabbix_version is version_compare('2.2', '>=') %}
+### option: startvmwarecollectors
 #	number of pre-forked vmware collector instances.
 #
 StartVMwareCollectors={{ zabbix_server_startvmwarecollectors }}
@@ -174,8 +245,7 @@ StartVMwareCollectors={{ zabbix_server_startvmwarecollectors }}
 #
 VMwareFrequency={{ zabbix_server_vmwarefrequency }}
 
-{#{% if zabbix_short_version >= '30' %}#}
-{% if zabbix_version | version_compare('3.0', '>=') %}
+{% if zabbix_version is version_compare('3.0', '>=') %}
 ### Option: VMwarePerfFrequency
 #       How often Zabbix will connect to VMware service to obtain performance data.
 #
@@ -191,8 +261,7 @@ VMwarePerfFrequency={{ zabbix_server_vmwareperffrequency }}
 VMwareCacheSize={{ zabbix_server_vmwarecachesize }}
 {% endif  %}
 
-{#{% if zabbix_short_version >= '30' %}#}
-{% if zabbix_version | version_compare('3.0', '>=') %}
+{% if zabbix_version is version_compare('3.0', '>=') %}
 ### Option: VMwareTimeout
 #       Specifies how many seconds vmware collector waits for response from VMware service.
 #
@@ -215,26 +284,32 @@ StartSNMPTrapper={{ zabbix_server_startsnmptrapper }}
 #	trapper will listen on all network interfaces if this parameter is missing.
 #
 {% if zabbix_server_listenip is defined and zabbix_server_listenip %}
-ListenIp={{ zabbix_server_listenip }}
+ListenIP={{ zabbix_server_listenip }}
 {% endif %}
 
 ### option: housekeepingfrequency
-#	how often zabbix will perform housekeeping procedure (in hours).
-#	housekeeping is removing unnecessary information from history, alert, and alarms tables.
+#	How often Zabbix will perform housekeeping procedure (in hours).
+#	Housekeeping is removing outdated information from the database.
+#	To prevent Housekeeper from being overloaded, no more than 4 times HousekeepingFrequency
+#	hours of outdated information are deleted in one housekeeping cycle, for each item.
+#	To lower load on server startup housekeeping is postponed for 30 minutes after server start.
+#	With HousekeepingFrequency=0 the housekeeper can be only executed using the runtime control option.
+#	In this case the period of outdated information deleted in one housekeeping cycle is 4 times the
+#	period since the last housekeeping cycle, but not less than 4 hours and not greater than 4 days.
 #
 HousekeepingFrequency={{ zabbix_server_housekeepingfrequency }}
 
 ### option: maxhousekeeperdelete
-#	the table "housekeeper" contains "tasks" for housekeeping procedure in the format:
+#	The table "housekeeper" contains "tasks" for housekeeping procedure in the format:
 #	[housekeeperid], [tablename], [field], [value].
-#	no more than 'maxhousekeeperdelete' rows (corresponding to [tablename], [field], [value])
+#	No more than 'MaxHousekeeperDelete' rows (corresponding to [tablename], [field], [value])
 #	will be deleted per one task in one housekeeping cycle.
-#	sqlite3 does not use this parameter, deletes all corresponding rows without a limit.
-#	if set to 0 then no limit is used at all. in this case you must know what you are doing!
+#	SQLite3 does not use this parameter, deletes all corresponding rows without a limit.
+#	If set to 0 then no limit is used at all. In this case you must know what you are doing!
 #
 MaxHousekeeperDelete={{ zabbix_server_maxhousekeeperdelete }}
 
-{% if zabbix_version | version_compare('3.2', '<=') %}
+{% if zabbix_version is version_compare('3.2', '<=') %}
 ### option: senderfrequency
 #	how often zabbix will try to send unsent alerts (in seconds).
 #
@@ -263,7 +338,7 @@ StartDBSyncers={{ zabbix_server_startdbsyncers }}
 #
 HistoryCacheSize={{ zabbix_server_historycachesize }}
 
-{% if zabbix_version | version_compare('3.0', '>=') %}
+{% if zabbix_version is version_compare('3.0', '>=') %}
 ### Option: HistoryIndexCacheSize
 #       Size of history index cache, in bytes.
 #       Shared memory size for indexing history cache.
@@ -277,8 +352,7 @@ HistoryIndexCacheSize={{ zabbix_server_historyindexcachesize }}
 #
 TrendCacheSize={{ zabbix_server_trendcachesize }}
 
-{#{% if zabbix_short_version < 30 %}#}
-{% if zabbix_version | version_compare('3.0', '<') %}
+{% if zabbix_version is version_compare('3.0', '<') %}
     ### option: historytextcachesize
 #	size of text history cache, in bytes.
 #	shared memory size for storing character, text or log history data.
@@ -286,8 +360,7 @@ TrendCacheSize={{ zabbix_server_trendcachesize }}
 HistoryTextCacheSize={{ zabbix_server_historytextcachesize }}
 {% endif %}
 
-{#{% if zabbix_short_version >= 22 %}#}
-{% if zabbix_version | version_compare('2.2', '>=') %}
+{% if zabbix_version is version_compare('2.2', '>=') %}
 ### option: valuecachesize
 #	size of history value cache, in bytes.
 #	shared memory size for caching item history data requests
@@ -296,8 +369,7 @@ HistoryTextCacheSize={{ zabbix_server_historytextcachesize }}
 ValueCacheSize={{ zabbix_server_valuecachesize }}
 {% endif %}
 
-{#{% if zabbix_short_version <= 24 %}#}
-{% if zabbix_version | version_compare('2.4', '<') %}
+{% if zabbix_version is version_compare('2.4', '<') %}
 ### option: nodenoevents
 #	if set to '1' local events won't be sent to master node.
 #	this won't impact ability of this node to propagate events from its child nodes.
@@ -346,7 +418,7 @@ AlertScriptsPath={{ zabbix_server_alertscriptspath }}
 #	full path to location of external scripts.
 #	default depends on compilation options.
 #
-ExternalScripts={{ zabbix_server_externalscripts }}
+ExternalScripts={{ zabbix_server_externalscriptspath }}
 
 ### option: fpinglocation
 #	location of fping.
@@ -397,8 +469,7 @@ ProxyConfigFrequency={{ zabbix_server_proxyconfigfrequency }}
 #
 ProxyDataFrequency={{ zabbix_server_proxydatafrequency }}
 
-{#{% if zabbix_short_version >= 22 %}#}
-{% if zabbix_version | version_compare('2.2', '>=') %}
+{% if zabbix_version is version_compare('2.2', '>=') %}
 ### option: allowroot
 #	allow the server to run as 'root'. if disabled and the server is started by 'root', the server
 #	will try to switch to user 'zabbix' instead. has no effect if started under a regular user.
@@ -408,8 +479,7 @@ ProxyDataFrequency={{ zabbix_server_proxydatafrequency }}
 AllowRoot={{ zabbix_server_allowroot }}
 {% endif %}
 
-{#{% if zabbix_short_version >= 30 %}#}
-{% if zabbix_version | version_compare('3.0', '>=') %}
+{% if zabbix_version is version_compare('3.0', '>=') %}
 ### Option: User
 #       Drop privileges to a specific, existing user on the system.
 #       Only has effect if run as 'root' and AllowRoot is disabled.
@@ -423,8 +493,7 @@ User={{ zabbix_server_user }}
 #
 Include={{ zabbix_server_include }}
 
-{#{% if zabbix_short_version >= 30 %}#}
-{% if zabbix_version | version_compare('3.0', '>=') %}
+{% if zabbix_version is version_compare('3.0', '>=') %}
 ### Option: SSLCertLocation
 #       Location of SSL client certificates.
 #       This parameter is used only in web monitoring.
@@ -448,8 +517,7 @@ SSLCALocation={{ zabbix_server_sslcalocation }}
 {% endif %}
 
 ####### loadable modules #######
-{#{% if zabbix_short_version >= 22 %}#}
-{% if zabbix_version | version_compare('2.2', '>=') %}
+{% if zabbix_version is version_compare('2.2', '>=') %}
 ### option: loadmodulepath
 #	full path to location of server modules.
 #	default depends on compilation options.
@@ -467,8 +535,7 @@ LoadModulePath={{ zabbix_server_loadmodulepath }}
 LoadModule = {{ loadmodule }}
 {% endif %}
 
-{#{% if zabbix_short_version >= 30 %}#}
-{% if zabbix_version | version_compare('3.0', '>=') %}
+{% if zabbix_version is version_compare('3.0', '>=') %}
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSCAFile

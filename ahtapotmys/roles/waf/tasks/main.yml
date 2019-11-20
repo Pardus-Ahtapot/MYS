@@ -7,6 +7,34 @@
     update_cache: yes
     state: latest
 
+- name: eski konfigurasyonlar temizleniyor (sites-avaible)
+  file:
+    state: absent
+    path: "/etc/apache2/sites-avaible/"
+
+- name: eski konfigurasyonlar temizleniyor (sites-enabled)
+  file:
+    state: absent
+    path: "/etc/apache2/sites-enabled/"
+
+- name: Enabled dizinini Olustur
+  file:
+    path: /etc/apache2/sites-enabled/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
+
+- name: Enabled dizinini Olustur
+  file:
+    path: /etc/apache2/sites-avaible/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
+
 - name: Waf Kurallari kurulumu
   apt:
     name: wafkurallar
@@ -53,99 +81,97 @@
   apache2_module:
     name: security2
     state: present
-  notify:
-   - restart apache2
+
 
 - name: proxy modulu aktive et
   apache2_module:
     name: proxy
     state: present
-  notify:
-   - restart apache2
+
 
 - name: proxy_html modul aktive et
   apache2_module:
     name: proxy_html
     state: present
-  notify:
-   - restart apache2
+
 
 - name: remoteip modul aktive et
   apache2_module:
     name: remoteip
     state: present
-  notify:
-   - restart apache2
+
+
+- name: rewrite modul aktive et
+  apache2_module:
+    name: rewrite
+    state: present
+
 
 - name: proxy_ajp modul aktive et
   apache2_module:
     name: proxy_ajp
     state: present
-  notify:
-   - restart apache2
+
 
 - name: headers modul aktive et
   apache2_module:
     name: headers
     state: present
-  notify:
-   - restart apache2
+
 
 - name: proxy_balancer modul aktive et
   apache2_module:
     name: proxy_balancer
     state: present
-  notify:
-   - restart apache2
+
 
 - name: proxy_connect modul aktive et
   apache2_module:
     name: proxy_connect
     state: present
-  notify:
-   - restart apache2
+
 
 - name: proxy_http modul aktive et
   apache2_module:
     name: proxy_http
     state: present
-  notify:
-   - restart apache2
+
 
 - name: proxy_http2 modul aktive et
   apache2_module:
     name: proxy_http2
     state: present
-  notify:
-   - restart apache2
+
 
 - name: proxy_wstunnel modul aktive et
   apache2_module:
     name: proxy_wstunnel
     state: present
-  notify:
-   - restart apache2
+
+
+- name: proxy_hcheck modul aktive et
+  apache2_module:
+    name: proxy_hcheck
+    state: present
+
 
 - name: ssl modul aktive et
   apache2_module:
     name: ssl
     state: present
-  notify:
-   - restart apache2
+
 
 - name: lbmethod_byrequests modul aktive et
   apache2_module:
     name: lbmethod_byrequests
     state: present
-  notify:
-   - restart apache2
+
 
 - name: lbmethod_bytraffic modul aktive et
   apache2_module:
     name: lbmethod_bytraffic
     state: present
-  notify:
-   - restart apache2
+
 
 - name: modsecurity.conf dosyasini uygula
   template:
@@ -171,20 +197,19 @@
     group: root
     mode: 0644
 
-# a2enconf modsecurity.conf
-#- name: mod_security2 konfigurasyon dosyasini aktive et
-#  command: "a2enconf modsecurity.conf"
-#  notify:
-#  - restart apache2
+- name: Sanal Sunucu Degiskenleri tespit ediliyor
+  include_vars:
+    dir: vars/vhosts
+    name: waf_vhosts
 
 - name: Apache Sanal Sunucu Konfigurasyonu Yapiliyor
   template:
     src: "vhosts.conf.j2"
-    dest: "/etc/apache2/sites-available/{{item.waf_hostname}}.conf"
+    dest: "/etc/apache2/sites-available/{{item.key}}.conf"
     owner: root
     group: root
     mode: 0644
-  with_items: "{{waf_vhosts[inventory_hostname]}}"
+  with_dict: "{{ waf_vhosts }}"
 
 - name: Sertifika Dizinlerini Olustur
   file: path=/etc/apache2/ssl/certs/ state=directory
@@ -193,14 +218,14 @@
   file: path=/etc/apache2/ssl/key/ state=directory
 
 - name: Sertifikalar kopyalaniyor
-  copy: src=templates/{{item.waf_hostname}}.crt.j2 dest=/etc/apache2/ssl/certs/{{item.waf_hostname}}.crt
-  when: (role_path + '/templates/' + item.waf_hostname + '.crt.j2') | is_file
-  with_items: "{{waf_vhosts[inventory_hostname]}}"
+  copy: src=templates/certificates/{{item.key}}.crt.j2 dest=/etc/apache2/ssl/certs/{{item.key}}.crt
+  when: (role_path + '/templates/certificates/' + item.key + '.crt.j2') | is_file
+  with_dict: "{{waf_vhosts}}"
 
 - name: Anahtarlar kopyalaniyor
-  copy: src=templates/{{item.waf_hostname}}.key.j2 dest=/etc/apache2/ssl/key/{{item.waf_hostname}}.key
-  when: (role_path + '/templates/' + item.waf_hostname + '.key.j2') | is_file
-  with_items: "{{waf_vhosts[inventory_hostname]}}"
+  copy: src=templates/certificates/{{item.key}}.key.j2 dest=/etc/apache2/ssl/key/{{item.key}}.key
+  when: (role_path + '/templates/certificates/' + item.key + '.key.j2') | is_file
+  with_dict: "{{waf_vhosts}}"
 
 - name: SSL icin konfigurasyon parametreleri ayarlaniyor
   template:
@@ -227,6 +252,9 @@
     mode: 0644
 
 - name: Sanal Sunuculari Aktive Et
-  command: a2ensite {{item.waf_hostname}}.conf
-  with_items: "{{waf_vhosts[inventory_hostname]}}"
+  command: a2ensite {{item.key}}.conf
+  with_dict: "{{waf_vhosts}}"
+
+  notify:
+   - restart apache2
 
