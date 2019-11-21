@@ -7,10 +7,10 @@
     update_cache: yes
     state: latest
 
-- name: eski konfigurasyonlar temizleniyor (sites-avaible)
+- name: eski konfigurasyonlar temizleniyor (sites-available)
   file:
     state: absent
-    path: "/etc/apache2/sites-avaible/"
+    path: "/etc/apache2/sites-available/"
 
 - name: eski konfigurasyonlar temizleniyor (sites-enabled)
   file:
@@ -26,9 +26,9 @@
     mode: 0755
     recurse: yes
 
-- name: Enabled dizinini Olustur
+- name: Available dizinini Olustur
   file:
-    path: /etc/apache2/sites-avaible/
+    path: /etc/apache2/sites-available/
     state: directory
     owner: root
     group: root
