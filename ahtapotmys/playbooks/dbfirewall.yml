@@ -1,6 +1,7 @@
 - hosts: dbfirewall
   sudo: yes
   vars_files:
+  - /etc/ansible/roles/base/vars/conf_list.yml
   - /etc/ansible/roles/base/vars/group.yml
   - /etc/ansible/roles/base/vars/user.yml
   - /etc/ansible/roles/base/vars/repo.yml
