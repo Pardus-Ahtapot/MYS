@@ -65,13 +65,14 @@
     {% endfor %}
 {% endif %}
 
-
 {% if item.value.restrict_by_ip == "on" %}
-    <Location {{item.value.restrict_by_ip_path}}>
-    {% for ip_exception in item.value.restricted_ip_list %}
+{% for keyx,valx in item.value.restriction_list.iteritems() %}
+    <Location {{valx.path}}>
+    {% for ip_exception in valx.allowed_ips %}
       Require ip {{ip_exception }}
     {% endfor %}
     </Location>
+{% endfor %}
 {% endif %}
 
 {% if item.value.proxy_vhost == "on" %}

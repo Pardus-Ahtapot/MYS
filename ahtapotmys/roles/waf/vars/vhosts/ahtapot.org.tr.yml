@@ -29,6 +29,14 @@ ahtapot.org.tr:
    proxy_load_balance_health_check_fail: "2"
    waf_disabled_rules: []
    restrict_by_ip: "on"
-   restrict_by_ip_path: "/admin"
-   restricted_ip_list: ["10.20.30.0/29"] 
+   restriction_list:
+      rest01:
+          path: "/kisitli-alan1"
+          allowed_ips: ["10.10.10.0/29"]
+      rest02:
+          path: "/kisitli-alan2"
+          allowed_ips: ["10.10.20.0/29"]
+#      restXX:
+#          path:
+#          allowed_ips:
    optimize_access_log: "on"

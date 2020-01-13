@@ -15,8 +15,8 @@ ntp:
 
 base_ntp_servers:
     server1:
-        fqdn: "0.tr.pool.ntp.org"
+        fqdn: "ntp1.ulakbim.gov.tr"
     server2:
-        fqdn: "1.tr.pool.ntp.org"
+        fqdn: "ntp2.ulakbim.gov.tr"
 #    serverX:
 #        fqdn: "" 
