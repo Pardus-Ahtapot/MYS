@@ -5,6 +5,7 @@
         state: "{{ item.value.state }}"
   with_dict: "{{to_be_removed_modules}}"
   sudo: yes
+  ignore_errors: yes
   tags: modprobe
 
 - name: Gereksiz cekirdek modulleri kalici olarak kaldirilmak icin blackliste aliniyor (fake install).
@@ -24,6 +25,7 @@
         state: "{{ item.value.state }}"
   with_dict: "{{to_be_blacklisted_modules}}"
   sudo: yes
+  ignore_errors: yes
   tags: modprobe
 
 - name: Gereksiz cekirdek modulleri kalici olarak kaldirilmak icin blackliste aliniyor (blacklist).
@@ -34,4 +36,5 @@
         group: "{{ bla_modules['conf']['group'] }}"
         mode: "{{ bla_modules['conf']['mode'] }}"
   sudo: yes
+  ignore_errors: yes
   tags: modprobe
