@@ -1,7 +1,7 @@
 ---
 - include: conf_integrity.yml
 
-- name: installing mhn packages
+- name: mhn paketleri yukleniyor
   sudo: yes
   apt:
     name: "{{ item }}"
@@ -19,14 +19,14 @@
     sed -i -r "s|(MAIL_PASSWORD =)(.*)|\1 '{{mhn_mail_pass|quote}}'|g" /opt/mhn/server/config.py
     sed -i -r "s|(DEFAULT_MAIL_SENDER =)(.*)|\1 '{{mhn_mail_sender|quote}}'|g" /opt/mhn/server/config.py
     sed -i -r "s|(LOG_FILE_PATH =)(.*)|\1 '{{mhn_log_file_path|quote}}'|g" /opt/mhn/server/config.py
-
-- name: Check if ssl certificate exists
+  
+- name: Ssl sertifikalarin varligi kontrol ediliyor
   sudo: yes
   stat:
     path: /etc/ssl/private/mhn.crt
   register: ssl_exists
 
-- name: Create ssl certificate
+- name: Ssl sertifikasi olusturuluyor
   sudo: yes
   shell: |
     mkdir /etc/postfix/ssl
@@ -42,7 +42,7 @@
     openssl req -new -key /etc/ssl/private/mhn.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{mhn_ssl_country}}/ST={{mhn_ssl_state}}/L={{mhn_ssl_locality}}/O={{mhn_ssl_organization}}/OU={{mhn_ssl_organizationalunit}}/CN={{mhn_ssl_commonname}}"
   when: (ssl_exists.stat.exists == False) and (mhn_create_ssl == True)
 
-- name: Creating ssl conf for nginx
+- name: Nginx icin ssl konfigurasyonu olusturuluyor
   sudo: yes
   template:
     src: "default.j2"
@@ -52,7 +52,7 @@
     mode: 0644
   notify: restart nginx
 
-- name: restart mhn services
+- name: Mhn servisleri yeniden baslatiliyor
   sudo: yes
   shell: supervisorctl restart all
 
