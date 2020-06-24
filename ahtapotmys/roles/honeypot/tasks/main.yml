@@ -14,20 +14,14 @@
     - dbus
     - rsync
     - dnsmasq-base
-#- name: copying bridge script
-#  sudo: yes
-#  template:
-#    src: "br0.j2"
-#    dest: "/etc/network/interfaces.d/{{lxc[inventory_hostname]['network_link']}}"
-#    owner: "root"
-#    group: "root"
-#    mode: 0755
-#  when: lxc[inventory_hostname].network_type == "veth"
-#
-#- name: ifup bridge
-#  sudo: yes
-#  command: /sbin/ifup {{lxc[inventory_hostname]['network_link']}}
-#  when: lxc[inventory_hostname].network_type == "veth"
+
+- name: fs.inotify.max_user_instances limiti arttiriliyor
+  sysctl:
+    name: fs.inotify.max_user_instances
+    sysctl_set: yes
+    value: '512'
+    reload: yes
+    state: present
 
 - name: modifying default.conf
   sudo: yes
@@ -131,20 +125,45 @@
   with_items: "{{containers[inventory_hostname]}}"
   sudo: yes
 
-
 - include: cowrie.yml
+  tags:
+    - cowrie
 - include: dionaea.yml
+  tags:
+    - dionaea
 - include: p0f.yml
+  tags:
+    - p0f
 - include: smtp.yml
+  tags:
+    - smtp
 - include: glastopf.yml
+  tags:
+    - glastopf
 - include: ftp.yml
+  tags:
+    - ftp
 - include: pop3.yml
+  tags:
+    - pop3
 - include: shockpot.yml
+  tags:
+    - shockpot
 - include: wordpot.yml
+  tags:
+    - wordpot
 - include: amun.yml
+  tags:
+    - amun
 - include: suricata.yml
+  tags:
+    - suricata
 - include: elastichoney.yml
+  tags:
+    - elastichoney
 - include: conpot.yml
+  tags:
+    - conpot
 
 - name: stopping passive containers
   sudo: yes
