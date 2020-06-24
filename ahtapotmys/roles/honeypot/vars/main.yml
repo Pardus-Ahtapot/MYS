@@ -179,4 +179,16 @@ containers:
       network: 10.0.3.0
       broadcast: 10.0.3.255
       gateway: 10.0.3.1
-
+  - type: "conpot"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: false
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.113
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
