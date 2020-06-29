@@ -1,0 +1,5 @@
+rsyslog_conf_list:
+- /etc/cron.d/signercron.sh
+- /etc/rsyslog.conf
+- /opt/signer.bash
+- /etc/logrotate.d/rsyslog

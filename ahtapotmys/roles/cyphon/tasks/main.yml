@@ -1,0 +1,181 @@
+---
+- name: installing cyphon
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - cyphon
+    - default-jre
+    - logstash
+    - elasticsearch
+    - rabbitmq-server
+    - postgresql
+    - nginx
+
+- name: configure java environment
+  sudo: yes
+  template:
+    src: "environment.j2"
+    dest: "/etc/environment"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: configure cyphon rsyslog.conf
+  sudo: yes
+  template:
+    src: "cyphon.conf.j2"
+    dest: "/etc/rsyslog.d/cyphon.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: configure rabbitmq environment
+  sudo: yes
+  template:
+    src: "rabbitmq-env.conf.j2"
+    dest: "/etc/rabbitmq/rabbitmq-env.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: configure pg_hba.conf
+  sudo: yes
+  template:
+    src: "pg_hba.conf.j2"
+    dest: "/etc/postgresql/{{postgresql_version}}/main/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: 0640
+
+- name: configure logstash rsyslog.conf
+  sudo: yes
+  template:
+    src: "rsyslog.conf.j2"
+    dest: "/etc/logstash/conf.d/rsyslog.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: restart logstash
+  sudo: yes
+  service:
+    name: logstash
+    enabled: yes
+    state: restarted
+
+- name: restart elasticsearch
+  sudo: yes
+  service:
+    name: elasticsearch
+    enabled: yes
+    state: restarted
+
+- name: restart rsyslog
+  sudo: yes
+  service:
+    name: rsyslog
+    enabled: yes
+    state: restarted
+
+- name: restart postgresql
+  sudo: yes
+  service:
+    name: postgresql
+    enabled: yes
+    state: restarted
+
+- name: restart rabbitmq-server
+  sudo: yes
+  service:
+    name: rabbitmq-server
+    enabled: yes
+    state: restarted
+
+- name: Configuring rabbitmq for cyphon
+  sudo: yes
+  shell: |
+    rabbitmqctl add_vhost cyphon
+    rabbitmqctl add_user cyphon_user ahtapot
+    rabbitmqctl set_user_tags cyphon_user administrator
+    rabbitmqctl set_permissions -p cyphon cyphon_user ".*" ".*" ".*"
+    rabbitmqctl set_permissions -p cyphon guest ".*" ".*" ".*"
+    rabbitmq-plugins enable rabbitmq_management
+    rabbitmqadmin declare exchange name=cyphon type=direct durable=true
+
+- name: modifying default.py
+  sudo: yes
+  template:
+    src: "default.py.j2"
+    dest: "/usr/src/app/cyphon/cyphon/settings/default.py"
+    owner: "cyphon"
+    group: "cyphon"
+    mode: 0644
+
+- name: modifying conf.py
+  sudo: yes
+  template:
+    src: "conf.py.j2"
+    dest: "/usr/src/app/cyphon/cyphon/settings/conf.py"
+    owner: "cyphon"
+    group: "cyphon"
+    mode: 0644
+
+- name: Creating secret key for cyphon
+  sudo: yes
+  shell: |
+    key=$(python -c 'import uuid;print str(uuid.uuid4()).replace("-","")'); sed -i "s/FILL_WITH_SECRET_KEY/$key/" /usr/src/app/cyphon/cyphon/settings/conf.py; sed -i "s/FILL_WITH_SECRET_KEY/$key/" /usr/src/app/cyphon/cyphon/settings/default.py
+
+- name: Creating postgresql database
+  sudo: yes
+  shell: |
+    bash /usr/src/app/entrypoints/cyphon-utils.sh createdb {{cyphon_dbname}} {{cyphon_dbuser}} {{cyphon_dbpass}}
+  ignore_errors: yes
+
+- name: Check if ssl certificate exists
+  sudo: yes
+  stat:
+    path: /etc/nginx/ssl/ssl.public.crt
+  register: ssl_exists
+
+- name: Create ssl certificate
+  sudo: yes
+  shell: |
+    mkdir /etc/nginx/ssl
+    cd /etc/nginx/ssl/
+    openssl genrsa -des3 -passout pass:xxxx -out /etc/nginx/ssl/ssl.pass.key 2048
+    openssl rsa -passin pass:xxxx -in /etc/nginx/ssl/ssl.pass.key -out /etc/nginx/ssl/ssl.private.key
+    chmod 600 ssl.private.key
+    rm /etc/nginx/ssl/ssl.pass.key
+    openssl req -new -key /etc/nginx/ssl/ssl.private.key -out /etc/nginx/ssl/ssl.csr -subj "/C={{cyphon_ssl_country}}/ST={{cyphon_ssl_state}}/L={{cyphon_ssl_locality}}/O={{cyphon_ssl_organization}}/OU={{cyphon_ssl_organizationalunit}}/CN={{cyphon_ssl_commonname}}"
+    openssl x509 -req -days 3650 -in /etc/nginx/ssl/ssl.csr -signkey /etc/nginx/ssl/ssl.private.key -out /etc/nginx/ssl/ssl.public.crt
+    openssl rsa -in /etc/nginx/ssl/ssl.private.key -out /etc/nginx/ssl/ssl.key.unencrypted
+    mv -f ssl.key.unencrypted ssl.private.key
+    openssl req -new -key /etc/nginx/ssl/ssl.private.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{cyphon_ssl_country}}/ST={{cyphon_ssl_state}}/L={{cyphon_ssl_locality}}/O={{cyphon_ssl_organization}}/OU={{cyphon_ssl_organizationalunit}}/CN={{cyphon_ssl_commonname}}"
+  when: (ssl_exists.stat.exists == False)
+
+- name: Creating nginx configuration 
+  sudo: yes
+  shell: |
+    cp /usr/share/doc/cyphon/sample-config/nginx/nginx.conf.ssl.ahtapot /etc/nginx/sites-available/cyphon.conf
+    rm -f /etc/nginx/sites-enabled/default
+    ln -s /etc/nginx/sites-available/cyphon.conf /etc/nginx/sites-enabled/default
+
+- name: restart cyphon
+  sudo: yes
+  service:
+    name: cyphon
+    enabled: yes
+    state: restarted
+
+- name: restart nginx
+  sudo: yes
+  service:
+    name: nginx
+    enabled: yes
+    state: restarted
+
+- name: Creating cyphon superuser
+  sudo: yes
+  shell: |
+    bash /usr/src/app/entrypoints/cyphon-utils.sh createsuperuser {{cyphon_web_username}} {{cyphon_web_password}}

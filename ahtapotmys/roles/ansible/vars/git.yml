@@ -11,6 +11,11 @@ gitrepos:
         accept_hostkey: "yes"
         destination: "/etc/ansible/"
         key_file: "/home/ahtapotops/.ssh/id_rsa"
+    repo03:
+        repo: "ssh://git@Gitlab_sunucu_fqdn:SSH_PORT/ahtapotops/sb.git"
+        accept_hostkey: "yes"
+        destination: "/etc/integrity/sb"
+        key_file: "/home/ahtapotops/.ssh/id_rsa"
 #    repoXX:
 #        repo: ""
 #        accept_hostkey: ""

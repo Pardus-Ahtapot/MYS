@@ -1,7 +1,8 @@
 ---
 # Ossimcik gorevlerini iceren dosyadir.
-- include: repo.yml
+- include: conf_integrity.yml
 - include: install.yml
 - include: ossec.yml
 - include: nxlog.yml
 - include: rsyslog.yml
+- include: ossec_agent.yml

@@ -1,0 +1,6 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+
+{% for key, value in sysctl_security.settings.iteritems() %}
+{{ key }} = {{ value }}
+{% endfor %}

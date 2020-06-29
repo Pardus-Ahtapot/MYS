@@ -25,6 +25,7 @@ ossimcik_rsyslog:
    imthreads: "4"
    MainQueueSize: "100000000"
    MainQueueWorkerThreads: "4"
+   RsyslogQueueWorkerThreads: "4"
    asyncWriting: "on"
    ioBufferSize: "1024k"
    ActionResumeRetryCount: "-1"

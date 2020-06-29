@@ -1,0 +1,100 @@
+use strict;
+
+#
+# Place your configuration directives here.  They will override those in
+# earlier files.
+#
+# See /usr/share/doc/amavisd-new/ for documentation and examples of
+# the directives you can use in this file
+#
+
+{% if use_quarantine == "True" %}
+ 
+$mydomain = '{{antispam_domain}}';
+$myhostname = '{{antispam_smtpd_banner[ansible_hostname]}}';
+$inet_socket_bind = '0.0.0.0';
+$inet_socket_port = [9998, 10024, 10026];
+$max_servers = 1;
+
+@lookup_sql_dsn = ( [ 'DBI:mysql:database=amavis;host={{quarantine_db_host}}', '{{quarantine_db_user}}', '{{quarantine_db_pass}}' ] );
+@storage_sql_dsn = @lookup_sql_dsn;
+$sql_allow_8bit_address = 1;
+
+$virus_quarantine_method = 'sql:';
+$spam_quarantine_method = 'sql:';
+$banned_files_quarantine_method = 'sql:';
+$bad_header_quarantine_method = 'sql:';
+
+$interface_policy{'9998'} = 'AM.PDP-INET';
+
+$policy_bank{'AM.PDP-INET'} = {
+  protocol => 'AM.PDP',
+  inet_acl => [qw(127.0.0.1 {{quarantine_db_host}})],
+};
+
+$interface_policy{'10026'} = 'ORIGINATING';
+
+$policy_bank{'ORIGINATING'} = {
+  originating => 1,
+  smtpd_discard_ehlo_keywords => ['8BITMIME'],
+};
+
+{% endif %}
+
+#_-_-_-_-Whitelist_-_-_-_-
+@whitelist_sender_acl = qw(
+{% if antispam_whitelist_address_domain %}
+{% for address in antispam_whitelist_address_domain %}
+{{address}}
+{% endfor %}
+{% endif %}
+);
+
+#_-_-_-_-Blacklist_-_-_-_-
+@blacklist_sender_acl = qw(
+{% if antispam_blacklist_address_domain %}
+{% for address in antispam_blacklist_address_domain %}
+{{address}}
+{% endfor %}
+{% endif %}
+);
+@local_domains_maps  = ( [".{{antispam_domain}}"] );
+$sa_spam_modifies_subj = {{antispam_spam_modifies_subj}};
+$sa_spam_subject_tag = '{{antispam_spam_subject_tag}}';
+$sa_tag_level_deflt  = {{antispam_tag_level_deflt}};  # add spam info headers if at, or above that level
+$sa_tag2_level_deflt = {{antispam_tag2_level_deflt}}; # add 'spam detected' headers at that level
+$sa_kill_level_deflt = {{antispam_kill_level_deflt}}; # triggers spam evasive actions
+
+$final_virus_destiny = D_DISCARD;
+$final_banned_destiny = D_DISCARD;
+$final_spam_destiny = D_DISCARD;
+$final_bad_header_destiny = D_DISCARD;
+
+$banned_filename_re = new_RE(
+# qr'^UNDECIPHERABLE$',  # is or contains any undecipherable components
+
+{% if antispam_block_mimetypes %}
+{% for mime in antispam_block_mimetypes %}
+  qr'^{{mime}}$'i,
+{% endfor %}
+{% endif %}
+
+{% if antispam_block_filetypes %}
+{% for file in antispam_block_filetypes %}
+  qr'^\.({{file}})$',
+{% endfor %}
+{% endif %}
+
+{% if antispam_block_fileextensions %}
+{% for ext in antispam_block_fileextensions %}
+  qr'.\.({{ext}})$'i,
+{% endfor %}
+{% endif %}
+
+);
+
+
+#------------ Do not modify anything below this line -------------
+1;  # ensure a defined return
+
+

@@ -71,6 +71,7 @@ ruleset(name="LogsFromClients") {
       queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
       queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
       queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
+      queue.workerthreads="{{ ossimcik_rsyslog['RsyslogQueueWorkerThreads'] }}"
       action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
    )
    stop
@@ -134,6 +135,22 @@ ruleset(name="WinRules") {
       queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
       action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
    )
+   action(name="OSSIM-Win-Log-Gonderme"
+      type="omfwd"
+      target="{{ ossimcik_rsyslog['ossim_server'] }}"
+      port="{{ ossimcik_rsyslog['port_udp'] }}"
+      protocol="tcp"
+      StreamDriver="gtls"
+      StreamDriverMode="1"
+      StreamDriverAuthMode="anon"
+      queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName03'] }}"
+      queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
+      queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
+      queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
+      action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
+   )
+
    stop
 }
 

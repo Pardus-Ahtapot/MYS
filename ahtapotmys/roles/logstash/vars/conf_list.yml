@@ -1,0 +1,5 @@
+logstash_conf_list:
+- /etc/logstash/conf.d/00-input.conf
+- /etc/default/logstash
+- /etc/logstash/conf.d/02-output.conf
+- /etc/logstash/conf.d/01-filter.conf

@@ -8,8 +8,8 @@
         mode: "{{ rsyslog['conf']['mode'] }}"
   when: "ansible_fqdn == item.1"
   with_subelements:
-    - "ossimciks"
-    - "clients"
+    - "{{ossimciks}}"
+    - clients
   notify:
     - rsyslog servisini yeniden baslat
   sudo: yes
@@ -27,15 +27,15 @@
   sudo: yes
   tags: rsyslog 
 
-#- name: Rsyslog logrotate cron.hourly'e ataniyor.
-#  template:
-#        src: "{{ logrotate_base['source'] }}"
-#        dest: "{{ logrotate_base['destination'] }}"
-#        owner: "{{ logrotate_base['owner'] }}"
-#        group: "{{ logrotate_base['group'] }}"
-#        mode: "{{ logrotate_base['mode'] }}"
-#  sudo: yes
-#  tags: rsyslog 
+- name: Rsyslog logrotate cron.hourly'e ataniyor.
+  template:
+        src: "{{ logrotate_base['source'] }}"
+        dest: "{{ logrotate_base['destination'] }}"
+        owner: "{{ logrotate_base['owner'] }}"
+        group: "{{ logrotate_base['group'] }}"
+        mode: "{{ logrotate_base['mode'] }}"
+  sudo: yes
+  tags: rsyslog 
 
 - name: Rsyslog servisi ayakta
   service:

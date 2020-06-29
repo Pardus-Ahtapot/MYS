@@ -1,0 +1,8 @@
+---
+# post rolunun gorevlerini iceren dosyadir
+- include: install.yml
+- include: script.yml
+- include: directory.yml
+- include: integrity.yml
+  when: global_integrity_check_result is defined and (global_integrity_check_result['rc'] == 0 or global_integrity_check_result['rc'] == 127 )
+- include: cron.yml

@@ -3,12 +3,12 @@ squid:
 # Squid yapilandirmasini belirtmektedir.
     conf:
         source: "squid"
-        destination: "/etc/squid3/squid.conf"
+        destination: "/etc/squid/squid.conf"
         owner: "root"
         group: "root"
         mode: "0644" 
     service:
-        name: "squid3"
+        name: "squid"
         state: "started"
         enabled: "yes"
     ldap:  

@@ -1,5 +1,6 @@
 ---
 # Base rolunun gorevlerini iceren dosyadir
+- include: conf_integrity.yml
 - include: group.yml
 - include: user.yml
 - include: hosts.yml
@@ -15,3 +16,4 @@
 - include: kernel_modules.yml
 - include: logger.yml
 - include: profile.yml
+- include: security.yml

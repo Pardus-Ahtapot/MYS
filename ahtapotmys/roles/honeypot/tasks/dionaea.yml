@@ -1,0 +1,40 @@
+---
+- name: installing dioneae honeypot
+  sudo: yes
+  shell: lxc-attach -n dionaea -- /bin/bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -yq update; apt-get -yq install dionaea wget sudo curl supervisor"
+  when: item.type == "dionaea"
+  with_items: "{{containers[inventory_hostname]}}"
+
+- name: send deploy dionaea script
+  sudo: yes
+  template:
+    src: "dionaea_deploy.sh.j2"
+    dest: "/var/lib/lxc/{{item.type}}/rootfs/usr/sbin/dionaea_deploy.sh"
+    owner: "root"
+    group: "root"
+    mode: 0755
+  when: item.type == "dionaea"
+  with_items: "{{containers[inventory_hostname]}}"
+
+- name: send dionaea index html template
+  sudo: yes
+  template:
+    src: "dionaea_index.html.j2"
+    dest: "/var/lib/lxc/{{item.type}}/rootfs/{{dionaea_conf.root_path}}/index.html"
+    owner: "root"
+    group: "root"
+    mode: 0755
+  when: item.type == "dionaea"
+  with_items: "{{containers[inventory_hostname]}}"
+
+- name: registering dionaea honeypot
+  sudo: yes
+  shell: lxc-attach -n dionaea -- /usr/sbin/dionaea_deploy.sh {{mhn_url}} {{mhn_deploy_key}}
+  when: item.type == "dionaea"
+  with_items: "{{containers[inventory_hostname]}}"
+
+- name: restarting dionaea honeypot
+  sudo: yes
+  shell: lxc-attach -n dionaea -- supervisorctl restart dionaea
+  when: item.type == "dionaea"
+  with_items: "{{containers[inventory_hostname]}}"

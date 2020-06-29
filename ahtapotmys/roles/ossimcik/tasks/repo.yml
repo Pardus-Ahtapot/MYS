@@ -1,9 +1,0 @@
----
-- name: Ossimcik icin gerekli depo yukleniyor.
-  apt_repository:
-        repo: "{{ item.value.url }}"
-        update_cache: "{{ item.value.updatecache }}"
-        state: "{{ item.value.state }}"
-  with_dict: "ossim_repositories"
-  sudo: yes
-  tags: repo

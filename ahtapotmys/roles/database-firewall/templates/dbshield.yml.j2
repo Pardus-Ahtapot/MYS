@@ -1,0 +1,90 @@
+##############################
+### General               ###
+#############################
+
+# Operating mode
+# possible values:
+#       learning - add queries to training set (default)
+#       protect - take action against abnormal queries
+mode: {{ dbfw_mode }}
+
+# DBMS type(default: mysql)
+dbms: {{ dbfw_dbms }}
+
+# IP address to listen on(default: 0.0.0.0)
+listenIP: {{ dbfw_listenip }}
+
+# Port number to listen on (0 means dbms default port ex. 3306 for mysql)
+listenPort: {{ dbfw_listenport }}
+
+# IP address of the server
+targetIP: {{ dbfw_backendip }}
+
+# Port number of the dbms (0 means dbms default port ex. 3306 for mysql)
+targetPort: {{ dbfw_backendport }}
+
+# TLS
+tlsPrivateKey:  cert/server-key.pem
+tlsCertificate: cert/server-cert.pem
+
+# Directory to save internal database(default: in model directory under OS's temp directory)
+dbDir: "/tmp/model/"
+
+# Databasse synchronisation interval, 0 will force sync after each commit.
+# Valid units are "ns", "us" (or "µs"), "ms", "s", "m" and "h". (default: 5s)
+SyncInterval: {{ dbfw_syncinterval }}
+
+#############################
+### HTTP Service          ###
+#############################
+# Run http interface(default: yes)
+http: {{ dbfw_webui }}
+
+# Serve https (default: yes)
+httpSSL: {{ dbfw_webhttps }}
+
+# IP address to listen on(default: 127.0.0.1)
+httpIP: {{ dbfw_webhttp_ip }}
+
+# Port number to listen on(default: 8070)
+httpPort: {{ dbfw_webhttp_port }}
+
+# Password
+httpPassword: {{ dbfw_webhttp_pass }}
+
+#############################
+### Protect               ###
+#############################
+
+# Action to take against abnormal requests
+# possible values:
+#       drop  - close the connection (default)
+#       pass  - pass the query to server
+action: {{ dbfw_action }}
+
+# Properties to check for abnormality
+#
+# possible values: (you can choose more than one - comma separated)
+#       user     - username
+#       source   - request sourece address
+#
+# Note: leave empty to avoid adiditional checks
+additionalChecks:  {{ dbfw_additional_checks }}
+
+#############################
+### Logging               ###
+#############################
+
+# Log depth
+#       1   warning
+#       2   info
+#       4   debug
+# default: 3 (warning + info)
+logLevel: {{ dbfw_log_level }}
+
+# Log path
+# possible values:
+#       /path/to/file
+#       stdout
+#       stderr (default)
+logPath: {{ dbfw_log_path }}

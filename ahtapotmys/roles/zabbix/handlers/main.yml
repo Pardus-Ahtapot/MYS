@@ -1,8 +1,22 @@
 ---
-# handlers file for wdijkerman.zabbix
-
-- name: zabbix-server restarted
+- name: restart zabbix-server
   sudo: yes
-  service: name=zabbix-server state=restarted enabled=yes
-  tags: zabbix-server
+  service:
+    name: zabbix-server
+    state: restarted
 
+- name: restart zabbix-agent
+  sudo: yes
+  service:
+    name: zabbix-agent
+    state: restarted
+
+- name: restart apache2
+  service:
+    name: apache2
+    state: restarted
+
+- name: restart mysqld
+  service:
+    name: mysqld
+    state: restarted

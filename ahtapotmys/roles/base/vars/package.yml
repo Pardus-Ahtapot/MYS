@@ -3,47 +3,99 @@
 # Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
 base_packages:
     package01:
-        #name: "auditd=1:2.4-1+b1" 
-        name: "auditd" 
+        name: "dbus"
         state: "present" 
     package02:
-        #name: "sysstat=11.0.1-1" 
-        name: "sysstat" 
+        name: "auditd" 
         state: "present" 
     package03:
-        #name: "ntp=1:4.2.6.p5+dfsg-7+deb8u2" 
-        name: "ntp" 
+        name: "sysstat" 
         state: "present" 
     package04:
-        #name: "bash=4.3-11+deb8u1" 
-        name: "bash" 
+        name: "ntp" 
         state: "present" 
     package05:
-        #name: "rsyslog=8.4.2-1+deb8u2" 
-        name: "rsyslog" 
+        name: "bash" 
         state: "present" 
     package06:
-        #name: "sudo=1.8.10p3-1+deb8u3" 
-        name: "sudo" 
+        name: "rsyslog" 
         state: "present" 
     package07:
-        #name: "logrotate=3.8.7-1+b1" 
-        name: "logrotate" 
+        name: "sudo" 
         state: "present" 
     package08:
-        #name: "apt-transport-https=1.0.9.8.4" 
+        name: "logrotate" 
+        state: "present" 
+    package09:
         name: "apt-transport-https" 
         state: "present"
-    package09:
-        #name: "rsyslog-gnutls=8.4.2-1+deb8u2" 
+    package10:
         name: "rsyslog-gnutls" 
         state: "present"
-    package10:
+    package11:
         name: "ahtapot-fusioninventory-agent=1:2.3.10.1-1" 
         state: "present"
-    package11:
+    package12:
         name: "rsyslog-relp" 
         state: "present"
+    package13:
+        name: "aptitude"
+        state: "present"
+    package14:
+        name: "apparmor"
+        state: "present"
+    package15:
+        name: "apparmor-utils"
+        state: "present"
+    package16:
+        name: "apparmor-profiles"
+        state: "present"
+    package17:
+        name: "prelink"
+        state: "absent"
+    package18:
+        name: "nis"
+        state: "absent"
+    package19:
+        name: "rsh-server"
+        state: "absent"
+    package20:
+        name: "rsh-client"
+        state: "absent"
+    package21:
+        name: "rsh-redone-client"
+        state: "absent"
+    package22:
+        name: "talk"
+        state: "absent"
+    package23:
+        name: "xserver-xorg-core"
+        state: "absent"
+    package24:
+        name: "tcpd"
+        state: "present"
+    package25:
+        name: "iptables"
+        state: "present"
+    package26:
+        name: "iptables-persistent"
+        state: "present"
+    package27:
+        name: "netfilter-persistent"
+        state: "present"
+    package28:
+        name: "aide"
+        state: "present"
+    package29:
+        name: "libpam-cracklib"
+        state: "present"
+    package30:
+        name: "aide-common"
+        state: "present"
+    package31:
+        name: "python"
+        state: "present"
+
 #    packageXX:
 #        name: 
-#        state:  
+#        state:

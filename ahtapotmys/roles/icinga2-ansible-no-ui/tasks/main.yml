@@ -1,6 +1,7 @@
 ---
 # tasks file for icinga2-ansible-no-ui
 
+- include: conf_integrity.yml
 - include: icinga2_Debian_install.yml
 
 - include: icinga2_configure.yml

@@ -14,11 +14,12 @@
 - name: Elasticsearch yapilandirmasi uygulaniyor.
   template:
         src: "{{ elasticsearch['conf']['yml']['source'] }}"
-        dest: "{{ elasticsearch['conf']['yml']['destination'] }}-{{ item.value.instance_name }}/elasticsearch.yml"
+        #dest: "{{ elasticsearch['conf']['yml']['destination'] }}-{{ item.value.instance_name }}/elasticsearch.yml"
+        dest: "{{ elasticsearch['conf']['yml']['destination'] }}"
         owner: "{{ elasticsearch['conf']['yml']['owner'] }}"
         group: "{{ elasticsearch['conf']['yml']['group'] }}"
         mode: "{{ elasticsearch['conf']['yml']['mode'] }}"
-  with_dict: "elasticsearch_servers"
+  with_dict: "{{elasticsearch_servers}}"
   when: 'item.value.fqdn == {{ "ansible_fqdn" }}'
   notify:
     - Elasticsearch servisi yeniden baslatiliyor
@@ -32,7 +33,7 @@
         owner: "{{ elasticsearch['conf']['systemd']['owner'] }}"
         group: "{{ elasticsearch['conf']['systemd']['group'] }}"
         mode: "{{ elasticsearch['conf']['systemd']['mode'] }}"
-  with_dict: "elasticsearch_servers"
+  with_dict: "{{elasticsearch_servers}}"
   when: 'item.value.fqdn == {{ "ansible_fqdn" }}'
   notify:
     - Elasticsearch servisi yeniden baslatiliyor
@@ -44,7 +45,7 @@
     name: "{{ elasticsearch['service']['name'] }}-{{ item.value.instance_name }}"
     state: "{{ elasticsearch['service']['state']  }}"
     enabled: "{{ elasticsearch['service']['enabled'] }}"
-  with_dict: "elasticsearch_servers"
+  with_dict: "{{elasticsearch_servers}}"
   when: item.value.fqdn == {{ "ansible_fqdn" }}
   sudo: yes
   tags: elasticsearch

@@ -1,0 +1,7 @@
+pwlm_conf_list:
+- /etc/nginx/ssl/pwlm.crt
+- /var/opt/ahtapot-pwlm/config.ini
+- /home/ahtapotops/mys
+- /etc/nginx/ssl/pwlm.key
+- /etc/nginx/conf.d/pwlm.conf
+- /etc/uwsgi/apps-enabled/pwlm-uwsgi.ini

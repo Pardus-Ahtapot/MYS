@@ -29,7 +29,7 @@ sudo_privileges:
     privilege03:
         hostgroups: "firewall"
         user: "lkk"
-        commands: "/usr/bin/tail * /var/log/*, /usr/sbin/iptraf, /bin/zcat -f /var/log/ahtapot/fw/*, /bin/cat /var/log/ahtapot/fw/*, /usr/sbin/arp -an, /usr/sbin/iptstate *, /usr/bin/bmon"
+        commands: "/usr/bin/tail * /var/log/*, /usr/sbin/iptraf-ng, /bin/zcat -f /var/log/ahtapot/fw/*, /bin/cat /var/log/ahtapot/fw/*, /usr/sbin/arp -an, /usr/sbin/iptstate *, /usr/bin/bmon"
     privilege04:
         hostgroups: "gitlab"
         user: "git"

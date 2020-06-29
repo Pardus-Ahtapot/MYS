@@ -1,0 +1,17 @@
+---
+- name: konfigurasyon listesi olusturuluyor
+  set_fact: conf_list="[ ]"
+  when: conf_list is not defined
+
+- name: konfigurasyon listesi birlestiriliyor
+  set_fact: conf_list="{{ conf_list }} + {{ waf_conf_list }}"
+
+- name: konfigurasyon kontrolu yapiliyor
+  sudo: yes
+  shell: "/usr/sbin/integrity-check.sh"
+  register: integrity_check_result
+  when: integrity_check_result is not defined
+  ignore_errors: yes
+
+- set_fact: global_integrity_check_result="{{integrity_check_result}}"
+  when: integrity_check_result.changed

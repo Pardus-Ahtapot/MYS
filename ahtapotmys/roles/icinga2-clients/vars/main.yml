@@ -2,7 +2,7 @@ icinga_server_ip: "127.0.0.1"
 
 nrpe_deps:
   - nagios-nrpe-server
-  - nagios-plugins
+  - nagios-nrpe-plugin
 
 icinga2_clients:
   install:
@@ -12,5 +12,5 @@ icinga2_clients:
 
   start_service:
     name: "nagios-nrpe-server"
-    state: "started"
+    state: "restarted"
     enabled: "yes"

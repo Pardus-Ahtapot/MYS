@@ -4,12 +4,33 @@ notifications:
       type: "Host",
       user_groups: "[\"icingaadmins\"]",
       #users: [],
-      condition : host.name == "serverX.ahtapot"
+      condition : ['host.name == "pardus-client"'],
+      interval: 1800
     }
 
   - { name: "mail-icingaadmin",
       type: "Service",
       user_groups: "[\"icingaadmins\"]",
       #users: [],
-      condition : host.name == "serverX.ahtapot"
+      condition : ['host.name == "pardus-client"'],
+      interval: 1800
     }
+
+  - { name: "sms-icingaadmin",
+      type: "Host",
+      user_groups: "[\"icingasmsadmins\"]",
+      #users: [],
+      condition : [ 'host.name == "pardus-client"', 'host.name == "gkts"' ],
+      command: "host-notify-by-sms",
+      interval: 1800
+    }
+
+  - { name: "sms-icingaadmin",
+      type: "Service",
+      user_groups: "[\"icingasmsadmins\"]",
+      #users: [],
+      condition : [ 'host.name == "pardus-client"', 'host.name == "gkts"' ],
+      command: "notify-by-sms",
+      interval: 1800
+    }
+

@@ -22,7 +22,13 @@ ossec:
         destination: "/var/ossec/etc/ossec.conf"
         owner: "ossec" 
         group: "ossec" 
-        mode: "0640" 
+        mode: "0640"
+    agent:
+        source: "agent.conf.j2"
+        destination: "/var/ossec/etc/shared/agent.conf"
+        owner: "ossec"
+        group: "ossec"
+        mode: "0640"
     email_notification: "no"
     syscheck_frequency: "21600"
 
@@ -38,7 +44,7 @@ ossec_local_files:
         location: "/var/log/mail.info"
     file04:
         log_format: "syslog"
-        location: "/var/log/nxlog/client.log*"
+        location: "/var/log/nxlog/client.log"
     file05:
         log_format: "syslog"
         location: "/var/log/messages"

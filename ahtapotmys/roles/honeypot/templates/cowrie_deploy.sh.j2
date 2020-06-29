@@ -1,0 +1,55 @@
+#!/bin/bash
+
+set -e
+set -x
+
+if [ $# -ne 2 ]
+    then
+        echo "Wrong number of arguments supplied."
+        echo "Usage: $0 <server_url> <deploy_key>."
+        exit 1
+fi
+
+
+server_url=$1
+deploy_key=$2
+
+#SSH Servisi silindigi icin kapatilmistir.
+#sed -i -r 's/[#]?Port 22\s*$/Port {{cowrie_real_ssh_port}}/g' /etc/ssh/sshd_config
+#service ssh restart
+
+cd /usr/share/cowrie
+source cowrie-env/bin/activate
+
+wget $server_url/static/registration.txt -O registration.sh
+chmod 755 registration.sh
+# Note: this will export the HPF_* variables
+. ./registration.sh $server_url $deploy_key "cowrie"
+
+cd etc
+cp cowrie.cfg.dist cowrie.cfg
+sed -i 's/#\[output_hpfeeds\]/[output_hpfeeds]/g' cowrie.cfg
+sed -i '/\[output_hpfeeds\]/!b;n;cenabled = true' cowrie.cfg
+sed -i "s/#server = hpfeeds.mysite.org/server = $HPF_HOST/g" cowrie.cfg
+sed -i "s/#port = 10000/port = $HPF_PORT/g" cowrie.cfg
+sed -i "s/#identifier = abc123/identifier = $HPF_IDENT/g" cowrie.cfg
+sed -i "s/#secret = secret/secret = $HPF_SECRET/g" cowrie.cfg
+sed -i 's/#debug=false/debug=false/' cowrie.cfg
+cd ..
+
+chown -R cowrie:users /usr/share/cowrie/
+{% if cowrie_enable_ssh == true %}
+touch /etc/authbind/byport/{{cowrie_ssh_port}}
+chown cowrie /etc/authbind/byport/{{cowrie_ssh_port}}
+chmod 770 /etc/authbind/byport/{{cowrie_ssh_port}}
+{% endif %}
+{% if cowrie_enable_telnet == true %}
+touch /etc/authbind/byport/{{cowrie_telnet_port}}
+chown cowrie /etc/authbind/byport/{{cowrie_telnet_port}}
+chmod 770 /etc/authbind/byport/{{cowrie_telnet_port}}
+{% endif %}
+
+# start.sh is deprecated on new Cowrie version and substituted by "bin/cowrie [start/stop/status]"
+sed -i 's/AUTHBIND_ENABLED=no/AUTHBIND_ENABLED=yes/' bin/cowrie
+sed -i 's/DAEMONIZE=""/DAEMONIZE="-n"/' bin/cowrie
+touch {{cowrie_register_check_file}}

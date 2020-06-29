@@ -1,0 +1,15 @@
+- name: restart amavis
+  sudo: yes
+  service:
+    name: amavis
+    enabled: yes
+    state: restarted
+
+- name: restart spamassassin
+  sudo: yes
+  service:
+    name: spamassassin
+    enabled: yes
+    state: restarted
+
+

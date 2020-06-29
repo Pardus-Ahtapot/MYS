@@ -1,0 +1,9 @@
+---
+cowrie_hostname: cowrie
+cowrie_enable_ssh: "true"
+cowrie_real_ssh_port: 2222
+cowrie_ssh_port: 22
+cowrie_ssh_version: SSH-2.0-OpenSSH_6.7p1 Ubuntu-5ubuntu1.3
+cowrie_enable_telnet: "true"
+cowrie_telnet_port: 2223
+cowrie_register_check_file: /etc/cowrie_registered

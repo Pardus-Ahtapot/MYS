@@ -1,0 +1,2 @@
+ossec_conf_list:
+- /var/ossec/etc/ossec.conf

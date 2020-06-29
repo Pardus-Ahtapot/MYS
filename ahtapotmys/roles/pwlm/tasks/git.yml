@@ -1,9 +1,11 @@
 ---
 - name: Git depolari olusturuluyor.
+  environment:
+    TMPDIR: "/home/ahtapotops/"
   git:
       repo: "{{ item.value.repo }}"
       dest: "{{ item.value.destination }}"
       accept_hostkey: "{{ item.value.accept_hostkey }}"
       key_file: "{{ item.value.key_file }}"
-  with_dict: "gitrepos" 
+  with_dict: "{{gitrepos}}"
   tags: git 

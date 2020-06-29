@@ -1,0 +1,182 @@
+---
+container_mirror: http://depo.pardus.org.tr/pardus/
+container_security_mirror: http://depo.pardus.org.tr/guvenlik/
+mhn_url: http://MHN_IP
+mhn_deploy_key: r0SwHB9N
+lxc_upgrade_minute: 0
+lxc_upgrade_hour: 3
+lxc:
+  pardus.ahtapot:
+    network_type: veth # veth|macvlan
+    network_link: lxcbr0
+    network_hwaddr: 00:16:3e:xx:xx:xx
+    network_link_bridge_slave: enp0s3
+    rsyslog_type: omfile
+    rsyslog_target:
+    rsyslog_port:
+    rsyslog_tls:
+    rsyslog_tls_cacert:
+    rsyslog_tls_mycert:
+    rsyslog_tls_myprivkey:
+    rsyslog_tls_authmode:
+    rsyslog_tls_permittedpeer:
+containers:
+# amun dionaea ftp pop3 smtp wordpot cowrie elastichoney conpot glastopf p0f shockpot suricata
+  pardus.ahtapot:
+  - type: "cowrie"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: true
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.101
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+  - type: "dionaea"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: false
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.102
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+  - type: "p0f"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: false 
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.103
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1 
+  - type: "smtp"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: true
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.104
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+  - type: "glastopf"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: true
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.105
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+  - type: "ftp"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: true
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.106
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+  - type: "pop3"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: true
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.107
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+  - type: "shockpot"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: false
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.108
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+  - type: "wordpot"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: false
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.109
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+  - type: "amun"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: false
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.110
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+  - type: "suricata"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: false
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.111
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+  - type: "elastichoney"
+    start_auto: 1
+    start_delay: 0
+    start_order: 0
+    force_register: false
+    interfaces:
+    - name: eth0
+      type: static
+      address: 10.0.3.112
+      netmask: 255.255.255.0
+      network: 10.0.3.0
+      broadcast: 10.0.3.255
+      gateway: 10.0.3.1
+

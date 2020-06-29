@@ -16,7 +16,7 @@
         owner: "{{ item.value.owner }}"
         group: "{{ item.value.group }}"
         mode: "{{ item.value.mode }}"
-  with_dict: "uwsgi_services"
+  with_dict: "{{uwsgi_services}}"
   notify:
     - uwsgi servisini yeniden baslat
   sudo: yes

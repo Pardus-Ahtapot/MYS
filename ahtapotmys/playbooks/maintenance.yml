@@ -3,5 +3,7 @@
 - hosts: all
   remote_user: ahtapotops 
   sudo: yes
+  vars_files:
+    - ../roles/maintenance/vars/conf_list.yml
   roles:
   - { role: maintenance }

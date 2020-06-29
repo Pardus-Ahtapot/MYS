@@ -1,0 +1,2 @@
+sks_conf_list:
+- /etc/nginx/sites-available/pgpkeyserver-lite.conf

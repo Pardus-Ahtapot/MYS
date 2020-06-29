@@ -1,0 +1,23 @@
+#!/bin/bash
+
+/usr/sbin/netfilter-persistent flush &>/dev/null
+NPROC=$(/usr/bin/nproc)
+NPROC=$(($NPROC -1))
+if (("$NPROC" == "0")); then
+        iptables -t mangle -I FORWARD -j NFQUEUE --queue-num 0 --queue-bypass
+else
+        iptables -t mangle -I FORWARD -j NFQUEUE --queue-balance 0:$NPROC --queue-bypass
+fi
+/usr/sbin/netfilter-persistent save &>/dev/null
+q=""
+for (( queue=0; queue<=$NPROC; queue++ ))
+do
+  q=$q"-q $queue "
+done
+sed -i "s@^ExecStart.*@ExecStart=/usr/bin/suricata -D $q -c /etc/suricata/suricata.yaml --pidfile /var/run/suricata.pid@" /lib/systemd/system/suricata.service
+systemctl daemon-reload
+systemctl enable netfilter-persistent
+systemctl restart netfilter-persistent
+systemctl enable suricata
+systemctl restart suricata
+

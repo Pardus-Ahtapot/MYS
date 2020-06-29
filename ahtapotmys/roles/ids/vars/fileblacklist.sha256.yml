@@ -1,0 +1,11 @@
+---
+suricata_blacklistsha256_action: alert
+suricata_blacklistsha256_src: any
+suricata_blacklistsha256_src_port: any
+suricata_blacklistsha256_dst: any
+suricata_blacklistsha256_dst_port: any
+suricata_blacklistsha256_msg: "Black list checksum match SHA256"
+suricata_blacklistsha256_sid: 1089811403
+suricata_blacklistsha256_rev: 1
+
+suricata_blacklistsha256:

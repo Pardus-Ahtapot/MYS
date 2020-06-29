@@ -6,8 +6,20 @@ icingausers:
       email: "root@localhost",
       groups: "[\"icingaadmins\"]"
     }
- 
+  - { name: "icingaSMSadmin",
+      display_name: "Icinga 2 SMS Admin",
+      enable_notifications: "true",
+      email: "root@localhost",
+      groups: "[\"icingasmsadmins\"]",
+      pager: "05551234567"
+    }
+
 icingagroups:
   - { name: "icingaadmins",
       display_name: "Icinga 2 Admin Group",
     }
+
+  - { name: "icingasmsadmins",
+      display_name: "Icinga 2 SMS Admin Group",
+    }
+

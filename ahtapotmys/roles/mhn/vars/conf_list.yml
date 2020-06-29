@@ -1,0 +1,2 @@
+mhn_conf_list:
+- /etc/nginx/sites-enabled/default

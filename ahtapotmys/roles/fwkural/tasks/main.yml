@@ -1,0 +1,3 @@
+---
+# Guvenlik Duvarinin gorevlerini iceren dosyadir.
+- include: iptables.yml

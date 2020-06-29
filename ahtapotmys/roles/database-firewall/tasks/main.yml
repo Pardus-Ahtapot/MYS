@@ -1,0 +1,18 @@
+---
+- name: Ahtapot Veritabani Guvenlik Duvari Kurulumu
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - dbshield
+
+- name: Konfigurasyon dosyasini uygula
+  sudo: yes
+  template:
+    src: "dbshield.yml.j2"
+    dest: "{{ dbfw_conf_dir }}/dbshield.yml"
+    owner: root
+    group: root
+    mode: 0644
+    

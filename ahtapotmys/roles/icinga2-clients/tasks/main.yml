@@ -1,6 +1,8 @@
 - name: "include variables"
   include_vars: "main.yml"
 
+- include: conf_integrity.yml
+
 - name: Install nrpe agents on Pardus
   sudo: yes
   apt: pkg={{ item }}
@@ -13,16 +15,25 @@
   sudo: yes
   template:
     src: check_mem.j2
-    dest: "/usr/lib/nagios/plugins/"
+    dest: "/usr/lib/nagios/plugins/check_mem"
     owner: root
     group: root
     mode: 0755
+
+- name: Copy check_service
+  sudo: yes
+  template:
+    src: check_service.j2
+    dest: "/usr/lib/nagios/plugins/check_service"
+    owner: root
+    group: root
+    mode: 0755 
 
 - name: Copy check_eth
   sudo: yes
   template:
     src: check_eth.j2
-    dest: "/usr/lib/nagios/plugins/"
+    dest: "/usr/lib/nagios/plugins/check_eth"
     owner: root
     group: root
     mode: 0755
@@ -31,7 +42,16 @@
   sudo: yes
   template:
     src: check_website.j2
-    dest: "/usr/lib/nagios/plugins/"
+    dest: "/usr/lib/nagios/plugins/check_website"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy nrpe.cfg
+  sudo: yes
+  template:
+    src: nrpe.cfg.j2
+    dest: "/etc/nagios/nrpe.cfg"
     owner: root
     group: root
     mode: 0755

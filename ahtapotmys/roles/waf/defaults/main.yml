@@ -1,5 +1,6 @@
 ---
 apache_conf_dir: "/etc/apache2/conf-available"
+apache_dir: "/etc/apache2"
 sec_audit_log: "/var/log/apache2/apache_audit_log.log"
 sec_audit_log_parts: "ABIFHZ" # # ABCDEFGHIJKZ
 sec_server_signature: "AHTAPOT_WAF"

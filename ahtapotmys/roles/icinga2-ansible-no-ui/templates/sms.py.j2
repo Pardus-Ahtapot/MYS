@@ -1,0 +1,21 @@
+#!/usr/bin/python
+import httplib, urllib, re, sys
+MBT_USERNAME          = sys.argv[1]
+MBT_PASSWORD          = sys.argv[2]
+MBT_COMPANY           = sys.argv[3]
+SMS_GSM               = sys.argv[4]
+SMS_MSG               =''
+for arg in sys.argv[5:] :
+    SMS_MSG = SMS_MSG  + '%20' + arg
+SMS_GATEWAY  = 'gateway.mobilus.net:80'
+SMS_API = '/gateway.asp?action=0&username=' +MBT_USERNAME + '&password=' + MBT_PASSWORD + '&company=' + MBT_COMPANY + '&message=' + SMS_MSG + '&numbers=' + SMS_GSM
+SMS_API = SMS_API.replace(" ","%20")
+cnn = httplib.HTTPConnection(SMS_GATEWAY )
+cnn.request('GET', SMS_API )
+cevap = cnn.getresponse( )
+
+response = cevap.read( )
+cnn.close
+with open("/tmp/output.txt", "a+") as f:
+    f.write(MBT_USERNAME+" "+MBT_PASSWORD+" "+MBT_COMPANY+" "+SMS_GSM+" "+SMS_MSG+" "+response+"\n")
+
