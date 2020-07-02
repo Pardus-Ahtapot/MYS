@@ -675,7 +675,7 @@
 - name: Sistem kullanici giris izinleri kontrol ediliyor
   shell: |
     for user in `awk -F: '($3 < 1000) {print $1 }' /etc/passwd`; do
-      if [ $user != "root" ];then
+      if [ $user != "root" ] && [ $user != "git" ];then
         /usr/sbin/usermod -L $user;
         if [ $user != "sync" ] && [ $user != "shutdown" ] && [ $user != "halt" ] && [ $user != "git" ] && [ $user != "gitlab-www" ] && [ $user != "gitlab-redis" ] && [ $user != "gitlab-psql" ];then
           /usr/sbin/usermod -s /usr/sbin/nologin $user;
