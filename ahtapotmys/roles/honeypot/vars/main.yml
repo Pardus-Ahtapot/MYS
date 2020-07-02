@@ -3,7 +3,7 @@ container_mirror: http://depo.pardus.org.tr/pardus/
 container_security_mirror: http://depo.pardus.org.tr/guvenlik/
 mhn_url: http://10.0.3.100 # Asagida tanimlanan mhn containerina ait IP bilgisi
 mhn_honeymap_url: http://10.0.3.100:3000 # Mhn containerina ait IP bilgisi
-mhn_deploy_key: r0SwHB9N
+mhn_deploy_key: xlINEePk
 lxc_upgrade_minute: 0
 lxc_upgrade_hour: 3
 lxc:
