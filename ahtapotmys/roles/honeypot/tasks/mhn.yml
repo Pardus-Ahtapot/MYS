@@ -47,7 +47,7 @@
     owner: "root"
     group: "root"
     mode: 0644
-  when: (item.type == "mhn") 
+  when: (item.type == "mhn") and (ssl_exists.stat.exists == False) and (mhn_create_ssl == True)
   with_items: "{{containers[inventory_hostname]}}"
 
 - name: Nginx servisi yeniden baslatiliyor
