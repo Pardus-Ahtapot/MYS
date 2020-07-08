@@ -9,7 +9,7 @@
 
 - name: Gitlab custom hook dizinleri olusturuluyor 
   file:
-        path: "/var/lib/lxc/gitlab/rootfs{{ item.value.path }}"
+        path: "{{ gitlab_container_rootfs_path }}{{ item.value.path }}"
         owner: "{{ git_user_id.stdout }}"
         group: "{{ git_user_id.stdout }}"
         mode: "{{ item.value.mode }}"
@@ -22,7 +22,7 @@
 - name: GitLab hook scriptleri olusturuluyor.
   template:
         src: "{{ item.value.source }}"
-        dest: "/var/lib/lxc/gitlab/rootfs{{ item.value.destination }}"
+        dest: "{{ gitlab_container_rootfs_path }}{{ item.value.destination }}"
         owner: "{{ git_user_id.stdout }}"
         group: "{{ git_user_id.stdout }}"
         mode: "{{ item.value.mode }}"

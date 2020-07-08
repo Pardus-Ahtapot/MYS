@@ -90,7 +90,7 @@
   sudo: yes
   template:
         src: "{{ inventory_dir }}/roles/base/templates/{{ hosts['conf']['source'] }}"
-        dest: "/var/lib/lxc/gitlab/rootfs{{ hosts['conf']['destination'] }}"
+        dest: "{{ gitlab_container_rootfs_path }}{{ hosts['conf']['destination'] }}"
         owner: "{{ hosts['conf']['owner'] }}"
         group: "{{ hosts['conf']['group'] }}"
         mode: "{{ hosts['conf']['mode'] }}"

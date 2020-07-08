@@ -2,6 +2,7 @@ container_mirror: http://depo.pardus.org.tr/pardus/
 container_security_mirror: http://depo.pardus.org.tr/guvenlik/
 lxc_upgrade_minute: 0
 lxc_upgrade_hour: 3
+gitlab_container_rootfs_path: /var/lib/lxc/gitlab/rootfs
 lxc:
   network_type: macvlan # veth|macvlan
   network_link: enp0s3 # type veth ise => lxcbr0

@@ -2,7 +2,7 @@
 - name: GitLab yapilandirmasi uygulaniyor.
   template:
         src: "{{ gitlab['conf']['source'] }}"
-        dest: "/var/lib/lxc/gitlab/rootfs{{ gitlab['conf']['destination'] }}"
+        dest: "{{ gitlab_container_rootfs_path }}{{ gitlab['conf']['destination'] }}"
         owner: "{{ gitlab['conf']['owner'] }}"
         group: "{{ gitlab['conf']['group'] }}"
         mode: "{{ gitlab['conf']['mode'] }}"
@@ -13,7 +13,7 @@
 
 - name: GitLab ssl dizini olusturuluyor
   file:
-        path: "/var/lib/lxc/gitlab/rootfs{{ gitlab['ssl']['directory']['path'] }}"
+        path: "{{ gitlab_container_rootfs_path }}{{ gitlab['ssl']['directory']['path'] }}"
         owner: "{{ gitlab['ssl']['directory']['owner'] }}"
         group: "{{ gitlab['ssl']['directory']['group'] }}"
         mode: "{{ gitlab['ssl']['directory']['mode'] }}"
@@ -25,22 +25,35 @@
 - name: GitLab ssl anahtari uygulaniyor.
   template:
         src: "{{ gitlab['ssl-key']['source'] }}"
-        dest: "/var/lib/lxc/gitlab/rootfs{{ gitlab['ssl-key']['destination'] }}"
+        dest: "{{ gitlab_container_rootfs_path }}{{ gitlab['ssl-key']['destination'] }}"
         owner: "{{ gitlab['ssl-key']['owner'] }}"
         group: "{{ gitlab['ssl-key']['group'] }}"
         mode: "{{ gitlab['ssl-key']['mode'] }}"
   notify:
     - GitLab servisi yeniden baslatiliyor
+  when: not {{ gitlab['use_self_signed_cert'] }}
   sudo: yes
   tags: ssl
 
 - name: GitLab ssl sertifikasi uygulaniyor.
   template:
         src: "{{ gitlab['ssl-crt']['source'] }}"
-        dest: "/var/lib/lxc/gitlab/rootfs{{ gitlab['ssl-crt']['destination'] }}"
+        dest: "{{ gitlab_container_rootfs_path }}{{ gitlab['ssl-crt']['destination'] }}"
         owner: "{{ gitlab['ssl-crt']['owner'] }}"
         group: "{{ gitlab['ssl-crt']['group'] }}"
         mode: "{{ gitlab['ssl-crt']['mode'] }}"
+  notify:
+    - GitLab servisi yeniden baslatiliyor
+  when: not {{ gitlab['use_self_signed_cert'] }}
+  sudo: yes
+  tags: ssl
+
+- name: GitLab icin ssl sertifikasi uretiliyor
+  command: >
+    openssl req -x509 -nodes -subj '/CN={{ gitlab['gitlab_fqdn'] }}' -days 365
+    -newkey rsa:4096 -sha256 -keyout {{ gitlab_container_rootfs_path }}/etc/gitlab/{{ gitlab['gitlab_fqdn'] }}.key -out {{ gitlab_container_rootfs_path }}/etc/gitlab/ssl/{{ gitlab['gitlab_fqdn'] }}.crt
+    creates={{ gitlab_container_rootfs_path }}/etc/gitlab/ssl/{{ gitlab['gitlab_fqdn'] }}.crt
+  when: "{{ gitlab['use_self_signed_cert'] }}"
   notify:
     - GitLab servisi yeniden baslatiliyor
   sudo: yes
@@ -54,7 +67,7 @@
 - name: GitLab yeniden yapilandiriliyor (ilk acilis)
   shell: lxc-attach -n gitlab -- /usr/bin/gitlab-ctl reconfigure
   args:
-    creates: "/var/lib/lxc/gitlab/rootfs{{ gitlab['firstrunpath'] }}"
+    creates: "{{ gitlab_container_rootfs_path }}{{ gitlab['firstrunpath'] }}"
   sudo: yes
   tags: gitlab
 
