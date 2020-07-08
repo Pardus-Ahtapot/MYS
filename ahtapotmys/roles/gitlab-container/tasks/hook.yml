@@ -1,0 +1,32 @@
+---
+
+- name: Git kullanicisinin id'si aliniyor
+  shell: lxc-attach -n gitlab -- id -u git
+  register: git_user_id
+  when: ansible_fqdn != "{{ gitlab['backup']['Server'] }}"
+  sudo: yes
+  tags: hook 
+
+- name: Gitlab custom hook dizinleri olusturuluyor 
+  file:
+        path: "/var/lib/lxc/gitlab/rootfs{{ item.value.path }}"
+        owner: "{{ git_user_id.stdout }}"
+        group: "{{ git_user_id.stdout }}"
+        mode: "{{ item.value.mode }}"
+        state: "{{ item.value.state }}"
+  with_dict: "{{hook_directories}}"
+  when: ansible_fqdn != "{{ gitlab['backup']['Server'] }}"
+  sudo: yes
+  tags: hook 
+
+- name: GitLab hook scriptleri olusturuluyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "/var/lib/lxc/gitlab/rootfs{{ item.value.destination }}"
+        owner: "{{ git_user_id.stdout }}"
+        group: "{{ git_user_id.stdout }}"
+        mode: "{{ item.value.mode }}"
+  with_dict: "{{hook_scripts}}"
+  when: ansible_fqdn != "{{ gitlab['backup']['Server'] }}"
+  sudo: yes
+  tags: hook 

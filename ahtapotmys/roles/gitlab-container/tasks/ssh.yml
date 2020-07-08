@@ -1,0 +1,57 @@
+---
+- name: Trusted CA Anahtarlari yapilandiriliyor
+  template:
+        src: "{{ inventory_dir }}/roles/base/templates/{{ ssh['TrustedUserCAKeys']['source'] }}"
+        dest: "/var/lib/lxc/gitlab/rootfs{{ ssh['TrustedUserCAKeys']['destination'] }}" 
+        owner: "{{ ssh['TrustedUserCAKeys']['owner'] }}" 
+        group: "{{ ssh['TrustedUserCAKeys']['group'] }}" 
+        mode: "{{ ssh['TrustedUserCAKeys']['mode'] }}" 
+  notify:
+    - Ssh servisi yeniden baslatiliyor
+  sudo: yes
+  tags: ssh
+
+- name: Revoked anahtar listesi yapilandiriliyor
+  template:
+        src: "{{ inventory_dir }}/roles/base/templates/{{ ssh['RevokedKeys']['source'] }}"
+        dest: "/var/lib/lxc/gitlab/rootfs{{ ssh['RevokedKeys']['destination'] }}" 
+        owner: "{{ ssh['RevokedKeys']['owner'] }}" 
+        group: "{{ ssh['RevokedKeys']['group'] }}" 
+        mode: "{{ ssh['RevokedKeys']['mode'] }}" 
+  notify:
+    - Ssh servisi yeniden baslatiliyor
+  sudo: yes
+  tags: ssh
+
+- name: Yerel baglanti bilgilendirme metni
+  template:
+        src: "{{ inventory_dir }}/roles/base/templates/{{ ssh['LocalBanner']['source'] }}"
+        dest: "/var/lib/lxc/gitlab/rootfs{{ ssh['LocalBanner']['destination'] }}"
+        owner: "{{ ssh['LocalBanner']['owner'] }}"
+        group: "{{ ssh['LocalBanner']['group'] }}"
+        mode: "{{ ssh['LocalBanner']['mode'] }}"
+  sudo: yes
+  tags: ssh
+
+- name: Uzak baglanti bilgilendirme metni
+  template:
+        src: "{{ inventory_dir }}/roles/base/templates/{{ ssh['RemoteBanner']['source'] }}"
+        dest: "/var/lib/lxc/gitlab/rootfs{{ ssh['RemoteBanner']['destination'] }}"
+        owner: "{{ ssh['RemoteBanner']['owner'] }}"
+        group: "{{ ssh['RemoteBanner']['group'] }}"
+        mode: "{{ ssh['RemoteBanner']['mode'] }}"
+  sudo: yes
+  tags: ssh
+
+- name: sshd yapilandiriliyor
+  template:
+        src: "{{ inventory_dir }}/roles/base/templates/{{ ssh['conf']['source'] }}"
+        dest: "/var/lib/lxc/gitlab/rootfs{{ ssh['conf']['destination'] }}"
+        owner: "{{ ssh['conf']['owner'] }}"
+        group: "{{ ssh['conf']['group'] }}"
+        mode: "{{ ssh['conf']['mode'] }}"
+  notify:
+    - Ssh servisi yeniden baslatiliyor
+    - Ssh servisi aktiflestiriliyor
+  sudo: yes
+  tags: ssh

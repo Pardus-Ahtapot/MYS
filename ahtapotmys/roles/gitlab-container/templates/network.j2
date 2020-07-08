@@ -1,0 +1,14 @@
+source /etc/network/interfaces.d/*
+auto lo
+iface lo inet loopback
+{% for interface in item.interfaces %}
+auto {{interface.name}}
+iface {{interface.name}} inet {{interface.type}}
+{% if interface.type == "static" %}
+  address {{interface.address}}
+  netmask {{interface.netmask}}
+  network {{interface.network}}
+  broadcast  {{interface.broadcast}}
+  gateway {{interface.gateway}}
+{% endif %}
+{% endfor %}
