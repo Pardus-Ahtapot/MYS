@@ -47,7 +47,6 @@ gitlab:
         group: root
         mode: 600
     firstrunpath: /var/opt/gitlab/bootstrapped
-    external_url: "https://{{gitlab_fqdn}}"
     gitlab_rails:
         gitlab_email_enabled: "true"
         gitlab_email_from: gitlab@gdys.local 
