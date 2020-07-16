@@ -2,7 +2,7 @@
 # GitLab'in degiskenlerinin tutuldugu dosyadir.
 gitlab:
     gitlab_fqdn: gitlab.ahtapot.local
-    use_self_signed_cert: yes
+    use_self_signed_cert: true
     backup:
         enabled: no
         Server: gitlab02.gdys.local
