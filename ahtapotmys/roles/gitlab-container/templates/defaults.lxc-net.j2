@@ -1,0 +1,5 @@
+{% if lxc.network_type == "macvlan" %}
+USE_LXC_BRIDGE="false"
+{% else %}
+USE_LXC_BRIDGE="true"
+{% endif %}
