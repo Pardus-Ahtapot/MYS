@@ -30,3 +30,13 @@
   when: ansible_fqdn != "{{ gitlab['backup']['Server'] }}"
   sudo: yes
   tags: hook 
+
+- name: gdyshook ve myshook anahtarlari aktariliyor
+  template:
+    src: "{{ item.source }}"
+    dest: "{{ gitlab_container_rootfs_path }}{{ item.destination }}"
+    owner: "{{ git_user_id.stdout }}"
+    group: "{{ git_user_id.stdout }}"
+    mode: "{{ item.mode }}"
+  with_items: "{{ gitlab['ssh-keys'] }}"
+  tags: hook
