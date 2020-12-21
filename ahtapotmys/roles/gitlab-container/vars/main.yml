@@ -46,6 +46,25 @@ gitlab:
         owner: root
         group: root
         mode: 600
+    ssh-keys:
+        - source: gdyshook.j2
+          destination: /var/opt/gitlab/.ssh/gdyshook
+          mode: 600
+        - source: gdyshook.pub.j2
+          destination: /var/opt/gitlab/.ssh/gdyshook.pub
+          mode: 600
+        - source: gdyshook-cert.pub.j2
+          destination: /var/opt/gitlab/.ssh/gdyshook-cert.pub
+          mode: 600
+        - source: myshook.j2
+          destination: /var/opt/gitlab/.ssh/myshook
+          mode: 600
+        - source: myshook.pub.j2
+          destination: /var/opt/gitlab/.ssh/myshook.pub
+          mode: 600
+        - source: myshook-cert.pub.j2
+          destination: /var/opt/gitlab/.ssh/myshook-cert.pub
+          mode: 600    
     firstrunpath: /var/opt/gitlab/bootstrapped
     gitlab_rails:
         gitlab_email_enabled: "true"
