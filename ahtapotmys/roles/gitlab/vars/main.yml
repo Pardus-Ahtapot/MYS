@@ -54,6 +54,7 @@ gitlab:
         enable: "true"
         redirect_http_to_https: "true"
     backup:
+        enabled: no
         Server: gitlab02.gdys.local
         Port: 22
     ansible:
