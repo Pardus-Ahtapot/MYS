@@ -24,6 +24,7 @@
   - ../roles/base/vars/fusioninventory.yml
   - ../roles/base/vars/security.yml
   - ../roles/base/vars/conf_list.yml
+  - ../roles/squid/vars/ad.yml
   - ../roles/squid/vars/package.yml
   - ../roles/squid/vars/squid.yml
   - ../roles/squid/vars/dansguardian.yml
