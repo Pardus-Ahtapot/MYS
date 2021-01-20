@@ -217,6 +217,7 @@
 - hosts: all:!ossimcik 
   remote_user: ahtapotops
   vars_files:
+  - ../roles/ossec/vars/conf_list.yml
   - ../roles/ossec/vars/package.yml
   - ../roles/ossec/vars/ossec.yml
   roles:
