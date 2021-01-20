@@ -33,7 +33,6 @@
   - ../roles/squid/vars/sarg.yml
   - ../roles/squid/vars/nginx.yml
   - ../roles/squid/vars/conf_list.yml
-  - ../roles/squid/vars/ad.yml
   - ../roles/post/vars/integrity.yml
   - ../roles/post/vars/package.yml
   roles:
