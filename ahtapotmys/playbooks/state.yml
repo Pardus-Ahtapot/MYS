@@ -85,6 +85,7 @@
 - hosts: pwlm
   remote_user: ahtapotops
   vars_files:
+  - ../roles/pwlm/vars/conf_list.yml
   - ../roles/pwlm/vars/package.yml
   - ../roles/pwlm/vars/uwsgi.yml
   - ../roles/pwlm/vars/pwlm.yml
@@ -133,6 +134,8 @@
 - hosts: proxy:proxy-dhcp:firewall-proxy-dhcp
   remote_user: ahtapotops
   vars_files:
+  - ../roles/squid/vars/ad.yml
+  - ../roles/squid/vars/conf_list.yml
   - ../roles/squid/vars/package.yml
   - ../roles/squid/vars/squid.yml
   - ../roles/squid/vars/dansguardian.yml
@@ -146,6 +149,7 @@
 - hosts: dhcp:proxy-dhcp:firewall-proxy-dhcp
   remote_user: ahtapotops
   vars_files:
+  - ../roles/dhcpd/vars/conf_list.yml
   - ../roles/dhcpd/vars/package.yml
   - ../roles/dhcpd/vars/dhcpd.yml
   roles:
