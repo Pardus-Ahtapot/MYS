@@ -4,7 +4,7 @@
   when: conf_list is not defined
 
 - name: konfigurasyon listesi birlestiriliyor
-  set_fact: conf_list="{{ conf_list }} + {{ mhn_conf_list }}"
+  set_fact: conf_list="{{ conf_list }} + {{ gitlab_conf_list }}"
 
 - name: konfigurasyon kontrolu yapiliyor
   sudo: yes

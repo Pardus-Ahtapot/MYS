@@ -1,0 +1,14 @@
+---
+# Calistirildiginda Gitlab Kurulumu Yapilir
+- hosts: ansible
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - ../roles/base/vars/host.yml
+  - ../roles/base/vars/ssh.yml
+  - ../roles/gitlab-container/vars/conf_list.yml
+  - ../roles/gitlab-container/vars/lxc.yml
+  - ../roles/gitlab-container/vars/hook.yml
+  - ../roles/gitlab-container/vars/conf_list.yml
+  roles:
+  - { role: gitlab-container }

@@ -1,7 +1,8 @@
 ---
+# tasks file for gitlab-container
 - include: conf_integrity.yml
 
-- name: installing lxc packages
+- name: Lxc paketleri yukleniyor
   sudo: yes
   apt:
     name: "{{ item }}"
@@ -15,15 +16,16 @@
     - rsync
     - dnsmasq-base
 
-- name: fs.inotify.max_user_instances limiti arttiriliyor
+- name: Sysctl parametreleri ayarlaniyor
   sysctl:
-    name: fs.inotify.max_user_instances
+    name: "{{ item.name }}"
     sysctl_set: yes
-    value: '512'
+    value: "{{ item.value }}"
     reload: yes
-    state: present
+    state: "{{ item.state }}"
+  with_items: "{{ kernel_params }}"
 
-- name: modifying default.conf
+- name: default.conf duzenleniyor
   sudo: yes
   template:
     src: "default.conf.j2"
@@ -33,7 +35,7 @@
     mode: 0644
   notify: restart lxc-net
 
-- name: modify defaults
+- name: defaults dosyasi duzenleniyor
   sudo: yes
   template:
     src: "defaults.lxc-net.j2"
@@ -43,35 +45,17 @@
     mode: 0644
   notify: restart lxc-net
 
-- name: restart lxc-net
-  sudo: yes
-  service:
-    name: lxc-net
-    enabled: yes
-    state: restarted
-
-- name: modifying rsyslog
-  sudo: yes
-  template:
-    src: "honeypot_rsyslog.conf.j2"
-    dest: "/etc/rsyslog.d/honeypot.conf"
-    owner: "root"
-    group: "root"
-    mode: 0644
-  notify: rsyslog servisini yeniden baslat
-
-
-- name: creating honeypot containers
+- name: GitLab containerı olusturuluyor
   sudo: yes
   shell: if [ ! -e /var/lib/lxc/{{item.type}} ]; then lxc-create --name={{item.type}} --template=pardus -- --arch=amd64 --release=onyedi --enable-non-free --mirror={{container_mirror}} --security-mirror={{container_security_mirror}}; fi
-  with_items: "{{containers[inventory_hostname]}}"
+  with_items: "{{containers}}"
 
-- name: stopping containers
+- name: Containerlar durduruluyor
   sudo: yes
   shell: lxc-stop -n {{item.type}} || true
-  with_items: "{{containers[inventory_hostname]}}"
+  with_items: "{{containers}}"
 
-- name: configuring honeypot config
+- name: Containerlar yapilandiriliyor
   sudo: yes
   shell: |
     egrep -q '^lxc.start.auto' /var/lib/lxc/{{item.type}}/config || echo 'lxc.start.auto = {{item.start_auto}}' >> /var/lib/lxc/{{item.type}}/config
@@ -80,9 +64,9 @@
     sed "s/^lxc.start.delay.*/lxc.start.delay = {{item.start_delay}}/g" /var/lib/lxc/{{item.type}}/config
     egrep -q '^lxc.start.order' /var/lib/lxc/{{item.type}}/config || echo 'lxc.start.order = {{item.start_order}}' >> /var/lib/lxc/{{item.type}}/config
     sed "s/^lxc.start.order.*/lxc.start.order = {{item.start_order}}/g" /var/lib/lxc/{{item.type}}/config
-  with_items: "{{containers[inventory_hostname]}}"
+  with_items: "{{containers}}"
 
-- name: configuring honeypot repositories
+- name: GitLab contianer repolari yapilandiriliyor
   sudo: yes
   template:
     src: "ahtapot.list.j2"
@@ -90,9 +74,9 @@
     owner: "root"
     group: "root"
     mode: 0644
-  with_items: "{{containers[inventory_hostname]}}"
+  with_items: "{{containers}}"
 
-- name: configuring honeypot interfaces
+- name: GitLab contianer arabirimleri yapilandiriliyor
   sudo: yes
   template:
     src: "network.j2"
@@ -100,12 +84,23 @@
     owner: "root"
     group: "root"
     mode: 0644
-  with_items: "{{containers[inventory_hostname]}}"
+  with_items: "{{containers}}"
 
-- name: starting containers
+- name: GitLab container hosts dosyasi duzenleniyor
+  sudo: yes
+  template:
+        src: "{{ inventory_dir }}/roles/base/templates/{{ hosts['conf']['source'] }}"
+        dest: "{{ gitlab_container_rootfs_path }}{{ hosts['conf']['destination'] }}"
+        owner: "{{ hosts['conf']['owner'] }}"
+        group: "{{ hosts['conf']['group'] }}"
+        mode: "{{ hosts['conf']['mode'] }}"
+  with_items: "{{containers}}"
+  tags: hosts 
+
+- name: Containerlar baslatiliyor
   sudo: yes
   shell: lxc-start -n {{item.type}}
-  with_items: "{{containers[inventory_hostname]}}"
+  with_items: "{{containers}}"
 
 - name: Configuring cronjob to upgrade lxc host
   cron:
@@ -115,62 +110,17 @@
     job: "apt -yq update; apt -yq upgrade"
   sudo: yes
 
-- name: Configuring cronjob to upgrade honeypot
+- name: Configuring cronjob to upgrade gitlab
   cron:
     name: "{{item.type}}_upgrade"
     minute: "{{lxc_upgrade_minute}}"
     hour: "{{lxc_upgrade_hour}}"
     job: |
       lxc-attach -n {{item.type}} -- /bin/bash -c "apt -yq update; apt -yq upgrade"
-  with_items: "{{containers[inventory_hostname]}}"
+  with_items: "{{containers}}"
   sudo: yes
 
-- include: mhn.yml
-  tags:
-    - mhn
-- include: cowrie.yml
-  tags:
-    - cowrie
-- include: dionaea.yml
-  tags:
-    - dionaea
-- include: p0f.yml
-  tags:
-    - p0f
-- include: smtp.yml
-  tags:
-    - smtp
-- include: glastopf.yml
-  tags:
-    - glastopf
-- include: ftp.yml
-  tags:
-    - ftp
-- include: pop3.yml
-  tags:
-    - pop3
-- include: shockpot.yml
-  tags:
-    - shockpot
-- include: wordpot.yml
-  tags:
-    - wordpot
-- include: amun.yml
-  tags:
-    - amun
-- include: suricata.yml
-  tags:
-    - suricata
-- include: elastichoney.yml
-  tags:
-    - elastichoney
-- include: conpot.yml
-  tags:
-    - conpot
-
-- name: stopping passive containers
-  sudo: yes
-  shell: lxc-stop -n {{item.type}} || true
-  when: item.start_auto == 0
-  with_items: "{{containers[inventory_hostname]}}"
-
+- include: install.yml
+- include: configure.yml
+- include: hook.yml
+- include: ssh.yml
