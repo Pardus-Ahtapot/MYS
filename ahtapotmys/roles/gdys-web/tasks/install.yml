@@ -130,11 +130,23 @@
     openssl req -x509 -nodes -subj '/CN={{ gdys['FQDN'] }}' -days 365
     -newkey rsa:4096 -sha256 -keyout /etc/nginx/ssl/{{ gdys['FQDN'] }}.key -out /etc/nginx/ssl/{{ gdys['FQDN'] }}.crt
     creates=/etc/nginx/ssl/{{ gdys['FQDN'] }}.crt
-  when: "{{ gdys['USE_SELF_SIGNED_CERT'] }}"
+  when: "{{ gdys['SSL'] }} and {{ gdys['USE_SELF_SIGNED_CERT'] }}"
   notify:
     - restart nginx
   sudo: yes
   tags: ssl
+
+- name: Nginx ssl dosyalari sunucuya gonderiliyor.
+  template:
+    src: "{{ item }}"
+    dest: "/etc/nginx/ssl/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - "{{ gdys['FQDN'] }}.crt"
+    - "{{ gdys['FQDN'] }}.key"
+  when: "{{ gdys['SSL'] }} and not {{ gdys['USE_SELF_SIGNED_CERT'] }}"
 
 - name: Nginx yapilandirmasi uygulaniyor
   template:
