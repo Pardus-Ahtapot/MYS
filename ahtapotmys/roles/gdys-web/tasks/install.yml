@@ -48,7 +48,7 @@
     requirements: /opt/gdys-web/requirements.txt
     virtualenv: /opt/gdys-web-venv
     extra_args: "--no-index --find-links=file:///opt/wheelhouse"
-    virtualenv_python: python3
+    virtualenv_python: python3.5
 
 - name: GDYS repo url'i olusturuluyor
   set_fact:
