@@ -1,0 +1,16 @@
+---
+# handlers file for gdys-web
+
+- name: restart nginx
+  sudo: yes
+  service:
+    name: nginx
+    enabled: yes
+    state: restarted
+  
+- name: restart gdysweb
+  sudo: yes
+  service:
+    name: gdysweb
+    enabled: yes
+    state: restarted

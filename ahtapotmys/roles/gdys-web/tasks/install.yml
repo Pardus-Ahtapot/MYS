@@ -1,0 +1,157 @@
+---
+- name: GDYS-Web icin gereken paketler yukleniyor.
+  apt:
+        name: "{{ item.value.name }}"
+        state: "{{ item.value.state }}"
+        force: "yes"
+  with_dict: "{{gdys_web_packages}}"
+  sudo: yes
+  tags: install
+
+- name: GDYS-Web temel paketi kuruluyor.
+  unarchive:
+    src: gdys-web.tar.gz
+    dest: /opt
+    owner: ahtapotops
+
+- name: GDYS-Web yapilandirmasi uygulaniyor
+  template:
+        src: "{{ gdys_env['source'] }}"
+        dest: "{{ gdys_env['destination'] }}"
+        owner: "{{ gdys_env['owner'] }}"
+        group: "{{ gdys_env['group'] }}"
+        mode: "{{ gdys_env['mode'] }}"
+  sudo: yes
+  notify: 
+    - restart gdysweb
+
+- name: GDYS-Web yapilandirmasi ayarlaniyor
+  shell: |
+    sed -i 's/SERVER_NAME =/# SERVER_NAME =/g' /opt/gdys-web/config.py
+    sed -i 's/SERVER_NAME_EXTRA =/# SERVER_NAME_EXTRA =/g' /opt/gdys-web/config.py
+    rm -rf /etc/nginx/sites-enabled/default
+  sudo: yes
+  notify: 
+    - restart gdysweb
+    - restart nginx
+  args:
+    warn: false
+
+- name: GDYS-Web icin gerekli python paketleri aliniyor.
+  unarchive:
+    src: wheelhouse.tar.gz
+    dest: /opt
+    owner: ahtapotops
+
+- name: GDYS-Web icin gerekli python paketleri yukleniyor
+  pip:
+    requirements: /opt/gdys-web/requirements.txt
+    virtualenv: /opt/gdys-web-venv
+    extra_args: "--no-index --find-links=file:///opt/wheelhouse"
+    virtualenv_python: python3
+
+- name: GDYS repo url'i olusturuluyor
+  set_fact:
+    gdys_repo_url: "ssh://git@{{ git['HOST']}}:{{git['PORT']}}/{{git['USER']}}/{{git['REPO_NAME']}}.git"
+
+- name: Git depolari olusturuluyor.
+  environment:
+    TMPDIR: "/home/ahtapotops/"
+  git:
+      repo: "{{ gdys_repo_url }}"
+      dest: "{{ gdys['WORKDIR'] }}"
+      accept_hostkey: yes
+      key_file: "/home/ahtapotops/.ssh/id_rsa"
+  tags: git 
+
+- name: Virtualenv bin path'i ayarlaniyor
+  set_fact:
+    venv_bin_path: '/opt/gdys-web-venv/bin'
+
+- name: GDYS-Web log dizini olusturuluyor
+  file:
+    path: "{{ gdys['LOGPATH'] }}"
+    state: directory
+    owner: ahtapotops
+    group: ahtapotops
+
+- name: Veritabani varligi kontrol ediliyor
+  stat: 
+    path: "{{ gdys['WORKDIR'] }}/app.db"
+  register: gdysweb_db
+
+- name: Gdys-web veritabani ayarlaniyor
+  shell: |
+    {{venv_bin_path}}/flask db init && \
+    {{venv_bin_path}}/flask db migrate -m "Initial migration" && \
+    {{venv_bin_path}}/flask db upgrade
+  args:
+    chdir: /opt/gdys-web
+  environment:
+    LC_ALL: C.UTF-8
+    LANG: C.UTF-8
+  when: gdysweb_db.stat.exists == False
+  notify: 
+    - restart gdysweb
+
+- name: Gdys-web servis dosyasi olusturuluyor
+  template:
+        src: "{{ systemd_service['source'] }}"
+        dest: "{{ systemd_service['destination'] }}"
+        owner: "{{ systemd_service['owner'] }}"
+        group: "{{ systemd_service['group'] }}"
+        mode: "{{ systemd_service['mode'] }}"
+  notify: 
+    - restart gdysweb
+  sudo: yes
+
+- name: Ceviri dosyalari yolu olusturuluyor
+  set_fact:
+    tr_translation_path: '/opt/gdys-web-venv/lib/python3.5/site-packages/flask_user/translations/tr/LC_MESSAGES/'
+
+- name: GDYS-Web dil dosyalari derleniyor
+  shell: |
+    "{{venv_bin_path}}"/pybabel compile -i {{tr_translation_path}}/flask_user.po -o {{tr_translation_path}}/flask_user.mo
+  notify: 
+    - restart gdysweb
+  sudo: yes
+
+- name: Nginx ssl dizini olusturuluyor
+  file:
+    path: /etc/nginx/ssl
+    state: directory
+    owner: root
+    group: root
+  when: "{{ gdys['SSL'] }}"
+  sudo: yes
+
+- name: Nginx icin Self-Signed sertifika olusturuluyor
+  command: >
+    openssl req -x509 -nodes -subj '/CN={{ gdys['FQDN'] }}' -days 365
+    -newkey rsa:4096 -sha256 -keyout /etc/nginx/ssl/{{ gdys['FQDN'] }}.key -out /etc/nginx/ssl/{{ gdys['FQDN'] }}.crt
+    creates=/etc/nginx/ssl/{{ gdys['FQDN'] }}.crt
+  when: "{{ gdys['USE_SELF_SIGNED_CERT'] }}"
+  notify:
+    - restart nginx
+  sudo: yes
+  tags: ssl
+
+- name: Nginx yapilandirmasi uygulaniyor
+  template:
+        src: "{{ nginx_conf['source'] }}"
+        dest: "{{ nginx_conf['destination'] }}"
+        owner: "{{ nginx_conf['owner'] }}"
+        group: "{{ nginx_conf['group'] }}"
+        mode: "{{ nginx_conf['mode'] }}"
+  sudo: yes
+
+- name: Nginx yapilandirmasi aktiflestiriliyor.
+  file:
+    src: "{{ nginx_conf['destination'] }}"
+    dest: /etc/nginx/sites-enabled/gdysweb
+    state: link
+  notify:
+    - restart nginx
+  sudo: yes
+
+- meta: flush_handlers

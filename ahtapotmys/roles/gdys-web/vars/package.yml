@@ -1,0 +1,19 @@
+gdys_web_packages:
+    package01:
+        name: "git" 
+        state: "present" 
+    package02:
+        name: "build-essential" 
+        state: "present"
+    package03:
+        name: "python3-pip" 
+        state: "present"
+    package04:
+        name: "python3-dev" 
+        state: "present"
+    package05:
+        name: "virtualenv" 
+        state: "present"
+    package06:
+        name: "nginx" 
+        state: "present"

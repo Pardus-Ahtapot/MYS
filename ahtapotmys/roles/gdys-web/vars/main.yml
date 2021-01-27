@@ -1,0 +1,40 @@
+---
+# vars file for gdys-web
+gdys:
+    FQDN: "gdys.ahtapot.org.tr"
+    SSL: yes
+    USE_SELF_SIGNED_CERT: yes
+    ADMIN_USERNAME: "admin"
+    ADMIN_MAIL: "admin@ahtapot.org"
+    ADMIN_PASSWORD: "LA123"
+    MYS_IP_ADDR: "192.168.1.1"
+    LOGPATH: "/var/log/ahtapot"
+    WORKDIR: "/etc/fw/gdys"
+
+git:
+    HOST: "gitlab.gdys.local"
+    PORT: "22"
+    USER: "ahtapotops"
+    REPO_NAME: "gdys"
+    BRANCH_NAME: "master"
+
+systemd_service:
+    source: "gdysweb.service.j2"
+    destination: "/etc/systemd/system/gdysweb.service"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+nginx_conf:
+    source: "gdysweb.conf.j2"
+    destination: "/etc/nginx/sites-available/gdysweb"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+gdys_env:
+    source: "gdys.env.j2"
+    destination: "/opt/gdys-web/.env"
+    owner: "ahtapotops"
+    group: "ahtapotops"
+    mode: "0755"
