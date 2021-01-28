@@ -1,4 +1,0 @@
----
-- name: fusioninventory servisini yeniden baslat
-  shell: "/usr/bin/fusioninventory-agent debug"
-  sudo: yes

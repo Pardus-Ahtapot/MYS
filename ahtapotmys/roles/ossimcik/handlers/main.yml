@@ -1,5 +1,0 @@
----
-# Ossimcik'in isleyici dosyasidir.
-- include: ossec.yml
-- include: nxlog.yml
-- include: rsyslog.yml

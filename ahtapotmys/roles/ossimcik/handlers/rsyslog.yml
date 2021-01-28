@@ -1,6 +1,0 @@
----
-- name: rsyslog servisi yeniden baslatiliyor
-  service:
-    name: "{{ ossimcik_rsyslog['service']['name'] }}"
-    state: restarted
-  sudo: yes

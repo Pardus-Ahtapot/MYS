@@ -1,5 +1,0 @@
-snorby_conf_list:
-- /opt/snorby/config/snorby-geoip.dat
-- /opt/snorby/db/seeds.rb
-- /opt/snorby/config/snorby_config.yml
-- /opt/snorby/config/database.yml

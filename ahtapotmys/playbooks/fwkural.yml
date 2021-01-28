@@ -1,9 +1,0 @@
----
-# Calistirildiginda Guvenlik Duvari Kurulumu Yapilir
-- hosts: firewall 
-  remote_user: ahtapotops
-  sudo: yes
-  vars_files:
-  - ../roles/fwkural/vars/iptables.yml
-  roles:
-  - { role: fwkural }

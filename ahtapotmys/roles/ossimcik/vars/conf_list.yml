@@ -1,8 +1,0 @@
-ossimcik_conf_list:
-- /var/ossec/etc/local_decoder.xml
-- /var/ossec/etc/shared/agent.conf
-- /etc/rsyslog.conf
-- /etc/nxlog/nxlog.conf
-- /var/ossec/etc/ossec.conf
-- /var/ossec/rules/local_rules.xml
-- /etc/logrotate.d/ossimcik

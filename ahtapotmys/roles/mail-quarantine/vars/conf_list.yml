@@ -1,4 +1,0 @@
-mail_quarantine_conf_list:
-- /etc/spamassassin/local.cf
-- /etc/amavis/conf.d/50-user
-- /opt/modoboa-ahtapot-installer/installer.cfg

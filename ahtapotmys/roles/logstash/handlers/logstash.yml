@@ -1,6 +1,0 @@
----
-- name: Logstash servisi yeniden baslatiliyor
-  service:
-    name: "{{ logstash['service']['name'] }}"
-    state: restarted
-  sudo: yes

@@ -1,6 +1,0 @@
----
-- name: Elasticsearch servisi yeniden baslatiliyor
-  service:
-    name: "{{ elasticsearch['service']['name'] }}"
-    state: restarted
-  sudo: yes

@@ -1,6 +1,0 @@
----
-- name: nxlog servisi yeniden baslatiliyor
-  service:
-    name: "{{ nxlog['service']['name'] }}"
-    state: restarted
-  sudo: yes

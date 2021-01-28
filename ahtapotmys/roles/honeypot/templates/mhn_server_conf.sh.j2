@@ -1,8 +1,0 @@
-sed -i -r "s|(SERVER_BASE_URL =)(.*)|\1 '{{mhn_url|quote}}'|g" /opt/mhn/server/config.py
-sed -i -r "s|(HONEYMAP_URL =)(.*)|\1 '{{mhn_honeymap_url|quote}}'|g" /opt/mhn/server/config.py
-sed -i -r "s|(MAIL_SERVER =)(.*)|\1 '{{mhn_mail_server|quote}}'|g" /opt/mhn/server/config.py
-sed -i -r "s|(MAIL_PORT =)(.*)|\1 {{mhn_mail_port}}|g" /opt/mhn/server/config.py
-sed -i -r "s|(MAIL_USERNAME =)(.*)|\1 '{{mhn_mail_user|quote}}'|g" /opt/mhn/server/config.py
-sed -i -r "s|(MAIL_PASSWORD =)(.*)|\1 '{{mhn_mail_pass|quote}}'|g" /opt/mhn/server/config.py
-sed -i -r "s|(DEFAULT_MAIL_SENDER =)(.*)|\1 '{{mhn_mail_sender|quote}}'|g" /opt/mhn/server/config.py
-sed -i -r "s|(LOG_FILE_PATH =)(.*)|\1 '{{mhn_log_file_path|quote}}'|g" /opt/mhn/server/config.py

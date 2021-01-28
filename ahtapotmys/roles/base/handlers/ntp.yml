@@ -1,6 +1,0 @@
----
-- name: ntp servisini yeniden baslat
-  service:
-    name: "{{ ntp['service']['name'] }}"
-    state: restarted
-  sudo: yes

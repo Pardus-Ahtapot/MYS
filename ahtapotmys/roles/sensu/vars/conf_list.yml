@@ -1,2 +1,0 @@
-sensu_conf_list:
-- /etc/redis/redis.conf

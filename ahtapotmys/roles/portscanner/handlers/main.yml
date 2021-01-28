@@ -1,4 +1,0 @@
----
-# Portscanner'in isleyici dosyasidir
-- include: nginx.yml
-- include: uwsgi.yml

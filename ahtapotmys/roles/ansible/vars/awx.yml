@@ -1,8 +1,0 @@
----
-awx_ssl_port: 443
-awx_ssl_country: TR
-awx_ssl_state: Cankaya
-awx_ssl_locality: Ankara
-awx_ssl_organization: Labris
-awx_ssl_organizationalunit: Arge
-awx_ssl_commonname: ahtapot

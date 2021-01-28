@@ -1,9 +1,0 @@
-{% for hostname in ossec_agent_conf_list %}
-<agent_config profile="{{hostname}}">
-  <syscheck>
-    {% for path in ossec_agent_conf_list[hostname] %}
-    <ignore>"{{ path }}"</ignore>
-    {% endfor %}
-  </syscheck>
-</agent_config>
-{% endfor %}

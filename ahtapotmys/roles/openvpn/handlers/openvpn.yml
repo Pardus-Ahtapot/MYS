@@ -1,6 +1,0 @@
----
-- name: openvpn servisini yeniden baslat
-  service:
-    name: "{{ openvpn['service']['name'] }}"
-    state: restarted
-  sudo: yes

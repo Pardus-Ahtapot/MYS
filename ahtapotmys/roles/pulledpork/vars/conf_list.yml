@@ -1,3 +1,0 @@
-pulledpork_conf_list:
-- /etc/pulledpork/pulledpork.conf
-- /lib/systemd/system/pulledpork.timer

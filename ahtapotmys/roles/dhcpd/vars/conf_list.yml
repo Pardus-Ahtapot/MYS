@@ -1,3 +1,0 @@
-dhcpd_conf_list:
-- /etc/udhcpd.conf
-- /etc/default/udhcpd

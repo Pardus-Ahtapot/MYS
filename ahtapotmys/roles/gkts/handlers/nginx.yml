@@ -1,6 +1,0 @@
----
-- name: nginx servisini yeniden baslat
-  service:
-    name: "{{ nginx['service']['name'] }}"
-    state: restarted
-  sudo: yes

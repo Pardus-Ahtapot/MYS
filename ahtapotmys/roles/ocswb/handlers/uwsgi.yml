@@ -1,6 +1,0 @@
----
-- name: uwsgi servisini yeniden baslat
-  service:
-    name: "{{ uwsgi['service']['name'] }}"
-    state: restarted
-  sudo: yes

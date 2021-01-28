@@ -1,6 +1,0 @@
-gitlab_conf_list:
-- /etc/gitlab/ssl/gitlab.gdys.local.crt
-- /etc/gitlab/gitlab.gdys.local.key
-- /var/opt/gitlab/git-data/repositories/ahtapotops/mys.git/custom_hooks/post-receive
-- /etc/gitlab/gitlab.rb
-- /var/opt/gitlab/git-data/repositories/ahtapotops/gdys.git/custom_hooks/post-receive

@@ -1,6 +1,0 @@
----
-- name: restart apache
-  sudo: yes
-  service:
-    name: "{{ apache_service }}"
-    state: "{{ apache_restart_state }}"

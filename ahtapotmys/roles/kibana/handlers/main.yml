@@ -1,4 +1,0 @@
----
-# Kibana'nin isleyici dosyasidir
-- include: kibana.yml
-- include: nginx.yml

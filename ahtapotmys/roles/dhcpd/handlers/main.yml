@@ -1,3 +1,0 @@
----
-# Dhcpd rolu icin isleyici dosyasidir
-- include: dhcpd.yml

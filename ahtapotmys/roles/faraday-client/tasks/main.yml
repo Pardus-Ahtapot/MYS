@@ -1,8 +1,0 @@
----
-- name: installing faraday-client
-  sudo: yes
-  apt:
-    name: "{{ item }}"
-  with_items:
-    - faraday-client
-

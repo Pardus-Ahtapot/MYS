@@ -1,6 +1,0 @@
----
-- name: kibana servisini yeniden baslat
-  service:
-    name: "{{ kibana['service']['name'] }}"
-    state: restarted
-  sudo: yes

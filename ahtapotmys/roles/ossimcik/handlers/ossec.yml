@@ -1,6 +1,0 @@
----
-- name: ossec servisi yeniden baslatiliyor
-  service:
-    name: "{{ ossec['service']['name'] }}"
-    state: restarted
-  sudo: yes

@@ -1,9 +1,0 @@
----
-- name: Maintenance rolu icin gerekli script yerlestiriliyor.
-  template:
-        src: "{{ maintenance['script']['source'] }}"
-        dest: "{{ maintenance['script']['destination'] }}"
-        owner: "{{ maintenance['script']['owner'] }}"
-        group: "{{ maintenance['script']['group'] }}"
-        mode: "{{ maintenance['script']['mode'] }}"
-  tags: install
