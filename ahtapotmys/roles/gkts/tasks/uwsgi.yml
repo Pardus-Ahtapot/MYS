@@ -1,0 +1,31 @@
+---
+- name: Soket klasoru yapilandiriliyor.
+  file:
+        path: "{{ uwsgi['socket']['path'] }}"
+        state: "{{ uwsgi['socket']['state'] }}"
+        owner: "{{ uwsgi['socket']['owner'] }}"
+        group: "{{ uwsgi['socket']['group'] }}"
+        mode: "{{ uwsgi['socket']['mode'] }}"
+  sudo: yes
+  tags: uwsgi 
+
+- name: Uwsgi servislerinin konfigurasyonlari yerlestiriliyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "{{ item.value.destination }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+  with_dict: "{{uwsgi_services}}"
+  notify:
+    - uwsgi servisini yeniden baslat
+  sudo: yes
+  tags: uwsgi 
+
+- name: Uwsgi servisi ayakta
+  service:
+        name: "{{ uwsgi['service']['name'] }}"
+        state: "{{ uwsgi['service']['state'] }}"
+        enabled: "{{ uwsgi['service']['enabled'] }}"
+  sudo: yes
+  tags: uwsgi

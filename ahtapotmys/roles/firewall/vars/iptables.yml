@@ -1,0 +1,12 @@
+---
+# Iptables yapilandirmasini iceren dosyadir.
+iptables:
+    service:
+        v4conf: "/etc/iptables/rules.v4"
+        v6conf: "/etc/iptables/rules.v6"
+    deploy:
+        repopath: "/etc/fw/gdys" 
+        filepath: "/etc/fw/gdys/files"
+        rsync_opts: "--force"
+        dest_port: "22"
+        recursive: "yes"

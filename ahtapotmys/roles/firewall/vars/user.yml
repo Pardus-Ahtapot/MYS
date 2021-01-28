@@ -1,0 +1,17 @@
+---
+# Kullanici degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar kullanici eklenebilir.
+firewall_users:
+    user1:
+        name: "lkk" 
+        uid: "1010" 
+        group: "lkk" 
+        shell: "/bin/bash"
+        state: "present" 
+        password: "$6$dLiZAJhE$4319ZGktWgTmK8gPTyHcoI09AyVRPdE1asy5FNB2hzWBnAymB61wOaUGl9uznaWnV3gbclTLt6FGOGYEhML.S/" 
+#    userX:
+#        name: 
+#        group:
+#        shell: 
+#        state:  
+#        password:  

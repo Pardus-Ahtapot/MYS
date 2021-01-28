@@ -1,0 +1,13 @@
+---
+- name: Sikilastirma yapilandiriliyor.
+  template:
+        src: "{{ sysctl['conf']['source'] }}"
+        dest: "{{ sysctl['conf']['destination'] }}" 
+        owner: "{{ sysctl['conf']['owner'] }}" 
+        group: "{{ sysctl['conf']['group'] }}" 
+        mode: "{{ sysctl['conf']['mode'] }}" 
+  notify:
+    - sysctl yi dosyadan yeniden yapilandir
+    - yonlendirme tablosunu sifirla
+  sudo: yes
+  tags: sysctl

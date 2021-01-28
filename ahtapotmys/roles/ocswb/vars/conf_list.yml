@@ -1,0 +1,7 @@
+ocswb_conf_list:
+- /etc/uwsgi/apps-enabled/ocswb-uwsgi.ini
+- /var/opt/ahtapot-ocs-wb/config.ini
+- /etc/nginx/ssl/ocswb.key
+- /etc/nginx/conf.d/ocswb.conf
+- /var/opt/ahtapot-ocs-wb-alarm/config.ini
+- /etc/nginx/ssl/ocswb.crt

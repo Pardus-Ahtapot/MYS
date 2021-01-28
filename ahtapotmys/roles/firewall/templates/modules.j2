@@ -1,0 +1,7 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+{% for key,value in firewall_modules.iteritems() %}
+{{ value.name }}
+{% endfor %}

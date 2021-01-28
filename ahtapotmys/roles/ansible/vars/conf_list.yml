@@ -1,0 +1,13 @@
+ansible_conf_list:
+- /usr/bin/gdys.sh
+- /usr/bin/mys.sh
+- /home/ahtapotops/sb
+- /usr/bin/gkts.sh
+- /usr/bin/CheckFWs.py
+- /usr/share/awx/installer/inventory
+- /usr/sbin/list-integrity-files.py
+- /etc/ansible/
+- /usr/sbin/awx_inventory.sh
+- /etc/fw/gdys
+- /usr/bin/update-ahtapot.py
+- /etc/nginx/sites-enabled/default

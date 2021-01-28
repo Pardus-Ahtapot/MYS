@@ -1,0 +1,101 @@
+---
+# Paket degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
+base_packages:
+    package01:
+        name: "dbus"
+        state: "present" 
+    package02:
+        name: "auditd" 
+        state: "present" 
+    package03:
+        name: "sysstat" 
+        state: "present" 
+    package04:
+        name: "ntp" 
+        state: "present" 
+    package05:
+        name: "bash" 
+        state: "present" 
+    package06:
+        name: "rsyslog" 
+        state: "present" 
+    package07:
+        name: "sudo" 
+        state: "present" 
+    package08:
+        name: "logrotate" 
+        state: "present" 
+    package09:
+        name: "apt-transport-https" 
+        state: "present"
+    package10:
+        name: "rsyslog-gnutls" 
+        state: "present"
+    package11:
+        name: "ahtapot-fusioninventory-agent=1:2.3.10.1-1" 
+        state: "present"
+    package12:
+        name: "rsyslog-relp" 
+        state: "present"
+    package13:
+        name: "aptitude"
+        state: "present"
+    package14:
+        name: "apparmor"
+        state: "present"
+    package15:
+        name: "apparmor-utils"
+        state: "present"
+    package16:
+        name: "apparmor-profiles"
+        state: "present"
+    package17:
+        name: "prelink"
+        state: "absent"
+    package18:
+        name: "nis"
+        state: "absent"
+    package19:
+        name: "rsh-server"
+        state: "absent"
+    package20:
+        name: "rsh-client"
+        state: "absent"
+    package21:
+        name: "rsh-redone-client"
+        state: "absent"
+    package22:
+        name: "talk"
+        state: "absent"
+    package23:
+        name: "xserver-xorg-core"
+        state: "absent"
+    package24:
+        name: "tcpd"
+        state: "present"
+    package25:
+        name: "iptables"
+        state: "present"
+    package26:
+        name: "iptables-persistent"
+        state: "present"
+    package27:
+        name: "netfilter-persistent"
+        state: "present"
+    package28:
+        name: "aide"
+        state: "present"
+    package29:
+        name: "libpam-cracklib"
+        state: "present"
+    package30:
+        name: "aide-common"
+        state: "present"
+    package31:
+        name: "python"
+        state: "present"
+
+#    packageXX:
+#        name: 
+#        state:

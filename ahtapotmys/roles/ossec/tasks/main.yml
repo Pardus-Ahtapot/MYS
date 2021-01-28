@@ -1,0 +1,5 @@
+---
+# Ossec gorevlerini iceren dosyadir.
+- include: conf_integrity.yml
+- include: install.yml
+- include: configure.yml

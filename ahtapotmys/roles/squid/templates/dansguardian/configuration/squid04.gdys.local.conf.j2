@@ -1,0 +1,217 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+# DansGuardian config file for version 2.10.1.1
+# **NOTE** as of version 2.7.5 most of the list files are now in dansguardianf1.conf
+
+reportinglevel = 3
+
+languagedir = '/etc/dansguardian/languages'
+language = 'ukenglish'
+
+loglevel = 2
+logexceptionhits = 2
+
+# Log File Format
+# 1 = DansGuardian format (space delimited)
+# 2 = CSV-style format
+# 3 = Squid Log File Format
+# 4 = Tab delimited
+logfileformat = 1
+
+# truncate large items in log lines
+#maxlogitemlength = 400
+
+anonymizelogs = {{ dansguardian['anonymizelogs'] }}
+
+# Syslog logging
+#
+# Use syslog for access logging instead of logging to the file
+# at the defined or built-in "loglocation"
+#syslog = on
+
+loglocation = '{{ dansguardian['loglocation'] }}'
+statlocation = '{{ dansguardian['loglocation'] }}'
+
+# Network Settings
+
+filterip =
+filterport = {{ dansguardian['filterport'] }} 
+
+proxyip = {{ dansguardian['proxyip'] }}
+proxyport = {{ dansguardian['proxyport'] }}
+
+accessdeniedaddress = '{{ dansguardian['accessdeniedaddress'] }}'
+nonstandarddelimiter = on
+
+usecustombannedimage = on
+custombannedimagefile = '{{ dansguardian['custombannedimagefile'] }}'
+
+# Filter groups options
+# filtergroups sets the number of filter groups. A filter group is a set of content
+# filtering options you can apply to a group of users.  The value must be 1 or more.
+# DansGuardian will automatically look for dansguardianfN.conf where N is the filter
+# group.  To assign users to groups use the filtergroupslist option.  All users default
+# to filter group 1.  You must have some sort of authentication to be able to map users
+# to a group.  The more filter groups the more copies of the lists will be in RAM so
+# use as few as possible.
+filtergroups = 1
+filtergroupslist = '/etc/dansguardian/lists/filtergroupslist'
+
+# Authentication files location
+bannediplist = '{{ dansguardian['bannediplist'] }}'
+exceptioniplist = '{{ dansguardian['exceptioniplist'] }}'
+
+# Weighted phrases 
+showweightedfound = on
+weightedphrasemode = 2
+
+# Caching for URLs
+urlcachenumber = 1000
+urlcacheage = 900
+scancleancache = on
+
+# Phrase filter section
+phrasefiltermode = 2
+preservecase = 0
+
+# Hex decoding options
+hexdecodecontent = off
+
+# Force Quick Search rather than DFA search algorithm
+forcequicksearch = off
+
+# Reverse lookups
+reverseaddresslookups = off
+reverseclientiplookups = off
+logclienthostnames = off
+
+# Build bannedsitelist and bannedurllist cache files.
+createlistcachefiles = on
+
+# POST protection (web upload and forms)
+maxuploadsize = {{ dansguardian['maxuploadsize'] }}
+
+# Content section
+maxcontentfiltersize = 256
+maxcontentramcachescansize = 2000
+maxcontentfilecachescansize = 20000
+
+# File cache dir
+filecachedir = '/tmp'
+deletedownloadedtempfiles = on
+
+# Trickle delay
+initialtrickledelay = 20
+trickledelay = 10
+
+# Download Managers
+downloadmanager = '/etc/dansguardian/downloadmanagers/fancy.conf'
+#downloadmanager = '/etc/dansguardian/downloadmanagers/trickle.conf'
+downloadmanager = '/etc/dansguardian/downloadmanagers/default.conf'
+
+# Content Scanners (Also known as AV scanners)
+#
+# Some of the scanner(s) require 3rd party software and libraries eg clamav.
+# See the individual plugin conf file for more options (if any).
+#
+#contentscanner = '/etc/dansguardian/contentscanners/clamav.conf'
+#contentscanner = '/etc/dansguardian/contentscanners/clamdscan.conf'
+#!! Unimplemented !! contentscanner = '/etc/dansguardian/contentscanners/kavav.conf'
+#!! Not compiled !! contentscanner = '/etc/dansguardian/contentscanners/kavdscan.conf'
+#contentscanner = '/etc/dansguardian/contentscanners/icapscan.conf'
+#contentscanner = '/etc/dansguardian/contentscanners/commandlinescan.conf'
+
+# Content scanner timeout
+contentscannertimeout = 60
+contentscanexceptions = off
+
+# Auth plugins
+# These replace the usernameidmethod* options in previous versions. They
+# handle the extraction of client usernames from various sources, such as
+# Proxy-Authorisation headers and ident servers, enabling requests to be
+# handled according to the settings of the user's filter group.
+# Multiple plugins can be specified, and will be queried in order until one
+# of them either finds a username or throws an error. For example, if Squid
+# is configured with both NTLM and Basic auth enabled, and both the 'proxy-basic'
+# and 'proxy-ntlm' auth plugins are enabled here, then clients which do not support
+# NTLM can fall back to Basic without sacrificing access rights.
+#
+# If you do not use multiple filter groups, you need not specify this option.
+#
+authplugin = '/etc/dansguardian/authplugins/proxy-basic.conf'
+#authplugin = '/etc/dansguardian/authplugins/proxy-digest.conf'
+{% if ad.enabled == "yes" and squid['ldap']['enabled'] != "yes" %}
+authplugin = '/etc/dansguardian/authplugins/proxy-ntlm.conf'
+{% endif %}
+#authplugin = '/etc/dansguardian/authplugins/proxy-ntlm.conf'
+#authplugin = '/etc/dansguardian/authplugins/ident.conf'
+#authplugin = '/etc/dansguardian/authplugins/ip.conf'
+
+# Re-check replaced URLs
+# As a matter of course, URLs undergo regular expression search/replace (urlregexplist)
+# *after* checking the exception site/URL/regexpURL lists, but *before* checking against
+# the banned site/URL lists, allowing certain requests that would be matched against the
+# latter in their original state to effectively be converted into grey requests.
+# With this option enabled, the exception site/URL/regexpURL lists are also re-checked
+# after replacement, making it possible for URL replacement to trigger exceptions based
+# on them.
+# Defaults to off.
+recheckreplacedurls = off
+
+# Misc settings
+
+forwardedfor = on
+usexforwardedfor = off
+logconnectionhandlingerrors = on
+logchildprocesshandling = off
+
+# Children Options
+maxchildren = {{ dansguardian['maxchildren'] }}
+minchildren = {{ dansguardian['minchildren'] }}
+maxsparechildren = {{ dansguardian['maxsparechildren'] }}
+minsparechildren = {{ dansguardian['minsparechildren'] }}
+preforkchildren = {{ dansguardian['preforkchildren'] }}
+maxagechildren = {{ dansguardian['maxagechildren'] }}
+
+maxips = 0
+
+# Process options
+# (Change these only if you really know what you are doing).
+# These options allow you to run multiple instances of DansGuardian on a single machine.
+# Remember to edit the log file path above also if that is your intention.
+
+# IPC filename
+ipcfilename = '/tmp/.dguardianipc'
+
+# URL list IPC filename
+urlipcfilename = '/tmp/.dguardianurlipc'
+
+# IP list IPC filename
+ipipcfilename = '/tmp/.dguardianipipc'
+
+# PID filename
+#pidfilename = '/var/run/dansguardian.pid'
+
+# Disable daemoning
+nodaemon = off
+
+# Disable logging process
+nologger = off
+
+# Enable logging of "ADs" category blocks
+logadblocks = off
+
+# Enable logging of client User-Agent
+loguseragent = off
+
+# Daemon runas user and group
+#daemonuser = 'dansguardian'
+#daemongroup = 'dansguardian'
+
+# Soft restart
+softrestart = off
+
+# Mail program
+mailer = '/usr/sbin/sendmail -t'

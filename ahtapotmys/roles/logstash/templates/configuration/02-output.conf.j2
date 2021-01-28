@@ -1,0 +1,114 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+output{
+
+  if [type] == "raw_location01" {
+
+    elasticsearch {
+      hosts => [{% for key,value in elasticsearch_servers.iteritems() %}"{{ value.fqdn }}"{% if not loop.last %},{% endif %}{% endfor %}]
+      index => "raw-location01-%{+YYYY.MM.dd}"
+      ssl => "true"
+      ssl_certificate_verification => "true"
+      user => "logstashraw"
+      password => "logstashrawpass"
+      truststore => "/etc/logstash/truststore.jks"
+      truststore_password => "TRUSTPASS"
+    }
+
+  } else if [type] == "raw_location02" {
+
+    elasticsearch {
+      hosts => [{% for key,value in elasticsearch_servers.iteritems() %}"{{ value.fqdn }}"{% if not loop.last %},{% endif %}{% endfor %}]
+      index => "raw-location02-%{+YYYY.MM.dd}"
+      ssl => "true"
+      ssl_certificate_verification => "true"
+      user => "logstashraw"
+      password => "logstashrawpass"
+      truststore => "/etc/logstash/truststore.jks"
+      truststore_password => "TRUSTPASS"
+    }
+
+  } else if [type] == "raw_location03" {
+
+    elasticsearch {
+      hosts => [{% for key,value in elasticsearch_servers.iteritems() %}"{{ value.fqdn }}"{% if not loop.last %},{% endif %}{% endfor %}]
+      index => "raw-location03-%{+YYYY.MM.dd}"
+      ssl => "true"
+      ssl_certificate_verification => "true"
+      user => "logstashraw"
+      password => "logstashrawpass"
+      truststore => "/etc/logstash/truststore.jks"
+      truststore_password => "TRUSTPASS"
+    }
+  
+  } else if [type] == "raw_location04" {
+
+    elasticsearch {
+      hosts => [{% for key,value in elasticsearch_servers.iteritems() %}"{{ value.fqdn }}"{% if not loop.last %},{% endif %}{% endfor %}]
+      index => "raw-location04-%{+YYYY.MM.dd}"
+      ssl => "true"
+      ssl_certificate_verification => "true"
+      user => "logstashraw"
+      password => "logstashrawpass"
+      truststore => "/etc/logstash/truststore.jks"
+      truststore_password => "TRUSTPASS"
+    }
+
+  } else if [type] == "alert_location01" {
+
+    elasticsearch {
+      hosts => [{% for key,value in elasticsearch_servers.iteritems() %}"{{ value.fqdn }}"{% if not loop.last %},{% endif %}{% endfor %}]
+      index => "alert-location01-%{+YYYY.MM.dd}"
+      ssl => "true"
+      ssl_certificate_verification => "true"
+      user => "logstashalert"
+      password => "logstashalertpass"
+      truststore => "/etc/logstash/truststore.jks"
+      truststore_password => "TRUSTPASS"
+    }
+
+  } else if [type] == "alert_location02" {
+
+    elasticsearch {
+      hosts => [{% for key,value in elasticsearch_servers.iteritems() %}"{{ value.fqdn }}"{% if not loop.last %},{% endif %}{% endfor %}]
+      index => "alert-location02-%{+YYYY.MM.dd}"
+      ssl => "true"
+      ssl_certificate_verification => "true"
+      user => "logstashalert"
+      password => "logstashalertpass"
+      truststore => "/etc/logstash/truststore.jks"
+      truststore_password => "TRUSTPASS"
+    }
+
+  } else if [type] == "alert_location03" {
+
+    elasticsearch {
+      hosts => [{% for key,value in elasticsearch_servers.iteritems() %}"{{ value.fqdn }}"{% if not loop.last %},{% endif %}{% endfor %}]
+      index => "alert-location03-%{+YYYY.MM.dd}"
+      ssl => "true"
+      ssl_certificate_verification => "true"
+      user => "logstashalert"
+      password => "logstashalertpass"
+      truststore => "/etc/logstash/truststore.jks"
+      truststore_password => "TRUSTPASS"
+    }
+  
+  } else if [type] == "alert_location04" {
+
+    elasticsearch {
+      hosts => [{% for key,value in elasticsearch_servers.iteritems() %}"{{ value.fqdn }}"{% if not loop.last %},{% endif %}{% endfor %}]
+      index => "alert-location04-%{+YYYY.MM.dd}"
+      ssl => "true"
+      ssl_certificate_verification => "true"
+      user => "logstashalert"
+      password => "logstashalertpass"
+      truststore => "/etc/logstash/truststore.jks"
+      truststore_password => "TRUSTPASS"
+    }
+
+  }
+
+
+}

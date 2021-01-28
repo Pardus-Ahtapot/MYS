@@ -1,0 +1,11 @@
+---
+# Guvenlik Duvarinin isleyici dosyasidir.
+- include: sysctl.yml
+- include: profile.yml
+- name: restart fastnetmon
+  sudo: yes
+  service:
+    name: fastnetmon
+    enabled: yes
+    state: restarted
+

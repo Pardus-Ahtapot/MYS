@@ -1,0 +1,5 @@
+---
+glastopf_conf:
+  register_check_file: /etc/glastopf_registered
+  listen_ip: 0.0.0.0
+  listen_port: 80

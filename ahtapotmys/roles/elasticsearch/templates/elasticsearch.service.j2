@@ -1,0 +1,58 @@
+[Unit]
+Description=Elasticsearch
+Documentation=http://www.elastic.co
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Environment=ES_HOME=/usr/share/elasticsearch
+Environment=DATA_DIR=/var/lib/elasticsearch
+Environment=PID_DIR=/var/run/elasticsearch
+EnvironmentFile=-/etc/default/elasticsearch
+
+WorkingDirectory=/usr/share/elasticsearch
+
+User=elasticsearch
+Group=elasticsearch
+
+{% for key,value in elasticsearch_servers.iteritems() %} 
+{% if ansible_fqdn == value.fqdn %} 
+{% if value.instance_name == item.value.instance_name %} 
+Environment=LOG_DIR=/var/log/elasticsearch-{{ value.instance_name }} 
+Environment=CONF_DIR=/etc/elasticsearch-{{ value.instance_name }}
+
+ExecStartPre=/usr/share/elasticsearch/bin/elasticsearch-systemd-pre-exec
+ExecStart=/usr/share/elasticsearch/bin/elasticsearch \
+                                                -Des.pidfile=${PID_DIR}/elasticsearch-{{ value.instance_name }}.pid \
+                                                -Des.default.path.home=${ES_HOME} \
+                                                -Des.default.path.logs=${LOG_DIR} \
+                                                -Des.default.path.data=${DATA_DIR} \
+                                                -Des.default.path.conf=${CONF_DIR}
+{% endif %}
+{% endif %}
+{% endfor %}
+StandardOutput=journal
+StandardError=inherit
+
+# Specifies the maximum file descriptor number that can be opened by this process
+LimitNOFILE=65535
+
+# Specifies the maximum number of bytes of memory that may be locked into RAM
+# Set to "infinity" if you use the 'bootstrap.mlockall: true' option
+# in elasticsearch.yml and 'MAX_LOCKED_MEMORY=unlimited' in /etc/default/elasticsearch
+#LimitMEMLOCK=infinity
+
+# Disable timeout logic and wait until process is stopped
+TimeoutStopSec=0
+
+# SIGTERM signal is used to stop the Java process
+KillSignal=SIGTERM
+
+# Java process is never killed
+SendSIGKILL=no
+
+# When a JVM receives a SIGTERM signal it exits with code 143
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

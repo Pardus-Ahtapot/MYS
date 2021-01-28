@@ -1,0 +1,25 @@
+# {{ ansible_managed }}
+
+{% for elem in notifications %}
+apply Notification "{{ elem.name }}" to {{ elem.type }} {
+{% if elem.command is not defined %}
+  {% if  elem.type == "Host" %}
+import "mail-host-notification"
+  {% elif elem.type == "Service" %}
+import "mail-service-notification"
+  {% endif %}
+{% endif %}
+user_groups = {{ elem.user_groups }}
+{% if elem.users is defined %}
+users = "{{ elem.users }}"
+{% endif %}
+{% if elem.command is defined %}
+command = "{{ elem.command }}"
+{% endif %}
+{% for elem2 in elem.condition %}
+assign where {{ elem2 }}
+{% endfor %}
+interval = {{elem.interval}}
+}
+{% endfor %}
+

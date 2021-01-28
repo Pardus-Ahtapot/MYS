@@ -1,0 +1,10 @@
+---
+- name: Portscanner konfigurasyonu yerlestiriliyor.
+  template:
+        src: "{{ portscanner['conf']['source'] }}"
+        dest: "{{ portscanner['conf']['destination'] }}"
+        owner: "{{ portscanner['conf']['owner'] }}"
+        group: "{{ portscanner['conf']['group'] }}"
+        mode: "{{ portscanner['conf']['mode'] }}"
+  sudo: yes
+  tags: portscanner 

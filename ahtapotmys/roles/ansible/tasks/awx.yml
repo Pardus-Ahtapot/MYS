@@ -1,0 +1,52 @@
+---
+
+- name: Check if ssl certificate exists
+  sudo: yes
+  stat:
+    path: /etc/ssl/private/awx.crt
+  register: ssl_exists
+
+- name: Create ssl certificate
+  sudo: yes
+  shell: |
+    cd /etc/ssl/private/
+    openssl genrsa -des3 -passout pass:xxxx -out /etc/ssl/private/awx.pass.key 2048
+    openssl rsa -passin pass:xxxx -in /etc/ssl/private/awx.pass.key -out /etc/ssl/private/awx.key
+    chmod 600 awx.key
+    rm /etc/ssl/private/awx.pass.key
+    openssl req -new -key /etc/ssl/private/awx.key -out /etc/ssl/private/awx.csr -subj "/C={{awx_ssl_country}}/ST={{awx_ssl_state}}/L={{awx_ssl_locality}}/O={{awx_ssl_organization}}/OU={{awx_ssl_organizationalunit}}/CN={{awx_ssl_commonname}}"
+    openssl x509 -req -days 3650 -in /etc/ssl/private/awx.csr -signkey /etc/ssl/private/awx.key -out /etc/ssl/private/awx.crt
+    openssl rsa -in /etc/ssl/private/awx.key -out /etc/ssl/private/awx.key.unencrypted
+    mv -f awx.key.unencrypted awx.key
+    openssl req -new -key /etc/ssl/private/awx.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{awx_ssl_country}}/ST={{awx_ssl_state}}/L={{awx_ssl_locality}}/O={{awx_ssl_organization}}/OU={{awx_ssl_organizationalunit}}/CN={{awx_ssl_commonname}}"
+  when: (ssl_exists.stat.exists == False)
+
+- name: Creating ssl conf for nginx
+  sudo: yes
+  template:
+    src: "awx-nginx.conf.j2"
+    dest: "/etc/nginx/sites-enabled/default"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart nginx
+
+- name: Creating awx inventory
+  sudo: yes
+  template:
+    src: "awx-inventory.j2"
+    dest: "/usr/share/awx/installer/inventory"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: install awx
+
+- name: Deploy awx inventory script on local
+  template:
+    src: "awx_inventory.sh.j2"
+    dest: "/usr/sbin/awx_inventory.sh"
+    owner: "root"
+    mode: "755"
+  delegate_to: localhost
+  run_once: true
+  sudo: yes

@@ -1,0 +1,5 @@
+---
+# Squid rolu icin isleyici dosyasidir
+- include: squid.yml
+- include: dansguardian.yml
+- include: nginx.yml

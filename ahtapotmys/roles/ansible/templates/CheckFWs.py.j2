@@ -1,0 +1,63 @@
+## Bu dosya ansible tarafindan yonetilmektedir!         
+## Burada yapilan degisikliklerin uzerine yazilir!!             
+    
+#!/usr/bin.env python
+# -*- coding: utf-8 -*-import os
+import os
+import sqlite3
+import hashlib
+
+fw_dir = '/etc/fw/gdys/'
+DatabaseDir = '/etc/fw/gdys/Firewall.db'
+FW_List = []
+ModifiedFWs = []
+CreateDB = "CREATE TABLE IF NOT EXISTS firewall(fwname,md5sum)"
+UpdateDB = "UPDATE firewall set md5sum = '{}' where fwname = '{}'"
+InsertDB = "INSERT INTO firewall (fwname,md5sum) VALUES('{}','{}')"
+Select_fwname = "SELECT fwname from firewall"
+Select_md5sum = "SELECT md5sum from firewall where fwname ='{}'"
+
+
+#con = sqlite3.connect(DatabaseDir)
+
+#cursor = con.cursor()
+def md5(fname):             #Get hash value of given file
+    hash_md5 = hashlib.md5()
+    with open(fname, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+    
+def CheckModifiedFWs():
+    con = sqlite3.connect(DatabaseDir)  #Connect DB
+
+    cursor = con.cursor()               #Create Cursor
+    cursor.execute(CreateDB)            #Create Table 'firewall'
+    cursor.execute(Select_fwname)       #Call fwnames
+    for row in cursor:
+        FW_List.append(row[0])          #fwnames -> FW_List
+
+    for root,_, files in os.walk(fw_dir):
+        for f in files:
+            if f[-3:] == ".fw":         #Eliminate to .fw files
+                abs_path = os.path.join(root,f)  #Full path of .fw files
+                C_md5sum = md5(abs_path)  #Current md5sum of file f
+                
+                if f in FW_List:            # If f saved DB before
+                    cursor.execute(Select_md5sum.format(f)) # md5sum of f in DB
+                    for row in cursor:
+                        md5sum = row[0]
+                        if md5sum != C_md5sum:
+                            #If Current md5sum and md5sum in DB is different
+                            #Update md5sum in DB and mark .fw file as modified
+                            cursor.execute(UpdateDB.format(C_md5sum,f))
+                            ModifiedFWs.append(f)
+                            
+                else: #If .fw file was not saved to DB
+                    ModifiedFWs.append(f) #Mark .fw file as Modified
+                    cursor.execute(InsertDB.format(f,C_md5sum))#Save to DB
+                    
+    con.commit()
+    con.close()
+    return ModifiedFWs
+

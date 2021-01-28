@@ -1,0 +1,6 @@
+---
+# Gkts'nin degiskenlerini iceren dosyadir
+gkts:
+    server: "GKTS_SUNUCU_FQDN"
+    port: "SSH_PORT"
+    logseverity: "local5.notice"

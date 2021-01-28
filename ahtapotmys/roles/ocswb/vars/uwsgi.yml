@@ -1,0 +1,27 @@
+---
+# Uwsgi degiskenlerini iceren dosyadir
+uwsgi:
+    socket:
+        path: "/var/run/ahtapot-ocswb" 
+        owner: "ahtapotops" 
+        group: "ahtapotops" 
+        mode: "755" 
+        state: "directory" 
+    service:
+        name: "uwsgi" 
+        state: "started" 
+        enabled: "yes" 
+
+uwsgi_services:
+    service01: 
+        source: "uwsgi/ocswb-uwsgi.ini.j2"
+        destination: "/etc/uwsgi/apps-enabled/ocswb-uwsgi.ini"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+#    serviceXX: 
+#        source: "uwsgi/"
+#        destination: ""
+#        owner: ""
+#        group: ""
+#        mode: ""

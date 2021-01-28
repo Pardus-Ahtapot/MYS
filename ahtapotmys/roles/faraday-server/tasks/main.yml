@@ -1,0 +1,79 @@
+---
+- name: installing faraday-server
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - faraday-server
+
+- name: Initializing faraday-server
+  sudo: yes
+  shell: |
+    /usr/share/faraday/server/faraday-util.sh initdb
+    sleep 20
+
+- name: Creating Faraday User
+  sudo: yes
+  shell: |
+    /usr/share/faraday/server/faraday-util.sh createsuperuser --username {{faraday_user}} --email {{faraday_email}} --password {{faraday_password}}
+
+- name: Changing Faraday User Password
+  sudo: yes
+  shell: |
+    /usr/share/faraday/server/faraday-util.sh changepassword --username {{faraday_user}} --password {{faraday_password}}
+
+- name: Registering secret_key
+  shell: "cat /root/.faraday/config/server.ini | grep \"secret_key\" | awk '{print $3}'"
+  register: secret_key
+
+- name: configure faraday server.ini file
+  sudo: yes
+  template:
+    src: "server.ini.j2"
+    dest: "/root/.faraday/config/server.ini"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Writing secret key
+  sudo: yes
+  shell: |
+    sed -i "s/secret_key.*/secret_key = {{secret_key.stdout_lines[0]}}/" /root/.faraday/config/server.ini
+
+- name: configure faraday server-service-options.conf file
+  sudo: yes
+  template:
+    src: "server-service-options.conf.j2"
+    dest: "/usr/share/faraday/server/env/server-service-options.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Check if ssl certificate exists
+  sudo: yes
+  stat:
+    path: /etc/ssl/faraday.crt
+  register: ssl_exists
+
+- name: Create ssl certificate
+  sudo: yes
+  shell: |
+    cd /etc/ssl/
+    openssl genrsa -des3 -passout pass:xxxx -out /etc/ssl/faraday.pass.key 2048
+    openssl rsa -passin pass:xxxx -in /etc/ssl/faraday.pass.key -out /etc/ssl/faraday.key
+    chmod 600 faraday.key
+    rm /etc/ssl/faraday.pass.key
+    openssl req -new -key /etc/ssl/faraday.key -out /etc/ssl/faraday.csr -subj "/C={{faraday_ssl_country}}/ST={{faraday_ssl_state}}/L={{faraday_ssl_locality}}/O={{faraday_ssl_organization}}/OU={{faraday_ssl_organizationalunit}}/CN={{faraday_ssl_commonname}}"
+    openssl x509 -req -days 3650 -in /etc/ssl/faraday.csr -signkey /etc/ssl/faraday.key -out /etc/ssl/faraday.crt
+    openssl rsa -in /etc/ssl/faraday.key -out /etc/ssl/faraday.key.unencrypted
+    mv -f faraday.key.unencrypted faraday.key
+    openssl req -new -key /etc/ssl/faraday.key -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650 -subj "/C={{faraday_ssl_country}}/ST={{faraday_ssl_state}}/L={{faraday_ssl_locality}}/O={{faraday_ssl_organization}}/OU={{faraday_ssl_organizationalunit}}/CN={{faraday_ssl_commonname}}"
+  when: (ssl_exists.stat.exists == False)
+
+- name: restart faraday-server
+  sudo: yes
+  service:
+    name: faraday-server
+    enabled: yes
+    state: restarted
+

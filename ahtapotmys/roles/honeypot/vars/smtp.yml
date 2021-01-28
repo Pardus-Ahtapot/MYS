@@ -1,0 +1,16 @@
+---
+honeypot_smtp_hostname: smtp
+honeypot_smtp_domain: example.com
+honeypot_smtp_sslcertprivate: /etc/honeypot-smtp/keys/smtpd.key
+honeypot_smtp_sslcertpublic: /etc/honeypot-smtp/keys/smtpd.crt
+honeypot_smtp_filename: /var/log/honeypot_smtp.log
+honeypot_smtp_sslport: 465
+honeypot_smtp_port: 25
+honeypot_smtp_create_ssl: True
+honeypot_smtp_ssl_country: "TR"
+honeypot_smtp_ssl_state: "Ankara"
+honeypot_smtp_ssl_locality: "Ankara"
+honeypot_smtp_ssl_organization: "organizasyon_adi"
+honeypot_smtp_ssl_organizationalunit: "organizasyon_birimi"
+honeypot_smtp_ssl_commonname: "alan_adi"
+

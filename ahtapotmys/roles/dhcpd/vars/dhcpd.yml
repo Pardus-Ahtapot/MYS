@@ -1,0 +1,71 @@
+---
+# Dhcpd rolunun degiskenlerini iceren dosyadir.
+dhcpd:
+    conf:
+        source: "udhcpd.conf.j2"
+        destination: "/etc/udhcpd.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    default:
+        source: "default-udhcpd.j2"
+        destination: "/etc/default/udhcpd"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    service:
+        name: "udhcpd"
+        state: "started"
+        enabled: "yes" 
+    common_conf:
+        pidfile: "/var/run/udhcpd.pid"
+        remaining: "yes" 
+        auto_time: "7200" 
+        decline_time: "3600" 
+        conftlict_time: "3600" 
+        offer_time: "60" 
+        lease_file: "/var/lib/misc/udhcpd.leases"
+
+dhcpd_servers:
+    server01:
+        fqdn: "DHCP_Sunucu_Fqdn"
+        start: "dhcp_start_ip"
+        end: "dhcp_end_ip"
+        interface: "dhcp_interface"
+        max_leases: "201"
+        min_lease: "60"
+        siaddr: "0.0.0.0"
+        sname: "ahtapot"
+        dns: "dns1 dns2"
+        subnet: "255.255.255.0"
+        router: "router_ip"
+        domain: "domain (gdys.local)"
+        lease: "86000"
+        static_leases:
+            lease01:
+                mac: "mac_adres"
+                ip: "ip_adres"
+#            leaseXX:
+#                mac: ""
+#                ip: ""
+#    serverXX:
+#        fqdn: ""
+#        start: ""
+#        end: ""
+#        interface: ""
+#        max_leases: ""
+#        min_lease: ""
+#        siaddr: ""
+#        sname: ""
+#        dns: ""
+#        subnet: ""
+#        router: ""
+#        domain: ""
+#        lease: ""
+#        static_leases:
+#            leaseXX:
+#                mac: ""
+#                ip: ""
+#            leaseXX:
+#                mac: ""
+#                ip: ""

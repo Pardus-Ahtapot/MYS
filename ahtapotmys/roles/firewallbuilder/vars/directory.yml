@@ -1,0 +1,21 @@
+---
+# Dizinleri iceren dosyadir.
+directories:
+    directory01:
+        path: "/etc/fw/"
+        group: "ahtapotops"
+        owner: "ahtapotops"
+        mode: "750"
+        state: "directory"
+    directory02:
+        path: "/home/ahtapotops/testfw/"
+        group: "ahtapotops"
+        owner: "ahtapotops"
+        mode: "750"
+        state: "directory"
+#    directoryXX:
+#        path: ""
+#        group: ""
+#        owner: ""
+#        mode: ""
+#        state: ""

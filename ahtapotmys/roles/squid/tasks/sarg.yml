@@ -1,0 +1,21 @@
+---
+# Sarg rolunun yapilandirma dosyasidir
+- name: Sarg yapilandiriliyor.
+  template:
+        src: "{{ sarg['conf']['source'] }}"
+        dest: "{{ sarg['conf']['destination'] }}"
+        owner: "{{ sarg['conf']['owner'] }}"
+        group: "{{ sarg['conf']['group'] }}"
+        mode: "{{ sarg['conf']['mode'] }}"
+  sudo: yes
+  tags: sarg
+
+- name: Sarg zamanlaniyor. 
+  template:
+        src: "{{ sarg['cron']['source'] }}"
+        dest: "{{ sarg['cron']['destination'] }}"
+        owner: "{{ sarg['cron']['owner'] }}"
+        group: "{{ sarg['cron']['group'] }}"
+        mode: "{{ sarg['cron']['mode'] }}"
+  sudo: yes
+  tags: sarg

@@ -1,0 +1,38 @@
+---
+# Calistirildiginda Ocswb Kurulumu Yapilir
+- hosts: ocswb
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - ../roles/base/vars/group.yml
+  - ../roles/base/vars/user.yml
+  - ../roles/base/vars/repo.yml
+  - ../roles/base/vars/rsyslog.yml
+  - ../roles/base/vars/ntp.yml
+  - ../roles/base/vars/package.yml
+  - ../roles/base/vars/kernelmodules_remove.yml
+  - ../roles/base/vars/kernelmodules_blacklist.yml
+  - ../roles/base/vars/host.yml
+  - ../roles/base/vars/audit.yml
+  - ../roles/base/vars/sudo.yml
+  - ../roles/base/vars/ssh.yml
+  - ../roles/base/vars/grub.yml
+  - ../roles/base/vars/logger.yml
+  - ../roles/base/vars/logrotate.yml
+  - ../roles/base/vars/directory.yml
+  - ../roles/base/vars/profile.yml
+  - ../roles/base/vars/fusioninventory.yml
+  - ../roles/base/vars/security.yml
+  - ../roles/base/vars/conf_list.yml
+  - ../roles/ocswb/vars/package.yml
+  - ../roles/ocswb/vars/uwsgi.yml
+  - ../roles/ocswb/vars/ocswb.yml
+  - ../roles/ocswb/vars/ocswbalarm.yml
+  - ../roles/ocswb/vars/nginx.yml
+  - ../roles/ocswb/vars/conf_list.yml
+  - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
+  roles:
+  - { role: base }
+  - { role: ocswb }
+  - { role: post }

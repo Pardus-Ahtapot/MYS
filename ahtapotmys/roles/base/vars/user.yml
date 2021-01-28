@@ -1,0 +1,14 @@
+---
+# Kullanici degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar kullanici eklenebilir.
+base_users:
+    user1:
+        name: ahtapotops
+        group: ahtapotops
+        shell: /bin/bash
+        state: present 
+#    userX:
+#        name: 
+#        group:
+#        shell: 
+#        state:  

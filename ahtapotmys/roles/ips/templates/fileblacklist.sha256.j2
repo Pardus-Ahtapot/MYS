@@ -1,0 +1,5 @@
+{% if suricata_blacklistsha256 %}
+{% for rule in suricata_blacklistsha256 %}
+{{rule}}
+{% endfor %}
+{% endif %}

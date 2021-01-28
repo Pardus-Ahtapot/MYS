@@ -1,0 +1,44 @@
+---
+# Nginx'in degiskenlerini iceren dosyadir
+nginx:
+    conf:
+        source: "gkts.conf.j2" 
+        destination: "/etc/nginx/conf.d/gkts.conf" 
+        owner: "root"
+        group: "root" 
+        mode: "0644" 
+    admin:
+        listen: "443" 
+        server_name: "admin.PWLM_FQDN"
+        access_log: "/var/log/nginx/gkts-admin-access.log"
+        error_log: "/var/log/nginx/gkts-admin-error.log"
+    developer:
+        listen: "443" 
+        server_name: "developer.PWLM_FQDN"
+        access_log: "/var/log/nginx/gkts-developer-access.log"
+        error_log: "/var/log/nginx/gkts-developer-error.log"
+    service:
+        name: "nginx" 
+        state: "started" 
+        enabled: "yes" 
+    default:
+        path: "/etc/nginx/sites-available/default"
+        state: "absent"
+    certificate:
+        source: "gkts.crt.j2"
+        destination: "/etc/nginx/ssl/gkts.crt"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    key:
+        source: "gkts.key.j2"
+        destination: "/etc/nginx/ssl/gkts.key"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    ssldir:
+        path: "/etc/nginx/ssl"
+        owner: "root"
+        group: "root"
+        mode: "755"
+        state: "directory"

@@ -1,0 +1,219 @@
+---
+# Sistem stabilitesini tutacak olan ansible dosyasi
+- hosts: all 
+  remote_user: ahtapotops 
+  vars_files:
+  - ../roles/base/vars/conf_list.yml
+  - ../roles/base/vars/group.yml
+  - ../roles/base/vars/user.yml
+  - ../roles/base/vars/repo.yml
+  - ../roles/base/vars/rsyslog.yml
+  - ../roles/base/vars/ntp.yml
+  - ../roles/base/vars/package.yml
+  - ../roles/base/vars/kernelmodules_remove.yml
+  - ../roles/base/vars/kernelmodules_blacklist.yml
+  - ../roles/base/vars/host.yml
+  - ../roles/base/vars/audit.yml
+  - ../roles/base/vars/sudo.yml
+  - ../roles/base/vars/ssh.yml
+  - ../roles/base/vars/grub.yml
+  - ../roles/base/vars/profile.yml
+  - ../roles/base/vars/logger.yml
+  - ../roles/base/vars/logrotate.yml
+  - ../roles/base/vars/directory.yml
+  - ../roles/base/vars/fusioninventory.yml
+  - ../roles/base/vars/security.yml
+  roles:
+  - { role: base }
+
+- hosts: ansible
+  remote_user: ahtapotops 
+  vars_files:
+  - ../roles/ansible/vars/conf_list.yml
+  - ../roles/ansible/vars/awx.yml
+  - ../roles/ansible/vars/package.yml
+  - ../roles/ansible/vars/ansible.yml
+  - ../roles/ansible/vars/directory.yml
+  - ../roles/ansible/vars/git.yml
+  - ../roles/ansible/vars/gkts.yml
+  roles:
+  - { role: ansible }
+
+- hosts: gitlab
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/gitlab/vars/conf_list.yml
+  - ../roles/gitlab/vars/package.yml
+  - ../roles/gitlab/vars/hook.yml
+  roles:
+  - { role: gitlab }
+
+- hosts: firewallbuilder
+  remote_user: ahtapotops 
+  vars_files:
+  - ../roles/firewallbuilder/vars/conf_list.yml
+  - ../roles/firewallbuilder/vars/package.yml
+  - ../roles/firewallbuilder/vars/fwbuilder.yml
+  - ../roles/firewallbuilder/vars/directory.yml
+  - ../roles/firewallbuilder/vars/git.yml
+  roles:
+  - { role: firewallbuilder }
+
+- hosts: rsyslog 
+  remote_user: ahtapotops 
+  vars_files:
+  - ../roles/rsyslog/vars/package.yml
+  - ../roles/rsyslog/vars/logrotate.yml
+  - ../roles/rsyslog/vars/signer.yml
+  - ../roles/rsyslog/vars/rsyslog.yml
+  - ../roles/logstash/vars/package.yml
+  - ../roles/logstash/vars/logstash.yml
+  - ../roles/logstash/vars/conf_list.yml
+  - ../roles/elasticsearch/vars/elasticsearch.yml
+  roles:
+  - { role: rsyslog }
+  - { role: logstash }
+
+- hosts: ntp
+  remote_user: ahtapotops
+  vars_files: 
+  - ../roles/ntp/vars/package.yml
+  - ../roles/ntp/vars/ntp.yml
+  roles:
+  - { role: ntp } 
+
+- hosts: pwlm
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/pwlm/vars/package.yml
+  - ../roles/pwlm/vars/uwsgi.yml
+  - ../roles/pwlm/vars/pwlm.yml
+  - ../roles/pwlm/vars/git.yml
+  - ../roles/pwlm/vars/nginx.yml
+  roles:
+  - { role: pwlm }
+
+- hosts: gkts
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/gkts/vars/package.yml
+  - ../roles/gkts/vars/gkts.yml
+  - ../roles/gkts/vars/nginx.yml
+  - ../roles/gkts/vars/uwsgi.yml
+  roles:
+  - { role: gkts }
+
+- hosts: testfirewall
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/testfirewall/vars/group.yml
+  - ../roles/testfirewall/vars/user.yml
+  - ../roles/testfirewall/vars/package.yml
+  - ../roles/testfirewall/vars/module.yml
+  - ../roles/testfirewall/vars/sysctl.yml
+  - ../roles/testfirewall/vars/directory.yml
+  roles:
+  - { role: testfirewall }
+
+- hosts: firewall:firewall-proxy-dhcp:firewall-openvpn
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/firewall/vars/group.yml
+  - ../roles/firewall/vars/user.yml
+  - ../roles/firewall/vars/package.yml
+  - ../roles/firewall/vars/module.yml
+  - ../roles/firewall/vars/sysctl.yml
+  - ../roles/firewall/vars/iptables.yml
+  - ../roles/firewall/vars/directory.yml
+  - ../roles/firewall/vars/contrackd.yml
+  - ../roles/firewall/vars/profile.yml
+  roles:
+  - { role: firewall }
+
+- hosts: proxy:proxy-dhcp:firewall-proxy-dhcp
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/squid/vars/package.yml
+  - ../roles/squid/vars/squid.yml
+  - ../roles/squid/vars/dansguardian.yml
+  - ../roles/squid/vars/updshalla.yml
+  - ../roles/squid/vars/zeustracker.yml
+  - ../roles/squid/vars/sarg.yml
+  - ../roles/squid/vars/nginx.yml
+  roles:
+  - { role: squid }
+
+- hosts: dhcp:proxy-dhcp:firewall-proxy-dhcp
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/dhcpd/vars/package.yml
+  - ../roles/dhcpd/vars/dhcpd.yml
+  roles:
+  - { role: dhcpd }
+
+- hosts: openvpn:firewall-openvpn
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/openvpn/vars/package.yml
+  - ../roles/openvpn/vars/openvpn.yml
+  - ../roles/openvpn/vars/sysctl.yml
+  roles:
+  - { role: openvpn }
+
+- hosts: elasticsearch
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/elasticsearch/vars/package.yml
+  - ../roles/elasticsearch/vars/elasticsearch.yml
+  - ../roles/elasticsearch/vars/searchguard.yml
+  roles:
+  - { role: elasticsearch }
+
+- hosts: kibana
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/kibana/vars/package.yml
+  - ../roles/kibana/vars/kibana.yml
+  - ../roles/kibana/vars/nginx.yml
+  roles:
+  - { role: kibana }
+
+- hosts: ossimcik
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/ossimcik/vars/package.yml
+  - ../roles/ossimcik/vars/ossec.yml
+  - ../roles/ossimcik/vars/nxlog.yml
+  - ../roles/ossimcik/vars/rsyslog.yml
+  - ../roles/ossimcik/vars/logrotate.yml
+  roles:
+  - { role: ossimcik }
+
+- hosts: portscanner
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/portscanner/vars/package.yml
+  - ../roles/portscanner/vars/uwsgi.yml
+  - ../roles/portscanner/vars/portscanner.yml
+  - ../roles/portscanner/vars/nginx.yml
+  roles:
+  - { role: portscanner }
+
+- hosts: ocswb 
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/ocswb/vars/package.yml
+  - ../roles/ocswb/vars/uwsgi.yml
+  - ../roles/ocswb/vars/ocswb.yml
+  - ../roles/ocswb/vars/ocswbalarm.yml
+  - ../roles/ocswb/vars/nginx.yml
+  roles:
+  - { role: ocswb }
+
+- hosts: all:!ossimcik 
+  remote_user: ahtapotops
+  vars_files:
+  - ../roles/ossec/vars/package.yml
+  - ../roles/ossec/vars/ossec.yml
+  roles:
+  - { role: ossec }

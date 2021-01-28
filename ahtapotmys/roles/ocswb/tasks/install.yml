@@ -1,0 +1,9 @@
+---
+- name: Ocswb icin gerekli paketler yukleniyor.
+  apt:
+        name: "{{ item.value.name }}"
+        state: "{{ item.value.state }}"
+        force: "yes"
+  with_dict: "{{ocswb_packages}}"
+  sudo: yes
+  tags: install

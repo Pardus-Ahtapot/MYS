@@ -1,0 +1,15 @@
+---
+# Ansible'in isleyici dosyasidir
+
+- name: restart nginx
+  sudo: yes
+  service:
+    name: nginx
+    state: restarted
+
+
+- name: install awx
+  sudo: yes
+  shell: |
+    cd /usr/share/awx/installer
+    ansible-playbook -i inventory install.yml

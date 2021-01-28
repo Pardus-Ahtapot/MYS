@@ -1,0 +1,4 @@
+---
+# Elasticsearch'in isleyici dosyasidir.
+- include: elasticsearch.yml
+- include: searchguard.yml

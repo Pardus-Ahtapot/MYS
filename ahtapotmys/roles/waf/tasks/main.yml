@@ -1,0 +1,260 @@
+---
+#- include: conf_integrity.yml
+
+- name: Apache2 Kurulumu
+  apt:
+    name: apache2
+    update_cache: yes
+    state: latest
+
+- name: eski konfigurasyonlar temizleniyor (sites-available)
+  file:
+    state: absent
+    path: "/etc/apache2/sites-available/"
+
+- name: eski konfigurasyonlar temizleniyor (sites-enabled)
+  file:
+    state: absent
+    path: "/etc/apache2/sites-enabled/"
+
+- name: Enabled dizinini Olustur
+  file:
+    path: /etc/apache2/sites-enabled/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
+
+- name: Available dizinini Olustur
+  file:
+    path: /etc/apache2/sites-available/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
+
+- name: Waf Kurallari kurulumu
+  apt:
+    name: wafkurallar
+    update_cache: yes
+    state: latest
+
+- name: Apache mod_security2 modul kurulumu
+  apt:
+    name: libapache2-mod-security2
+    update_cache: yes
+    state: latest
+
+- name: Apache evasive modul kurulumu
+  apt:
+    name: libapache2-mod-evasive
+    update_cache: yes
+    state: latest
+
+- name: evasive.conf dosyasini uygula
+  template:
+    src: "evasive.conf.j2"
+    dest: "{{ apache_dir }}/mods-available/evasive.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: security2.conf dosyasini uygula
+  template:
+    src: "security2.conf.j2"
+    dest: "{{ apache_dir }}/mods-available/security2.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Evasive modul aktivasyonu
+  apache2_module:
+    name: evasive
+    state: present
+  notify:
+   - restart apache2
+  ignore_errors: yes
+
+- name: mod_security2 aktivasyonu
+  apache2_module:
+    name: security2
+    state: present
+
+
+- name: proxy modulu aktive et
+  apache2_module:
+    name: proxy
+    state: present
+
+
+- name: proxy_html modul aktive et
+  apache2_module:
+    name: proxy_html
+    state: present
+
+
+- name: remoteip modul aktive et
+  apache2_module:
+    name: remoteip
+    state: present
+
+
+- name: rewrite modul aktive et
+  apache2_module:
+    name: rewrite
+    state: present
+
+
+- name: proxy_ajp modul aktive et
+  apache2_module:
+    name: proxy_ajp
+    state: present
+
+
+- name: headers modul aktive et
+  apache2_module:
+    name: headers
+    state: present
+
+
+- name: proxy_balancer modul aktive et
+  apache2_module:
+    name: proxy_balancer
+    state: present
+
+
+- name: proxy_connect modul aktive et
+  apache2_module:
+    name: proxy_connect
+    state: present
+
+
+- name: proxy_http modul aktive et
+  apache2_module:
+    name: proxy_http
+    state: present
+
+
+- name: proxy_http2 modul aktive et
+  apache2_module:
+    name: proxy_http2
+    state: present
+
+
+- name: proxy_wstunnel modul aktive et
+  apache2_module:
+    name: proxy_wstunnel
+    state: present
+
+
+- name: proxy_hcheck modul aktive et
+  apache2_module:
+    name: proxy_hcheck
+    state: present
+
+
+- name: ssl modul aktive et
+  apache2_module:
+    name: ssl
+    state: present
+
+
+- name: lbmethod_byrequests modul aktive et
+  apache2_module:
+    name: lbmethod_byrequests
+    state: present
+
+
+- name: lbmethod_bytraffic modul aktive et
+  apache2_module:
+    name: lbmethod_bytraffic
+    state: present
+
+
+- name: modsecurity.conf dosyasini uygula
+  template:
+    src: "modsecurity.conf.j2"
+    dest: "/etc/modsecurity/modsecurity.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: apache2.conf | genel apache ayarlari
+  template:
+    src: "apache2.conf.j2"
+    dest: "/etc/apache2/apache2.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ports.conf | genel apache ayarlari | portlar ayarlaniyor
+  template:
+    src: "ports.conf.j2"
+    dest: "/etc/apache2/ports.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Sanal Sunucu Degiskenleri tespit ediliyor
+  include_vars:
+    dir: vars/vhosts
+    name: waf_vhosts
+
+- name: Apache Sanal Sunucu Konfigurasyonu Yapiliyor
+  template:
+    src: "vhosts.conf.j2"
+    dest: "/etc/apache2/sites-available/{{item.key}}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  with_dict: "{{ waf_vhosts }}"
+
+- name: Sertifika Dizinlerini Olustur
+  file: path=/etc/apache2/ssl/certs/ state=directory
+
+- name: Anahtar Dizinlerini Olustur           
+  file: path=/etc/apache2/ssl/key/ state=directory
+
+- name: Sertifikalar kopyalaniyor
+  copy: src=templates/certificates/{{item.key}}.crt.j2 dest=/etc/apache2/ssl/certs/{{item.key}}.crt
+  when: (role_path + '/templates/certificates/' + item.key + '.crt.j2') | is_file
+  with_dict: "{{waf_vhosts}}"
+
+- name: Anahtarlar kopyalaniyor
+  copy: src=templates/certificates/{{item.key}}.key.j2 dest=/etc/apache2/ssl/key/{{item.key}}.key
+  when: (role_path + '/templates/certificates/' + item.key + '.key.j2') | is_file
+  with_dict: "{{waf_vhosts}}"
+
+- name: SSL icin konfigurasyon parametreleri ayarlaniyor
+  template:
+    src: "ssl-params.conf.j2"
+    dest: "/etc/apache2/conf-enabled/ssl-params.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Istisna IP adresleri haric tutuluyor
+  template:
+    src: "whitelist.conf.j2"
+    dest: "/etc/apache2/whitelist.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ozel Hata Sayfasi Kopyalaniyor
+  template:
+    src: "waf_error.html.j2"
+    dest: "/var/www/html/waf_error.html"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Sanal Sunuculari Aktive Et
+  command: a2ensite {{item.key}}.conf
+  with_dict: "{{waf_vhosts}}"
+
+  notify:
+   - restart apache2
+

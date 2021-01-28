@@ -1,0 +1,10 @@
+---
+- name: Conntrackd script yapilandiriliyor.
+  template:
+        src: "{{ conntrackd['script']['source'] }}"
+        dest: "{{ conntrackd['script']['destination'] }}" 
+        owner: "{{ conntrackd['script']['owner'] }}" 
+        group: "{{ conntrackd['script']['group'] }}" 
+        mode: "{{ conntrackd['script']['mode'] }}" 
+  sudo: yes
+  tags: conntrackd

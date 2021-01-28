@@ -1,0 +1,52 @@
+---
+# Logstash 'in degiskenlerinin tutuldugu dosyadir.
+logstash:
+    service:
+        name: "logstash"
+        state: "started"
+        enabled: "yes"
+    conf:
+        default:
+            source: "logstash.j2"
+            destination: "/etc/default/logstash" 
+            owner: "logstash"
+            group: "root"
+            mode: "0640" 
+        javacmd: "/usr/bin/java"
+        ls_home: "/var/lib/logstash"
+        ls_opts: ""
+        ls_heap_size: "1g"
+        ls_pidfile: "/var/run/logstash.pid"
+        ls_user: "root"
+        ls_group: "root"
+        ls_log_file: "/var/log/logstash/logstash.log"
+        ls_conf_dir: "/etc/logstash/conf.d"
+        ls_open_files: "999999"
+        ls_nice: "19"
+        kill_on_stop_timeout: "1"
+
+logstash_configs:
+    conf01:
+        source: "configuration/00-input.conf.j2"
+        destination: "/etc/logstash/conf.d/00-input.conf"
+        owner: "logstash" 
+        group: "logstash"
+        mode: "0640" 
+    conf02:
+        source: "configuration/01-filter.conf.j2"
+        destination: "/etc/logstash/conf.d/01-filter.conf"
+        owner: "logstash"
+        group: "logstash"
+        mode: "0640" 
+    conf03:
+        source: "configuration/02-output.conf.j2"
+        destination: "/etc/logstash/conf.d/02-output.conf" 
+        owner: "logstash"
+        group: "logstash"
+        mode: "0640" 
+#    confXX:
+#        source: ""
+#        destination: "" 
+#        owner: ""
+#        group: ""
+#        mode: "" 

@@ -1,0 +1,8 @@
+portscanner_conf_list:
+- /etc/nginx/ssl/portscanner.key
+- /etc/cron.d/scanner
+- /etc/nginx/ssl/portscanner.crt
+- /var/opt/portscan/portscan.conf
+- /etc/uwsgi/apps-enabled/portscanner-uwsgi.ini
+- /etc/cron.d/parser
+- /etc/nginx/conf.d/portscanner.conf

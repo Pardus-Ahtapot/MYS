@@ -1,0 +1,13 @@
+---
+# Gitin degiskenlerini iceren dosyadir
+gitrepos:
+    repo01:
+        repo: "ssh://git@GitLab_Sunucu_FQDN:SSHPORT/ahtapotops/mys.git"
+        accept_hostkey: "yes"
+        destination: "/home/ahtapotops/mys"
+        key_file: "/home/ahtapotops/.ssh/id_rsa"
+#    repoXX:
+#        repo: ""
+#        accept_hostkey: ""
+#        destination: ""
+#        key_file: ""

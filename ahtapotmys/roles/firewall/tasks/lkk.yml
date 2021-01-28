@@ -1,0 +1,9 @@
+---
+- name: ahtapot-lkk betigi tasiniyor
+  template:
+      src: "ahtapot-lkk.py.j2"
+      dest: "/var/opt/ahtapot-lkk/ahtapot-lkk.py"
+      owner: "lkk"
+      group: "lkk"
+      mode: "750"
+  sudo: "yes"

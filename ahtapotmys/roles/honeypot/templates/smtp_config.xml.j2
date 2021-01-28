@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<appconfig>
+        <dict name="enabled_handlers">
+                <bool name="screen">False</bool>
+                <bool name="elasticsearch">False</bool>
+                <bool name="file">True</bool>
+        </dict>
+        <str name="domain">{{honeypot_smtp_domain}}</str>
+        <str name="sslcertprivate">{{honeypot_smtp_sslcertprivate}}</str>
+        <str name="hostname">{{honeypot_smtp_hostname}}.{{honeypot_smtp_domain}}</str>
+        <dict name="elasticsearch">
+                <str name="index">honeypot</str>
+                <str name="host">127.0.0.1</str>
+                <int name="port">9200</int>
+        </dict>
+        <str name="sslcertpublic">{{honeypot_smtp_sslcertpublic}}</str>
+        <str name="filename">{{honeypot_smtp_filename}}</str>
+        <int name="sslport">{{honeypot_smtp_sslport}}</int>
+        <int name="port">{{honeypot_smtp_port}}</int>
+</appconfig>
+

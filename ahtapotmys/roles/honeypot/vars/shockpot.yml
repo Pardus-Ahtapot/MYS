@@ -1,0 +1,5 @@
+---
+shockpot_conf:
+  register_check_file: /etc/shockpot_registered
+  listen_ip: 0.0.0.0
+  listen_port: 80

@@ -1,0 +1,12 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+DHCPD_ENABLED="yes"
+
+# Options to pass to busybox' udhcpd.
+#
+# -S    Log to syslog
+# -f    run in foreground
+
+DHCPD_OPTS="-S"

@@ -1,0 +1,64 @@
+---
+- name: Trusted CA Anahtarlari yapilandiriliyor
+  template:
+        src: "{{ ssh['TrustedUserCAKeys']['source'] }}"
+        dest: "{{ ssh['TrustedUserCAKeys']['destination'] }}" 
+        owner: "{{ ssh['TrustedUserCAKeys']['owner'] }}" 
+        group: "{{ ssh['TrustedUserCAKeys']['group'] }}" 
+        mode: "{{ ssh['TrustedUserCAKeys']['mode'] }}" 
+  notify:
+    - sshd servisini yeniden baslat
+  sudo: yes
+  tags: ssh
+
+- name: Revoked anahtar listesi yapilandiriliyor
+  template:
+        src: "{{ ssh['RevokedKeys']['source'] }}"
+        dest: "{{ ssh['RevokedKeys']['destination'] }}" 
+        owner: "{{ ssh['RevokedKeys']['owner'] }}" 
+        group: "{{ ssh['RevokedKeys']['group'] }}" 
+        mode: "{{ ssh['RevokedKeys']['mode'] }}" 
+  notify:
+    - sshd servisini yeniden baslat
+  sudo: yes
+  tags: ssh
+
+- name: Yerel baglanti bilgilendirme metni
+  template:
+        src: "{{ ssh['LocalBanner']['source'] }}"
+        dest: "{{ ssh['LocalBanner']['destination'] }}"
+        owner: "{{ ssh['LocalBanner']['owner'] }}"
+        group: "{{ ssh['LocalBanner']['group'] }}"
+        mode: "{{ ssh['LocalBanner']['mode'] }}"
+  sudo: yes
+  tags: ssh
+
+- name: Uzak baglanti bilgilendirme metni
+  template:
+        src: "{{ ssh['RemoteBanner']['source'] }}"
+        dest: "{{ ssh['RemoteBanner']['destination'] }}"
+        owner: "{{ ssh['RemoteBanner']['owner'] }}"
+        group: "{{ ssh['RemoteBanner']['group'] }}"
+        mode: "{{ ssh['RemoteBanner']['mode'] }}"
+  sudo: yes
+  tags: ssh
+
+- name: sshd yapilandiriliyor
+  template:
+        src: "{{ ssh['conf']['source'] }}"
+        dest: "{{ ssh['conf']['destination'] }}"
+        owner: "{{ ssh['conf']['owner'] }}"
+        group: "{{ ssh['conf']['group'] }}"
+        mode: "{{ ssh['conf']['mode'] }}"
+  notify:
+    - sshd servisini yeniden baslat
+  sudo: yes
+  tags: ssh
+
+- name: sshd servisi ayakta
+  service:
+        name: "{{ ssh['service']['name'] }}"
+        state: "{{ ssh['service']['state'] }}"
+        enabled: "{{ ssh['service']['enabled'] }}"
+  sudo: yes
+  tags: ssh

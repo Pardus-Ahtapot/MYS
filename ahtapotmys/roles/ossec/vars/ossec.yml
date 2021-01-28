@@ -1,0 +1,14 @@
+---
+# Ossec agent ayarlarini iceren dosyadir.
+ossec:
+    conf:
+        source: "ossec.conf.j2" 
+        destination: "/var/ossec/etc/ossec.conf" 
+        owner: "root" 
+        group: "ossec" 
+        mode: "0660" 
+    service:
+        name: "ossec" 
+        state: "started" 
+        enabled: "yes"
+    server: "OSSIMCIK_FQDN"

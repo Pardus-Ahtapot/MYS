@@ -1,0 +1,17 @@
+---
+# Paket degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
+kibana_packages:
+    package01:
+        name: "kibana=4.5.0" 
+        state: "present" 
+    package02:
+        #name: "nginx=1.6.2-5+deb8u2" 
+        name: "nginx" 
+        state: "present" 
+#    packageXX:
+#        name: 
+#        state:  
+#    packageXX:
+#        name: 
+#        state:  

@@ -1,0 +1,30 @@
+---
+# Cikarilacak cekirdek modullerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak cikarilmak istenilen kadar cekirdek modulu eklenebilir.
+# Eklenen cekirdek modullerinin makine her yeniden baslayisinda otomatik eklenmesi engellenir.
+# Cikarilacak modul baska bir modul tarafindan kullaniliyorsa ilk olarak KULANAN modul cikarilmalidir.
+
+bla_modules:
+    conf: 
+        source: "kernelmodules_blacklist.conf.j2"
+        destination: "/etc/modprobe.d/blacklist.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+
+to_be_blacklisted_modules:
+    module01:
+        name: "uhci_hcd"
+        state: "absent"
+    module02:
+        name: "ehci_hcd"
+        state: "absent"
+    module03:
+        name: "usbhid"
+        state: "absent"
+    module04:
+        name: "usbcore"
+        state: "absent"
+#    moduleXX:
+#        name:
+#        state:

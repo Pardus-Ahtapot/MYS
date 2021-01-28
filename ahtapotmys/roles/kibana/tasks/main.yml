@@ -1,0 +1,6 @@
+---
+# Kibana gorevlerini iceren dosyadir
+- include: conf_integrity.yml
+- include: install.yml
+- include: kibana.yml
+- include: nginx.yml

@@ -1,0 +1,91 @@
+---
+- name: GitLab yapilandirmasi uygulaniyor.
+  template:
+        src: "{{ gitlab['conf']['source'] }}"
+        dest: "{{ gitlab_container_rootfs_path }}{{ gitlab['conf']['destination'] }}"
+        owner: "{{ gitlab['conf']['owner'] }}"
+        group: "{{ gitlab['conf']['group'] }}"
+        mode: "{{ gitlab['conf']['mode'] }}"
+  notify:
+    - GitLab servisi yeniden baslatiliyor
+  sudo: yes
+  tags: gitlab
+
+- name: GitLab ssl dizini olusturuluyor
+  file:
+        path: "{{ gitlab_container_rootfs_path }}{{ gitlab['ssl']['directory']['path'] }}"
+        owner: "{{ gitlab['ssl']['directory']['owner'] }}"
+        group: "{{ gitlab['ssl']['directory']['group'] }}"
+        mode: "{{ gitlab['ssl']['directory']['mode'] }}"
+        state: "{{ gitlab['ssl']['directory']['state'] }}"
+        recurse: "{{ gitlab['ssl']['directory']['recurse'] }}"
+  sudo: yes
+  tags: ssl
+
+- name: GitLab ssl anahtari uygulaniyor.
+  template:
+        src: "{{ gitlab['ssl-key']['source'] }}"
+        dest: "{{ gitlab_container_rootfs_path }}{{ gitlab['ssl-key']['destination'] }}"
+        owner: "{{ gitlab['ssl-key']['owner'] }}"
+        group: "{{ gitlab['ssl-key']['group'] }}"
+        mode: "{{ gitlab['ssl-key']['mode'] }}"
+  notify:
+    - GitLab servisi yeniden baslatiliyor
+  when: not {{ gitlab['use_self_signed_cert'] }}
+  sudo: yes
+  tags: ssl
+
+- name: GitLab ssl sertifikasi uygulaniyor.
+  template:
+        src: "{{ gitlab['ssl-crt']['source'] }}"
+        dest: "{{ gitlab_container_rootfs_path }}{{ gitlab['ssl-crt']['destination'] }}"
+        owner: "{{ gitlab['ssl-crt']['owner'] }}"
+        group: "{{ gitlab['ssl-crt']['group'] }}"
+        mode: "{{ gitlab['ssl-crt']['mode'] }}"
+  notify:
+    - GitLab servisi yeniden baslatiliyor
+  when: not {{ gitlab['use_self_signed_cert'] }}
+  sudo: yes
+  tags: ssl
+
+- name: GitLab icin ssl sertifikasi uretiliyor
+  command: >
+    openssl req -x509 -nodes -subj '/CN={{ gitlab['gitlab_fqdn'] }}' -days 365
+    -newkey rsa:4096 -sha256 -keyout {{ gitlab_container_rootfs_path }}/etc/gitlab/{{ gitlab['gitlab_fqdn'] }}.key -out {{ gitlab_container_rootfs_path }}/etc/gitlab/ssl/{{ gitlab['gitlab_fqdn'] }}.crt
+    creates={{ gitlab_container_rootfs_path }}/etc/gitlab/ssl/{{ gitlab['gitlab_fqdn'] }}.crt
+  when: "{{ gitlab['use_self_signed_cert'] }}"
+  notify:
+    - GitLab servisi yeniden baslatiliyor
+  sudo: yes
+  tags: ssl
+
+- name: Ilk yapilandirma oncesi /proc/sys container icerisine rw olarak baglaniyor
+  shell: lxc-attach -n gitlab -- mount -o remount,rw /proc/sys/
+  sudo: yes
+  tags: gitlab
+
+- name: GitLab yeniden yapilandiriliyor (ilk acilis)
+  shell: lxc-attach -n gitlab -- /usr/bin/gitlab-ctl reconfigure
+  args:
+    creates: "{{ gitlab_container_rootfs_path }}{{ gitlab['firstrunpath'] }}"
+  sudo: yes
+  tags: gitlab
+
+- name: Ilk yapilandirma sonrasi /proc/sys container icerisine ro olarak baglaniyor
+  shell: lxc-attach -n gitlab -- mount -o remount,ro /proc/sys/
+  sudo: yes
+  tags: gitlab  
+
+- name: Git kullanicisinin parolasi kontrol ediliyor
+  shell: lxc-attach -n gitlab -- cat /etc/shadow | grep 'git:' | awk 'BEGIN {FS=":"}{print $2}'
+  register: git_user_passwd_check
+  tags: gitlab
+
+- name: Git kullanicisinin parolasi olusturuluyor
+  shell: lxc-attach -n gitlab -- usermod --password "{{ gitlab['user']['password'] }}" "{{ gitlab['user']['name'] }}"
+  sudo: yes
+  when: git_user_passwd_check.stdout != "0"
+  notify:
+    - GitLab servisi aktiflestiriliyor
+    - GitLab servisi yeniden baslatiliyor
+  tags: gitlab

@@ -1,0 +1,11 @@
+---
+# Paket degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar paket eklenebilir.
+ntp_packages:
+    package01:
+        #name: "ntp=1:4.2.6.p5+dfsg-7+deb8u2" 
+        name: "ntp" 
+        state: "present" 
+#    packageXX:
+#        name: 
+#        state:  

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Erisim Engellendi</title>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Language" content="tr"/>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<link rel="stylesheet" type="text/css" media="all" href="https://{{ dansguardian['request']['address'] }}:{{ dansguardian['request']['port'] }}/static/403_template/style.css"" />
+<link rel="stylesheet" type="text/css" media="all" href="https://{{ dansguardian['request']['address'] }}:{{ dansguardian['request']['port'] }}/static/403_template/backgrounds.css" />
+</head>
+<body>
+<div class="wrapper">
+        <div class="mainWrapper">
+        <div class="leftHolder">
+            <div class="errorNumber">403</div>
+        </div>
+        <div class="rightHolder">
+            <div class="message"><p>Güvenlik politikaları gereğince, bu adrese erişiminiz engellenmiştir.Bu sayfanın erşime kapatılmasının uygun olmadığını düşünüyorsanız gerekçenizi <b{{ dansguardian['request']['telephone'] }}</b> telefon numarasından iletebilirsiniz.</p></div>
+            <div class="tux"><img src="https://{{ dansguardian['request']['address'] }}:{{ dansguardian['request']['port'] }}/static/403_template/images/tux.ico" alt="Erisim Reddedildi..." title="Erisim Reddedildi." id="tux"></div>
+            <div class="tryToMessage">
+                Erisim Bilgileri :
+                <ul>
+                    <li><b>Kullanıcı : </b>-USER-</li>
+                    <li><b>IP : </b>-IP-</li>
+                    <li><b>Baglantı : </b>-URL-</li>
+                    <li><b>Sebep : </b>-REASONGIVEN-</li>
+                    <li><b>Kategori : </b>-CATEGORIES-</li>
+                </ul>
+
+                <br/>
+            </div>
+
+          </div>
+        </div>
+</div>
+</body>
+</html>

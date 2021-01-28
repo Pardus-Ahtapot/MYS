@@ -1,0 +1,33 @@
+---
+# Dhcpd rolunun yapilandirma dosyasidir
+- name: dhcpd yapilandiriliyor
+  template:
+        src: "{{ dhcpd['conf']['source'] }}"
+        dest: "{{ dhcpd['conf']['destination'] }}"
+        owner: "{{ dhcpd['conf']['owner'] }}"
+        group: "{{ dhcpd['conf']['group'] }}"
+        mode: "{{ dhcpd['conf']['mode'] }}"
+  notify:
+    - dhcpd servisini yeniden baslat
+  sudo: yes
+  tags: dhcpd
+
+- name: default udhcpd yapilandiriliyor
+  template:
+        src: "{{ dhcpd['default']['source'] }}"
+        dest: "{{ dhcpd['default']['destination'] }}"
+        owner: "{{ dhcpd['default']['owner'] }}"
+        group: "{{ dhcpd['default']['group'] }}"
+        mode: "{{ dhcpd['default']['mode'] }}"
+  notify:
+    - dhcpd servisini yeniden baslat
+  sudo: yes
+  tags: dhcpd
+
+- name: dhcpd servisi ayakta
+  service:
+        name: "{{ dhcpd['service']['name'] }}"
+        state: "{{ dhcpd['service']['state'] }}"
+        enabled: "{{ dhcpd['service']['enabled'] }}"
+  sudo: yes
+  tags: dhcpd

@@ -1,0 +1,5 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+{{ logger['min'] }} {{ logger['hour'] }} * * * root /usr/bin/logger -p {{ logger['facility'] }}.{{ logger['severity'] }} -t {{ logger['tag'] }} {{ logger['message'] }}

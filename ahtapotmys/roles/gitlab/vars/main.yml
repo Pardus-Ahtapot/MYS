@@ -1,0 +1,61 @@
+---
+# GitLab'in degiskenlerinin tutuldugu dosyadir.
+gitlab:
+# git kullanicisini yapilandirmasi belirtilmektedir.
+    user:
+        name: git
+        password: "jQCGY1Gp$rVz8u3qRyH3UCB.6MSnWToQv1qQYjYeatbBEA0pA4aqnjoTchjPDsm9CAeuk1xVKoV3MqM1C/UJZ6Fgap9XmB0"
+        state: present
+    service:
+        name: gitlab-runsvdir
+        state: started
+        enabled: yes
+    conf:
+        source: gitlab.rb.j2
+        destination: /etc/gitlab/gitlab.rb
+        owner: root
+        group: root
+        mode: 0640
+    ssl:
+        directory:
+            path: /etc/gitlab/ssl
+            owner: root 
+            group: root 
+            mode: 700
+            state: directory 
+            recurse: no 
+    ssl-crt:
+        source: ssl-crt.j2
+        destination: /etc/gitlab/ssl/gitlab.gdys.local.crt
+        owner: root
+        group: root
+        mode: 600
+    ssl-key:
+        source: ssl-key.j2
+        destination: /etc/gitlab/gitlab.gdys.local.key
+        owner: root
+        group: root
+        mode: 600
+    external_url: https://Gitlab_FQDN
+    firstrunpath: /var/opt/gitlab/bootstrapped
+    gitlab_rails:
+        gitlab_email_enabled: "true"
+        gitlab_email_from: gitlab@gdys.local 
+        gitlab_email_display_name: GdysGitlab 
+        gitlab_email_reply_to: no-reply@gdys.local
+        gitlab_default_theme: 2
+        gitlab_shell_ssh_port: SSH_PORT
+        smtp_enable: "true" 
+        smtp_address: ldap01.gdys.local
+        smtp_port: 25 
+        smtp_domain: gdys.local
+        smtp_tls: "false" 
+    nginx:
+        enable: "true"
+        redirect_http_to_https: "true"
+    backup:
+        Server: gitlab02.gdys.local
+        Port: 22
+    ansible:
+        Server: ansible01.gdys.local
+        Port: 22

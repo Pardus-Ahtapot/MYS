@@ -1,0 +1,21 @@
+---
+- name: Ntp servisi yapilandiriliyor.
+  template:
+        src: "{{ ntp['conf']['source'] }}"
+        dest: "{{ ntp['conf']['destination'] }}"
+        owner: "{{ ntp['conf']['owner'] }}"
+        group: "{{ ntp['conf']['group'] }}"
+        mode: "{{ ntp['conf']['mode'] }}"
+  when: "'ntp' not in group_names"
+  notify:
+    - ntp servisini yeniden baslat
+  sudo: yes
+  tags: ntp
+
+- name: Ntp servisi ayakta
+  service:
+        name: "{{ ntp['service']['name'] }}"
+        state: "{{ ntp['service']['state'] }}"
+        enabled: "{{ ntp['service']['enabled'] }}"
+  sudo: yes
+  tags: ntp

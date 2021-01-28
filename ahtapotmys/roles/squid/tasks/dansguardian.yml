@@ -1,0 +1,93 @@
+---
+- name: Dansguardian temel konfigurasyonu yapilandiriliyor
+  template:
+        src: "{{ dansguardian['conf']['source'] }}/{{ ansible_fqdn }}.conf.j2"
+        dest: "{{ dansguardian['conf']['destination'] }}"
+        owner: "{{ dansguardian['conf']['owner'] }}"
+        group: "{{ dansguardian['conf']['group'] }}"
+        mode: "{{ dansguardian['conf']['mode'] }}"
+  notify:
+    - dansguardian servisini yeniden baslat
+  sudo: yes
+  tags: dansguardian
+
+- name: Dansguardian temel filitre konfigurasyonu yapilandiriliyor
+  template:
+        src: "{{ dansguardian['f1conf']['source'] }}"
+        dest: "{{ dansguardian['f1conf']['destination'] }}"
+        owner: "{{ dansguardian['f1conf']['owner'] }}"
+        group: "{{ dansguardian['f1conf']['group'] }}"
+        mode: "{{ dansguardian['f1conf']['mode'] }}"
+  notify:
+    - dansguardian servisini yeniden baslat
+  sudo: yes
+  tags: dansguardian
+
+- name: Dasnguardian updshalla klasoru olusturuluyor. 
+  file:
+        path: "{{ dansguardian['updshalla']['path'] }}"
+        state: "{{ dansguardian['updshalla']['state'] }}"
+        owner: "{{ dansguardian['updshalla']['owner'] }}"
+        group: "{{ dansguardian['updshalla']['group'] }}"
+        mode: "{{ dansguardian['updshalla']['mode'] }}"
+  sudo: yes
+  tags: dansguardian
+
+- name: Beyaz listeler yapilandiriliyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "{{ item.value.destination }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+  with_dict: "{{dansguardian_whitelists}}"
+  notify:
+    - dansguardian konfigurasyonunu yeniden yukle
+  sudo: yes
+  tags: dansguardian_whitelists 
+
+- name: Kara listeler yapilandiriliyor.
+  template:
+        src: "{{ item.value.source }}"
+        dest: "{{ item.value.destination }}"
+        owner: "{{ item.value.owner }}"
+        group: "{{ item.value.group }}"
+        mode: "{{ item.value.mode }}"
+  with_dict: "{{dansguardian_blacklists}}"
+  notify:
+    - dansguardian konfigurasyonunu yeniden yukle
+  sudo: yes
+  tags: dansguardian_blacklists 
+
+- name: Yerel listeler olusturuluyor.
+  shell: /usr/bin/touch "{{ item.value.path }}" 
+  args:
+      creates: "{{ item.value.path }}"
+  with_dict: "{{dansguardian_locallists}}"
+  notify:
+    - dansguardian konfigurasyonunu yeniden yukle
+  sudo: yes
+  tags: dansguardian_locallists 
+
+- name: Dansguardian 403 request yapilandiriliyor
+  template:
+        src: "{{ dansguardian['request']['html']['source'] }}"
+        dest: "{{ dansguardian['request']['html']['destination'] }}"
+        owner: "{{ dansguardian['request']['html']['owner'] }}"
+        group: "{{ dansguardian['request']['html']['group'] }}"
+        mode: "{{ dansguardian['request']['html']['mode'] }}"
+  notify:
+    - dansguardian servisini yeniden baslat 
+  sudo: yes
+  tags: request
+
+- include: updshalla.yml
+- include: zeustracker.yml
+
+- name: dansguardian servisi ayakta
+  service:
+        name: "{{ dansguardian['service']['name'] }}"
+        state: "{{ dansguardian['service']['state'] }}"
+        enabled: "{{ dansguardian['service']['enabled'] }}"
+  sudo: yes
+  tags: dansguardian

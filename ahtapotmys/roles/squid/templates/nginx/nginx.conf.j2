@@ -1,0 +1,21 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+server {
+    listen {{ nginx['listen'] }};
+    server_name {{ nginx['server_name'] }};
+    root {{ nginx['root'] }};
+    index {{ nginx['index'] }};
+    charset {{ nginx['charset'] }};
+    
+    ssl {{ nginx['ssl'] }};
+    ssl_certificate {{ nginx['certificate']['destination'] }};
+    ssl_certificate_key {{ nginx['key']['destination'] }};
+
+    auth_basic "Restricted";
+    auth_basic_user_file {{ nginx['htpasswd']['destination'] }};
+    
+    access_log {{ nginx['access_log'] }};
+    error_log {{ nginx['error_log'] }}; 
+}

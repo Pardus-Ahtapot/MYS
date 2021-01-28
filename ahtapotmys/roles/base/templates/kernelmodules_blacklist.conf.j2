@@ -1,0 +1,7 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+{% for key,value in to_be_blacklisted_modules.iteritems() %}
+blacklist {{ value.name }}
+{% endfor %}

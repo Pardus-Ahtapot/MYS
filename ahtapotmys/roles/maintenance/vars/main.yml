@@ -1,0 +1,17 @@
+---
+# Maintenance rolunun degiskenlerini iceren dosyadir.
+maintenance:
+    script:
+        source: ahtapot-pyBekci.py.j2 
+        destination: /var/opt/ahtapot-pyBekci.py 
+        owner: ahtapotops 
+        group: ahtapotops 
+        mode: 660 
+    maintainer:
+        directory: 
+            path: /var/log/bekciarchive/
+            owner: ahtapotops 
+            group: ahtapotops
+            mode: 700 
+            state: directory 
+            recurse: yes 

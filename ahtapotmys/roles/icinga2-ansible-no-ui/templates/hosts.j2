@@ -1,0 +1,105 @@
+# {{ ansible_managed }}
+
+object Host "{{item.hostname}}" {
+  import "generic-host"
+  address = "{{item.ip}}"
+  vars.os = "{{item.os}}"
+  check_command = "hostalive"
+{% if item.snmp_check == "true" %}
+  vars.snmp_address = "{{item.ip}}"
+  vars.snmp_community = "{{item.snmp_community}}"
+{% endif %}
+}
+
+{% if item.snmp_check == "true" %}
+{% if item.snmp_load.check == "true" %}
+object Service "snmp-load" {
+  host_name = "{{item.hostname}}"
+  vars.snmp_load_type = "{{item.snmp_load.type}}"
+  vars.snmp_warn = "{{item.snmp_load.warning}}"
+  vars.snmp_crit = "{{item.snmp_load.critical}}"
+  check_command = "{{item.snmp_load.check_command}}"
+}
+{% endif %}
+{% if item.snmp_memory.check == "true" %}
+object Service "snmp-memory" {
+  host_name = "{{item.hostname}}"
+  vars.snmp_warn = "{{item.snmp_memory.warning}}"
+  vars.snmp_crit = "{{item.snmp_memory.critical}}"
+  check_command = "{{item.snmp_memory.check_command}}"
+}
+{% endif %}
+{% if item.snmp_storage.check == "true" %}
+object Service "snmp-storage" {
+  host_name = "{{item.hostname}}"
+  vars.snmp_warn = "{{item.snmp_storage.warning}}"
+  vars.snmp_crit = "{{item.snmp_storage.critical}}"
+  vars.snmp_storage_name = "{{item.snmp_storage.storage_name}}"
+  check_command = "{{item.snmp_storage.check_command}}"
+}
+{% endif %}
+
+{% if item.snmp_interface.check == "true" %}
+{% for iface in item.snmp_interface.interfaces %}
+object Service "snmp-int-{{iface.interface_label}}" {
+  host_name = "{{item.hostname}}"
+  vars.snmp_interface = "{{iface.interface}}"
+  vars.snmp_interface_label = "{{iface.interface_label}}"
+  vars.snmp_interface_perf = "{{iface.interface_perf}}"
+  vars.snmp_interface_bits_bytes = "{{iface.interface_bits_bytes}}"
+  vars.snmp_interface_megabytes = "{{iface.interface_megabytes}}"
+  vars.snmp_interface_noregexp = "{{iface.interface_noregexp}}"
+  vars.snmp_warncrit_percent = "{{iface.warncrit_percent}}"
+  vars.snmp_warn = "{{iface.warning}}"
+  vars.snmp_crit = "{{iface.critical}}"
+  check_command = "{{item.snmp_interface.check_command}}"
+}
+{% endfor %}
+{% endif %}
+
+
+{% endif %}
+
+{% if item.nsclient_check == "true" %}
+
+{% if item.nsclient_disk.check == "true" %}
+object Service "check_disk" { 
+  check_command = "nscp"
+  host_name = "{{item.hostname}}"
+  vars.nscp_password = "{{item.nsclient_password}}"
+  vars.nscp_variable = "USEDDISKSPACE"
+  vars.nscp_params = "{{item.nsclient_disk.drive}}"
+  vars.nscp_warn = "{{item.nsclient_disk.warning}}"
+  vars.nscp_crit = "{{item.nsclient_disk.critical}}"
+}
+{% endif %}
+{% if item.nsclient_cpu.check == "true" %}
+object Service "check_cpu" {
+  check_command = "nscp"
+  host_name = "{{item.hostname}}"
+  vars.nscp_password = "{{item.nsclient_password}}"
+  vars.nscp_variable = "CPULOAD"
+  vars.nscp_params = "{{item.nsclient_cpu.minutes}},{{item.nsclient_cpu.warning}},{{item.nsclient_cpu.critical}}"
+}
+{% endif %}
+{% if item.nsclient_memory.check == "true" %}
+object Service "check_memory" {
+  check_command = "nscp"
+  host_name = "{{item.hostname}}"
+  vars.nscp_password = "{{item.nsclient_password}}"
+  vars.nscp_variable = "MEMUSE"
+  vars.nscp_warn = "{{item.nsclient_memory.warning}}"
+  vars.nscp_crit = "{{item.nsclient_memory.critical}}"
+}
+{% endif %}
+{% endif %}
+
+{% if item.check_commands is defined %}
+{% for elem in item.check_commands %}
+object Service "{{ elem.service }}" {
+  check_command = "{{ elem.check_command }}"
+  host_name =  "{{item.hostname}}"
+}
+{% endfor %}
+{% endif %}
+

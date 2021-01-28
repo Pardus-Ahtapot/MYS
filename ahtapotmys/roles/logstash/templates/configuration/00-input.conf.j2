@@ -1,0 +1,43 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+input {
+
+  file {
+    path => '/data/log/raw_location01.log'
+    start_position => 'beginning'
+    type => 'raw_location01'	
+  }
+  
+  file {
+    path => '/data/log/alert_location01.log'
+    start_position => 'beginning'
+    type => 'alert_location01'	
+  }
+  
+  file {
+    path => '/data/log/raw_location02.log'
+    start_position => 'beginning'
+    type => 'raw_location02'	
+  }
+  
+  file {
+    path => '/data/log/alert_location02.log'
+    start_position => 'beginning'
+    type => 'alert_location02'	
+  }
+  
+  file {
+    path => '/data/log/raw_location03.log'
+    start_position => 'beginning'
+    type => 'raw_location03'	
+  }
+  
+  file {
+    path => '/data/log/alert_location03.log'
+    start_position => 'beginning'
+    type => 'alert_location03'	
+  }
+
+}

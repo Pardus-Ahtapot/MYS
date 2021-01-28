@@ -1,0 +1,30 @@
+---
+- name: Rsyslog server yapilandiriliyor.
+  template:
+        src: "{{ rsyslog['conf']['source'] }}"
+        dest: "{{ rsyslog['conf']['destination'] }}"
+        owner: "{{ rsyslog['conf']['owner'] }}"
+        group: "{{ rsyslog['conf']['group'] }}"
+        mode: "{{ rsyslog['conf']['mode'] }}"
+  notify:
+    - rsyslog servisini yeniden baslat
+  sudo: yes
+  tags: rsyslog 
+
+- name: Ryslog icin logrotate configurasyonu yapilandiriliyor.
+  template:
+        src: "{{ logrotate['conf']['source'] }}"
+        dest: "{{ logrotate['conf']['destination'] }}"
+        owner: "{{ logrotate['conf']['owner'] }}"
+        group: "{{ logrotate['conf']['group'] }}"
+        mode: "{{ logrotate['conf']['mode'] }}"
+  sudo: yes
+  tags: rsyslog 
+
+- name: Rsyslog servisi ayakta
+  service:
+        name: "{{ rsyslog['service']['name'] }}"
+        state: "{{ rsyslog['service']['state'] }}"
+        enabled: "{{ rsyslog['service']['enabled'] }}"
+  sudo: yes
+  tags: rsyslog

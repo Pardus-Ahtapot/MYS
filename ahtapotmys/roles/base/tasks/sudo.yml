@@ -1,0 +1,31 @@
+---
+- name: Sudoers yapilandiriliyor.
+  template:
+        src: "{{ sudo['conf']['source'] }}"
+        dest: "{{ sudo['conf']['destination'] }}" 
+        owner: "{{ sudo['conf']['owner'] }}" 
+        group: "{{ sudo['conf']['group'] }}" 
+        mode: "{{ sudo['conf']['mode'] }}" 
+        validate: "{{ sudo['conf']['validate'] }}" 
+  sudo: yes
+  tags: sudoers
+
+- name: Sudoio klasoru yapilandiriliyor.
+  file:
+        path: "{{ sudo['directory']['path'] }}"
+        state: "{{ sudo['directory']['state'] }}"
+        owner: "{{ sudo['directory']['owner'] }}"
+        group: "{{ sudo['directory']['group'] }}"
+        mode: "{{ sudo['directory']['mode'] }}"
+  sudo: yes
+  tags: sudoio 
+
+- name: Sudoio hostname klasoru yapilandiriliyor.
+  file:
+        path: "{{ sudo['directory']['path'] }}/{{ ansible_hostname }}"
+        state: "{{ sudo['directory']['state'] }}"
+        owner: "{{ sudo['directory']['owner'] }}"
+        group: "{{ sudo['directory']['group'] }}"
+        mode: "{{ sudo['directory']['mode'] }}"
+  sudo: yes
+  tags: sudoio 

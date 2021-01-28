@@ -1,0 +1,52 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+########################################
+# Global directives                    #
+########################################
+User nxlog
+Group ossec 
+
+LogFile /var/log/nxlog/nxlog.log
+LogLevel INFO
+
+########################################
+# Modules                              #
+########################################
+define clientlog /var/log/nxlog/client.log
+
+<Extension exec> 
+    Module xm_exec 
+</Extension> 
+<Extension fileop>
+    Module      xm_fileop
+</Extension>
+<Extension _syslog>
+    Module      xm_syslog
+</Extension>
+<Input in>
+    Module      im_ssl
+    Host        0.0.0.0
+    Port        6514
+    CAFile      /etc/ssl/nxlog/rootCA.pem
+    CertFile    /etc/ssl/nxlog/{{ ansible_fqdn }}.crt
+    CertKeyFile /etc/ssl/nxlog/{{ ansible_fqdn }}.key
+    AllowUntrusted TRUE
+</Input>
+<Output out>
+    Module      om_file
+    Exec $raw_event =~ s/\<\d+\>//g;
+    File        "/var/log/nxlog/client.log"
+    Exec if out->file_size() > 1G \ 
+    { \ 
+        $newfile = "/var/log/nxlog/client.log" + "_" + strftime(now(), "%Y%m%d%H%M%S"); \ 
+        out->rotate_to($newfile); \ 
+        exec_async("/bin/bzip2", $newfile); \ 
+        exec_async("/usr/bin/find /var/log/nxlog/ -name 'client.log.*' -mtime +5 -exec rm -rf {} \; "); \ 
+    } 
+</Output>
+<Route rota>
+    Priority    1
+    Path        in => out
+</Route>

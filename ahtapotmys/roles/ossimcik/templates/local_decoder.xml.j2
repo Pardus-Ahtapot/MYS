@@ -1,0 +1,57 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+<!-- Ahtapot Decoders
+  -  https://www.ahtapot.org.tr
+  -  Author: Ugur CIL 23/12/2017
+  -  ULAKBIM TUBITAK
+  -->
+
+<!-- Labris Decoders -->
+
+<decoder name="c-icap">
+   <program_name>^c-icap$</program_name>
+</decoder>
+
+<decoder name="labris-icap">
+   <parent>c-icap</parent>
+   <prematch>: labris-icapserver - </prematch>
+   <regex offset="after_prematch">(\d+.\d+.\d+)-</regex>
+   <regex>(\d+:\d+:\d+)#011</regex>
+   <regex>(\.+)#011</regex>
+   <regex>(\S+)#011</regex>
+   <regex>\.+#011\.+#011(\.+)#011</regex>
+   <regex>(\.+)#011</regex>
+   <regex>\.+#011\.+#011\.+#011\.+#011\.+#011\.+#011\.+#011\.+#011</regex>
+   <regex>(\.+)#011</regex>
+   <order>extra_data, extra_data, user, srcip, url, action, extra_data</order>
+</decoder>
+
+<!-- Labris Decoders -->
+
+<!-- Ahtapot System Monitoring Section -->
+
+<decoder name="rsyslog">
+   <program_name>liblogging-stdlog</program_name>
+</decoder>
+
+<decoder name="rsyslog-input-modules">
+   <parent>rsyslog</parent>
+   <prematch offset="after_parent">^im</prematch>
+   <regex>(im\S+)[(\d+)]: </regex>
+   <regex>\.+'(\.+)', </regex>
+   <regex>\.+'(\.+)'</regex>
+   <order>action, srcport, extra_data, extra_data</order>
+</decoder>
+
+<decoder name="rsyslog-output-modules">
+   <parent>rsyslog</parent>
+   <prematch offset="after_parent">^om</prematch>
+   <regex>(om\S+)[(\S+):(\d+)]: </regex>
+   <regex>\.+'(\.+)', </regex>
+   <regex>\.+'(\.+)'</regex>
+   <order>action, dstip, dstport, extra_data, extra_data</order>
+</decoder>
+
+<!-- Ahtapot System Monitoring Section -->

@@ -1,0 +1,23 @@
+---
+# Gitin degiskenlerini iceren dosyadir
+gitrepos:
+    repo01:
+        repo: "ssh://git@Gitlab_sunucu_fqdn:SSH_PORT/ahtapotops/gdys.git"
+        accept_hostkey: "yes"
+        destination: "/etc/fw/gdys"
+        key_file: "/home/ahtapotops/.ssh/id_rsa"
+    repo02:
+        repo: "ssh://git@Gitlab_sunucu_fqdn:SSH_PORT/ahtapotops/mys.git"
+        accept_hostkey: "yes"
+        destination: "/etc/ansible/"
+        key_file: "/home/ahtapotops/.ssh/id_rsa"
+    repo03:
+        repo: "ssh://git@Gitlab_sunucu_fqdn:SSH_PORT/ahtapotops/sb.git"
+        accept_hostkey: "yes"
+        destination: "/etc/integrity/sb"
+        key_file: "/home/ahtapotops/.ssh/id_rsa"
+#    repoXX:
+#        repo: ""
+#        accept_hostkey: ""
+#        destination: ""
+#        key_file: ""

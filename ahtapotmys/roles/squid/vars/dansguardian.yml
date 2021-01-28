@@ -1,0 +1,122 @@
+---
+dansguardian:
+# Dansguardian yapilandirmasini belirtmektedir.
+    conf:
+        source: "dansguardian/configuration"
+        destination: "/etc/dansguardian/dansguardian.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    f1conf:
+        source: "dansguardian/configuration/dansguardianf1.conf.j2"
+        destination: "/etc/dansguardian/dansguardianf1.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    service:
+        name: "dansguardian"
+        state: "started"
+        enabled: "yes"
+    anonymizelogs: "off"
+    loglocation: "/var/log/dansguardian/access.log"
+    statlocation: "/var/log/dansguardian/stats"
+    filterport: "8080" 
+    proxyip: "localhost" 
+    proxyport: "3128" 
+    accessdeniedaddress: "http://YOURSERVER.YOURDOMAIN/cgi-bin/dansguardian.pl" 
+    custombannedimagefile: "/usr/share/dansguardian/transparent1x1.gif" 
+    bannediplist: "/etc/dansguardian/lists/bannediplist" 
+    exceptioniplist: "/etc/dansguardian/lists/exceptioniplist" 
+    maxuploadsize: "0"
+    maxchildren: "120"
+    minchildren: "8"
+    maxsparechildren: "32"
+    minsparechildren: "4"
+    preforkchildren: "6"
+    maxagechildren: "500"
+    updshalla:
+        path: "/etc/dansguardian/lists/blacklists/shalla"
+        owner: "root"
+        group: "root"
+        state: "directory"
+        mode: "755" 
+    request:
+        html:
+            source: "request/template.html.j2"
+            #source: "request/template_phone.html.j2" # Aktif hale getirmek icin ust satiri yorumlayip bu satiri aciniz
+            destination: "/etc/dansguardian/languages/ukenglish/template.html"
+            owner: "root"
+            group: "root"
+            mode: "0644"
+        address: "pwlm.gdys.local"
+        port: "443"
+        telephone: "542-911-0724"
+    
+dansguardian_locallists:
+# Yerel listeler yerel proxy sunucularinda yapilacak olan engelleme islemlerinde kullanilir.
+    list01:
+        path: "/etc/dansguardian/lists/bannedurllist_local"
+    list02:
+        path: "/etc/dansguardian/lists/bannedsitelist_local"
+    list03:
+        path: "/etc/dansguardian/lists/exceptionurllist_local"
+    list04:
+        path: "/etc/dansguardian/lists/exceptionsitelist_local"
+#    listXX:
+#        path: ""
+           
+
+dansguardian_blacklists:
+    list01:
+        source: "dansguardian/bannedurllist/bannedurllist.j2" 
+        destination: "/etc/dansguardian/lists/bannedurllist"
+        owner: "root" 
+        group: "root" 
+        mode: "0644" 
+    list02:
+        source: "dansguardian/bannedurllist/bannedurllist_general.j2" 
+        destination: "/etc/dansguardian/lists/bannedurllist_general"
+        owner: "root" 
+        group: "root" 
+        mode: "0644" 
+    list03:
+        source: "dansguardian/bannedsitelist/bannedsitelist.j2" 
+        destination: "/etc/dansguardian/lists/bannedsitelist"
+        owner: "root" 
+        group: "root" 
+        mode: "0644" 
+    list04:
+        source: "dansguardian/bannedsitelist/bannedsitelist_general.j2" 
+        destination: "/etc/dansguardian/lists/bannedsitelist_general"
+        owner: "root" 
+        group: "root" 
+        mode: "0644" 
+
+
+dansguardian_whitelists:
+    list01:
+        source: "dansguardian/exceptionurllist/exceptionurllist.j2" 
+        destination: "/etc/dansguardian/lists/exceptionurllist"
+        owner: "root" 
+        group: "root" 
+        mode: "0644" 
+    list02:
+        source: "dansguardian/exceptionurllist/exceptionurllist_general.j2" 
+        destination: "/etc/dansguardian/lists/exceptionurllist_general"
+        owner: "root" 
+        group: "root" 
+        mode: "0644" 
+    list03:
+        source: "dansguardian/exceptionsitelist/exceptionsitelist.j2" 
+        destination: "/etc/dansguardian/lists/exceptionsitelist"
+        owner: "root" 
+        group: "root" 
+        mode: "0644" 
+    list04:
+        source: "dansguardian/exceptionsitelist/exceptionsitelist_general.j2" 
+        destination: "/etc/dansguardian/lists/exceptionsitelist_general"
+        owner: "root" 
+        group: "root" 
+        mode: "0644" 
+
+

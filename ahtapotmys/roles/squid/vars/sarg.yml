@@ -1,0 +1,27 @@
+---
+# Sarg yapilandirmasini belirtmektedir.
+sarg:
+    conf:
+        source: "sarg/sarg.conf.j2"
+        destination: "/etc/sarg/sarg.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    cron:
+        source: "sarg/sarg-cron.j2"
+        destination: "/etc/cron.d/sarg"
+        owner: "root"
+        group: "root"
+        mode: "0755" 
+    min: "*/5"
+    hour: "*"
+    week: "*"
+    day: "*"
+    month: "*" 
+    title: "Kullanici Proxy Raporu" 
+    output_dir: "/var/www/html/squid-reports" 
+    exclude_users: "/etc/sarg/exclude_users" 
+    exclude_hosts: "/etc/sarg/exclude_hosts" 
+    exclude_codes: "/etc/sarg/exclude_codes" 
+    usertab: "/etc/sarg/usertab"
+    log: "/var/log/sarg-report.log"

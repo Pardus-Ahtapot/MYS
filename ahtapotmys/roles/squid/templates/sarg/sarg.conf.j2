@@ -1,0 +1,367 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+# sarg.conf
+access_log /var/log/squid3/access.log
+
+# TAG: graphs yes|no
+graphs yes
+graph_days_bytes_bar_color orange
+
+# TAG:  graph_font
+graph_font /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf
+
+# TAG:	title
+title "{{ sarg['title'] }}"
+
+# TAG:	font_face
+font_face Tahoma,Verdana,Arial
+
+# TAG:	header_color
+header_color darkblue
+
+# TAG:	header_bgcolor
+header_bgcolor blanchedalmond
+
+# TAG:	font_size
+font_size 9px
+
+# TAG:	header_font_size
+header_font_size 10px
+
+# TAG:	title_font_size
+title_font_size 11px
+
+# TAG:	background_color
+background_color white
+
+# TAG:	text_color
+text_color #000000
+
+# TAG:	text_bgcolor
+text_bgcolor lavender
+
+# TAG:	title_color
+title_color green
+
+# TAG:	logo_image
+#logo_image none
+
+# TAG:	logo_text
+logo_text "Ahtapot"
+
+# TAG:	logo_text_color
+#logo_text_color #000000
+
+# TAG:	logo_image_size
+#image_size 80 45
+
+# TAG:	background_image
+#background_image none
+
+# TAG:  password
+#       User password file used by Squid authentication scheme
+#       If used, generate reports just for that users.
+#
+#password none
+
+# TAG:  temporary_dir
+temporary_dir /tmp
+
+# TAG:  output_dir
+output_dir {{ sarg['output_dir'] }}
+
+# TAG:  output_email
+#output_email none
+
+# TAG:  resolve_ip yes/no
+resolve_ip yes
+
+# TAG:  user_ip yes/no
+user_ip no
+
+# TAG:  topuser_sort_field field normal/reverse
+topuser_sort_field BYTES reverse
+
+# TAG:  user_sort_field field normal/reverse
+user_sort_field BYTES reverse
+
+# TAG:  exclude_users file
+exclude_users {{ sarg['exclude_users'] }}
+
+# TAG:  exclude_hosts file
+exclude_hosts {{ sarg['exclude_hosts'] }}
+
+# TAG:  useragent_log file
+#useragent_log none
+
+# TAG:  date_format  
+date_format e
+
+# TAG:  per_user_limit file MB
+#per_user_limit none
+
+# TAG: lastlog n
+lastlog 0
+
+# TAG: remove_temp_files yes
+remove_temp_files yes
+
+# TAG: index yes|no|only
+index yes
+
+# TAG: index_tree date|file
+index_tree file
+
+# TAG: overwrite_report yes|no
+overwrite_report yes
+
+# TAG: records_without_userid ignore|ip|everybody
+records_without_userid ip
+
+# TAG: use_comma no|yes
+use_comma no
+
+# TAG: mail_utility mail|mailx
+mail_utility mailx
+
+# TAG: topsites_num n
+topsites_num 100
+
+# TAG: topsites_sort_order CONNECT|BYTES A|D
+topsites_sort_order CONNECT D
+
+# TAG: index_sort_order A/D
+index_sort_order D
+
+# TAG: exclude_codes file
+exclude_codes {{ sarg['exclude_codes'] }}
+
+# TAG: replace_index string
+#replace_index <?php echo str_replace(".", "_", $REMOTE_ADDR); echo ".html"; ?>
+
+# TAG: max_elapsed milliseconds
+max_elapsed 28800000
+
+# TAG: report_type type
+report_type topusers topsites sites_users users_sites date_time denied auth_failures site_user_time_date downloads
+
+# TAG: usertab filename
+usertab {{ sarg['usertab'] }}
+
+# TAG: LDAPHost hostname
+#LDAPHost 127.0.0.1
+
+# TAG: LDAPPort port
+#LDAPPort 389
+
+# TAG: LDAPBindDN CN=username,OU=group,DC=mydomain,DC=com
+#LDAPBindDN cn=proxy,dc=mydomain,dc=local
+
+# TAG: LDAPBindPW secret
+#LDAPBindPW secret
+
+# TAG: LDAPBaseSearch OU=users,DC=mydomain,DC=com
+#LDAPBaseSearch ou=users,dc=mydomain,dc=local
+
+# TAG: LDAPFilterSearch uid=%s
+#LDAPFilterSearch uid=%s
+
+# TAG: LDAPTargetAttr attributename
+#LDAPTargetAttr cn
+
+# TAG: long_url yes|no
+long_url no
+
+# TAG: date_time_by bytes|elap
+date_time_by bytes
+
+# TAG: charset name
+charset UTF-8
+
+# TAG: user_invalid_char "&/"
+#user_invalid_char "&/"
+
+# TAG: privacy yes|no
+privacy no
+#privacy_string "***.***.***.***"
+#privacy_string_color blue
+
+# TAG: include_users "user1:user2:...:usern"
+#include_users none
+
+# TAG: exclude_string "string1:string2:...:stringn"
+#exclude_string none
+
+# TAG: show_successful_message yes|no
+show_successful_message no
+
+# TAG: show_read_statistics yes|no
+show_read_statistics no
+
+# TAG: topuser_fields
+topuser_fields NUM DATE_TIME USERID CONNECT BYTES %BYTES IN-CACHE-OUT USED_TIME MILISEC %TIME TOTAL AVERAGE
+
+# TAG: user_report_fields
+user_report_fields CONNECT BYTES %BYTES IN-CACHE-OUT USED_TIME MILISEC %TIME TOTAL AVERAGE
+
+# TAG: bytes_in_sites_users_report yes|no
+bytes_in_sites_users_report yes
+
+# TAG: topuser_num n
+topuser_num 0
+
+# TAG: datafile file
+#datafile none
+
+# TAG: datafile_delimiter ";"
+#datafile_delimiter ";"
+
+# TAG: datafile_fields all
+#datafile_fields user;date;time;url;connect;bytes;in_cache;out_cache;elapsed
+
+# TAG: datafile_url ip|name
+#datafile ip
+
+# TAG: weekdays
+weekdays 0-6
+
+# TAG: hours
+hours 0-23
+
+# TAG: dansguardian_conf file
+dansguardian_conf /etc/dansguardian/dansguardian.conf
+
+# TAG: dansguardian_filter_out_date on|off
+#dansguardian_filter_out_date on
+
+# TAG: squidguard_conf file
+#squidguard_conf /usr/local/squidGuard/squidGuard.conf
+
+# TAG: redirector_log file
+#redirector_log /usr/local/squidGuard/var/logs/urls.log
+
+# TAG: redirector_filter_out_date on|off
+#redirector_filter_out_date on
+
+# TAG: redirector_log_format
+#redirector_log_format #year#-#mon#-#day# #hour# #tmp#/#list#/#tmp#/#tmp#/#url#/#tmp# #ip#/#tmp# #user# #end#
+
+# TAG: show_sarg_info yes|no
+show_sarg_info yes
+
+# TAG: show_sarg_logo yes|no
+show_sarg_logo yes
+
+# TAG: parsed_output_log directory
+#parsed_output_log none
+
+# TAG: parsed_output_log_compress /bin/gzip|/usr/bin/bzip2|nocompress
+#parsed_output_log_compress /bin/gzip
+
+# TAG: displayed_values bytes|abbreviation
+displayed_values bytes
+
+# Report limits
+# TAG: authfail_report_limit n
+# TAG: denied_report_limit n
+# TAG: siteusers_report_limit n
+# TAG: squidguard_report_limit n
+# TAG: user_report_limit n
+# TAG: dansguardian_report_limit n
+# TAG: download_report_limit n
+#      report limits (lines).
+#      '0' no limit
+#
+#authfail_report_limit 10
+#denied_report_limit 10
+#siteusers_report_limit 0
+#squidguard_report_limit 10
+#dansguardian_report_limit 10
+#user_report_limit 10
+#user_report_limit 50
+
+# TAG: www_document_root dir
+#www_document_root /var/www/html
+
+# TAG: block_it module_url
+#block_it none
+
+# TAG: external_css_file path
+#     Provide the path to an external css file to link into the HTML reports instead of
+#     the inline css written by sarg when this option is not set.
+#
+#     In versions prior to 2.3, this used to be an absolute file name to
+#     a file to include verbatim in each HTML page but, as it takes a lot of
+#     space, version 2.3 switched to a link to an external css file.
+#     Therefore, this option must contain the HTTP server path on which a client
+#     browser may find the css file.
+#
+#     Sarg use theses style classes:
+#	.logo		logo class
+#	.info		sarg information class, align=center
+#	.title_c	title class, align=center
+#	.header_c	header class, align:center
+#	.header_l	header class, align:left
+#	.header_r	header class, align:right
+#	.text		text class, align:right
+#	.data		table text class, align:right
+#	.data2		table text class, align:left
+#	.data3		table text class, align:center
+#	.link  		link class
+#
+#     Sarg can be instructed to output the internal css it inline
+#     into the reports with this command:
+#
+#        sarg --css
+#
+#     You can redirect the output to a file of your choice and edit
+#     it to your liking.
+#
+#external_css_file none
+
+# TAG: user_authentication yes|no
+#     Allow user authentication in User Reports using .htaccess
+#     Parameters:  
+#	AuthUserTemplateFile - The template to use to create the
+#     .htaccess file. In the template, %u is replaced by the
+#     user's ID for which the report is generated. The path of the
+#     template is relative to the directory containing sarg
+#     configuration file.
+#
+# user_authentication no
+# AuthUserTemplateFile sarg_htaccess
+
+# TAG: download_suffix "suffix,suffix,...,suffix"
+download_suffix "zip,arj,bzip,gz,ace,doc,iso,adt,bin,cab,com,dot,drv$,lha,lzh,mdb,mso,ppt,rtf,src,shs,sys,exe,dll,mp3,avi,mpg,mpeg"
+
+# TAG: ulimit n
+ulimit 20000
+
+# TAG: ntlm_user_format username|domainname+username
+#ntlm_user_format domainname+username
+
+# TAG: realtime_refresh_time num sec
+# realtime_refresh_time 3
+
+# TAG: realtime_access_log_lines num
+# realtime_access_log_lines 1000
+
+# TAG: realtime_types: GET,PUT,CONNECT,ICP_QUERY,POST
+# realtime_types GET,PUT,CONNECT  
+
+# TAG: realtime_unauthenticated_records: ignore|show
+# realtime_unauthenticated_records: show
+
+# TAG: byte_cost value no_cost_limit
+#      Cost per byte.
+#      Eg. byte_cost 0.01 100000000
+#           per byte cost      = 0.01
+#           bytes with no cost = 100 Mb
+#      0 = disable
+#
+# byte_cost 0.01 50000000
+
+# TAG: squid24 on|off
+squid24 off

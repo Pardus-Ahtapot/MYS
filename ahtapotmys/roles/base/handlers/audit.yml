@@ -1,0 +1,12 @@
+---
+- name: auditd servisinin yeniden baslatilmasi
+  service:
+    name: "{{ audit['service']['name'] }}"
+    state: restarted
+  sudo: yes
+
+- name: auditd servisinin yeniden yuklenmesi
+  service:
+    name: "{{ audit['service']['name'] }}"
+    state: reloaded
+  sudo: yes

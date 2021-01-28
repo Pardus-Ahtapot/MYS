@@ -1,0 +1,99 @@
+---
+# Openvpn'in degiskenlerini iceren dosyadir
+openvpn:
+    default:
+        source: "default-openvpn.j2"
+        destination: "/etc/default/openvpn"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    service:
+        name: "openvpn@server"
+        state: "started"
+        enabled: "yes"
+    conf: 
+        source: "server.conf.j2"
+        destination: "/etc/openvpn/server.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    ldapconf: 
+        source: "auth-ldap.conf.j2"
+        destination: "/etc/openvpn/auth-ldap.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    cacrt:
+        source: "certificates/cacrt.j2"
+        destination: "/etc/openvpn/ca.crt"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    cert:
+        source: "certificates"
+        destination: "/etc/openvpn/server.crt"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    key:
+        source: "certificates"
+        destination: "/etc/openvpn/server.key"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+
+    common_conf: 
+        dev: "tun"
+        ca: "/etc/openvpn/ca.crt" 
+        cert: "/etc/openvpn/server.crt"
+        key: "/etc/openvpn/server.key"
+        dh: "/etc/openvpn/dh2048.pem"
+        tls-version-min: "1.2" 
+        user: "nobody"
+        group: "nogroup"
+        status: "/var/log/openvpn-status.log"
+        log: "/var/log/openvpn.log"
+        verb: "9"
+
+
+openvpn_servers:
+    server01:
+        fqdn: "OPENVPN_FQDN"
+        port: "1194"
+        proto: "tcp"
+        server: "10.8.0.0 255.255.255.0"
+        dns_servers:
+            dns01:
+               ip: "8.8.8.8" 
+            dns02:
+               ip: "8.8.4.4" 
+        auth: "noldap" # ( openldap , activedirectory , liderahenk , noldap ) 
+        Ldap: "ldap://172.16.19.100:389"  
+        BindDN: "CN=administrator,DC=bilgio,DC=local"  
+        Password: "m'r'v'x123"  
+        FollowReferrals: "no"  
+        TLSEnable: "no"  
+        BaseDN: "DC=bilgio,DC=local"  
+        SearchFilter: "(sAMAccountName=%u)"  
+        RequireGroup: "false"  
+#    serverXX:
+#        fqdn: ""
+#        port: ""
+#        proto: ""
+#        server: ""
+#        dns_servers:
+#            dnsXX:
+#               ip: "" 
+#            dnsXX:
+#               ip: "" 
+#            dnsXX:
+#               ip: "" 
+#        auth: "" # ( openldap , activedirectory , liderahenk , noldap ) 
+#            Ldap: ""  
+#            BindDN: ""  
+#            Password: ""  
+#            FollowReferrals: ""  
+#            TLSEnable: ""  
+#            BaseDN: ""  
+#            SearchFilter: ""  
+#            RequireGroup: ""  

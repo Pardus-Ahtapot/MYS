@@ -1,0 +1,32 @@
+---
+- name: Audit kurallari yapilandiriliyor.
+  template:
+        src: "{{ audit['rules']['source'] }}"
+        dest: "{{ audit['rules']['destination'] }}" 
+        owner: "{{ audit['rules']['owner'] }}" 
+        group: "{{ audit['rules']['group'] }}" 
+        mode: "{{ audit['rules']['mode'] }}" 
+  notify:
+    - auditd servisinin yeniden baslatilmasi 
+  sudo: yes
+  tags: audit
+
+- name: auditd.conf yapilandiriliyor.
+  template:
+        src: "{{ audit['conf']['source'] }}"
+        dest: "{{ audit['conf']['destination'] }}"
+        owner: "{{ audit['conf']['owner'] }}"
+        group: "{{ audit['conf']['group'] }}"
+        mode: "{{ audit['conf']['mode'] }}"
+  notify:
+    - auditd servisinin yeniden yuklenmesi
+  sudo: yes 
+  tags: audit
+
+- name: AUDITD Servisi ayakta
+  service:
+        name: "{{ audit['service']['name'] }}"
+        state: "{{ audit['service']['state'] }}"
+        enabled: "{{ audit['service']['enabled'] }}"
+  sudo: yes
+  tags: audit

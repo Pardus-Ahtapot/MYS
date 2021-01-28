@@ -1,0 +1,22 @@
+---
+# Calistirildiginda Guvenlik Duvari Kurulumu Yapilir
+- hosts: firewall 
+  remote_user: ahtapotops
+  sudo: yes
+  vars_files:
+  - ../roles/firewall/vars/group.yml
+  - ../roles/firewall/vars/user.yml
+  - ../roles/firewall/vars/package.yml
+  - ../roles/firewall/vars/module.yml
+  - ../roles/firewall/vars/sysctl.yml
+  - ../roles/firewall/vars/iptables.yml
+  - ../roles/firewall/vars/contrackd.yml
+  - ../roles/firewall/vars/profile.yml
+  - ../roles/firewall/vars/directory.yml
+  - ../roles/firewall/vars/conf_list.yml
+  - ../roles/firewall/vars/fastnetmon.yml
+  - ../roles/post/vars/integrity.yml
+  - ../roles/post/vars/package.yml
+  roles:
+  - { role: firewall }
+  - { role: post }

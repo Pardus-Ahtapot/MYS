@@ -1,0 +1,60 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+<ossec_config>
+
+   <client>
+      <server-hostname>{{ ossec['server'] }}</server-hostname>
+      <config-profile>{{ inventory_hostname }}</config-profile>
+   </client>
+#<syscheck>
+#      <frequency>3600</frequency>
+#      <auto_ignore>no</auto_ignore>
+#      <alert_new_files>yes</alert_new_files>
+#      <scan_on_start>yes</scan_on_start>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/bin/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/boot/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/etc/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/lib/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/opt/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/root/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/sbin/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/srv/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/usr/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">/var/</directories>
+#      <directories check_all="yes" check_owner="yes" check_perm="yes">C:</directories>
+#     <ignore>/home/</ignore>
+#      <ignore>/dev/</ignore>
+#      <ignore>/media/</ignore>
+#      <ignore>/mnt/</ignore>
+#      <ignore>/proc/</ignore>
+#      <ignore>/run/</ignore>
+#      <ignore>/sys/</ignore>
+#      <ignore>/tmp/</ignore>
+#      <ignore>/var/backups/</ignore>
+#      <ignore>/var/cache/</ignore>
+#      <ignore>/var/lib/</ignore>
+#      <ignore>/var/log/</ignore>
+#      <ignore>/var/lock/</ignore>
+#      <ignore>/var/mail/</ignore>
+#      <ignore>/var/spool/</ignore>
+#      <ignore>/var/run/</ignore>
+#      <ignore>/var/state/</ignore>
+#      <ignore>/var/tmp/</ignore>
+#      <ignore>C:\Users</ignore>
+#     <ignore>C:\Documents and Settings</ignore>
+#     <ignore>C:\Windows\Temp</ignore>
+#      <ignore>C:\ProgramData</ignore>
+#     <ignore>C:\Windows\Prefetch</ignore>
+#   </syscheck>
+   
+#     <rootcheck>
+#      <rootkit_files>/var/ossec/etc/shared/rootkit_files.txt</rootkit_files>
+#      <rootkit_trojans>/var/ossec/etc/shared/rootkit_trojans.txt</rootkit_trojans>
+#      <system_audit>/var/ossec/etc/shared/system_audit_rcl.txt</system_audit>
+#      <system_audit>/var/ossec/etc/shared/cis_debian_linux_rcl.txt</system_audit>
+#     <system_audit>/var/ossec/etc/shared/cis_rhel_linux_rcl.txt</system_audit>
+#      <system_audit>/var/ossec/etc/shared/cis_rhel5_linux_rcl.txt</system_audit>
+#    </rootcheck>
+</ossec_config>

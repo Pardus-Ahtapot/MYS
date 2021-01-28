@@ -1,0 +1,27 @@
+---
+- name: debian | installing additional packages in support of suricata
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - ethtool
+
+- name: debian | installing suricata and tools
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - suricata
+
+- name: debian | installing iptables-persistent netfilter-persistent and bridge-utils for IPS mode
+  sudo: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - iptables-persistent
+    - netfilter-persistent
+    - bridge-utils
+  when: (fwbuilder_exists == "false") and (suricata_mode == "ips")
+

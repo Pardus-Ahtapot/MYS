@@ -1,0 +1,12 @@
+---
+# Grup degiskenlerini iceren dosyadir.
+# Yorum satiri ile gosterilen sablon doldurularak istenilen kadar grup eklenebilir.
+testfirewall_groups:
+    group1:
+        name: "kontrol" 
+        gid: "1020" 
+        state: "present"
+#    groupX:
+#        name:  
+#        gid:  
+#        state:   

@@ -1,0 +1,45 @@
+---
+# nginx yapilandirmasini belirtmektedir.
+nginx:
+    conf:
+        source: "nginx/nginx.conf.j2"
+        destination: "/etc/nginx/conf.d/sarg.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    service:
+        name: "nginx" 
+        state: "started"
+        enabled: "yes"
+    key:
+        source: "nginx/sarg.key.j2"
+        destination: "/etc/nginx/ssl/sarg.key"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    certificate:
+        source: "nginx/sarg.crt.j2"
+        destination: "/etc/nginx/ssl/sarg.crt"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    htpasswd:
+        source: "nginx/sarg.htpasswd.j2"
+        destination: "/etc/nginx/ssl/sarg.htpasswd"
+        owner: "root"
+        group: "root"
+        mode: "0644" 
+    ssldir:
+        path: "/etc/nginx/ssl" 
+        owner: "root"
+        group: "root"
+        mode: "755" 
+        state: "directory" 
+    listen: "443" 
+    server_name: "PROXY_SERVER_FQDN"
+    root: "/var/www/html/squid-reports/"
+    charset: "UTF-8" 
+    index: "index.html" 
+    ssl: "on" 
+    access_log: "/var/log/nginx/sarg.access.log"
+    error_log: "/var/www/html/sarg.error.log"

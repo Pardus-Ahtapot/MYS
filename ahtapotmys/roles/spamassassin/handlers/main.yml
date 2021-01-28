@@ -1,0 +1,41 @@
+- name: restart clamav-freshclam
+  sudo: yes
+  service:
+    name: clamav-freshclam
+    enabled: yes
+    state: restarted
+
+- name: restart clamav-daemon
+  sudo: yes
+  service:
+    name: clamav-daemon
+    enabled: yes
+    state: restarted
+
+- name: restart amavis
+  sudo: yes
+  service:
+    name: amavis
+    enabled: yes
+    state: restarted
+
+- name: restart spamassassin
+  sudo: yes
+  service:
+    name: spamassassin
+    enabled: yes
+    state: restarted
+
+- name: restart postfix
+  sudo: yes
+  service:
+    name: postfix
+    enabled: yes
+    state: restarted
+
+- name: restart postfwd
+  sudo: yes
+  service:
+    name: postfwd
+    enabled: yes
+    state: restarted

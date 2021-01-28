@@ -1,0 +1,7 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+!#/bin/bash
+
+/usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ahtapotops@{{ gkts['hook']['server'] }} -p {{ gkts['hook']['port'] }} -i /home/ahtapotops/.ssh/gktshook &

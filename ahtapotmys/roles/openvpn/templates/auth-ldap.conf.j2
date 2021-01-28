@@ -1,0 +1,29 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+{% for key,value in openvpn_servers.iteritems() %}
+{% if ansible_fqdn == value.fqdn %}
+<LDAP>
+	URL		{{ value.Ldap }}
+	BindDN		{{ value.BindDN }}
+	Password	{{ value.Password }}
+	Timeout		15
+	FollowReferrals {{ value.FollowReferrals }}
+	TLSEnable	{{ value.TLSEnable }}
+{% if value.TLSEnable == "yes" %}
+	TLSCACertFile	/usr/local/etc/ssl/ca.pem
+	TLSCACertDir	/etc/ssl/certs
+	TLSCertFile	/usr/local/etc/ssl/client-cert.pem
+	TLSKeyFile	/usr/local/etc/ssl/client-key.pem
+	TLSCipherSuite	ALL:!ADH:@STRENGTH
+{% endif %}
+</LDAP>
+
+<Authorization>
+        BaseDN          {{ value.BaseDN }}
+	SearchFilter    {{ value.SearchFilter }}
+        RequireGroup    {{ value.RequireGroup }}
+</Authorization>
+{% endif %}
+{% endfor %}

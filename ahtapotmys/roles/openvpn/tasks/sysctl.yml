@@ -1,0 +1,11 @@
+---
+- name: Port forwarding uygulaniyor.
+  sysctl:
+        name: "{{ item.value.name }}"
+        value: "{{ item.value.value }}"
+        state: "{{ item.value.state}}"
+        sysctl_set: "yes"
+        reload: "yes"
+  with_dict: "{{openvpn_sysctl}}"
+  sudo: yes
+  tags: openvpn

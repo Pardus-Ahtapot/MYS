@@ -1,0 +1,34 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+name = {{ audit['name'] }}
+name_format = {{ audit['name_format'] }}
+log_file = {{ audit['log_file'] }} 
+log_format = {{ audit['log_format'] }}
+log_group = {{ audit['log_group'] }}
+max_log_file = {{ audit['max_log_file'] }}
+max_log_file_action = {{ audit['max_log_file_action'] }}
+num_logs = {{ audit['num_logs'] }}
+
+priority_boost = {{ audit['priority_boost'] }}
+flush = {{ audit['flush'] }}
+freq = {{ audit['freq'] }}
+disp_qos = {{ audit['disp_qos'] }}
+dispatcher = {{ audit['dispatcher'] }}
+space_left = {{ audit['space_left'] }}
+space_left_action = {{ audit['space_left_action'] }}
+action_mail_acct = {{ audit['action_mail_acct'] }}
+admin_space_left = {{ audit['admin_space_left'] }}
+admin_space_left_action = {{ audit['admin_space_left_action'] }}
+disk_full_action = {{ audit['disk_full_action'] }}
+disk_error_action = {{ audit['disk_error_action'] }}
+
+tcp_listen_queue = {{ audit['tcp_listen_queue'] }}
+tcp_max_per_addr = {{ audit['tcp_max_per_addr'] }}
+tcp_client_ports = {{ audit['tcp_client_ports'] }}
+tcp_client_max_idle = {{ audit['tcp_client_max_idle'] }}
+
+enable_krb5 = {{ audit['enable_krb5'] }}
+krb5_principal = {{ audit['krb5_principal'] }}
+krb5_key_file = {{ audit['krb5_key_file'] }}

@@ -1,0 +1,205 @@
+#################
+#### MODULES ####
+#################
+
+module(load="imuxsock")
+module(load="imklog")
+module(load="imrelp")
+module(load="imfile" mode="{{ ossimcik_rsyslog['Mode'] }}")
+module(load="imudp" threads="{{ ossimcik_rsyslog['imthreads'] }}")
+module(load="omrelp")
+
+main_queue(
+   queue.size="{{ ossimcik_rsyslog['MainQueueSize'] }}"
+   queue.workerthreads="{{ ossimcik_rsyslog['MainQueueWorkerThreads'] }}"
+)
+
+$DefaultNetstreamDriverCAFile {{ ossimcik_rsyslog['tls']['cacert'] }}
+
+#############################
+### Listening To Clients ####
+#############################
+
+input(type="imudp"
+   port="{{ ossimcik_rsyslog['port_udp'] }}"
+   ruleset="LogsFromClients"
+)
+
+input(type="imrelp"
+   port="{{ ossimcik_rsyslog['port'] }}"
+   ruleset="LogsFromClients"
+   tls="{{ ossimcik_rsyslog['tls']['state'] }}"
+   tls.caCert="{{ ossimcik_rsyslog['tls']['cacert'] }}"
+   tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
+   tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
+   tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
+   tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
+)
+
+ruleset(name="LogsFromClients") {
+   if $msg contains 'AV - Alert -' then stop
+
+   if $msg contains 'New USB device found' or $msg contains 'Product' or \
+      $msg contains 'Manufacturer' or $msg contains 'SerialNumber' then {
+      action(name="USB-Log-Yerele-Yazma"
+         type="omfile"
+         file="{{ ossimcik_rsyslog['LogLocationUSB'] }}"
+         asyncWriting="{{ ossimcik_rsyslog['asyncWriting'] }}"
+         iobuffersize="{{ ossimcik_rsyslog['ioBufferSize'] }}"
+      )
+   }
+
+   action(name="Butun-Log-Yerele-Yazma"
+      type="omfile"
+      file="{{ ossimcik_rsyslog['LogLocationALL'] }}"
+      asyncWriting="{{ ossimcik_rsyslog['asyncWriting'] }}"
+      iobuffersize="{{ ossimcik_rsyslog['ioBufferSize'] }}"
+   )
+
+   action(name="RsyslogSvr-Log-Gonderme"
+      type="omrelp"
+      target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
+      port="{{ ossimcik_rsyslog['port'] }}"
+      tls="{{ ossimcik_rsyslog['tls']['state'] }}"
+      tls.caCert="{{ ossimcik_rsyslog['tls']['cacert'] }}"
+      tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
+      tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
+      tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
+      tls.permittedpeer=["{{ ossimcik_rsyslog['rsyslog_server'] }}"]
+      queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName01'] }}"
+      queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
+      queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
+      queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
+      queue.workerthreads="{{ ossimcik_rsyslog['RsyslogQueueWorkerThreads'] }}"
+      action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
+   )
+   stop
+}
+
+#################################
+### To RsyslogSvr/OSSIM Rules ###
+#################################
+
+ruleset(name="AlertRules") {
+   action(name="RsyslogSvr-Alarm-Gonderme"
+      type="omrelp"
+      target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
+      port="{{ ossimcik_rsyslog['port'] }}"
+      tls="{{ ossimcik_rsyslog['tls']['state'] }}"
+      tls.caCert="{{ ossimcik_rsyslog['tls']['cacert'] }}"
+      tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
+      tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
+      tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
+      tls.permittedpeer=["{{ ossimcik_rsyslog['rsyslog_server'] }}"]
+      queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName02'] }}"
+      queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
+      queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
+      queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
+      action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
+   )
+   action(name="OSSIM-Alarm-Gonderme" 
+      type="omfwd"
+      target="{{ ossimcik_rsyslog['ossim_server'] }}"
+      port="{{ ossimcik_rsyslog['port_udp'] }}"
+      protocol="tcp"
+      StreamDriver="gtls"
+      StreamDriverMode="1"
+      StreamDriverAuthMode="anon"
+      queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName03'] }}"
+      queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
+      queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
+      queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
+      action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
+   )
+   stop
+}
+
+ruleset(name="WinRules") {
+   action(name="RsyslogSvr-Win-Log-Gonderme"
+      type="omrelp"
+      target="{{ ossimcik_rsyslog['rsyslog_server'] }}"
+      port="{{ ossimcik_rsyslog['port'] }}"
+      tls="{{ ossimcik_rsyslog['tls']['state'] }}"
+      tls.caCert="{{ ossimcik_rsyslog['tls']['cacert'] }}"
+      tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
+      tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
+      tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
+      tls.permittedpeer=["{{ ossimcik_rsyslog['rsyslog_server'] }}"]
+      queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName04'] }}"
+      queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
+      queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
+      queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
+      action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
+   )
+   action(name="OSSIM-Win-Log-Gonderme"
+      type="omfwd"
+      target="{{ ossimcik_rsyslog['ossim_server'] }}"
+      port="{{ ossimcik_rsyslog['port_udp'] }}"
+      protocol="tcp"
+      StreamDriver="gtls"
+      StreamDriverMode="1"
+      StreamDriverAuthMode="anon"
+      queue.filename="{{ ossimcik_rsyslog['ActionQueueFileName03'] }}"
+      queue.saveonshutdown="{{ ossimcik_rsyslog['ActionQueueSaveOnShutdown'] }}"
+      queue.type="{{ ossimcik_rsyslog['ActionQueueType'] }}"
+      queue.maxfilesize="{{ ossimcik_rsyslog['ActionQueueMaxFileSize'] }}"
+      queue.size="{{ ossimcik_rsyslog['ActionQueueSize'] }}"
+      action.resumeretrycount="{{ ossimcik_rsyslog['ActionResumeRetryCount'] }}"
+   )
+
+   stop
+}
+
+####################################
+### Read Windows Logs and Alerts ###
+####################################
+
+input(type="imfile"
+   file="/var/ossec/logs/alerts/alerts.log"
+   tag="ossecAlerts"
+   ruleset="AlertRules"
+)
+
+input(type="imfile"
+   file="/var/log/nxlog/client.log"
+   tag="WindowsLogs"
+   ruleset="WinRules"
+)
+
+auth,authpriv.*                 /var/log/auth.log
+*.*;auth,authpriv.none,kern.!=info      -/var/log/syslog
+#cron.*                         /var/log/cron.log
+daemon.*                        -/var/log/daemon.log
+kern.*;kern.!=info              -/var/log/kern.log
+lpr.*                           -/var/log/lpr.log
+mail.*                          -/var/log/mail.log
+user.*                          -/var/log/user.log
+
+mail.info                       -/var/log/mail.info
+mail.warn                       -/var/log/mail.warn
+mail.err                        /var/log/mail.err
+
+news.crit                       /var/log/news/news.crit
+news.err                        /var/log/news/news.err
+news.notice                     -/var/log/news/news.notice
+
+*.=debug;\
+        auth,authpriv.none;\
+        news.none;mail.none     -/var/log/debug
+*.=info;*.=notice;*.=warn;\
+        auth,authpriv.none;\
+        cron,daemon.none;kern.!=info;\
+        mail,news.none          -/var/log/messages
+
+*.emerg                         :omusrmsg:*
+
+###########################
+#### GLOBAL DIRECTIVES ####
+###########################
+
+$WorkDirectory {{ ossimcik_rsyslog['WorkDirectory'] }}
+$IncludeConfig {{ ossimcik_rsyslog['IncludeConfig'] }}

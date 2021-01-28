@@ -1,0 +1,5 @@
+---
+# Dhcpd rolunun main dosyasidir
+- include: conf_integrity.yml
+- include: install.yml
+- include: dhcpd.yml

@@ -1,0 +1,10 @@
+## Bu dosya ansible tarafindan yonetilmektedir!
+## Burada yapilan degisikliklerin uzerine yazilir!!
+{{ ansible_managed }}
+
+[Paths]
+squid_repo_path = {{ pwlm['squid_repo_path'] }}
+whitelist_file = {{ pwlm['whitelist_file'] }}
+confirm_branch = {{ pwlm['confirm_branch'] }}
+master_branch = {{ pwlm['master_branch'] }}
+receiver_mail = {{ pwlm['receiver_mail'] }}

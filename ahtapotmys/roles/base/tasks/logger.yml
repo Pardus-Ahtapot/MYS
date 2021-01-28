@@ -1,0 +1,10 @@
+---
+- name: Heartbeat yapilandiriliyor.
+  template:
+        src: "{{ logger['cron']['source'] }}"
+        dest: "{{ logger['cron']['destination'] }}"
+        owner: "{{ logger['cron']['owner'] }}"
+        group: "{{ logger['cron']['group'] }}"
+        mode: "{{ logger['cron']['mode'] }}"
+  sudo: yes
+  tags: logger 

@@ -1,0 +1,15 @@
+---
+# Base rolunde olmasi gereken dizinleri iceren dosyadir.
+base_ahtapot_directories:
+    directory01:
+        path: "/var/log/ahtapot/"
+        owner: "ahtapotops"
+        group: "ahtapotops"
+        mode: "755"
+        state: "directory"
+#    directoryXX:
+#        path: ""
+#        owner: ""
+#        group: ""
+#        mode: ""
+#        state: ""
