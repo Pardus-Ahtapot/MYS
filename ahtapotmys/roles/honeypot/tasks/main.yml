@@ -126,11 +126,12 @@
   tags: port_mapping
 
 - name: iptables servisinin kaydetilmesi
+  sudo: yes
   shell: |
     echo "*nat\n:PREROUTING ACCEPT [0:0]\n:INPUT ACCEPT [0:0]\n:OUTPUT ACCEPT [0:0]\n:POSTROUTING ACCEPT [0:0]" > /etc/iptables/rules.v4
     /sbin/iptables -t nat -S PREROUTING | awk '{if(NR>1)print}' >> /etc/iptables/rules.v4
     echo  "COMMIT" >> /etc/iptables/rules.v4
-  sudo: yes
+  when: lxc[inventory_hostname]['network_type'] == "veth"
   tags: port_mapping
 
 - name: Configuring cronjob to upgrade lxc host
