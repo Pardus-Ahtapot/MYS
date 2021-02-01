@@ -55,6 +55,7 @@
   - ../roles/mhn/vars/conf_list.yml
   - ../roles/kibana/vars/conf_list.yml
   - ../roles/gitlab/vars/conf_list.yml
+  - ../roles/gitlab-container/vars/conf_list.yml
   - ../roles/pwlm/vars/conf_list.yml
   - ../roles/dhcpd/vars/conf_list.yml
   - ../roles/sks/vars/conf_list.yml
