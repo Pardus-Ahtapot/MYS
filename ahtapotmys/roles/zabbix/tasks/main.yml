@@ -1,6 +1,8 @@
 ---
 # tasks file for wdijkerman.zabbix
 
+#- include: conf_integrity.yml
+
 - name: "Zabbix SQL Path"
   set_fact:
     datafiles_path: /usr/share/doc/zabbix-server-{{ zabbix_server_database }}
