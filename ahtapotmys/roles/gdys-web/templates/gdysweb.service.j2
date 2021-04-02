@@ -1,0 +1,14 @@
+[Unit]
+Description=uWSGI instance to serve Gdys Web
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/opt/gdys-web
+Environment="PATH=/opt/gdys-web-venv/bin:{{ ansible_env.PATH }}"
+ExecStart=/opt/gdys-web-venv/bin/uwsgi --ini gdysweb.ini
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
