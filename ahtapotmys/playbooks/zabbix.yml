@@ -3,6 +3,7 @@
 - hosts: zabbix
   sudo: yes
   vars_files: 
+  - ../roles/base/vars/conf_list.yml
   - ../roles/base/vars/group.yml
   - ../roles/base/vars/user.yml
   - ../roles/base/vars/repo.yml
@@ -23,9 +24,12 @@
   - ../roles/base/vars/fusioninventory.yml
   - ../roles/base/vars/security.yml
   - ../roles/zabbix/vars/main.yml
+  - ../roles/apache/vars/conf_list.yml
+  - ../roles/mysql/vars/conf_list.yml
+  - ../roles/zabbix/vars/conf_list.yml
+  - ../roles/zabbix/vars/main.yml
   roles:
   - { role: base }
   - { role: apache }
   - { role: mysql }
   - { role: zabbix }
-  - { role: zabbix-web }
