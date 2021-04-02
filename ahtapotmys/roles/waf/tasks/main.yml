@@ -217,14 +217,22 @@
 - name: Anahtar Dizinlerini Olustur           
   file: path=/etc/apache2/ssl/key/ state=directory
 
+- name: Sertifika CA Dizinlerini Olustur
+  file: path=/etc/apache2/ssl/ca/ state=directory
+
 - name: Sertifikalar kopyalaniyor
-  copy: src=templates/certificates/{{item.key}}.crt.j2 dest=/etc/apache2/ssl/certs/{{item.key}}.crt
-  when: (role_path + '/templates/certificates/' + item.key + '.crt.j2') | is_file
+  copy: src=templates/certificates/{{item.value.ssl_cert_file}}.j2 dest=/etc/apache2/ssl/certs/{{item.value.ssl_cert_file}}
+  when: (role_path + '/templates/certificates/' + item.value.ssl_cert_file + '.j2') | is_file
   with_dict: "{{waf_vhosts}}"
 
 - name: Anahtarlar kopyalaniyor
-  copy: src=templates/certificates/{{item.key}}.key.j2 dest=/etc/apache2/ssl/key/{{item.key}}.key
-  when: (role_path + '/templates/certificates/' + item.key + '.key.j2') | is_file
+  copy: src=templates/certificates/{{item.value.ssl_key_file}}.j2 dest=/etc/apache2/ssl/key/{{item.value.ssl_key_file}}
+  when: (role_path + '/templates/certificates/' + item.value.ssl_key_file + '.j2') | is_file
+  with_dict: "{{waf_vhosts}}"
+
+- name: CA kopyalaniyor
+  copy: src=templates/certificates/{{item.value.ssl_ca_file}}.j2 dest=/etc/apache2/ssl/ca/{{item.value.ssl_ca_file}}
+  when: (role_path + '/templates/certificates/' + item.value.ssl_ca_file + '.j2') | is_file
   with_dict: "{{waf_vhosts}}"
 
 - name: SSL icin konfigurasyon parametreleri ayarlaniyor
@@ -257,4 +265,3 @@
 
   notify:
    - restart apache2
-
