@@ -7,32 +7,34 @@ pwlm_packages:
         name: "python-sqlite" 
         state: "present" 
     package02:
-        #name: "python-django=1.9.6-1" 
-        name: "python-django" 
+        name: "python-django-common=1.9.6-1" 
         state: "present" 
     package03:
+        name: "python-django=1.9.6-1" 
+        state: "present" 
+    package04:
         #name: "uwsgi=2.0.7-1" 
         name: "uwsgi" 
         state: "present" 
-    package04:
+    package05:
         #name: "uwsgi-plugin-python=2.0.7-1" 
         name: "uwsgi-plugin-python" 
         state: "present" 
-    package05:
+    package06:
         name: "django-jet=0.1.4" 
         state: "present" 
-    package06:
+    package07:
         #name: "python-requests=2.4.3-6" 
         name: "python-requests" 
         state: "present" 
-    package07:
+    package08:
         name: "ahtapot-pwlm=1.0.2" 
         state: "present" 
-    package08:
+    package09:
         #name: "nginx=1.6.2-5+deb8u2" 
         name: "nginx" 
         state: "present" 
-    package09:
+    package10:
         #name: "git=1:2.1.4-2.1+deb8u2" 
         name: "git" 
         state: "present" 
