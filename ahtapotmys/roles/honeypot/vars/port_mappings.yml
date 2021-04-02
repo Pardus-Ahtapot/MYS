@@ -1,0 +1,236 @@
+lxc_containers_port_mappings:
+  hp.ahtapot.org.tr:
+  # Port Block 1000
+  - name: "mhn"
+    ports:
+    - from: 1100
+      to: 10000
+    - from: 1180
+      to: 80
+    - from: 1181
+      to: 8181
+    - from: 3000 # This is an exception for honeymap url
+      to: 3000
+
+  # Port Block 2000
+  - name: "cowrie"
+    ports:
+    - from: 2222
+      to: 22
+
+  # Port Block 3000
+  - name: "dionaea"
+    ports:
+    - from: 3080
+      to: 80
+    - from: 3443
+      to: 443
+
+  # Port Block 4000
+  - name: "p0f"
+    ports:
+    - from: 3022
+      to: 22
+
+  # Port Block 5000
+  - name: "smtp"
+    ports:
+    - from: 5025
+      to: 25
+    - from: 5465
+      to: 465
+
+  # Port Block 6000
+  - name: "glastopf"
+    ports:
+    - from: 6080
+      to: 80
+    - from: 6022
+      to: 22
+
+  # Port Block 7000
+  - name: "ftp"
+    ports:
+    - from: 7021
+      to: 21
+    - from: 7022
+      to: 22
+    - from: 7990
+      to: 990
+
+  # Port Block 8000
+  - name: "pop3"
+    ports:
+    - from: 8025
+      to: 25
+    - from: 8465
+      to: 465
+    - from: 8022
+      to: 22
+
+  # Port Block 9000
+  - name: "shockpot"
+    ports:
+    - from: 9022
+      to: 22
+    - from: 9080
+      to: 80
+
+  # Port Block 10000
+  - name: "wordpot"
+    ports:
+    - from: 10022
+      to: 22
+    - from: 10080
+      to: 80
+
+  # Port Block 11000
+  - name: "amun"
+    ports:
+    - from: 11601
+      to: 6101
+    - from: 11201
+      to: 2101
+    - from: 11021
+      to: 21
+    - from: 11067
+      to: 6070
+    - from: 11022
+      to: 22
+    - from: 11127
+      to: 3127
+    - from: 11967
+      to: 2967
+    - from: 11103
+      to: 2103
+    - from: 11111
+      to: 1111
+    - from: 11023
+      to: 23
+    - from: 11128
+      to: 3128
+    - from: 11968
+      to: 2968
+    - from: 11180
+      to: 1080
+    - from: 11745
+      to: 2745
+    - from: 11205
+      to: 2105
+    - from: 11025
+      to: 25
+    - from: 11203
+      to: 10203
+    - from: 11547
+      to: 7547
+    - from: 11555
+      to: 2555
+    - from: 11107
+      to: 2107
+    - from: 11443
+      to: 443
+    - from: 11389
+      to: 3389
+    - from: 11445
+      to: 445
+    - from: 11123
+      to: 1023
+    - from: 11125
+      to: 1025
+    - from: 11268
+      to: 3268
+    - from: 11135
+      to: 135
+    - from: 11144
+      to: 7144
+    - from: 11500
+      to: 5000
+    - from: 11617
+      to: 617
+    - from: 11105
+      to: 105
+    - from: 11954
+      to: 2954
+    - from: 11554
+      to: 554
+    - from: 11042
+      to: 42
+    - from: 11587
+      to: 587
+    - from: 11139
+      to: 139
+    - from: 11628
+      to: 3628
+    - from: 11372
+      to: 3372
+    - from: 11380
+      to: 2380
+    - from: 11900
+      to: 1900
+    - from: 11581
+      to: 1581
+    - from: 11110
+      to: 110
+    - from: 11999
+      to: 9999
+    - from: 11143
+      to: 143
+    - from: 11880
+      to: 8080
+    - from: 11168
+      to: 5168
+    - from: 11080
+      to: 80
+    - from: 11129
+      to: 6129
+    - from: 11544
+      to: 5554
+    - from: 11523
+      to: 41523
+    - from: 11747
+      to: 27347
+    - from: 11292
+      to: 38292
+
+  # Port Block 12000
+  - name: "suricata"
+    ports:
+    - from: 12022
+      to: 22
+
+  # Port Block 13000
+  - name: "elastichoney"
+    ports:
+    - from: 13080
+      to: 80
+    - from: 13443
+      to: 443
+    - from: 13092
+      to: 9200
+    - from: 13022
+      to: 22
+
+  # Port Block 14000
+  - name: "conpot"
+    ports:
+    - from: 14818
+      to: 44818
+    - from: 14022
+      to: 22
+    - from: 14201
+      to: 10201
+    - from: 14020
+      to: 5020
+    - from: 14088
+      to: 8800
+    - from: 14021
+      to: 2121
+    - from: 14808
+      to: 47808
+    - from: 14069
+      to: 6969
+    - from: 14161
+      to: 16100
+    - from: 14623
+      to: 6230
+      

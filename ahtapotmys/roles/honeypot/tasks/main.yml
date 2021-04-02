@@ -107,6 +107,33 @@
   shell: lxc-start -n {{item.type}}
   with_items: "{{containers[inventory_hostname]}}"
 
+- name: Port mapping icin nat tablosuna ait PREROUTING chaini temizleniyor 
+  sudo: yes
+  command: >
+    /sbin/iptables -t nat -F PREROUTING
+  when: lxc[inventory_hostname]['network_type'] == "veth"
+  tags: port_mapping
+
+- name: Sunucu uzerindeki portlar container icerisine map ediliyor
+  sudo: yes
+  command: >
+    bash -c "/sbin/iptables -t nat -I PREROUTING -p tcp --dport {{ item.1.from }} -j DNAT --to-destination $(lxc-info -n {{item.0.name}} -iH):{{ item.1.to }}"
+    bash -c "/sbin/iptables -t nat -I PREROUTING -p udp --dport {{ item.1.from }} -j DNAT --to-destination $(lxc-info -n {{item.0.name}} -iH):{{ item.1.to }}"
+  when: lxc[inventory_hostname]['network_type'] == "veth"
+  with_subelements:
+    - "{{lxc_containers_port_mappings[inventory_hostname]}}"
+    - ports
+  tags: port_mapping
+
+- name: iptables servisinin kaydetilmesi
+  sudo: yes
+  shell: |
+    echo "*nat\n:PREROUTING ACCEPT [0:0]\n:INPUT ACCEPT [0:0]\n:OUTPUT ACCEPT [0:0]\n:POSTROUTING ACCEPT [0:0]" > /etc/iptables/rules.v4
+    /sbin/iptables -t nat -S PREROUTING | awk '{if(NR>1)print}' >> /etc/iptables/rules.v4
+    echo  "COMMIT" >> /etc/iptables/rules.v4
+  when: lxc[inventory_hostname]['network_type'] == "veth"
+  tags: port_mapping
+
 - name: Configuring cronjob to upgrade lxc host
   cron:
     name: "lxc_host_upgrade"

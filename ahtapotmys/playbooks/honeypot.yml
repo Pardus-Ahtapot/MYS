@@ -22,6 +22,7 @@
   - ../roles/base/vars/security.yml
   - ../roles/base/vars/conf_list.yml
   - ../roles/honeypot/vars/main.yml
+  - ../roles/honeypot/vars/port_mappings.yml
   - ../roles/honeypot/vars/mhn.yml
   - ../roles/honeypot/vars/cowrie.yml
   - ../roles/honeypot/vars/dionaea.yml
