@@ -1,4 +1,4 @@
-## Bu dosya ansible tarafindan yonetilmektedir!
+w## Bu dosya ansible tarafindan yonetilmektedir!
 ## Burada yapilan degisikliklerin uzerine yazilir!!
 {{ ansible_managed }}
 
@@ -80,7 +80,7 @@ UsePAM {{ ssh['UsePAM'] }}
 {% else %}
 Banner {{ ssh['RemoteBanner']['destination'] }}
 {% endif %}
-
+#Tum istemcilerin baglanabilmesi icin kalmalidir
 AcceptEnv LANG LC_*
 
 Subsystem sftp /usr/lib/openssh/sftp-server

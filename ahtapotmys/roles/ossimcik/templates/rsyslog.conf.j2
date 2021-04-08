@@ -33,7 +33,7 @@ input(type="imrelp"
    tls.myCert="{{ ossimcik_rsyslog['tls']['mycert'] }}"
    tls.myPrivKey="{{ ossimcik_rsyslog['tls']['myprivkey'] }}"
    tls.authMode="{{ ossimcik_rsyslog['tls']['authmode'] }}"
-   tls.permittedpeer=["{{ ossimcik_rsyslog['tls']['permittedpeer'] }}"]
+   tls.permittedpeer=[{{ ossimcik_rsyslog['tls']['permittedpeer'] }}]
 )
 
 ruleset(name="LogsFromClients") {

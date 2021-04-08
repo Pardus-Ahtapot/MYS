@@ -28,8 +28,11 @@
   - ../roles/mysql/vars/conf_list.yml
   - ../roles/zabbix/vars/conf_list.yml
   - ../roles/zabbix/vars/main.yml
+
   roles:
   - { role: base }
   - { role: apache }
   - { role: mysql }
   - { role: zabbix }
+  - { role: zabbix-web }
+
