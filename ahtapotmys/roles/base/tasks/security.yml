@@ -1129,3 +1129,9 @@
   sudo: yes
   tags: security
 
+- name: Dil destegi icin LC_ALL=C ayarlaniyor
+  shell: |
+    echo 'LC_ALL=C' >> /home/ahtapotops/.bashrc;
+  args:
+        executable: /bin/bash
+
