@@ -75,6 +75,13 @@
 {% endfor %}
 {% endif %}
 
+{% if item.value.cache_control_status == "On" %}
+	<FilesMatch "\.({% item.value.cache_control_file_ext %})$">
+		Header set Cache-Control "max-age={% item.value.cache_control_max_age %}, public"
+	</FilesMatch>
+{% endif %}
+
+
 {% if item.value.proxy_vhost == "on" %}
 
 	{% if item.value.proxy_load_balance_pool_name|length > 0  %}

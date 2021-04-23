@@ -46,3 +46,6 @@ ahtapot.org.tr:
 #          path:
 #          allowed_ips:
    optimize_access_log: "on"
+   cache_control_status: "On"
+   cache_control_max_age: "86400"
+   cache_control_file_ext: "ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf"
