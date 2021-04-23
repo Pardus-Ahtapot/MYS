@@ -35,6 +35,7 @@ ahtapot.org.tr:
    proxy_sticky_sessions: "On"
    proxy_sticky_session_name: "auto"
    waf_disabled_rules: []
+   waf_disabled_tags: []
    restrict_by_ip: "off"
    restriction_list:
 #      rest01:
