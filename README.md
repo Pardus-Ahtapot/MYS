@@ -7,7 +7,24 @@ MYS Ahtapot bunyesinde bulunan Merkezi Yonetim Aracidir.
 Ahtapot hakkinda daha fazla bilgi ilgili linkten elde edilebilir.
 [ahtapot.org.tr] (http://ahtapot.org.tr)
 
-Gereklilikler
+Bu paketin sundugu roller
+------------------------
+- Guvenlik Duvari
+- Guvenlik Duvari Yonetim Sistemi
+- Guvenli Internet Erisim Sistemi
+- Sanal Ozel Ag (VPN)
+- Eposta Guvenlik
+- Web Uygulama Guvenlik
+- IPS
+- IDS
+- DBFirewall
+- Honeypot
+- ELK
+- Log Toplama Sistemi
+- Ag ve Bilgi sistemleri cihazlari izleme (Monitoring)
+- ..
+
+bBagimliliklar
 -------------
 
 - git
