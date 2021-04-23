@@ -32,7 +32,8 @@ ahtapot.org.tr:
    proxy_load_balance_health_check_int: "30"
    proxy_load_balance_health_check_pass: "1"
    proxy_load_balance_health_check_fail: "2"
-   proxy_sticky_sessions: "PHPSID"
+   proxy_sticky_sessions: "On"
+   proxy_sticky_session_name: "auto"
    waf_disabled_rules: []
    restrict_by_ip: "off"
    restriction_list:

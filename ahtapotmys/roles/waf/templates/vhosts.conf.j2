@@ -77,23 +77,29 @@
 
 {% if item.value.cache_control_status == "On" %}
 	<FilesMatch "\.({% item.value.cache_control_file_ext %})$">
-		Header set Cache-Control "max-age={% item.value.cache_control_max_age %}, public"
+		Header set Cache-Control "max-age={{ item.value.cache_control_max_age }}, public"
 	</FilesMatch>
 {% endif %}
 
 
 {% if item.value.proxy_vhost == "on" %}
+	{% if item.value.proxy_sticky_sessions == "on" %}
+		Header add Set-Cookie "{% if item.value.proxy_sticky_session_name == "auto" %}ROUTEID{% else %}{% item.value.proxy_sticky_session_name %}{% endif %}=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
+	{% endif %}
 
 	{% if item.value.proxy_load_balance_pool_name|length > 0  %}
 		{% if item.value.proxy_load_balance_members|length > 0  %}
 		<Proxy balancer://{{item.value.proxy_load_balance_pool_name}}>
 			{% set loadbalancer_active = "active" %}
 			{% for proxy_member in item.value.proxy_load_balance_members %}
-			BalancerMember {{proxy_member}}{% if item.value.proxy_load_balance_health_check == "on"  %} hcmethod=TCP hcinterval={{item.value.proxy_load_balance_health_check_int}} hcpasses={{item.value.proxy_load_balance_health_check_pass}} hcfails={{item.value.proxy_load_balance_health_check_fail}}{% endif %}
+			BalancerMember {{proxy_member}}{% if item.value.proxy_load_balance_health_check == "on"  %} hcmethod=TCP hcinterval={{item.value.proxy_load_balance_health_check_int}} hcpasses={{item.value.proxy_load_balance_health_check_pass}} hcfails={{item.value.proxy_load_balance_health_check_fail}}{% endif %}{% if item.value.proxy_sticky_sessions == "on" %} route=backend-{{ loop.index }} enablereuse=On{% end if %}
 			
 			{% endfor %}
 			 {% if item.value.proxy_load_balance_method|length > 0  %}
-			ProxySet lbmethod={{item.value.proxy_load_balance_method}}
+                          ProxySet lbmethod={{item.value.proxy_load_balance_method}}
+				{% if item.value.proxy_sticky_sessions == "on" %}
+			  ProxySet stickysession={% if item.value.proxy_sticky_session_name == "auto" %}ROUTEID{% else %}{% item.value.proxy_sticky_session_name %}{% endif %}
+				{% endif %}
 			 {% endif %}
 		</Proxy>
 		{% endif %}
