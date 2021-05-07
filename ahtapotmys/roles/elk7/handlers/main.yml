@@ -1,0 +1,21 @@
+---
+- name: restart elasticsearch
+  service:
+    name: elasticsearch
+    state: restarted
+#    sleep: 5
+
+
+- name: reload systemd configuration
+  command: systemctl daemon-reload
+#  systemd:
+#   name: elasticsearch
+#    daemon_reload: true
+
+- name: reload systemd configuration
+  systemd: state=started name=elasticsearch daemon_reload=yes
+
+- name: restart kibana
+  service:
+    name: kibana
+    state: restarted
