@@ -32,7 +32,7 @@ ahtapot.org.tr:
    proxy_load_balance_health_check_int: "30"
    proxy_load_balance_health_check_pass: "1"
    proxy_load_balance_health_check_fail: "2"
-   proxy_sticky_sessions: "On"
+   proxy_sticky_sessions: "Off"
    proxy_sticky_session_name: "auto"
    waf_disabled_rules: []
    waf_disabled_tags: []
@@ -48,6 +48,6 @@ ahtapot.org.tr:
 #          path:
 #          allowed_ips:
    optimize_access_log: "on"
-   cache_control_status: "On"
+   cache_control_status: "Off"
    cache_control_max_age: "86400"
    cache_control_file_ext: "ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf"
