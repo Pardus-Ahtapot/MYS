@@ -121,6 +121,18 @@
 	ProxyPassReverseCookiePath {{item.value.reverse_cookie_path}}
 	ProxyPassReverseCookieDomain {{item.value.reverse_cookie_domain}}
 	SSLProxyEngine {{item.value.proxy_ssl}}
+{% if item.value.proxy_ssl_verify == "Off"  %}
+{% raw %}{% endraw %}
+        SSLProxyVerify none
+{% raw %}{% endraw %}
+        SSLProxyCheckPeerCN off
+{% raw %}{% endraw %}
+        SSLProxyCheckPeerName off
+{% raw %}{% endraw %}
+        SSLProxyCheckPeerExpire off
+{% raw %}{% endraw %}
+{% endif %}
+	
 	{% if loadbalancer_active is defined %}
 		ProxyPass "/" balancer://{{item.value.proxy_load_balance_pool_name}}/
 	{% else %}
