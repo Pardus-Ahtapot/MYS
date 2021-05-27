@@ -111,6 +111,10 @@
 	{% endif %}
 {% endif %}
 {% raw %}{% endraw %}
+{% if item.value.waf_force_https == "On" %}
+	Header edit Location "(^http[s]?://)([a-zA-Z0-9\.\-]+)(:\d+)?/" "/"
+{% raw %}{% endraw %}
+{% endif %}
 
 		</Proxy>
 		{% endif %}
