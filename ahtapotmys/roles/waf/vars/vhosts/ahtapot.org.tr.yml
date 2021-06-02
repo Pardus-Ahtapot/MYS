@@ -21,10 +21,12 @@ ahtapot.org.tr:
    reverse_cookie_path: "/ /"
    reverse_cookie_domain: "127.0.0.1 ahtapot.org.tr"
    proxy_ssl: "Off"
+   proxy_ssl_verify: "Off"
    proxy_pass: '"/" "balancer://ahtapot_backend"'
    proxy_reverse_pass: '"/" "balancer://ahtapot_backend"'
    proxy_load_balance_pool_name: "ahtapot_backend"
    proxy_load_balance_members: ["http://172.16.103.200"]
+   proxy_max_conn_per_backend: "0"
    proxy_load_balance_method: "byrequests"
    proxy_load_balance_health_check: "on"
    proxy_load_balance_health_check_method: "TCP"

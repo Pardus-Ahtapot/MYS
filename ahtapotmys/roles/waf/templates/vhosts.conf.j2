@@ -98,7 +98,7 @@
 		<Proxy balancer://{{item.value.proxy_load_balance_pool_name}}>
 			{% set loadbalancer_active = "active" %}
 			{% for proxy_member in item.value.proxy_load_balance_members %}
-                        BalancerMember {{proxy_member}}{% if item.value.proxy_load_balance_health_check == "on"  %} hcmethod=TCP hcinterval={{item.value.proxy_load_balance_health_check_int}} hcpasses={{item.value.proxy_load_balance_health_check_pass}} hcfails={{item.value.proxy_load_balance_health_check_fail}}{% endif %}{% if item.value.proxy_sticky_sessions == "On" %} route=backend-{{ loop.index }} enablereuse=On{% endif %}
+                        BalancerMember {{proxy_member}}{% if item.value.proxy_load_balance_health_check == "on"  %} hcmethod=TCP hcinterval={{item.value.proxy_load_balance_health_check_int}} hcpasses={{item.value.proxy_load_balance_health_check_pass}} hcfails={{item.value.proxy_load_balance_health_check_fail}}{% endif %}{% if item.value.proxy_sticky_sessions == "On" %} route=backend-{{ loop.index }} enablereuse=On{% endif %} {% if item.value.proxy_max_conn_per_backend|int > 0 %}max={{ item.value.proxy_max_conn_per_backend }}{% endif %}
 {% raw %}{% endraw %}
 
 			{% endfor %}
@@ -111,6 +111,10 @@
 	{% endif %}
 {% endif %}
 {% raw %}{% endraw %}
+{% if item.value.waf_force_https == "On" %}
+	Header edit Location "(^http[s]?://)([a-zA-Z0-9\.\-]+)(:\d+)?/" "/"
+{% raw %}{% endraw %}
+{% endif %}
 
 		</Proxy>
 		{% endif %}
@@ -121,6 +125,18 @@
 	ProxyPassReverseCookiePath {{item.value.reverse_cookie_path}}
 	ProxyPassReverseCookieDomain {{item.value.reverse_cookie_domain}}
 	SSLProxyEngine {{item.value.proxy_ssl}}
+{% if item.value.proxy_ssl_verify == "Off"  %}
+{% raw %}{% endraw %}
+        SSLProxyVerify none
+{% raw %}{% endraw %}
+        SSLProxyCheckPeerCN off
+{% raw %}{% endraw %}
+        SSLProxyCheckPeerName off
+{% raw %}{% endraw %}
+        SSLProxyCheckPeerExpire off
+{% raw %}{% endraw %}
+{% endif %}
+	
 	{% if loadbalancer_active is defined %}
 		ProxyPass "/" balancer://{{item.value.proxy_load_balance_pool_name}}/
 	{% else %}
