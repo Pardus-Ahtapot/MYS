@@ -6,3 +6,9 @@ sec_audit_log_parts: "ABIFHZ" # # ABCDEFGHIJKZ
 sec_server_signature: "AHTAPOT_WAF"
 sec_rule_remove_by_id: "960017,970901,960015"
     # 981203,981184,981185,981186,981205,960015,981143,950109,960032,981220,981222,970901,960017,960010,981060
+document_root: "/var/www/html"
+error_403: "error_403.html"
+error_500: "error_500.html"
+error_503: "error_503.html"
+error_502: "error_502.html"
+

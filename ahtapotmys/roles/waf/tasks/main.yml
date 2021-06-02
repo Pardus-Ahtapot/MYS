@@ -251,10 +251,34 @@
     group: root
     mode: 0644
 
-- name: Ozel Hata Sayfasi Kopyalaniyor
+- name: Ozel Hata Sayfasi Kopyalaniyor (403)
   template:
-    src: "waf_error.html.j2"
-    dest: "/var/www/html/waf_error.html"
+    src: "{{error_403}}.j2"
+    dest: "/var/www/html/{{error_403}}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ozel Hata Sayfasi Kopyalaniyor (500)
+  template:
+    src: "{{error_500}}.j2"
+    dest: "/var/www/html/{{error_500}}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ozel Hata Sayfasi Kopyalaniyor (502)
+  template:
+    src: "{{error_502}}.j2"
+    dest: "/var/www/html/{{error_502}}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ozel Hata Sayfasi Kopyalaniyor (503)
+  template:
+    src: "{{error_503}}.j2"
+    dest: "/var/www/html/{{error_503}}"
     owner: root
     group: root
     mode: 0644

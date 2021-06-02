@@ -1,0 +1,26 @@
+- hosts: elk7
+  sudo: yes
+  vars_files:
+  - /etc/ansible/roles/base/vars/group.yml
+  - /etc/ansible/roles/base/vars/user.yml
+  - /etc/ansible/roles/base/vars/repo.yml
+  - /etc/ansible/roles/base/vars/rsyslog.yml
+  - /etc/ansible/roles/base/vars/ntp.yml
+  - /etc/ansible/roles/base/vars/package.yml
+  - /etc/ansible/roles/base/vars/kernelmodules_remove.yml
+  - /etc/ansible/roles/base/vars/kernelmodules_blacklist.yml
+  - /etc/ansible/roles/base/vars/host.yml
+  - /etc/ansible/roles/base/vars/audit.yml
+  - /etc/ansible/roles/base/vars/sudo.yml
+  - /etc/ansible/roles/base/vars/ssh.yml
+  - /etc/ansible/roles/base/vars/grub.yml
+  - /etc/ansible/roles/base/vars/logger.yml
+  - /etc/ansible/roles/base/vars/logrotate.yml
+  - /etc/ansible/roles/base/vars/directory.yml
+  - /etc/ansible/roles/base/vars/profile.yml
+  - /etc/ansible/roles/base/vars/fusioninventory.yml
+  - /etc/ansible/roles/base/vars/security.yml
+  - /etc/ansible/roles/elk7/vars/main.yml
+  roles:
+#    - { role: base }
+    - { role: elk7 }

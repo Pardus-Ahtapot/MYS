@@ -52,12 +52,22 @@
 
 	SecDebugLogLevel {{item.value.waf_debug_level}}
 
-        DocumentRoot /var/www/html
-        ErrorDocument 403 /waf_error.html
-        ErrorDocument 500 /waf_error.html
-        ErrorDocument 503 /waf_error.html
+{% if item.value.error_403 is defined %}{% set custom_403 = item.value.error_403 %}{% else %}{% set custom_403 = error_403 %}{% endif %}
+{% if item.value.error_500 is defined %}{% set custom_500 = item.value.error_500 %}{% else %}{% set custom_500 = error_500 %}{% endif %}              
+{% if item.value.error_502 is defined %}{% set custom_502 = item.value.error_502 %}{% else %}{% set custom_502 = error_502 %}{% endif %}              
+{% if item.value.error_503 is defined %}{% set custom_503 = item.value.error_503 %}{% else %}{% set custom_503 = error_503 %}{% endif %}              
 
-        ProxyPass /waf_error.html !
+        DocumentRoot {{document_root}}
+        ErrorDocument 403 /{{custom_403}}
+        ErrorDocument 500 /{{custom_500}}
+        ErrorDocument 502 /{{custom_502}}
+        ErrorDocument 503 /{{custom_503}}
+
+        ProxyPass /{{custom_403}} !
+        ProxyPass /{{custom_500}} !
+        ProxyPass /{{custom_502}} !
+        ProxyPass /{{custom_503}} !
+
 
 {% if item.value.waf_disabled_rules|length > 0 %}
     {% for rule_id in item.value.waf_disabled_rules %} 

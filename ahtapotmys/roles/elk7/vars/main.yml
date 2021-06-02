@@ -1,0 +1,120 @@
+es_version_lock: true 
+es_other_package_name: "elasticsearch-oss"
+es_enable_xpack: true
+
+#es_config:
+#  cluster.name: "ahcluster"
+#  discovery.seed_hosts: "localhost:9301"
+#  http.port: 9201
+#  transport.port: 9301
+#  bootstrap.memory_lock: true
+
+es_cluster_name: ahcluster
+es_master_node: elk01.demo.ahtapot.org.tr
+es_path_data: /var/lib/elasticsearch
+es_path_logs: /var/log/elasticsearch
+es_memory_lock: true
+es_network_host: 0.0.0.0
+es_http_port: 9200
+kb_network_host: 0.0.0.0
+
+default_file: "/etc/default/elasticsearch"
+es_home: "/usr/share/elasticsearch"
+
+
+es_conf_dir: "/etc/elasticsearch"
+es_pid_dir: "/var/run/elasticsearch"
+es_data_dirs:
+  - "/var/lib/elasticsearch"
+es_log_dir: "/var/log/elasticsearch"
+
+
+es_xpack_security: true
+es_xpack_security_transport_ssl_verification_mode: certificate
+es_xpack_security_ssl_keystore_path:  /etc/elasticsearch/elastic-certificates.p12
+es_xpack_security_ssl_truststore_path:  /etc/elasticsearch/elastic-certificates.p12
+
+es_enable_transport_ssl: true
+
+#discovery.zen.ping.unicast.hosts: ["172.16.103.99", "172.16.103.102"]
+es_jvm_options_initial_heap_size: "4"
+es_jvm_options_maximum_heap_size: "4"
+
+install_kibana: true
+
+es_api_basic_auth_username: elastic
+es_api_basic_auth_password: LA123a
+
+es_users:
+  native:
+    kibana4_server:
+          password: LA123a
+          roles:
+            - kibana4_server
+    logstash_system:
+          #this should be successfully modified
+          password: LA123a
+          #this will be ignored
+          roles:
+            - kibana4_server
+    elastic:
+          password: LA123a
+#  file:
+#    es_admin:
+#          password: LA123a
+#          roles:
+#            - admin
+#    ahtapotops:
+#          password: LA123a
+#          roles:
+#            - power_user
+#            - user
+
+es_roles:
+  file:
+    admin:
+      cluster:
+        - all
+      indices:
+        - names: '*'
+      privileges:
+        - all
+    power_user:
+      cluster:
+        - monitor
+      indices:
+        - names: '*'
+      privileges:
+        - all
+    user:
+      indices:
+        - names: '*'
+      privileges:
+        - read
+    kibana4_server:
+      cluster:
+        - monitor
+      indices:
+        - names: '.kibana'
+      privileges:
+        - all
+  native:
+    logstash:
+      cluster:
+        - manage_index_templates
+      indices:
+        - names: 'logstash-*'
+      privileges:
+        - write
+        - delete
+        - create_index
+    #this will be ignored - its reserved
+    logstash_system:
+      cluster:
+        - manage_index_templates
+      indices:
+        - names: 'logstash-*'
+      privileges:
+        - write
+        - delete
+        - create_index
