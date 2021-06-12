@@ -24,7 +24,7 @@ Bu paketin sundugu roller
 - Ag ve Bilgi sistemleri cihazlari izleme (Monitoring)
 - ..
 
-bBagimliliklar
+Bagimliliklar
 -------------
 
 - git
