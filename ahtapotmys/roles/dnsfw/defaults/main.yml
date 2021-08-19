@@ -1,0 +1,9 @@
+---
+verbosity: "1"
+num_threads: "4"
+interface: "0.0.0.0"
+port: "53"
+outgoing_range: "462"
+num_queries_per_thread: "30"
+forward_addr: ["193.140.83.251", "193.140.83.252"]
+bl_path: "/etc/ahtapot/dnsfw/blacklist"

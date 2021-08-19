@@ -1,0 +1,21 @@
+---
+verbosity: "1"
+num_threads: "4"
+interface: "0.0.0.0"
+port: "53"
+outgoing_range: "462"
+num_queries_per_thread: "30"
+forward_addr: ["193.140.83.251", "193.140.83.252"]
+local_data:
+    local01:
+         domain: "ahtapot.org.tr"
+         type: "A"
+         content: "172.16.103.200"
+    local02:
+         domain: "pardus.org.tr"
+         type: "A"
+         content: "172.16.103.220"
+download_bl: "on"
+autodownload: "on"
+usom_domain_list: "https://liste.ahtapot.org.tr/usom/url-list.txt"
+ahtapot_cti_dnsbl: "https://liste.ahtapot.org.tr/dnsbl/open.txt"

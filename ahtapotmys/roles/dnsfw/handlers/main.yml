@@ -1,0 +1,19 @@
+---
+- name: restart dnsserver
+  service:
+    name: unbound
+    state: restarted
+#    sleep: 5
+
+- name: restart logrotate
+  service:
+    name: logrotate
+    state: restarted
+#    sleep: 5
+
+- name: restart cron
+  service:
+    name: cron
+    state: restarted
+#    sleep: 5
+

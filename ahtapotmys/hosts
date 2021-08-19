@@ -88,6 +88,8 @@
 
 [ha]
 
+[dnsfw]
+
 [all:vars]
 ansible_shell_type=sh
 
