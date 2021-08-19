@@ -1,0 +1,76 @@
+server:
+	verbosity: {{ verbosity }}
+	num-threads: {{ num_threads }}
+	interface: {{ interface }}
+	port: {{ port }}
+	outgoing-range: {{ outgoing_range }}
+	outgoing-num-tcp: 1
+	incoming-num-tcp: 1
+	so-reuseport: yes
+	msg-buffer-size: 8192
+	msg-cache-size: 2m
+	msg-cache-slabs: 2
+	num-queries-per-thread: {{ num_queries_per_thread }}
+	rrset-cache-size: 4m
+	rrset-cache-slabs: 2
+	cache-min-ttl: 10
+	cache-max-ttl: 3600
+	cache-max-negative-ttl: 120
+	infra-cache-slabs: 2
+	infra-cache-numhosts: 200
+	do-ip6: no
+	access-control: 0.0.0.0/0 allow
+	chroot: ""
+	username: ""
+	logfile: /var/log/ahtapot/dnsfw/query.log
+	verbosity: 1
+	log-queries: yes
+	root-hints: "/etc/unbound/named.root"
+	hide-identity: yes
+	hide-version: yes
+	identity: "Not Supported"
+	version: "0"
+	target-fetch-policy: "2 1 0 0 0 0"
+	harden-short-bufsize: yes
+	harden-large-queries: yes
+	harden-below-nxdomain: yes
+	harden-referral-path: yes
+	harden-algo-downgrade: yes
+	use-caps-for-id: yes
+	caps-whitelist: "dnsleaktest.com"
+	private-domain: "home"
+	do-not-query-localhost: no
+	prefetch: yes
+	prefetch-key: yes
+	rrset-roundrobin: yes
+	minimal-responses: yes
+	module-config: "validator python iterator"
+	domain-insecure: "home"
+	domain-insecure: "1.1.10.in-addr.arpa"
+	val-permissive-mode: yes
+	val-log-level: 2
+	key-cache-size: 100k
+	key-cache-slabs: 2
+	neg-cache-size: 10k
+	unblock-lan-zones: yes
+	insecure-lan-zones: yes
+{% for keyx,valx in local_data.iteritems() %}
+       local-data: "{{valx.domain}} {{valx.type}} {{valx.content}}"
+{% endfor %}
+
+python:
+	python-script: "/etc/ahtapot/dnsfw/dns-firewall.py"
+remote-control:
+	control-enable: yes
+	control-interface: 127.0.0.1
+	control-port: 8953
+	server-key-file: "/etc/unbound/unbound_server.key"
+	server-cert-file: "/etc/unbound/unbound_server.pem"
+	control-key-file: "/etc/unbound/unbound_control.key"
+	control-cert-file: "/etc/unbound/unbound_control.pem"
+forward-zone:
+	name: "."
+	forward-first: yes
+{% for addr in forward_addr %}
+	forward-addr: {{ addr }}
+{% endfor %}

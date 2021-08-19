@@ -1,0 +1,111 @@
+---
+#- include: conf_integrity.yml
+
+- name: AppArmor Durduruluyor
+  service:
+    name: apparmor
+    state: stopped
+  failed_when: false
+  tags:
+    - configuration
+    - apparmor
+
+- name: AppArmor Kaldırılıyor
+  service:
+    name: apparmor
+    enabled: false
+  failed_when: false
+  tags:
+    - configuration
+    - apparmor
+
+- name: Paket Siliniyor
+  apt:
+    name: apparmor
+    state: absent
+    purge: true
+  tags:
+    - configuration
+    - apparmor
+
+- name: Log Dizini oluşturuluyor
+  file:
+    path: /var/log/ahtapot/dnsfw
+    state: directory
+    mode: 0775
+    recurse: yes
+
+- name: Gecici Politika uygulanıyor
+  template:
+    src: "policy-rc.d.j2"
+    dest: "/usr/sbin/policy-rc.d"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ahtapot DNSFW Kurulumu
+  apt:
+    name: ahtapot-dnsfw-ose
+    update_cache: yes
+    state: latest
+
+- name: Ahtapot DNSFW için Log Rotate Konfigüre ediliyor
+  template:
+    src: "logrotate_unbound.j2"
+    dest: "/etc/logrotate.d/ahtapot_dnsfw"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ahtapot DNSFW Konfigürasyonu Güncelleniyor
+  template:
+    src: "ahtapot-dns-fw.conf.j2"
+    dest: "/etc/unbound/unbound.conf.d/ahtapot-dns-firewall.conf"
+    owner: root
+    group: root
+    mode: 0644
+#  notify:
+#   - restart dnsserver
+
+#- name: DNS Kara Listeleri İndiriliyor
+#  apt:
+#    name: wafkurallar
+#    update_cache: yes
+#    state: latest
+
+- name: Log Dosyası İzinleri Ayarlanıyor
+  file:
+    path: "/var/log/ahtapot/dnsfw/query.log"
+    state: touch
+    mode: 0755
+    owner: unbound
+
+- name: USOM Listesi Indiriliyor
+  get_url:
+    url: "{{ usom_domain_list }}"
+    dest: "{{ bl_path }}"
+    force: yes
+    validate_certs: no
+  when: (download_bl  == "on")
+  ignore_errors: yes
+
+- name: Run CRON job every day at 11.05 PM UTC
+  cron:
+    name: "ahtapot_dnsfw_list_update"
+    user: "root"
+    hour: 06
+    minute: 5
+    job: "/usr/bin/wget --quiet -O {{ bl_path }} {{ usom_domain_list }} && /usr/sbin/unbound-control reload"
+    state: present
+  when: (autodownload == "on")
+  notify:
+   - restart cron
+
+- name: Gecici Politika Kaldırılıyor
+  file:
+    path: "/usr/sbin/policy-rc.d"
+    state: absent
+  notify:
+   - restart dnsserver
+   - restart logrotate
+
