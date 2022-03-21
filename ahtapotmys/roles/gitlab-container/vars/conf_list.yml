@@ -1,0 +1,6 @@
+gitlab_container_conf_list:
+- /var/lib/lxc/gitlab/rootfs/etc/gitlab/ssl/gitlab.gdys.local.crt
+- /var/lib/lxc/gitlab/rootfs/etc/gitlab/gitlab.gdys.local.key
+- /var/lib/lxc/gitlab/rootfs/var/opt/gitlab/git-data/repositories/ahtapotops/mys.git/custom_hooks/post-receive
+- /var/lib/lxc/gitlab/rootfs/etc/gitlab/gitlab.rb
+- /var/lib/lxc/gitlab/rootfs/var/opt/gitlab/git-data/repositories/ahtapotops/gdys.git/custom_hooks/post-receive

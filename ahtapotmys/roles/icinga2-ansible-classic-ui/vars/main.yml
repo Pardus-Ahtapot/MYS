@@ -1,12 +1,13 @@
 ---
 # defaults file for icinga2-ansible-classic-ui
 
-icinga2_classic_ui_passwd: "labris"
+icinga2_classic_ui_passwd: "ahtapotops"
 
 # Vars for Debian OS Family
 icinga2_classic_ui_pkg:
  - icinga2-classicui=2.1.1-1
  - python-passlib
+ - apache2
 
 icinga_ssl_country: "TR"
 icinga_ssl_state: "sehir"

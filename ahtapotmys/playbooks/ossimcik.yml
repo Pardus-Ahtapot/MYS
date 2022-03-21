@@ -49,14 +49,13 @@
   - ../roles/honeypot/vars/conf_list.yml
   - ../roles/ansible/vars/conf_list.yml
   - ../roles/icinga2-clients/vars/conf_list.yml
-  - ../roles/waf-evasive/vars/conf_list.yml
-  - ../roles/waf-proxy-vhosts/vars/conf_list.yml
   - ../roles/ids/vars/conf_list.yml
   - ../roles/gkts/vars/conf_list.yml
   - ../roles/ntp/vars/conf_list.yml
   - ../roles/mhn/vars/conf_list.yml
   - ../roles/kibana/vars/conf_list.yml
   - ../roles/gitlab/vars/conf_list.yml
+  - ../roles/gitlab-container/vars/conf_list.yml
   - ../roles/pwlm/vars/conf_list.yml
   - ../roles/dhcpd/vars/conf_list.yml
   - ../roles/sks/vars/conf_list.yml

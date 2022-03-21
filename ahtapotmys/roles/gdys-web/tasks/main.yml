@@ -1,0 +1,3 @@
+---
+# tasks file for gdys-web
+- include: install.yml

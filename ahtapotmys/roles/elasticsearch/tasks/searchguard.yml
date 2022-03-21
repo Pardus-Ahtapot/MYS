@@ -11,4 +11,4 @@
     - searchguard konfigurasyonu yeniden yukleniyor
   sudo: yes
   tags: searchguard
-
+  when: searchguard_active|bool == true

@@ -1,14 +1,14 @@
 Source: ahtapot-mys
 Section: base
 Priority: optional
-Maintainer: Volkan DELIOGLU <volkan.delioglu@pardus.org.tr>, Ugur CIL <ugur.cil@pardus.org.tr>    
+Maintainer: Ibrahim ARI (ibrahim.ari@pardus.org.tr)
 Build-Depends: debhelper (>= 8.0.0)
 Standards-Version: 3.9.4
 Homepage: https://github.com/Pardus-Ahtapot/MYS.git
 
 Package: ahtapot-mys
 Architecture: all
-Depends: python (>= 2.7), python (<< 2.8), ansible (>=1.7)
+Depends: python (>= 2.7), python (<< 2.8), ansible (>=1.7), git
 Description: Ahtapot Merkezi Yonetim Sistemi Ansible Playbooklari
  Merkezi Yonetim Sisteminin temelini olusturan Ansible uzerinde calisacak playbooklar 
  bu paket icerisinde bulunmaktadır. Bu playbooklar ile, Ahtapot kapsamindaki 

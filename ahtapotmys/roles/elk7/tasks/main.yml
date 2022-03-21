@@ -1,0 +1,181 @@
+
+---
+#- include: conf_integrity.yml
+- set_fact:
+    kibana_server_from_inventory: "{{ groups['kibana'] }}"
+  when:
+      - install_kibana is defined
+  register: install_kibana_to
+
+- set_fact:
+    server_for_kibana: "{{ kibana_server_from_inventory | first }}"
+  when:
+      - install_kibana_to is defined
+
+#- debug:
+#    msg: Kibana yuklenecek sunucu {{ server_for_kibana }}
+
+- set_fact: "es_major_version={{ es_version.split('.')[0] }}.x"
+  when:
+      - es_major_version is undefined
+
+- name: Sysctl kullanilarak IPv6 Kapatiliyor
+  sysctl: name={{ item }} value=1 state=present reload=yes
+  with_items:
+    - net.ipv6.conf.all.disable_ipv6
+    - net.ipv6.conf.default.disable_ipv6
+    - net.ipv6.conf.lo.disable_ipv6
+
+- name: Mevcut kurulu ELK kontrolu yapip kaldiriliyor
+  apt:
+    name: "{{ es_other_package_name }}"
+    state: absent
+
+- name: Kurulu elasticsearch paketleri kontrol ediliyor
+  shell: "dpkg-query -W -f'${Status}' {{ es_other_package_name }}"
+  register: elasticsearch_package
+  failed_when: False
+  changed_when: False
+  check_mode: no
+
+- name: Elasticsearch icin apt hold durumu kaldiriliyor
+  dpkg_selections:
+    name: "{{ es_other_package_name }}"
+    selection: "install"
+  when: elasticsearch_package.stdout == 'install ok installed'
+
+- name: Elasticsearch servisi durduruluyor
+  service:
+    name: 'elasticsearch'
+    state: stopped
+  when: elasticsearch_package.stdout == 'install ok installed'
+
+- name: Farkli versiyonlar kaldiriliyor
+  apt:
+    name: '{{ es_other_package_name }}'
+    state: absent
+  when: elasticsearch_package.stdout == 'install ok installed'
+
+- name: Elasticsearch paketi kuruluyor
+  apt:
+    name: elasticsearch=7.4.2
+    update_cache: yes
+
+- name: Elasticsearch paketi icin apt kilitleniyor
+  become: yes
+  dpkg_selections:
+    name: "elasticsearch"
+    selection: "hold"
+  when: es_version_lock
+
+- name: Elasticsearch konfigurasyonu kopyalaniyor
+  template:
+    src: elasticsearch.yml.j2
+    dest: "{{ es_conf_dir }}/elasticsearch.yml"
+    owner: root
+    group: "{{ es_group }}"
+    mode: "660"
+    force: yes
+  register: system_change
+  notify: restart elasticsearch
+  
+- name: Systemd startup servisleri Elasticsearch icin ayarlaniyor
+  command: systemctl enable elasticsearch
+
+- name: Default dosyasi kopyalaniyor
+  template:
+    src: "{{ es_config_default }}"
+    dest: "{{ default_file }}"
+    owner: root
+    group: "{{ es_group }}"
+    mode: "660"
+    force: yes
+  notify: restart elasticsearch
+
+- name: Systemd guncellemeleri uygulaniyor
+  file:
+    path: "{{ sysd_config_file | dirname }}"
+    state: directory
+    mode: "755"
+  when: use_system_d and m_lock_enabled
+
+- name: Systemd konfigurasyonu override ediliyor
+  template:
+    src: override.conf.j2
+    dest: "{{ sysd_config_file }}"
+  when: use_system_d and m_lock_enabled
+
+- name: Systemd konfigurasyonu tekrar yukleniyor
+  command: systemctl daemon-reload
+
+- name: X-Pack guvenlik eklentisi calistiriliyor
+  include: xpack/es-xpack.yml
+  when: es_enable_xpack
+
+#- name: include es-ssl.yml
+#  include: es-ssl.yml
+#  when: es_enable_http_ssl or es_enable_transport_ssl
+
+- name: Transport Layer TLS sertifikalari olusuturuluyor
+  include: es-tls-ssl.yml
+  when: es_enable_transport_ssl
+
+- name: jvm.options dosyasi uygulaniyor
+  template:
+    src: "{{ es_config_jvm }}"
+    dest: "{{ es_conf_dir }}/jvm.options"
+    owner: root
+    group: "{{ es_group }}"
+    mode: "660"
+    force: yes
+  notify: restart elasticsearch
+
+- name: Kibana Elasticsearch makinasina kuruluyor
+  apt:
+    name: kibana=7.4.2
+    update_cache: yes
+  when: "{{ (server_for_kibana is defined) and (server_for_kibana == ansible_fqdn) }}"
+
+- name: Systemd startup servisleri Kibana ayarlaniyor
+  command: systemctl enable kibana
+  when: "{{ (server_for_kibana is defined) and (server_for_kibana == ansible_fqdn) }}"
+  
+
+- name: Kibana konfigurasyonu uygulaniyor
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    regexp: '^#\s*server.host: "localhost"*$'
+    line: 'server.host: "0.0.0.0"'
+  when: "{{ (server_for_kibana is defined) and (server_for_kibana == ansible_fqdn) }}"
+  
+- name: Kibana arayuz ismi guncelleniyor
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    regexp: '^#\s*server.name: "your-hostname"*$'
+    line: 'server.name: "{{ es_cluster_name }}"'
+  when: "{{ (server_for_kibana is defined) and (server_for_kibana == ansible_fqdn) }}"
+
+- name: Kibana Guvenlik aktif hale getiriliyor
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    regexp: '^#\s*xpack.security.enabled: true*$'
+    line: 'xpack.security.enabled: true'
+  when: "{{ (server_for_kibana is defined) and (server_for_kibana == ansible_fqdn) and (es_enable_xpack is defined) }}"  
+
+- name: Kibana kullanicisi konfigure ediliyor (kullanici)
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    regexp: '^#\s*elasticsearch.username: "kibana"*$'
+    line: 'elasticsearch.username: "elastic"'
+  when: "{{ (server_for_kibana is defined) and (server_for_kibana == ansible_fqdn) and (es_xpack_security is defined) }}"
+
+- name: Kibana kullanicisi konfigure ediliyor (sifre)
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    regexp: '^#\s*elasticsearch.password: "pass"*$'
+    line: 'elasticsearch.password: "{{ es_users["native"]["elastic"]["password"] }}"'
+  when: "{{ (server_for_kibana is defined) and (server_for_kibana == ansible_fqdn) and (es_xpack_security is defined) }}"
+
+- name: Kibana Elasticsearch makinasinda baslatiliyor
+  when: "{{ (server_for_kibana is defined) and (server_for_kibana == ansible_fqdn) }}"
+  command: systemctl start kibana

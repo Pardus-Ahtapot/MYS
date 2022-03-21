@@ -1,0 +1,78 @@
+---
+
+- name: Sertifika dizini olusturuluyor
+  file:
+    owner: root
+    group: '{{ es_group }}'
+    mode: '0755'
+    path: '{{ es_conf_dir }}/certs'
+    state: directory
+  when: "{{ (es_enable_transport_ssl is defined) and (es_master_node == ansible_fqdn) }}"
+  
+- name: CA kontrolu yapiliyor
+  stat:
+    path: "{{ es_conf_dir }}/certs/elastic-stack-ca.p12"
+  register: elastic_stack_ca_file
+  when: "{{ (es_enable_transport_ssl is defined) and (es_master_node == ansible_fqdn) }}"
+
+- name: CA sertifika olusturuluyor
+  args:
+    chdir: '{{ es_conf_dir }}'
+  become: yes
+  command: "'{{ es_bin_dir }}'/elasticsearch-certutil ca --out '{{ es_conf_dir }}'/certs/elastic-stack-ca.p12 --pass ''"
+#  when: not elastic_stack_ca_file.stat.exists
+  when: "{{ (es_enable_transport_ssl is defined) and (es_master_node == ansible_fqdn) and (not elastic_stack_ca_file.stat.exists) }}"
+
+- name: Master node icin sertifika ve ozel anahtar kontrol ediliyor
+  stat:
+    path: "{{ es_conf_dir }}/certs/elastic-certificates.p12"
+  register: elastic_certificates_file
+  
+- name: Master node icin sertifika ve ozel anahtar olusturuluyor
+  args:
+    chdir: '{{ es_conf_dir }}'
+  become: yes
+  command: "'{{ es_bin_dir }}'/elasticsearch-certutil cert --ca '{{ es_conf_dir }}'/certs/elastic-stack-ca.p12 --ca-pass '' --out '{{ es_conf_dir }}'/certs/elastic-certificates.p12 --pass ''"
+  when: "{{ (elastic_stack_ca_file) and (not elastic_certificates_file) and (es_master_node == ansible_fqdn) }}"
+
+- name: Sertifikalar yerel sunucuya tasiniyor
+  fetch:
+    src: "{{ es_conf_dir }}/certs/elastic-stack-ca.p12"
+    dest: "/tmp/fetched/"
+    flat: yes
+  when: "{{ es_master_node == ansible_fqdn }}" 
+  register: certificates_fetched
+
+- name: data nodelar uzerinde sertifika dizini olusturuluyor
+  file:
+    owner: root
+    group: '{{ es_group }}'
+    mode: '0640'
+    path: '{{ es_conf_dir }}/certs'
+    state: directory
+  when: "{{ (es_enable_transport_ssl is defined) and (es_master_node != ansible_fqdn) }}"
+
+- name: Sertifika paketi data nodelara gonderiliyor
+  copy:
+    src: "/tmp/fetched/elastic-stack-ca.p12"
+    dest: "{{ es_conf_dir }}/certs/elastic-stack-ca.p12"
+    owner: root
+    group: '{{ es_group }}'
+    mode: '0640'
+  when: "{{ (es_enable_transport_ssl is defined) and (certificates_fetched is defined) and (es_master_node != ansible_fqdn) }}"
+  
+- name: Tum Nodelar uzerinde klasor izinleri duzenleniyor
+  file:
+    path: "{{ es_conf_dir }}/certs/"
+    owner: root
+    group: '{{ es_group }}'
+    mode: '0755'
+  when: "{{ certificates_fetched is defined }}" 
+
+- name: Tum Nodelar uzerinde sertifika izinleri duzenleniyor
+  file:
+    path: "{{ es_conf_dir }}/certs/elastic-stack-ca.p12"
+    owner: root
+    group: '{{ es_group }}'
+    mode: '0640'
+  when: "{{ certificates_fetched is defined }}" 

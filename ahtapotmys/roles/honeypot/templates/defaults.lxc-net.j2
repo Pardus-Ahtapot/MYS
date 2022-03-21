@@ -1,1 +1,5 @@
+{% if lxc[inventory_hostname].network_type == "macvlan" %}
+USE_LXC_BRIDGE="false"
+{% else %}
 USE_LXC_BRIDGE="true"
+{% endif %}

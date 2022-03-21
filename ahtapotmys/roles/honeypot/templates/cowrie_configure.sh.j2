@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+set -x
+
+sed -i -r 's/[#]?Port 22\s*$/Port {{cowrie_real_ssh_port}}/g' /etc/ssh/sshd_config; service ssh restart;
+sed -i -e '/^\[ssh\]$/,/^\[/ s/^enabled.*$/enabled = {{cowrie_enable_ssh}}/' /usr/share/cowrie/etc/cowrie.cfg;
+sed -i -e '/^\[ssh\]$/,/^\[/ s/^version.*$/version = {{cowrie_ssh_version}}/' /usr/share/cowrie/etc/cowrie.cfg;
+sed -i -e '/^\[ssh\]$/,/^\[/ s/^listen_endpoints.*$/listen_endpoints = tcp:{{cowrie_ssh_port}}:interface=0.0.0.0/' /usr/share/cowrie/etc/cowrie.cfg;
+sed -i -e '/^\[telnet\]$/,/^\[/ s/^enabled.*$/enabled = {{cowrie_enable_telnet}}/' /usr/share/cowrie/etc/cowrie.cfg;
+sed -i -e '/^\[telnet\]$/,/^\[/ s/^listen_endpoints.*$/listen_endpoints = tcp:{{cowrie_telnet_port}}:interface=0.0.0.0/' /usr/share/cowrie/etc/cowrie.cfg;
+sed -i -r 's/^[#]?\[output_textlog\]$/\[output_textlog\]/' /usr/share/cowrie/etc/cowrie.cfg;
+sed -i -r '/^\[output_textlog\]$/,/^[#]?\[/ s/^[#]?enabled.*$/enabled = true/' /usr/share/cowrie/etc/cowrie.cfg;
+sed -i -r '/^\[output_textlog\]$/,/^[#]?\[/ s/^[#]?logfile.*$/logfile = ${honeypot:log_path}\/audit.log/' /usr/share/cowrie/etc/cowrie.cfg;
+sed -i -r '/^\[output_textlog\]$/,/^[#]?\[/ s/^[#]?format.*$/format = cef/' /usr/share/cowrie/etc/cowrie.cfg;
+touch /etc/authbind/byport/{{cowrie_ssh_port}} /etc/authbind/byport/{{cowrie_telnet_port}}
+chown cowrie /etc/authbind/byport/{{cowrie_ssh_port}} /etc/authbind/byport/{{cowrie_telnet_port}}
+chmod 770 /etc/authbind/byport/{{cowrie_ssh_port}} /etc/authbind/byport/{{cowrie_telnet_port}}

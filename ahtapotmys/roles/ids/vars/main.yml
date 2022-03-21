@@ -1,6 +1,6 @@
 ---
 # defaults file for ansible-suricata
-suricata_mode: "ids"#ids|ips
+suricata_mode: "ids" #ids|ips
 fwbuilder_exists: "false"
 suricata_ips_mode: "bridge" #nat|bridge
 ips_int_iface_master: enp1s3

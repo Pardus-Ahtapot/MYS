@@ -1,0 +1,46 @@
+
+server {
+  listen 80;
+  server_name _;
+  if ($request_uri !~ "^/(api|static)(.*)" ) {
+      rewrite ^ https://$host$request_uri? permanent;
+  }
+  location / { 
+      try_files $uri @mhnserver; 
+  }
+  
+  root /opt/www;
+
+  location @mhnserver {
+    include uwsgi_params;
+    uwsgi_pass unix:/tmp/uwsgi.sock;
+  }
+
+  location  /static {
+    alias /opt/mhn/server/mhn/static;
+  }
+
+
+}
+
+server {
+    listen              443 ssl;
+    server_name         _;
+    ssl_certificate     /etc/ssl/private/mhn.crt;
+    ssl_certificate_key /etc/ssl/private/mhn.key;
+
+    location / { 
+        try_files $uri @mhnserver; 
+    }
+    
+    root /opt/www;
+
+    location @mhnserver {
+      include uwsgi_params;
+      uwsgi_pass unix:/tmp/uwsgi.sock;
+    }
+
+    location  /static {
+      alias /opt/mhn/server/mhn/static;
+    }
+}

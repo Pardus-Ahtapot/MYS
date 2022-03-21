@@ -1,0 +1,106 @@
+# ======================== Elasticsearch Configuration For Ahtapot SIEM =========================
+# ---------------------------------- Cluster -----------------------------------
+#
+# Use a descriptive name for your cluster:
+#
+{% if es_cluster_name %}
+cluster.name: {{ es_cluster_name }}
+{% endif %}
+
+#
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: {{ inventory_hostname }}
+{% if inventory_hostname == es_master_node %}
+node.master: true
+{% else %}
+node.data: true
+{% endif %}
+
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+#
+# ----------------------------------- Paths ------------------------------------
+#
+# Path to directory where to store the data (separate multiple locations by comma):
+#
+path.data: {{ es_path_data }}
+#
+# Path to log files:
+#
+path.logs: {{ es_path_logs }}
+#
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+#
+{% if es_memory_lock %}
+bootstrap.memory_lock: true
+{% endif %}
+#
+# Make sure that the heap size is set to about half the memory available
+# on the system and that the owner of the process is allowed to use this
+# limit.
+#
+# Elasticsearch performs poorly when the system is swapping the memory.
+#
+# ---------------------------------- Network -----------------------------------
+#
+# Set the bind address to a specific IP (IPv4 or IPv6):
+#
+network.host: {{ es_network_host }}
+#
+# Set a custom port for HTTP:
+#
+http.port: {{ es_http_port }}
+#
+# For more information, consult the network module documentation.
+#
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when this node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+#
+#discovery.seed_hosts: ["host1", "host2"]
+#
+# Bootstrap the cluster using an initial set of master-eligible nodes:
+#
+{% if es_cluster_name %}
+cluster.initial_master_nodes: ["{{ es_master_node }}"{% if es_master_node != inventory_hostname %}, "{{ inventory_hostname }}"{% endif %}]
+{% endif %}
+
+#
+# For more information, consult the discovery and cluster formation module documentation.
+#
+# ---------------------------------- Gateway -----------------------------------
+#
+# Block initial recovery after a full cluster restart until N nodes are started:
+#
+#gateway.recover_after_nodes: 3
+#
+# For more information, consult the gateway module documentation.
+#
+# ---------------------------------- Various -----------------------------------
+#
+# Require explicit names when deleting indices:
+#
+#action.destructive_requires_name: true
+{% if es_cluster_name %}
+discovery.zen.ping.unicast.hosts: ["172.16.103.99", "172.16.103.102"]
+{% endif %}
+
+{% if es_enable_xpack %}
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+
+{% if es_xpack_security_transport_ssl_verification_mode %}
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.keystore.path: /etc/elasticsearch/certs/elastic-stack-ca.p12
+xpack.security.transport.ssl.truststore.path: /etc/elasticsearch/certs/elastic-stack-ca.p12
+{% endif %}
+
+{% endif %}

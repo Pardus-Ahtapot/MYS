@@ -18,8 +18,6 @@ net.ipv4.icmp_echo_ignore_broadcasts = {{ sysctl['icmp_echo_ignore_broadcasts'] 
 
 net.ipv4.conf.all.log_martians = {{ sysctl['log_martians'] }}
 net.ipv4.conf.default.log_martians = {{ sysctl['log_martians'] }}
-net.ipv4.conf.eth0.log_martians = {{ sysctl['log_martians'] }}
-net.ipv4.conf.eth1.log_martians = {{ sysctl['log_martians'] }}
 net.ipv4.conf.lo.log_martians = {{ sysctl['log_martians'] }}
 
 net.ipv4.tcp_ecn = {{ sysctl['tcp_ecn'] }}
@@ -43,43 +41,29 @@ net.ipv4.tcp_max_syn_backlog = {{ sysctl['tcp_max_syn_backlog'] }}
 
 net.ipv4.conf.all.rp_filter = {{ sysctl['rp_filter'] }}
 net.ipv4.conf.default.rp_filter = {{ sysctl['rp_filter'] }}
-net.ipv4.conf.eth0.rp_filter = {{ sysctl['rp_filter'] }}
-net.ipv4.conf.eth1.rp_filter = {{ sysctl['rp_filter'] }}
 net.ipv4.conf.lo.rp_filter = {{ sysctl['rp_filter'] }}
 
 net.ipv4.conf.all.accept_source_route = {{ sysctl['accept_source_route'] }}
 net.ipv4.conf.default.accept_source_route = {{ sysctl['accept_source_route'] }}
-net.ipv4.conf.eth0.accept_source_route = {{ sysctl['accept_source_route'] }}
-net.ipv4.conf.eth1.accept_source_route = {{ sysctl['accept_source_route'] }}
 net.ipv4.conf.lo.accept_source_route = {{ sysctl['accept_source_route'] }}
 net.ipv6.conf.all.accept_source_route = {{ sysctl['accept_source_route_ipv6'] }}
 net.ipv6.conf.default.accept_source_route = {{ sysctl['accept_source_route_ipv6'] }}
-net.ipv6.conf.eth0.accept_source_route = {{ sysctl['accept_source_route_ipv6'] }}
-net.ipv6.conf.eth1.accept_source_route = {{ sysctl['accept_source_route_ipv6'] }}
 net.ipv6.conf.lo.accept_source_route = {{ sysctl['accept_source_route_ipv6'] }}
 
 net.ipv4.conf.all.bootp_relay = {{ sysctl['bootp_relay'] }}
 net.ipv4.conf.default.bootp_relay = {{ sysctl['bootp_relay'] }}
-net.ipv4.conf.eth0.bootp_relay = {{ sysctl['bootp_relay'] }}
-net.ipv4.conf.eth1.bootp_relay = {{ sysctl['bootp_relay'] }}
 net.ipv4.conf.lo.bootp_relay = {{ sysctl['bootp_relay'] }}
 
 net.ipv4.ip_forward = {{ sysctl['ip_forward'] }}
 
 net.ipv4.conf.all.secure_redirects = {{ sysctl['secure_redirects'] }}
 net.ipv4.conf.default.secure_redirects = {{ sysctl['secure_redirects'] }}
-net.ipv4.conf.eth0.secure_redirects = {{ sysctl['secure_redirects'] }}
-net.ipv4.conf.eth1.secure_redirects = {{ sysctl['secure_redirects'] }}
 net.ipv4.conf.lo.secure_redirects = {{ sysctl['secure_redirects'] }}
 
 net.ipv4.conf.all.send_redirects = {{ sysctl['send_redirects'] }}
 net.ipv4.conf.default.send_redirects = {{ sysctl['send_redirects'] }}
-net.ipv4.conf.eth0.send_redirects = {{ sysctl['send_redirects'] }}
-net.ipv4.conf.eth1.send_redirects = {{ sysctl['send_redirects'] }}
 net.ipv4.conf.lo.send_redirects = {{ sysctl['send_redirects'] }}
 
 net.ipv4.conf.all.proxy_arp = {{ sysctl['proxy_arp'] }}
 net.ipv4.conf.default.proxy_arp = {{ sysctl['proxy_arp'] }}
-net.ipv4.conf.eth0.proxy_arp = {{ sysctl['proxy_arp'] }}
-net.ipv4.conf.eth1.proxy_arp = {{ sysctl['proxy_arp'] }}
 net.ipv4.conf.lo.proxy_arp = {{ sysctl['proxy_arp'] }}

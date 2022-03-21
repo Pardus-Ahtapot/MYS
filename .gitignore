@@ -4,3 +4,4 @@ debian/files
 debian/ahtapot-mys.debhelper.log
 debian/ahtapot-mys/
 .idea/
+.DS_Store

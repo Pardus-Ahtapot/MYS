@@ -1,0 +1,15 @@
+/var/log/ahtapot/dnsfw/*.log {
+        daily
+        missingok
+        rotate 14
+        compress
+        delaycompress
+        notifempty
+        create 640 unbound
+        sharedscripts
+	postrotate
+		 /usr/sbin/unbound-control log_reopen
+	endscript
+
+
+}

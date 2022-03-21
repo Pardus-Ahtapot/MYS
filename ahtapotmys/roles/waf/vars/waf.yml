@@ -1,3 +1,4 @@
+waf_high_avaibility: "on"
 waf_listen_ip: "0.0.0.0"
 waf_listen_port: "80"
 waf_default_timeout: "200"
@@ -23,7 +24,7 @@ waf_global_response_body_access: "On"
 waf_global_response_body_limit: "10000"
 waf_global_response_body_action: "ProccessPartial"
 waf_global_audit_log_parts: "ABDEFHIJZ"
-waf_whitelist_ips: ["161.9.194.170", "161.9.194.172", "161.9.194.173"]
+waf_whitelist_ips: []
 waf_ddos:
     waf_hash_table_size: "3097"
     waf_page_count: "2"
@@ -34,43 +35,3 @@ waf_ddos:
     waf_email_notify: "ahtapot@pardus.org.tr"
     waf_ddos_logs_dir: "/var/log/ahtapot/waf/mod_evasive.log"
     waf_ddos_sys_cmd: ""
-waf_vhosts:
-    waftest.ahtapot.org.tr:
-        - waf_hostname: "ahtapot.org.tr"
-          server_alias: "www.ahtapot.org.tr"
-          listen_ip: "*"
-          listen_port: "80"
-          ssl_engine: "on"
-          http_protocol_options: "UnSafe"
-          waf_status: "DetectionOnly"
-          waf_debug_level: "0"
-          preserve_host: "On"
-          remote_ip_header: "X-Forwarded-For"
-          reverse_cookie_path: "/ /"
-          reverse_cookie_domain: "127.0.0.1 ahtapot.org.tr"
-          proxy_ssl: "On"
-          proxy_pass: '"/" "http://172.50.50.12/"'
-          proxy_reverse_pass: '"/" "http://172.50.50.12/"'
-          proxy_load_balance_pool_name: "websunucularim"
-          proxy_load_balance_members: ["http://172.50.50.13/", "http://172.50.50.14/"]
-          proxy_load_balance_method: "byrequests"
-          waf_disabled_rules: ["340162", "340163"]
-        - waf_hostname: "demo.ahtapot.org.tr"
-          server_alias: "www.demo.ahtapot.org.tr"
-          listen_ip: "*"
-          listen_port: "80"
-          ssl_engine: "Off"
-          http_protocol_options: "UnSafe"
-          waf_status: "DetectionOnly"
-          waf_debug_level: "0"
-          preserve_host: "On"
-          remote_ip_header: "X-Forwarded-For"
-          reverse_cookie_path: "/ /"
-          reverse_cookie_domain: "127.0.0.1 ahtapot.org.tr"
-          proxy_ssl: "On"
-          proxy_pass: '"/" "http://172.50.50.12/"'
-          proxy_reverse_pass: '"/" "http://172.50.50.12/"'
-          proxy_load_balance_pool_name: ""
-          proxy_load_balance_members: []
-          proxy_load_banace_method: ""
-          waf_disabled_rules: []

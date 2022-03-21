@@ -2,7 +2,7 @@
 ## Burada yapilan degisikliklerin uzerine yazilir!!
 
 [global]
-   netbios name = {{inventory_hostname| upper}}
+   netbios name = {{ansible_hostname| upper}}
    realm = {{ad.domain}}
    workgroup = {{ad.workgroup|upper}}
    security = ads
